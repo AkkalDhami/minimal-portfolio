@@ -25,6 +25,6 @@ export const NAME = "Akkal Dhami";
 
 export const LOCATION = "Kathmandu, Nepal";
 
-export const CODE_THEME_BG = "#101010";
+export const CODE_THEME_BG = "#0a0a0a";
 
 export const DEFAULT_CODE_THEME = "vesper";

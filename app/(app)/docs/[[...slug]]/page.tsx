@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import matter from "gray-matter";
 import { mdxComponents } from "@/components/docs/mdx-components";
-import rehypePrettyCode from "rehype-pretty-code";
+import rehypePrettyCode, { LineElement } from "rehype-pretty-code";
 import { DEFAULT_CODE_THEME } from "@/lib/constants";
 import { OnThisPage } from "@/components/docs/on-this-page";
 import { Metadata, Route } from "next";
@@ -102,8 +102,6 @@ export default async function DocsPage(props: PageProps<"/docs/[[...slug]]">) {
   const source = fs.readFileSync(filePath, "utf8");
   const { content, data } = matter(source);
 
-  const theme = DEFAULT_CODE_THEME;
-
   return (
     <div className="flex w-full max-w-4xl gap-8 px-4 sm:p-0">
       <div id="docs-content">
@@ -125,12 +123,15 @@ export default async function DocsPage(props: PageProps<"/docs/[[...slug]]">) {
                     rehypePrettyCode,
                     {
                       theme: {
-                        dark: theme || "github-dark-high-contrast",
+                        dark: DEFAULT_CODE_THEME || "github-dark-high-contrast",
                         light: "github-light-default"
                       },
                       keepBackground: false,
-                      defaultLang: "plaintext",
-                      grid: true
+                      onVisitLine(node: LineElement) {
+                        if (node.children.length === 0) {
+                          node.children = [{ type: "text", value: " " }];
+                        }
+                      }
                     }
                   ]
                 ]
