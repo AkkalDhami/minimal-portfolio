@@ -56,9 +56,7 @@ GITHUB_REDIRECT_URI="your-github-redirectUri"
 
 <Step>Setup Environment Configuration </Step>
 
-<Code children="src/configs/env.ts" />
-
-```ts
+```ts title="src/configs/env.ts"
 import "dotenv/config";
 
 interface Config {
@@ -86,9 +84,7 @@ export default env;
 
 <Step>Configure Passport with GitHub Strategy</Step>
 
-<Code children="src/configs/passport.ts" />
-
-```ts
+```ts title="src/configs/passport.ts"
 import passport from "passport";
 import { Strategy as GitHubStrategy, Profile } from "passport-github2";
 import env from "./env";
@@ -115,10 +111,7 @@ passport.use(
 
 <Step>Configure OAuth controller</Step>
 
-<Code children="src/controllers/oauth.controller.ts" /> **or**
-<Code children="src/controllers/auth.controller.ts" />
-
-```ts
+```ts title="src/controllers/oauth.controller.ts"
 import { NextFunction, Request, Response } from "express";
 import { Profile } from "passport-github2";
 
@@ -155,13 +148,10 @@ export const githubOAuth = AsyncHandler(
 
 <Step>Configure OAuth routes</Step>
 
-<Code children="src/routes/oauth.routes.ts" /> **or**
-<Code children="src/routes/auth.routes.ts" />
-
-```ts
+```ts title="src/routes/oauth.routes.ts"
 import { Router } from "express";
 import passport from "passport";
-import { githubOAuth } from "../controllers/github-oauth.controller";
+import { githubOAuth } from "../controllers/oauth.controller";
 
 const router = Router();
 
@@ -184,9 +174,7 @@ export default router;
 
 <Step>Mount routes</Step>
 
-<Code children="src/routes/index.ts" />
-
-```ts
+```ts title="src/routes/index.ts"
 import { Router } from "express";
 import OAuthRoutes from "./oauth.routes";
 
@@ -199,13 +187,13 @@ export default router;
 
 <Step>Initialize passport</Step>
 
-<Code children="src/app.ts" />
-
 ```ts
 import "./configs/passport";
 ```
 
-```ts {8}
+<br />
+
+```ts title="src/app.ts"
 import express, { Express, Request, Response } from "express";
 
 import { notFoundHandler } from "./middlewares/not-found-handler";
