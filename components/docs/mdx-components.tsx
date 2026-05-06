@@ -5,6 +5,7 @@ import PackageManagerTabs from "./package-manager-tabs";
 import Code from "./custom-code";
 import Note from "./note";
 import { cn } from "@/lib/utils";
+import { SiTypescript } from "react-icons/si";
 
 export const mdxComponents: MDXComponents = {
   pre: Pre,
@@ -27,7 +28,7 @@ export const mdxComponents: MDXComponents = {
   p: props => <p className="text-muted-primary my-2 leading-7" {...props} />,
   code: props => (
     <code
-      className="thin-scrollbar max-h-120 max-w-[272.5px] overflow-x-auto px-3 py-2.5 font-mono leading-relaxed sm:max-w-full"
+      className="thin-scrollbar max-h-120 max-w-[272.5px] overflow-x-auto rounded-lg px-3 py-2.5 font-mono leading-relaxed sm:max-w-full"
       {...props}
     />
   ),
@@ -47,6 +48,19 @@ export const mdxComponents: MDXComponents = {
       {...props}
     />
   ),
+  figcaption: props => {
+    return (
+      <figcaption
+        className={cn(
+          "font-code flex items-center gap-2 border-b border-neutral-800 px-4 py-2 text-neutral-400"
+        )}
+        {...props}>
+        <SiTypescript className="size-4 text-neutral-400" />
+        {props.children}
+      </figcaption>
+    );
+  },
+
   strong: props => <strong className="text-primary" {...props} />,
   blockquote: ({ className, ...props }: React.ComponentProps<"blockquote">) => (
     <blockquote
