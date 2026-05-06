@@ -35,9 +35,14 @@ export default function PackageManagerTabs({
     <Tabs
       value={pkgManager}
       className={cn(
-        "my-6 w-full rounded-md border-0 bg-neutral-100 dark:bg-[#101010]"
+        "my-6 w-full rounded-lg border-0 bg-stone-100 dark:bg-neutral-950"
       )}>
-      <TabsList variant="underline" className={cn("bg-transparent pt-3 pl-3")}>
+      <TabsList
+        style={{
+          paddingTop: "6px"
+        }}
+        variant="underline"
+        className={cn("bg-transparent pt-6 pl-4")}>
         <TerminalIcon className="text-muted-foreground mr-3 size-6 pt-1" />
         {Object.keys(managers).map(m => {
           const Icon = getIconForPackageManager(m as PackageManager);
