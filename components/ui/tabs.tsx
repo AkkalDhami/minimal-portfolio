@@ -31,7 +31,7 @@ function TabsList({
   return (
     <TabsPrimitive.List
       className={cn(
-        "text-muted-foreground group relative z-0 flex w-fit items-center justify-center gap-x-0.5",
+        "text-muted-foreground group relative z-0 flex w-fit items-center justify-center gap-x-0.5 pt-4",
         "data-[orientation=vertical]:flex-col",
         variant === "default"
           ? "bg-muted *:data-[slot=tabs-tab]:hover:bg-accent text-muted-foreground/72 p-0.5"
