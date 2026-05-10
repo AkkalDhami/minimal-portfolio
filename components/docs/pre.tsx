@@ -27,7 +27,7 @@ export function Pre({
   }, [children]);
 
   return (
-    <div className="relative max-w-[272.5px] overflow-x-auto sm:max-w-[850px]">
+    <div className="relative max-w-[272.5px] overflow-x-auto sm:max-w-212.5">
       <pre
         ref={ref}
         {...props}
@@ -38,7 +38,7 @@ export function Pre({
         <CopyButton
           text={code}
           docs={true}
-          className="group absolute right-5 bottom-3 z-10 cursor-pointer bg-transparent py-[6.65px] text-xs hover:bg-neutral-800 hover:text-white"
+          className="group absolute right-2 bottom-3 z-10 cursor-pointer bg-[#0a0a0a] py-[6.65px] text-xs hover:bg-neutral-800 hover:text-white"
         />
         {children}
       </pre>
