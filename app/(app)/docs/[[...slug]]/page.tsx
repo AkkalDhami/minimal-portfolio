@@ -103,7 +103,7 @@ export default async function DocsPage(props: PageProps<"/docs/[[...slug]]">) {
   const { content, data } = matter(source);
 
   return (
-    <div className="flex w-full max-w-4xl gap-8 px-4 sm:p-0">
+    <div className="flex w-full max-w-4xl gap-8 overflow-x-auto px-4 sm:p-0">
       <div id="docs-content">
         <article className="prose prose-neutral dark:prose-invert mb-6 max-w-none [&_ol]:list-decimal [&_ol]:pl-6 [&_ul]:list-disc [&_ul]:pl-6">
           <div className="my-4">
