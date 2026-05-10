@@ -296,9 +296,7 @@ html {
   }
 
   [data-rehype-pretty-code-figure] {
-    width: 100%;
     position: relative;
-    overflow: auto;
     margin-top: 4px;
     @apply rounded-lg bg-[#0a0a0a];
   }
