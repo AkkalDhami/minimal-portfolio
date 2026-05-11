@@ -28,7 +28,7 @@ export const mdxComponents: MDXComponents = {
   p: props => <p className="text-muted-primary my-2 leading-7" {...props} />,
   code: props => (
     <code
-      className="thin-scrollbar max-h-120 max-w-[272.5px] overflow-x-auto rounded-lg px-3 py-2.5 font-mono leading-relaxed sm:max-w-full"
+      className="h-full max-h-100 overflow-y-auto rounded-lg px-3 py-2.5 font-mono leading-relaxed"
       {...props}
     />
   ),
@@ -40,11 +40,11 @@ export const mdxComponents: MDXComponents = {
     />
   ),
   ul: props => (
-    <ul className="text-muted-primary list-disc space-y-2.5 pl-2" {...props} />
+    <ul className="text-muted-primary list-disc space-y-2.5 pl-6" {...props} />
   ),
   ol: props => (
     <ol
-      className="text-muted-primary list-decimal space-y-2.5 pl-2"
+      className="text-muted-primary list-decimal space-y-2.5 pl-6"
       {...props}
     />
   ),
