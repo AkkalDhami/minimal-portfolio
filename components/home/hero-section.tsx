@@ -30,9 +30,9 @@ export function HeroSection() {
   return (
     <section
       id="about"
-      className="screen-line-after relative z-10 px-4 py-5 pt-16 pb-6 font-sans font-normal">
-      <div className="mt-4 sm:mt-4">
-        <div className="mb-5 flex items-baseline-last gap-2">
+      className="screen-line relative z-10 px-4 pt-16 pb-0 font-sans font-normal">
+      <div className="mt-4">
+        <div className="flex items-baseline-last gap-2">
           <BlurText
             text={NAME}
             delay={80}
@@ -45,11 +45,11 @@ export function HeroSection() {
           initial={{ opacity: 0, y: -40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="mt-3 flex flex-col lg:text-left">
+          className="flex flex-col space-y-5 lg:text-left">
           <motion.h2
             {...fadeUp}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="text-muted-primary mb-6 hidden overflow-hidden text-lg font-medium sm:block md:text-xl">
+            className="text-muted-primary mt-4 hidden overflow-hidden text-lg font-medium sm:block md:text-xl">
             I build <FlipWords words={HERO_WORDS} />
           </motion.h2>
           <SplitText
@@ -70,8 +70,8 @@ export function HeroSection() {
           <motion.div
             {...fadeUp}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="text-muted-foreground mb-6 w-full text-lg leading-relaxed">
-            <div className="mt-4 flex flex-wrap items-center gap-3">
+            className="text-muted-foreground w-full text-lg leading-relaxed">
+            <div className="flex flex-wrap items-center gap-3">
               {HOME_PAGE_STACKS.map(tech => (
                 <TechBadge
                   key={tech.value}
@@ -87,7 +87,7 @@ export function HeroSection() {
           <motion.div
             {...fadeUp}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-4 mb-6 flex flex-wrap items-center gap-4 lg:justify-start">
+            className="flex flex-wrap items-center gap-5 lg:justify-start">
             <PrimaryButton
               as="a"
               href="/projects"
@@ -104,7 +104,7 @@ export function HeroSection() {
               View My Resume
             </PrimaryButton>
           </motion.div>
-          <div className="mt-3">
+          <div className="mt-1">
             <SocialLinks minimal={false} className="sm:gap-6" />
           </div>
         </motion.div>
