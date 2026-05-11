@@ -2,12 +2,8 @@
 
 import { useEffect, useState } from "react";
 import GithubSlugger from "github-slugger";
+import { AnimatePresence, motion } from "motion/react";
 import { cn } from "@/lib/utils";
-import {
-  ChartNoAxesGanttIcon,
-  ChevronDownIcon,
-  ChevronUpIcon
-} from "lucide-react";
 
 import { TOCItemType, TOCMinimap } from "@/components/docs/toc-minimap";
 
@@ -16,15 +12,6 @@ type Heading = {
   text: string;
   level: number;
 };
-
-// const ITEMS: TOCItemType[] = [
-//   { title: "Installation", url: "#installation", depth: 2 },
-//   { title: "Usage", url: "#usage", depth: 2 },
-//   { title: "API Reference", url: "#api-reference", depth: 2 },
-//   { title: "TOCMinimap", url: "#tocminimap", depth: 3 },
-//   { title: "TOCItemType", url: "#tocitemtype", depth: 3 },
-//   { title: "References", url: "#references", depth: 2 }
-// ];
 
 export function OnThisPage() {
   const [headings, setHeadings] = useState<Heading[]>([]);
@@ -59,13 +46,11 @@ export function OnThisPage() {
       })
       .filter(Boolean) as Heading[];
 
-    const items = list.map(item => {
-      return {
-        title: item.text,
-        url: `#${item.id}`,
-        depth: item.level
-      };
-    });
+    const items = list.map(item => ({
+      title: item.text,
+      url: `#${item.id}`,
+      depth: item.level
+    }));
 
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setItems(items);
@@ -102,47 +87,92 @@ export function OnThisPage() {
 
   return (
     <>
-      <nav className="group bg-muted/50 rounded-primary relative my-6 w-full px-4 py-2">
-        <div
-          onClick={() => setOpen(o => !o)}
-          className="text-muted-primary hover:text-primary my-2 flex cursor-pointer items-center justify-between duration-300">
-          <div className="flex items-center gap-2">
-            <ChartNoAxesGanttIcon className="text-muted-primary size-5" />
-            <h4 className="text-base font-semibold">On This Page</h4>
-          </div>
-          {open ? (
-            <ChevronUpIcon className="size-5" />
-          ) : (
-            <ChevronDownIcon className="size-5" />
-          )}
-        </div>
+      <motion.nav
+        initial={{ opacity: 0, y: 30, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{
+          duration: 0.35,
+          ease: "easeOut"
+        }}
+        className="fixed bottom-6 left-1/2 z-40 w-[320px] max-w-[calc(100vw-2rem)] -translate-x-1/2 overflow-hidden rounded-2xl border border-neutral-200/50 bg-neutral-100/80 backdrop-blur-xl dark:border-neutral-800 dark:bg-neutral-900/80">
+        <div className="relative flex h-full w-full flex-col rounded-2xl px-2 py-3">
+          <button
+            onClick={() => setOpen(o => !o)}
+            className="text-muted-primary hover:text-primary flex w-full cursor-pointer items-center gap-4 px-4 transition-colors duration-300">
+            <div className="bg-primary size-2.5 rounded-full" />
+            <motion.span
+              key={activeId}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.2 }}
+              className="text-foreground max-w-[220px] truncate text-base font-medium">
+              {headings.find(h => h.id === activeId)?.text ?? headings[0]?.text}
+            </motion.span>
+          </button>
 
-        {open && (
-          <ul className="list-inside list-none space-y-2 text-sm">
-            {headings.map(h => (
-              <li
-                key={h.id}
-                style={{ paddingLeft: `${(h.level - 2) * 16}px` }}
-                className="list-none">
-                <a
-                  href={`#${h.id}`}
-                  className={cn(
-                    "transition-colors",
-                    activeId === h.id
-                      ? "text-foreground font-medium"
-                      : "text-muted-foreground hover:text-foreground underline-offset-2 hover:underline"
-                  )}>
-                  {h.text}
-                </a>
-              </li>
-            ))}
-          </ul>
-        )}
-      </nav>
+          <AnimatePresence initial={false}>
+            {open && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{
+                  duration: 0.25,
+                  ease: "easeInOut"
+                }}
+                className="overflow-hidden">
+                <motion.ul
+                  initial="hidden"
+                  animate="visible"
+                  exit="hidden"
+                  variants={{
+                    visible: {
+                      transition: {
+                        staggerChildren: 0.04
+                      }
+                    }
+                  }}
+                  className="mt-3 space-y-1 pl-2 text-sm">
+                  {headings.map(h => (
+                    <motion.li
+                      key={h.id}
+                      variants={{
+                        hidden: {
+                          opacity: 0,
+                          x: -10
+                        },
+                        visible: {
+                          opacity: 1,
+                          x: 0
+                        }
+                      }}
+                      className="list-none"
+                      style={{
+                        paddingLeft: `${(h.level - 2) * 16}px`
+                      }}>
+                      <a
+                        href={`#${h.id}`}
+                        className={cn(
+                          "block rounded-lg px-2 py-1.5 transition-all duration-200",
+                          activeId === h.id
+                            ? "bg-secondary text-foreground"
+                            : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+                        )}>
+                        {h.text}
+                      </a>
+                    </motion.li>
+                  ))}
+                </motion.ul>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </motion.nav>
 
       <TOCMinimap
         items={items}
-        className="fixed top-1/2 right-4 z-40 hidden -translate-y-1/2 lg:inline"
+        className="top-1/2 right-4 z-40 hidden -translate-y-1/2"
       />
     </>
   );
