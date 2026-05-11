@@ -27,11 +27,11 @@ export function Pre({
   }, [children]);
 
   return (
-    <div className="relative max-w-[272.5px] overflow-x-auto sm:max-w-212.5">
+    <div className="relative max-w-[272.5px] overflow-x-auto sm:max-w-210">
       <pre
         ref={ref}
         {...props}
-        className={cn("thin-scrollbar relative", className)}
+        className={cn("thin-scrollbar relative rounded-lg", className)}
         style={{
           backgroundColor: bg
         }}>

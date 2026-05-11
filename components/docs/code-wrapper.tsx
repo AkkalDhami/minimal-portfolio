@@ -14,7 +14,7 @@ export function CodeWrapper({
       <CopyButton
         text={code}
         docs={true}
-        className="group absolute top-1/2 right-2 z-10 w-auto -translate-y-1/2 cursor-pointer bg-transparent p-1.5 text-xs hover:bg-neutral-300 dark:hover:bg-neutral-800"
+        className="group absolute top-1/2 right-2 z-10 w-auto -translate-y-1/2 cursor-pointer bg-transparent p-1.5 text-xs hover:bg-neutral-800 dark:hover:bg-neutral-800"
       />
       {children}
     </div>
