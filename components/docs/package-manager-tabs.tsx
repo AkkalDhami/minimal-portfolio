@@ -34,9 +34,7 @@ export default function PackageManagerTabs({
   return (
     <Tabs
       value={pkgManager}
-      className={cn(
-        "my-6 w-full rounded-lg border-0 bg-stone-100 dark:bg-neutral-950"
-      )}>
+      className={cn("my-6 w-full rounded-lg border-0 bg-neutral-950")}>
       <TabsList
         style={{
           paddingTop: "6px"
@@ -51,7 +49,7 @@ export default function PackageManagerTabs({
               key={m}
               value={m}
               className={cn(
-                "text-muted-foreground hover:text-foreground flex items-center gap-3"
+                "flex items-center gap-3 text-neutral-400 hover:text-white"
               )}
               onClick={() => {
                 onChangePackageManager(m as PackageManager);
@@ -76,12 +74,8 @@ export default function PackageManagerTabs({
                   data-slot="code-block"
                   data-language="bash"
                   className="font-code leading-none">
-                  <span className="text-[#eb7520] dark:text-[#ffc799]">
-                    {bin}
-                  </span>{" "}
-                  <span className="text-[#0e99d9] dark:text-[#52e1e3]">
-                    {remaining}
-                  </span>
+                  <span className="text-[#ffc799]">{bin}</span>{" "}
+                  <span className="text-[#52e1e3]">{remaining}</span>
                 </code>
               </pre>
             </CodeWrapper>
