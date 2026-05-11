@@ -105,7 +105,7 @@ export default async function DocsPage(props: PageProps<"/docs/[[...slug]]">) {
   return (
     <div className="flex w-full max-w-4xl gap-8 overflow-x-auto px-4 sm:p-0">
       <div id="docs-content">
-        <article className="prose prose-neutral dark:prose-invert mb-6 max-w-none [&_ol]:list-decimal [&_ol]:pl-6 [&_ul]:list-disc [&_ul]:pl-6">
+        <article className="prose prose-neutral dark:prose-invert mb-6 max-w-none">
           <div className="my-4">
             <div className="flex items-center justify-between gap-4">
               <h2 className="text-2xl font-medium">{data.title}</h2>
