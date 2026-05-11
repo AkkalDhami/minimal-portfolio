@@ -66,7 +66,7 @@ export function GitHubContributionGraph({
   }, [year, initialData]);
 
   return (
-    <div className="w-full space-y-4">
+    <div className="w-full space-y-2">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h3 className="text-muted-foreground text-base font-medium tracking-wide uppercase">
           Github Contributions

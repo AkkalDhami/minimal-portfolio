@@ -13,16 +13,16 @@ export default async function Page() {
   return (
     <div className="border-edge mx-auto flex max-w-4xl flex-col space-y-2 border-x">
       <HeroSection />
+      <GitHubContributions />
       <HeroSectionBackground />
       <ProjectsSection home />
-
-      <GitHubContributions home />
 
       <PlaybookSection home />
 
       <SkillsSection home />
       <TemplateSection home />
       <StackMarquee home />
+      <GitHubContributions home />
       <ContactSection home />
     </div>
   );
