@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { cn } from "@/lib/utils";
 
 import { TOCItemType, TOCMinimap } from "@/components/docs/toc-minimap";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 type Heading = {
   id: string;
@@ -106,7 +107,7 @@ export function OnThisPage() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -6 }}
               transition={{ duration: 0.2 }}
-              className="text-foreground max-w-[220px] truncate text-base font-medium">
+              className="text-foreground max-w-58 truncate text-base font-medium">
               {headings.find(h => h.id === activeId)?.text ?? headings[0]?.text}
             </motion.span>
           </button>
@@ -121,49 +122,51 @@ export function OnThisPage() {
                   duration: 0.25,
                   ease: "easeInOut"
                 }}
-                className="overflow-hidden">
-                <motion.ul
-                  initial="hidden"
-                  animate="visible"
-                  exit="hidden"
-                  variants={{
-                    visible: {
-                      transition: {
-                        staggerChildren: 0.04
-                      }
-                    }
-                  }}
-                  className="mt-3 space-y-1 pl-2 text-sm">
-                  {headings.map(h => (
-                    <motion.li
-                      key={h.id}
-                      variants={{
-                        hidden: {
-                          opacity: 0,
-                          x: -10
-                        },
-                        visible: {
-                          opacity: 1,
-                          x: 0
+                className="w-full max-w-120 overflow-hidden">
+                <ScrollArea scrollbarGutter className={"h-100"}>
+                  <motion.ul
+                    initial="hidden"
+                    animate="visible"
+                    exit="hidden"
+                    variants={{
+                      visible: {
+                        transition: {
+                          staggerChildren: 0.04
                         }
-                      }}
-                      className="list-none"
-                      style={{
-                        paddingLeft: `${(h.level - 2) * 16}px`
-                      }}>
-                      <a
-                        href={`#${h.id}`}
-                        className={cn(
-                          "block rounded-lg px-2 py-1.5 transition-all duration-200",
-                          activeId === h.id
-                            ? "bg-secondary text-foreground"
-                            : "text-muted-foreground hover:bg-secondary hover:text-foreground"
-                        )}>
-                        {h.text}
-                      </a>
-                    </motion.li>
-                  ))}
-                </motion.ul>
+                      }
+                    }}
+                    className="mt-3 space-y-1 pl-2 text-sm">
+                    {headings.map(h => (
+                      <motion.li
+                        key={h.id}
+                        variants={{
+                          hidden: {
+                            opacity: 0,
+                            x: -10
+                          },
+                          visible: {
+                            opacity: 1,
+                            x: 0
+                          }
+                        }}
+                        className="list-none"
+                        style={{
+                          paddingLeft: `${(h.level - 2) * 16}px`
+                        }}>
+                        <a
+                          href={`#${h.id}`}
+                          className={cn(
+                            "block rounded-lg px-2 py-1.5 transition-all duration-200",
+                            activeId === h.id
+                              ? "bg-secondary text-foreground"
+                              : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+                          )}>
+                          {h.text}
+                        </a>
+                      </motion.li>
+                    ))}
+                  </motion.ul>
+                </ScrollArea>
               </motion.div>
             )}
           </AnimatePresence>
