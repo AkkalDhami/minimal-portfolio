@@ -10,8 +10,6 @@ import { TechBadge } from "@/components/projects/tech-badge";
 import { HOME_PAGE_STACKS } from "@/utils/stack";
 import { NAME } from "@/lib/constants";
 import { Route } from "next";
-import { BlurText } from "@/components/ui/blur-text";
-import { SplitText } from "@/components/ui/split-text";
 
 const HERO_WORDS = [
   "systems that scale under pressure.",
@@ -21,11 +19,6 @@ const HERO_WORDS = [
   "performance-first engineering."
 ];
 
-const fadeUp = {
-  initial: { opacity: 0, y: 20, filter: "blur(4px)" },
-  animate: { opacity: 1, y: 0, filter: "blur(0px)" }
-};
-
 export function HeroSection() {
   return (
     <section
@@ -33,44 +26,20 @@ export function HeroSection() {
       className="screen-line relative z-10 px-4 pt-16 pb-0 font-sans font-normal">
       <div className="mt-4">
         <div className="flex items-baseline-last gap-2">
-          <BlurText
-            text={NAME}
-            delay={80}
-            animateBy="letters"
-            direction="top"
-            className="font-inter text-4xl font-semibold tracking-wide uppercase sm:text-5xl lg:text-6xl xl:text-7xl"
-          />
+          <h1 className="font-inter text-4xl font-semibold tracking-wide uppercase sm:text-5xl lg:text-6xl xl:text-7xl">
+            {NAME}
+          </h1>
         </div>
-        <motion.div
-          initial={{ opacity: 0, y: -40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="flex flex-col space-y-5 lg:text-left">
-          <motion.h2
-            {...fadeUp}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="text-muted-primary mt-4 hidden overflow-hidden text-lg font-medium sm:block md:text-xl">
+        <div className="flex flex-col space-y-5 lg:text-left">
+          <h2 className="text-muted-primary mt-4 hidden overflow-hidden text-lg font-medium sm:block md:text-xl">
             I build <FlipWords words={HERO_WORDS} />
-          </motion.h2>
-          <SplitText
-            text="I design scalable web systems focused on performance, maintainability,
-          and real-world impact."
-            className="text-muted-foreground text-lg leading-relaxed"
-            delay={50}
-            duration={1.25}
-            ease="power3.out"
-            splitType="words"
-            from={{ opacity: 0, y: 40 }}
-            to={{ opacity: 1, y: 0 }}
-            threshold={0.1}
-            rootMargin="-100px"
-            textAlign="left"
-          />
+          </h2>
+          <p className="text-muted-foreground text-lg leading-relaxed">
+            I design scalable web systems focused on performance,
+            maintainability, and real-world impact.
+          </p>
 
-          <motion.div
-            {...fadeUp}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="text-muted-foreground w-full text-lg leading-relaxed">
+          <div className="text-muted-foreground w-full text-lg leading-relaxed">
             <div className="flex flex-wrap items-center gap-3">
               {HOME_PAGE_STACKS.map(tech => (
                 <TechBadge
@@ -83,11 +52,8 @@ export function HeroSection() {
                 </TechBadge>
               ))}
             </div>
-          </motion.div>
-          <motion.div
-            {...fadeUp}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="flex flex-wrap items-center gap-5 lg:justify-start">
+          </div>
+          <div className="flex flex-wrap items-center gap-5 lg:justify-start">
             <PrimaryButton
               as="a"
               href="/projects"
@@ -103,11 +69,11 @@ export function HeroSection() {
               className="rounded-primary from-background to-muted primary-ring w-full bg-linear-to-br py-3.5 sm:w-auto">
               View My Resume
             </PrimaryButton>
-          </motion.div>
+          </div>
           <div className="mt-1">
             <SocialLinks minimal={false} className="sm:gap-6" />
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
