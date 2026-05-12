@@ -5,7 +5,6 @@ import {
   X_URL
 } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-import { motion } from "motion/react";
 import { LuArrowUpRight } from "react-icons/lu";
 import { SiDailydotdev } from "react-icons/si";
 import { PrimaryButton } from "@/components/ui/primary-button";
@@ -94,14 +93,10 @@ export function SocialLinks({
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: 0.2 }}
-      viewport={{ once: true }}>
+    <div>
       <div className={cn("grid grid-cols-2 gap-4 md:grid-cols-4", className)}>
         {socialLinks.map(social => (
-          <motion.a
+          <a
             key={social.name}
             href={social.href}
             onClick={() => chatScrollPlay()}
@@ -120,9 +115,9 @@ export function SocialLinks({
                 <LuArrowUpRight className="text-muted-primary group-hover:text-accent-foreground size-4" />
               </div>
             </div>
-          </motion.a>
+          </a>
         ))}
       </div>
-    </motion.div>
+    </div>
   );
 }
