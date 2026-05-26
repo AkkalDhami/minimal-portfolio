@@ -99,7 +99,7 @@ export function OnThisPage() {
         <div className="relative flex h-full w-full flex-col rounded-2xl px-2 py-3">
           <button
             onClick={() => setOpen(o => !o)}
-            className="text-muted-primary hover:text-primary flex w-full cursor-pointer items-center gap-4 px-4 transition-colors duration-300">
+            className="text-muted-primary hover:text-primary mb-1 flex w-full cursor-pointer items-center gap-4 px-4 transition-colors duration-300">
             <div className="bg-primary size-2.5 rounded-full" />
             <motion.span
               key={activeId}
@@ -135,7 +135,7 @@ export function OnThisPage() {
                         }
                       }
                     }}
-                    className="mt-3 space-y-1 pl-2 text-sm">
+                    className="mt-2 space-y-1 pl-2 text-sm">
                     {headings.map(h => (
                       <motion.li
                         key={h.id}

@@ -82,6 +82,7 @@ export function CopyButton({
         copy(text);
         onClick?.(e);
       }}
+      disabled={state === "done"}
       className={cn(
         "group/icon focus-visible:ring-ring/50 text-muted-foreground hover:text-primary absolute right-0 flex cursor-pointer items-center justify-center rounded-md px-1.5 py-1.5 transition-[color,box-shadow] outline-none focus:z-10 focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed",
         "duration-100 ease-in-out",

@@ -4,10 +4,20 @@ import { Pre } from "./pre";
 import PackageManagerTabs from "./package-manager-tabs";
 import Code from "./custom-code";
 import Note from "./note";
+import Output from "./output";
 import { cn } from "@/lib/utils";
-import { SiTypescript } from "react-icons/si";
+import { Table, THead, TBody, TR, TH, TD, Highlight } from "./table";
+import { getIconForLanguageExtension } from "@/components/docs/icon";
 
 export const mdxComponents: MDXComponents = {
+  Table,
+  THead,
+  TBody,
+  TR,
+  TH,
+  TD,
+  Output,
+  Highlight,
   pre: Pre,
   PackageManagerTabs,
   Code,
@@ -26,9 +36,12 @@ export const mdxComponents: MDXComponents = {
     <h4 className="mt-4 mb-4 text-lg font-medium tracking-tight" {...props} />
   ),
   p: props => <p className="text-muted-primary my-2 leading-7" {...props} />,
-  code: props => (
+  code: ({ className, ...props }) => (
     <code
-      className="h-full max-h-100 overflow-y-auto rounded-lg px-3 py-2.5 font-mono leading-relaxed"
+      className={cn(
+        "thin-scrollbar max-h-120 overflow-x-auto px-3 py-2.5 font-mono leading-relaxed",
+        className
+      )}
       {...props}
     />
   ),
@@ -49,13 +62,18 @@ export const mdxComponents: MDXComponents = {
     />
   ),
   figcaption: props => {
+    const iconExtension =
+      "data-language" in props && typeof props["data-language"] === "string"
+        ? getIconForLanguageExtension(props["data-language"])
+        : null;
+
     return (
       <figcaption
         className={cn(
           "font-code flex items-center gap-2 border-b border-neutral-800 px-4 py-2 text-neutral-400"
         )}
         {...props}>
-        <SiTypescript className="size-4 text-neutral-400" />
+        {iconExtension}
         {props.children}
       </figcaption>
     );
