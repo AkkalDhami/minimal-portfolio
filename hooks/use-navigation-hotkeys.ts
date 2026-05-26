@@ -18,7 +18,6 @@ type HotkeyMap = Record<string, string>;
 
 type Options = {
   routes?: HotkeyMap;
-  requireShift?: boolean;
 };
 
 export function useNavigationHotkeys(options: Options = {}) {
@@ -39,8 +38,7 @@ export function useNavigationHotkeys(options: Options = {}) {
       x: X_URL,
       l: LINKEDIN_URL,
       z: DAILY_DEV_URL
-    },
-    requireShift = false
+    }
   } = options;
 
   useEffect(() => {
@@ -56,7 +54,7 @@ export function useNavigationHotkeys(options: Options = {}) {
 
       const key = e.key.toLowerCase();
 
-      if (requireShift && !e.shiftKey) return;
+      if (!e.shiftKey) return;
 
       const path = routes[key];
       if (!path) return;
@@ -82,5 +80,5 @@ export function useNavigationHotkeys(options: Options = {}) {
 
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [router, routes, requireShift, play]);
+  }, [router, routes, play]);
 }
