@@ -47,12 +47,12 @@ export async function generateMetadata(props: {
   const source = fs.readFileSync(filePath, "utf8");
   const { data } = matter(source);
   return {
-    title: `${data.title}  | Playbook `,
-    description: data.description ?? "Playbook",
+    title: `${data.title}  | Docs `,
+    description: data.description ?? "Docs",
     keywords: siteConfig.keywords,
     openGraph: {
-      title: `${data.title}  | Playbook `,
-      description: data.description ?? "Playbook",
+      title: `${data.title}  | Docs `,
+      description: data.description ?? "Docs",
       url: `/docs/${slug.length > 0 ? slug.join("/") : ""}`,
       siteName: siteConfig.name,
       type: "article",
@@ -78,6 +78,9 @@ function getDocPath(slug?: string[]) {
     notFound();
   }
 
+  if (slug.length === 2 && slug[1] === "dsa") {
+    return path.join(DOCS_PATH, "dsa", `${slug.join("/")}.mdx`);
+  }
   return path.join(DOCS_PATH, `${slug.join("/")}.mdx`);
 }
 
@@ -96,7 +99,7 @@ export default async function DocsPage(props: PageProps<"/docs/[[...slug]]">) {
     lastComponentIndex >= 0 ? slug[lastComponentIndex] : undefined;
 
   const { next, prev } = lastSlug
-    ? findNeighbour(lastSlug as string)
+    ? findNeighbour(slug[0] === "dsa" ? "dsa" : "playbook", lastSlug as string)
     : { next: undefined, prev: undefined };
 
   const source = fs.readFileSync(filePath, "utf8");
@@ -104,10 +107,10 @@ export default async function DocsPage(props: PageProps<"/docs/[[...slug]]">) {
 
   return (
     <div className="flex w-full max-w-4xl gap-8 overflow-x-auto px-4 sm:p-0">
-      <div id="docs-content">
+      <div id="docs-content" className="w-full [font-variant-ligatures:none]">
         <article className="prose prose-neutral dark:prose-invert mb-6 max-w-none">
           <div className="my-4">
-            <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center justify-between gap-4 pr-2">
               <h2 className="text-2xl font-medium">{data.title}</h2>
               <NextSteps next={next} prev={prev} min />
             </div>
@@ -139,8 +142,8 @@ export default async function DocsPage(props: PageProps<"/docs/[[...slug]]">) {
             }}
           />
         </article>
-        <div className="mt-8">
-          <NextSteps next={next} prev={prev} className="mt-8" />
+        <div className="border-edge border-t px-2 py-2 pt-4">
+          <NextSteps next={next} prev={prev} className="mt-3" />
         </div>
       </div>
     </div>
