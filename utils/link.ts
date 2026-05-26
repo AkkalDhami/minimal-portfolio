@@ -1,8 +1,8 @@
 export function isActiveLink(pathname: string, href: string) {
   if (href === "/") return pathname === "/";
 
-  if (href == "/playbook" && pathname.startsWith("/docs")) {
-    return true;
+  if (pathname.startsWith("/docs")) {
+    return false;
   }
 
   const escaped = href.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");

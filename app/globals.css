@@ -282,15 +282,15 @@ html {
       @apply mt-0;
     }
 
-    &:first-child>h3:first-child {
+    &:first-child > h3:first-child {
       @apply mt-0;
     }
 
-    >h3 {
+    > h3 {
       @apply mt-8;
     }
 
-    >h3+p {
+    > h3 + p {
       @apply mt-2;
     }
   }
@@ -298,7 +298,7 @@ html {
   [data-rehype-pretty-code-figure] {
     position: relative;
     margin-top: 4px;
-    @apply rounded-lg bg-[#0a0a0a];
+    @apply rounded-lg border bg-black;
     max-width: 840px;
   }
 
@@ -310,7 +310,7 @@ html {
     counter-reset: line;
   }
 
-  code>[data-line]::before {
+  code > [data-line]::before {
     counter-increment: line;
     content: counter(line);
 
@@ -323,7 +323,6 @@ html {
 }
 
 @media (prefers-color-scheme: dark) {
-
   code[data-theme*=" "],
   code[data-theme*=" "] span {
     color: var(--shiki-dark);

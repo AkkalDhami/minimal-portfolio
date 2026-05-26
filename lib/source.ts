@@ -1,10 +1,14 @@
 import { IPlaybook } from "@/types/app.types";
 import { PLAYBOOK_DATA } from "@/data/playbook";
+import { DSA_DATA } from "@/data/dsa";
 
 export const findNeighbour = (
+  type: "playbook" | "dsa",
   slug: string
 ): { prev: IPlaybook | undefined; next: IPlaybook | undefined } => {
-  const currentItem = PLAYBOOK_DATA.find(item => item.slug === slug);
+  const DATA = type === "playbook" ? PLAYBOOK_DATA : DSA_DATA;
+
+  const currentItem = DATA.find(item => item.slug === slug);
 
   if (!currentItem) {
     return {
@@ -13,13 +17,12 @@ export const findNeighbour = (
     };
   }
 
-  const index = PLAYBOOK_DATA.sort((a, b) =>
-    a.title.localeCompare(b.title)
-  ).findIndex(item => item.slug === slug);
+  const index = DATA.sort((a, b) => a.title.localeCompare(b.title)).findIndex(
+    item => item.slug === slug
+  );
 
   return {
-    prev: index > 0 ? PLAYBOOK_DATA[index - 1] : undefined,
-    next:
-      index < PLAYBOOK_DATA.length - 1 ? PLAYBOOK_DATA[index + 1] : undefined
+    prev: index > 0 ? DATA[index - 1] : undefined,
+    next: index < DATA.length - 1 ? DATA[index + 1] : undefined
   };
 };
