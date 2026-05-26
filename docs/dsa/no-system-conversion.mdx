@@ -1,0 +1,201 @@
+---
+title: Number System Conversion
+description: Learn how to convert numbers between different number systems, such as binary, octal, decimal.
+---
+
+Number system conversion is the process of converting a number from one base to another. The most common number systems are:
+
+- **Binary (Base 2)**: Uses only two digits, <Highlight>0</Highlight> and <Highlight>1</Highlight>
+- **Octal (Base 8)**: Uses digits from <Highlight>0</Highlight> to <Highlight>7</Highlight>
+- **Decimal (Base 10)**: Uses digits from <Highlight>0</Highlight> to <Highlight>9</Highlight>
+- **Hexadecimal (Base 16)**: Uses digits from <Highlight>0</Highlight> to <Highlight>9</Highlight> and letters <Highlight>A</Highlight> to <Highlight>F</Highlight>
+
+## <br />
+
+<br />
+
+## 1. Binary to Decimal Conversion
+
+#### Code:
+
+```cpp title="binary-to-decimal.cpp"
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    int n;
+
+    cout << "Enter a binary no: ";
+    cin >> n;
+
+    int ans = 0;
+    int mul = 1;
+    int on = n;
+
+    while (n != 0)
+    {
+        int rem = n % 10;
+        if (rem != 0 && rem != 1)
+        {
+            cout << "Invalid binary no." << endl;
+            return 0;
+        }
+        n /= 10;
+
+        ans += rem * mul;
+        mul *= 2;
+    }
+
+    cout << "Decimal no. of " << on << " : " << ans << endl;
+
+    return 0;
+}
+```
+
+## <br />
+
+#### Output:
+
+<Output>Enter a binary no: 111 Decimal no. of 111 : 7</Output>
+
+## <br />
+
+<br />
+
+## 2. Octal to Decimal Conversion
+
+#### Code:
+
+```cpp title="octal-to-decimal.cpp"
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    int n;
+
+    cout << "Enter an octal no: ";
+    cin >> n;
+
+    int ans = 0;
+    int mul = 1;
+    int on = n;
+
+    while (n != 0)
+    {
+        int rem = n % 10;
+        if (rem < 0 || rem > 7)
+        {
+            cout << "Invalid octal no." << endl;
+            return 0;
+        }
+        n /= 10;
+
+        ans += rem * mul;
+        mul *= 8;
+    }
+
+    cout << "Decimal no. of " << on << " : " << ans << endl;
+
+    return 0;
+}
+```
+
+## <br />
+
+#### Output:
+
+<Output>Enter a octal no: 173 Decimal no. of 173 : 123</Output>
+
+## <br />
+
+<br />
+
+## 3. Decimal to Binary Conversion
+
+#### Code:
+
+```cpp title="decimal-to-binary.cpp"
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    int n;
+
+    cout << "Enter a no: ";
+    cin >> n;
+
+    int ans = 0;
+    int mul = 1;
+    int on = n;
+
+    while (n != 0)
+    {
+        int rem = n % 2;
+        n /= 2;
+
+        ans += rem * mul;
+        mul *= 10;
+    }
+
+    cout << "Binary no. of " << on << " : " << ans << endl;
+
+    return 0;
+}
+```
+
+## <br />
+
+#### Output:
+
+<Output>Enter a no: 7 Binary no. of 7 : 111</Output>
+
+## <br />
+
+<br />
+
+## 4. Decimal to Octal Conversion
+
+#### Code:
+
+```cpp title="decimal-to-octal.cpp"
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    int n;
+
+    cout << "Enter a no: ";
+    cin >> n;
+
+    int ans = 0;
+    int mul = 1;
+    int on = n;
+
+    while (n != 0)
+    {
+        int rem = n % 8;
+        n /= 8;
+
+        ans += rem * mul;
+        mul *= 10;
+    }
+
+    cout << "Octal no. of " << on << " : " << ans << endl;
+
+    return 0;
+}
+```
+
+## <br />
+
+#### Output:
+
+<Output>Enter a no: 123 Octal no. of 123 : 173</Output>

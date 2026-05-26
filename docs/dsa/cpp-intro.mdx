@@ -1,0 +1,728 @@
+---
+title: Introduction to C++
+description: "Learn the basics of C++. Variables, Data types, Control flow, and operators, etc."
+---
+
+## 1. Basic Program
+
+```cpp title="hello.cpp"
+#include <iostream>
+
+using namespace std;
+
+int main() {
+    cout << "Hello World";
+    return 0;
+}
+```
+
+## <br />
+
+<br />
+
+## 2. Explanation of Program
+
+- <Highlight>#include iostream</Highlight>: Used for input and output
+  operations.
+
+- <Highlight>using namespace std;</Highlight>: Allows use of standard library
+  objects without writing std::.
+
+- <Highlight>cout</Highlight>: Used to display output.
+
+- <Highlight>int main()</Highlight>: Main function where program execution
+  begins.
+
+- <Highlight>cout</Highlight>: Used to display output.
+
+- <Highlight>return 0;</Highlight>: Indicates successful execution
+
+## <br />
+
+<br />
+
+## 3. Applications of C++
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Field</TH>
+      <TH>Usage</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>Game Development</TD>
+      <TD>Game engines</TD>
+    </TR>
+    
+    <TR>
+       <TD>Operating Systems</TD>
+       <TD>Windows, Linux components</TD>
+    </TR>
+
+    <TR>
+      <TD>Web Browsers</TD>
+      <TD>Browser engines</TD>
+    </TR>
+
+<TR>
+  <TD>Embedded Systems</TD>
+  <TD>Microcontrollers</TD>
+</TR>
+
+    <TR>
+      <TD>Databases</TD>
+      <TD>MySQL</TD>
+    </TR>
+
+    <TR>
+      <TD>Competitive Programming</TD>
+      <TD>Fast execution</TD>
+    </TR>
+
+  </TBody>
+</Table>
+
+## <br />
+
+<br />
+
+## 4. Variables & Data Types
+
+### 4.1 Variables
+
+Variables are named memory locations that hold values.
+
+---
+
+### 4.2 Data Types
+
+Data types define the kind of data a variable can hold.
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Data Type</TH>
+      <TH>Size</TH>
+      <TH>Example</TH>
+    </TR>
+  </THead>
+
+  <TBody>
+    <TR>
+      <TD><Highlight>int</Highlight></TD>
+      <TD>4 Bytes</TD>
+      <TD>10</TD>
+    </TR>
+
+    <TR>
+      <TD><Highlight>float</Highlight></TD>
+      <TD>4 Bytes</TD>
+      <TD>3.14</TD>
+    </TR>
+
+    <TR>
+      <TD><Highlight>double</Highlight></TD>
+      <TD>8 Bytes</TD>
+      <TD>10.5678</TD>
+    </TR>
+
+    <TR>
+      <TD><Highlight>char</Highlight></TD>
+      <TD>1 Byte</TD>
+      <TD>'A'</TD>
+    </TR>
+
+    <TR>
+      <TD><Highlight>bool</Highlight></TD>
+      <TD>1 Byte</TD>
+      <TD>true</TD>
+    </TR>
+
+    <TR>
+      <TD><Highlight>short</Highlight></TD>
+      <TD>2 Bytes</TD>
+      <TD>120</TD>
+    </TR>
+
+    <TR>
+      <TD><Highlight>long</Highlight></TD>
+      <TD>4 or 8 Bytes</TD>
+      <TD>123456</TD>
+    </TR>
+
+    <TR>
+      <TD><Highlight>long long</Highlight></TD>
+      <TD>8 Bytes</TD>
+      <TD>9876543210</TD>
+    </TR>
+
+    <TR>
+      <TD><Highlight>string</Highlight></TD>
+      <TD>Depends on Length</TD>
+      <TD>"Hello"</TD>
+    </TR>
+
+  </TBody>
+</Table>
+
+---
+
+```cpp title="datatypes.cpp"
+#include <iostream>
+using namespace std;
+
+int main()
+{
+
+    int num = 534;
+    cout << num << endl;
+
+    long int lnum = 34;
+    cout << lnum << endl;
+
+    float x = 35.99;
+    cout << x << endl;
+
+    double a = 93.98;
+    cout << a << endl;
+
+    char c = 'A';
+    cout << c << endl;
+
+    bool isTrue = false;
+    cout <<  isTrue << endl;
+
+    string str = "Hello World!";
+    cout << str << endl;
+
+    return 0;
+}
+```
+
+## <br />
+
+<br />
+
+## 5. Type Casting
+
+Type casting is the process of converting one data type to another.
+
+### 5.1 Implicit Type Casting
+
+- Automatic conversion of lower precision to higher precision data type.
+- No risk of data loss.
+
+**Example:**
+
+```cpp title="implicit-cast.cpp"
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int a = 10;
+    double b = a;
+    cout << b << endl;
+
+    return 0;
+}
+```
+
+## <br />
+
+### 5.2 Explicit Type Casting
+
+- Manual conversion of higher precision to lower precision data type.
+- Risk of data loss.
+
+**Example:**
+
+```cpp title="explicit-cast.cpp"
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    double a = 10.5;
+
+    int b = (int)a;
+    // int b = static_cast<int>(a);
+
+    cout << b << endl;
+
+    return 0;
+}
+```
+
+## <br />
+
+<br />
+
+## 6. Conditional Statement
+
+Conditional statements are used to make decisions on the basis of a condition.
+
+#### Write a program to check if a number is even or odd using if-else statement.
+
+```cpp title="even-odd.cpp"
+#include <iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cout << "Enter a number: ";
+
+    cin >> n; //? read the user input
+
+    if (n % 2 == 0) {
+        cout << n << " is even no." << endl;
+    } else {
+        cout << n << " is odd no." << endl;
+    }
+
+    return 0;
+}
+```
+
+## <br />
+
+<br />
+
+## 7. Loop Statement
+
+Loop statements are used to repeat a block of code until a condition condition is met.
+
+- for loop
+- while loop
+- do-while loop
+
+### 7.1 for Loop
+
+- Used to repeat a block of code a fixed number of times.
+- Syntax: <Highlight>for (initialization; condition; increment/decrement)</Highlight>
+
+<br />
+```cpp title="for-loop.cpp"
+#include <iostream>
+using namespace std;
+
+int main()
+{
+for (int i = 0; i < 5; i++)
+{
+cout << i << endl;
+}
+
+    return 0;
+
+}
+
+````
+<br />
+---
+
+### 7.2 while Loop
+
+- Used to repeat a block of code until a condition is met.
+- Syntax: <Highlight>while (condition)</Highlight>
+
+<br />
+```cpp title="while-loop.cpp"
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int i = 0;
+    while (i < 5)
+    {
+        cout << i << endl;
+        i++;
+    }
+
+    return 0;
+}
+````
+
+## <br />
+
+### 7.3 do-while Loop
+
+- Used to repeat a block of code at least once.
+- Syntax: <Highlight>do { code } while (condition);</Highlight>
+
+<br />
+```cpp title="do-while-loop.cpp"
+#include <iostream>
+using namespace std;
+
+int main()
+{
+int i = 0;
+do
+{
+cout << i << endl;
+i++;
+} while (i < 5);
+
+    return 0;
+
+}
+
+````
+<br />
+---
+<br />
+
+
+## 8. Operators
+
+Operators are symbols that are used to perform operations on variables and values.
+
+### 8.1 Arithmetic Operators
+
+- <Highlight>+</Highlight> (Addition)
+- <Highlight>-</Highlight> (Subtraction)
+- <Highlight>*</Highlight> (Multiplication)
+- <Highlight>/</Highlight> (Division)
+- <Highlight>%</Highlight> (Modulus)
+
+<br />
+---
+
+### 8.2 Assignment Operators
+
+- <Highlight>=</Highlight> (Assignment)
+- <Highlight>+=</Highlight> (Addition Assignment)
+- <Highlight>-=</Highlight> (Subtraction Assignment)
+- <Highlight>*=</Highlight> (Multiplication Assignment)
+- <Highlight>/=</Highlight> (Division Assignment)
+- <Highlight>%=</Highlight> (Modulus Assignment)
+
+<br />
+---
+
+### 8.3 Comparison Operators
+
+- <Highlight>==</Highlight> (Equal)
+- <Highlight>!=</Highlight> (Not Equal)
+- <Highlight>==</Highlight> (Identity)
+- <Highlight>!==</Highlight> (Not Identity)
+- <Highlight>&lt;</Highlight> (Less Than)
+- <Highlight>&gt;</Highlight> (Greater Than)
+- <Highlight>&lt;=</Highlight> (Less Than or Equal)
+- <Highlight>&gt;=</Highlight> (Greater Than or Equal)
+
+<br />
+---
+
+### 8.4 Logical Operators
+
+- <Highlight>&&</Highlight> (AND)
+- <Highlight>||</Highlight> (OR)
+- <Highlight>!</Highlight> (NOT)
+
+<br />
+---
+
+### 8.5 Bitwise Operators
+
+- <Highlight>&amp;</Highlight> (AND)
+- <Highlight>|</Highlight> (OR)
+- <Highlight>~</Highlight> (NOT)
+- <Highlight>^</Highlight> (XOR)
+- <Highlight>&lt;&lt;</Highlight> (Left Shift)
+- <Highlight>&gt;&gt;</Highlight> (Right Shift)
+
+<br />
+---
+
+### 8.6 Pre & Post Increment/Decrement Operators
+
+- <Highlight>++</Highlight> (Pre-Increment): first increment then use the value
+- <Highlight>--</Highlight> (Pre-Decrement): first decrement then use the value
+- <Highlight>++</Highlight> (Post-Increment): first use the value then increment
+- <Highlight>--</Highlight> (Post-Decrement): first use the value then decrement
+
+<br />
+---
+
+#### Example:
+
+```cpp title="operators.cpp"
+#include <iostream>
+
+using namespace std;
+
+int main() {
+    //* Arithmetic Operators
+    int a = 5, b = 3;
+    cout << "a + b = " << a + b << endl;
+    cout << "a - b = " << a - b << endl;
+    cout << "a * b = " << a * b << endl;
+    cout << "a / b = " << a / b << endl;
+    cout << "a % b = " << a % b << endl;
+
+    //* Relational Operators
+    cout << "a == b = " << (a == b) << endl;
+    cout << "a != b = " << (a != b) << endl;
+    cout << "a > b = " << (a > b) << endl;
+    cout << "a < b = " << (a < b) << endl;
+    cout << "a >= b = " << (a >= b) << endl;
+    cout << "a <= b = " << (a <= b) << endl;
+
+    //* Logical Operators
+    cout << "a && b = " << (a && b) << endl;
+    cout << "a || b = " << (a || b) << endl;
+
+    //* Bitwise Operators
+    cout << "a & b = " << (a & b) << endl;
+    cout << "a | b = " << (a | b) << endl;
+    cout << "~a = " << (~a) << endl;
+    cout << "a << b = " << (a << b) << endl;
+    cout << "a >> b = " << (a >> b) << endl;
+
+    //* Assignment Operators
+    cout << "a += b = " << (a += b) << endl;
+    cout << "a -= b = " << (a -= b) << endl;
+    cout << "a *= b = " << (a *= b) << endl;
+    cout << "a /= b = " << (a /= b) << endl;
+    cout << "a %= b = " << (a %= b) << endl;
+
+    return 0;
+}
+````
+
+## <br />
+
+<br />
+
+## 9. Switch Statement, Break & Continue
+
+### 9.1 Switch Statement
+
+- Used to execute one of many blocks of code based on the value of a variable.
+- Syntax: <Highlight>switch (expression) &#123; case label: code; break; default: code; break; &#125;</Highlight>
+
+<br />
+```cpp title="switch.cpp"
+#include <iostream>
+using namespace std;
+
+int main()
+{
+int a = 3;
+switch (a)
+{
+case 1:
+cout << "a is 1" << endl;
+break;
+case 2:
+cout << "a is 2" << endl;
+break;
+case 3:
+cout << "a is 3" << endl;
+break;
+default:
+cout << "a is not 1, 2, or 3" << endl;
+break;
+}
+return 0;
+}
+
+````
+
+<br />
+---
+
+### 9.2 Break Statement
+
+- Used to exit a loop or switch statement.
+- Syntax: <Highlight>break;</Highlight>
+
+
+<br />
+---
+
+### 9.3 Continue Statement
+
+- Used to skip the current iteration of a loop and continue with the next iteration.
+- Syntax: <Highlight>continue;</Highlight>
+
+<br />
+---
+<br />
+
+## 10. Some Basic Programs
+
+
+### 10.1 Multiplication Table of n
+
+Write a program to print the multiplication table of n.
+
+#### Code:
+
+```cpp title="multiplication.cpp"
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int n;
+    cout << "Enter value of n: ";
+    cin >> n;
+
+    for (int i = 1; i <= 10; i++)
+    {
+        cout << n << " * " << i << " = " << n * i << endl;
+    }
+
+    return 0;
+}
+````
+
+#### Output:
+
+<Output>
+  Enter value of n: 12 12 * 1 = 12 12 * 2 = 24 12 * 3 = 36 12 * 4 = 48 12 * 5 =
+  60 12 * 6 = 72 12 * 7 = 84 12 * 8 = 96 12 * 9 = 108 12 * 10 = 120
+</Output>
+
+## <br />
+
+### 10.2 Power of a Number
+
+Write a program to calculate the power of a number.
+
+#### Code:
+
+```cpp title="power.cpp"
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int base, power;
+    cout << "Enter a base: ";
+    cin >> base;
+    cout << "Enter a power: ";
+    cin >> power;
+
+    int res = base;
+
+    for (int i = 1; i < power; i++)
+    {
+        res = res * base;
+    }
+    cout << base << "^" << power << " = " << res << endl;
+
+    return 0;
+}
+```
+
+#### Output:
+
+<Output>Enter a base: 3 Enter a power: 3 3^3 = 27</Output>
+
+## <br />
+
+### 10.3 Check if a Number is Prime or Not
+
+Write a program to check if a number is prime or not.
+
+#### Code:
+
+```cpp title="prime.cpp"
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int n;
+    cout << "Enter a no: ";
+    cin >> n;
+    bool isPrime = false;
+
+    if (n < 2)
+    {
+        isPrime = false;
+    }
+    else if (n == 2)
+    {
+        isPrime = true;
+    }
+    else if (n % 2 == 0)
+    {
+        isPrime = false;
+    }
+    else
+    {
+        for (int i = 3; i * i <= n; i+=2)
+        {
+            if (n % i == 0)
+            {
+                isPrime = false;
+                break;
+            }
+        }
+        isPrime = true;
+    }
+
+    if (isPrime)
+    {
+        cout << n << " is a prime no." << endl;
+    }
+    else
+    {
+        cout << n << " is not a prime no." << endl;
+    }
+
+    return 0;
+}
+```
+
+#### Output:
+
+<Output>Enter a no: 12 12 is not a prime no.</Output>
+
+## <br />
+
+### 10.4 Fibonacci Series
+
+Write a program to print the first n Fibonacci numbers.
+
+n = 11: <Highlight>0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55,</Highlight>
+
+#### Code:
+
+```cpp title="fibonacci.cpp"
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    int n;
+
+    cout << "Enter a no: ";
+    cin >> n;
+
+    int a = 0, b = 1, c = 0;
+
+    for (int i = 1; i <= n; i++)
+    {
+        cout << c << ", ";
+        a = b;
+        b = c;
+        c = a + b;
+    }
+
+    return 0;
+}
+```
+
+#### Output:
+
+<Output>Enter a no: 12 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89,</Output>
