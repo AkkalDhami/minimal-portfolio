@@ -40,7 +40,7 @@ export default function PackageManagerTabs({
       )}>
       <TabsList
         style={{
-          paddingTop: "2px"
+          paddingTop: "3px"
         }}
         variant="underline"
         className={cn(
