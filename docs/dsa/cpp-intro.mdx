@@ -16,29 +16,27 @@ int main() {
 }
 ```
 
-## <br />
-
+<br />
+---
 <br />
 
 ## 2. Explanation of Program
 
-- <Highlight>#include iostream</Highlight>: Used for input and output
-  operations.
+- <Highlight>#include iostream</Highlight>: Used for input and output operations.
 
-- <Highlight>using namespace std;</Highlight>: Allows use of standard library
-  objects without writing std::.
+
+- <Highlight>using namespace std;</Highlight>: Allows use of standard library objects without writing std::.
 
 - <Highlight>cout</Highlight>: Used to display output.
 
-- <Highlight>int main()</Highlight>: Main function where program execution
-  begins.
+- <Highlight>int main()</Highlight>: Main function where program execution begins.
 
 - <Highlight>cout</Highlight>: Used to display output.
 
 - <Highlight>return 0;</Highlight>: Indicates successful execution
 
-## <br />
-
+<br />
+---
 <br />
 
 ## 3. Applications of C++
@@ -66,38 +64,35 @@ int main() {
       <TD>Browser engines</TD>
     </TR>
 
-<TR>
-  <TD>Embedded Systems</TD>
-  <TD>Microcontrollers</TD>
-</TR>
+   <TR>
+      <TD>Embedded Systems</TD>
+      <TD>Microcontrollers</TD>
+   </TR>
 
     <TR>
       <TD>Databases</TD>
       <TD>MySQL</TD>
     </TR>
-
+    
     <TR>
       <TD>Competitive Programming</TD>
       <TD>Fast execution</TD>
     </TR>
-
   </TBody>
 </Table>
 
-## <br />
-
+<br />
+---
 <br />
 
 ## 4. Variables & Data Types
 
 ### 4.1 Variables
-
 Variables are named memory locations that hold values.
 
 ---
 
 ### 4.2 Data Types
-
 Data types define the kind of data a variable can hold.
 
 <Table>
@@ -163,7 +158,6 @@ Data types define the kind of data a variable can hold.
       <TD>Depends on Length</TD>
       <TD>"Hello"</TD>
     </TR>
-
   </TBody>
 </Table>
 
@@ -201,8 +195,8 @@ int main()
 }
 ```
 
-## <br />
-
+<br />
+---
 <br />
 
 ## 5. Type Casting
@@ -230,7 +224,8 @@ int main()
 }
 ```
 
-## <br />
+<br />
+---
 
 ### 5.2 Explicit Type Casting
 
@@ -256,8 +251,8 @@ int main()
 }
 ```
 
-## <br />
-
+<br />
+---
 <br />
 
 ## 6. Conditional Statement
@@ -267,7 +262,7 @@ Conditional statements are used to make decisions on the basis of a condition.
 #### Write a program to check if a number is even or odd using if-else statement.
 
 ```cpp title="even-odd.cpp"
-#include <iostream>
+#include <iostream> 
 using namespace std;
 
 int main() {
@@ -275,7 +270,7 @@ int main() {
     cout << "Enter a number: ";
 
     cin >> n; //? read the user input
-
+    
     if (n % 2 == 0) {
         cout << n << " is even no." << endl;
     } else {
@@ -286,8 +281,8 @@ int main() {
 }
 ```
 
-## <br />
-
+<br />
+---
 <br />
 
 ## 7. Loop Statement
@@ -310,16 +305,14 @@ using namespace std;
 
 int main()
 {
-for (int i = 0; i < 5; i++)
-{
-cout << i << endl;
-}
+    for (int i = 0; i < 5; i++)
+    {
+        cout << i << endl;
+    }
 
     return 0;
-
 }
-
-````
+```
 <br />
 ---
 
@@ -344,9 +337,9 @@ int main()
 
     return 0;
 }
-````
-
-## <br />
+```
+<br />
+---
 
 ### 7.3 do-while Loop
 
@@ -360,18 +353,16 @@ using namespace std;
 
 int main()
 {
-int i = 0;
-do
-{
-cout << i << endl;
-i++;
-} while (i < 5);
+    int i = 0;
+    do
+    {
+        cout << i << endl;
+        i++;
+    } while (i < 5);
 
     return 0;
-
 }
-
-````
+```
 <br />
 ---
 <br />
@@ -493,10 +484,10 @@ int main() {
 
     return 0;
 }
-````
+```
 
-## <br />
-
+<br />
+---
 <br />
 
 ## 9. Switch Statement, Break & Continue
@@ -513,26 +504,25 @@ using namespace std;
 
 int main()
 {
-int a = 3;
-switch (a)
-{
-case 1:
-cout << "a is 1" << endl;
-break;
-case 2:
-cout << "a is 2" << endl;
-break;
-case 3:
-cout << "a is 3" << endl;
-break;
-default:
-cout << "a is not 1, 2, or 3" << endl;
-break;
+    int a = 3;
+    switch (a)
+    {
+    case 1:
+        cout << "a is 1" << endl;
+        break;
+    case 2:
+        cout << "a is 2" << endl;
+        break;
+    case 3:
+        cout << "a is 3" << endl;
+        break;
+    default:
+        cout << "a is not 1, 2, or 3" << endl;
+        break;
+    }
+    return 0;
 }
-return 0;
-}
-
-````
+```
 
 <br />
 ---
@@ -581,19 +571,28 @@ int main()
 
     return 0;
 }
-````
+```
 
 #### Output:
 
 <Output>
-  Enter value of n: 12 12 * 1 = 12 12 * 2 = 24 12 * 3 = 36 12 * 4 = 48 12 * 5 =
-  60 12 * 6 = 72 12 * 7 = 84 12 * 8 = 96 12 * 9 = 108 12 * 10 = 120
+  Enter value of n: 12
+  12 * 1 = 12
+  12 * 2 = 24
+  12 * 3 = 36
+  12 * 4 = 48
+  12 * 5 = 60
+  12 * 6 = 72
+  12 * 7 = 84
+  12 * 8 = 96
+  12 * 9 = 108
+  12 * 10 = 120
 </Output>
 
-## <br />
+<br />
+---
 
 ### 10.2 Power of a Number
-
 Write a program to calculate the power of a number.
 
 #### Code:
@@ -623,10 +622,15 @@ int main()
 ```
 
 #### Output:
+<Output>
+  Enter a base: 3 
+  Enter a power: 3
+  3^3 = 27
+</Output>
 
-<Output>Enter a base: 3 Enter a power: 3 3^3 = 27</Output>
 
-## <br />
+<br />
+---
 
 ### 10.3 Check if a Number is Prime or Not
 
@@ -685,9 +689,13 @@ int main()
 
 #### Output:
 
-<Output>Enter a no: 12 12 is not a prime no.</Output>
+<Output>
+  Enter a no: 12
+  12 is not a prime no.
+</Output>
 
-## <br />
+<br />
+---
 
 ### 10.4 Fibonacci Series
 
@@ -718,11 +726,15 @@ int main()
         b = c;
         c = a + b;
     }
-
+    
     return 0;
 }
 ```
 
 #### Output:
 
-<Output>Enter a no: 12 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89,</Output>
+
+<Output>
+  Enter a no: 12
+  0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 
+</Output>
