@@ -302,6 +302,20 @@ html {
     max-width: 840px;
   }
 
+  [data-highlighted-line],
+  [data-highlighted-chars] {
+    position: relative;
+    background-color: var(--muted);
+  }
+
+  [data-highlighted-chars] {
+    border-radius: var(--radius-sm);
+    padding-inline: 0.3rem;
+    padding-block: 0.1rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+  }
+
   /* [data-rehype-pretty-code-title] {
      @apply bg-[#0a0a0a] rounded-t-lg py-2 px-4 text-neutral-300 
   } */
@@ -328,10 +342,6 @@ html {
     color: var(--shiki-dark);
     background-color: var(--shiki-dark-bg);
   }
-}
-
-[data-highlighted-line] {
-  background-color: var(--color-neutral-600);
 }
 
 ::-webkit-scrollbar {

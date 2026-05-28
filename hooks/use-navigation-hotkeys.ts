@@ -27,6 +27,7 @@ export function useNavigationHotkeys(options: Options = {}) {
   const {
     routes = {
       h: "/",
+      a: "/dsa",
       p: "/projects",
       e: "/#skills",
       c: "/contacts",
@@ -54,7 +55,7 @@ export function useNavigationHotkeys(options: Options = {}) {
 
       const key = e.key.toLowerCase();
 
-      if (!e.shiftKey) return;
+      if (e.shiftKey) return;
 
       const path = routes[key];
       if (!path) return;

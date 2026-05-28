@@ -81,6 +81,9 @@ function getDocPath(slug?: string[]) {
   if (slug.length === 2 && slug[1] === "dsa") {
     return path.join(DOCS_PATH, "dsa", `${slug.join("/")}.mdx`);
   }
+  if (slug.length === 2 && slug[1] === "playbook") {
+    return path.join(DOCS_PATH, "playbook", `${slug.join("/")}.mdx`);
+  }
   return path.join(DOCS_PATH, `${slug.join("/")}.mdx`);
 }
 

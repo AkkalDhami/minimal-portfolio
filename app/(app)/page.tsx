@@ -13,7 +13,7 @@ export default async function Page() {
   return (
     <div className="border-edge mx-auto flex max-w-4xl flex-col space-y-2 border-x">
       <HeroSection />
-      <GitHubContributions />
+      <GitHubContributions year={"2025"} />
       <HeroSectionBackground />
       <ProjectsSection home />
 
@@ -22,7 +22,7 @@ export default async function Page() {
       <SkillsSection home />
       <TemplateSection home />
       <StackMarquee home />
-      <GitHubContributions home />
+      <GitHubContributions home={true} />
       <ContactSection home />
     </div>
   );
