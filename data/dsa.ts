@@ -31,5 +31,11 @@ export const DSA_DATA: IDSA[] = [
     title: "04. Number System Conversion",
     description: "Learn about converting between different number systems.",
     docs: "/docs/dsa/no-system-conversion"
+  },
+  {
+    slug: "arrays",
+    title: "05. Basic Arrays Problems",
+    description: "Solve basic arrays problems.",
+    docs: "/docs/dsa/arrays"
   }
 ];
