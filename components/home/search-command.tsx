@@ -46,6 +46,7 @@ import { useSound } from "@/hooks/use-sound";
 import { click005Sound } from "@/sounds/click-005";
 import { click002Sound } from "@/sounds/click-002";
 import { uChatScrollButtonSound } from "@/sounds/chat-scroll";
+import { DSA_DATA } from "@/data/dsa";
 
 export interface Item {
   value: string;
@@ -139,6 +140,16 @@ export const playbooks: Item[] = PLAYBOOK_DATA.map(play => {
   };
 });
 
+export const dsa: Item[] = DSA_DATA.map(play => {
+  return {
+    value: `${play.docs}`,
+    label: play.title,
+    icon: RiBookOpenLine,
+    link: true,
+    newTab: true
+  };
+});
+
 export const templates: Item[] = TEMPLATE_DATA.map(t => {
   return {
     value: `${t.liveUrl}`,
@@ -193,6 +204,7 @@ export const groupedItems: Group[] = [
   { items: navigations, value: "NAVIGATION" },
   { items: projects, value: "PROJECTS" },
   { items: playbooks, value: "BACKEND PLAYBOOK" },
+  { items: dsa, value: "DATA STRUCTURES & ALGORITHMS" },
   { items: templates, value: "TEMPLATES" },
   { items: contacts, value: "CONTACT INFO" },
   { items: socials, value: "SOCIAL LINKS" },

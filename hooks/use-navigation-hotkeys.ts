@@ -45,6 +45,7 @@ export function useNavigationHotkeys(options: Options = {}) {
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       const target = e.target as HTMLElement;
+      if (e.shiftKey || e.ctrlKey) return;
 
       const isTyping =
         target.tagName === "INPUT" ||
@@ -54,8 +55,6 @@ export function useNavigationHotkeys(options: Options = {}) {
       if (isTyping) return;
 
       const key = e.key.toLowerCase();
-
-      if (e.shiftKey) return;
 
       const path = routes[key];
       if (!path) return;
