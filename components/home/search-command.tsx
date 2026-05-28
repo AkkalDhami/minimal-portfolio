@@ -4,7 +4,8 @@ import {
   RiBookOpenLine,
   RiHome4Line,
   RiPhoneLine,
-  RiGithubFill
+  RiGithubFill,
+  RiCodeSSlashLine
 } from "react-icons/ri";
 import { HiOutlineCube } from "react-icons/hi";
 import { LiaLaptopCodeSolid } from "react-icons/lia";
@@ -109,6 +110,13 @@ export const navigations: Item[] = [
     value: "/contacts",
     link: true,
     key: "c"
+  },
+  {
+    icon: RiCodeSSlashLine,
+    label: "DSA",
+    value: "/dsa",
+    link: true,
+    key: "a"
   }
 ];
 export const projects: Item[] = PROJECTS.map(proj => {

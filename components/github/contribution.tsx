@@ -36,12 +36,20 @@ const YEARS = [
 
 interface GithubContributionsProps {
   initialData: Activity[];
+  home?: boolean;
 }
 
 export function GitHubContributionGraph({
-  initialData
+  initialData,
+  home = false
 }: GithubContributionsProps) {
-  const [year, setYear] = useState<string>("2026");
+  const [year, setYear] = useState<string>(
+    home
+      ? "2026"
+      : initialData.length > 0
+        ? initialData[0].date.slice(0, 4)
+        : "2026"
+  );
   const [data, setData] = useState<Activity[]>(initialData);
   const [loading, setLoading] = useState(false);
 
@@ -67,27 +75,29 @@ export function GitHubContributionGraph({
 
   return (
     <div className="w-full space-y-2">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <h3 className="text-muted-foreground text-base font-medium tracking-wide uppercase">
-          Github Contributions
-        </h3>
-        <Select
-          value={year}
-          onValueChange={val => {
-            if (val) setYear(val);
-          }}>
-          <SelectTrigger className="rounded-primary h-6 w-30 text-xs">
-            <SelectValue placeholder="Select Year" />
-          </SelectTrigger>
-          <SelectContent className={"rounded-primary w-auto"}>
-            {YEARS.map(y => (
-              <SelectItem key={y.value} value={y.value} className="text-xs">
-                {y.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+      {home && (
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h3 className="text-muted-foreground text-base font-medium tracking-wide uppercase">
+            Github Contributions
+          </h3>
+          <Select
+            value={year}
+            onValueChange={val => {
+              if (val) setYear(val);
+            }}>
+            <SelectTrigger className="rounded-primary h-6 w-30 text-xs">
+              <SelectValue placeholder="Select Year" />
+            </SelectTrigger>
+            <SelectContent className={"rounded-primary w-auto"}>
+              {YEARS.map(y => (
+                <SelectItem key={y.value} value={y.value} className="text-xs">
+                  {y.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      )}
 
       <div className="group relative min-h-50">
         {loading ? (

@@ -23,7 +23,7 @@ export function HeroSection() {
   return (
     <section
       id="about"
-      className="screen-line relative z-10 px-4 pt-16 pb-0 font-sans font-normal">
+      className="screen-line relative z-10 px-4 pt-16 pb-4 font-sans font-normal">
       <div className="mt-4">
         <div className="flex items-baseline-last gap-2">
           <h1 className="font-inter text-4xl font-semibold tracking-wide uppercase sm:text-5xl lg:text-6xl xl:text-7xl">
