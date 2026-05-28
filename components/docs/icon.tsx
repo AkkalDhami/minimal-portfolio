@@ -1,4 +1,3 @@
-import { SVGProps } from "react";
 import { PackageManager } from "./package-manager-tabs";
 import { cn } from "@/lib/utils";
 import { FileIcon } from "lucide-react";
@@ -277,6 +276,7 @@ export const LanguageIcons = {
         d="M44.284,36.035L27.687,1.429c-0.855-1.783-3.337-1.93-4.397-0.26L4.886,30.177	c-0.397,0.625-0.385,1.426,0.029,2.04l9.271,13.738c0.575,0.852,1.634,1.237,2.623,0.953l25.942-7.458	C44.208,39.031,44.939,37.402,44.284,36.035z M40.618,37.279L18.8,43.388c-0.505,0.142-0.98-0.305-0.87-0.818l7.735-36.097	c0.139-0.65,1.023-0.755,1.311-0.157l14.265,29.621C41.489,36.481,41.194,37.118,40.618,37.279z"></path>
     </svg>
   ),
+
   mdx: (props: IconProps) => (
     <svg
       {...props}
@@ -290,6 +290,7 @@ export const LanguageIcons = {
       />
     </svg>
   ),
+
   sql: (props: IconProps) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -305,6 +306,7 @@ export const LanguageIcons = {
       <path d="M12 2c1.041 0 2.044 .068 2.977 .198l.469 .071q .84 .14 1.586 .348l.44 .131l.075 .024a11 11 0 0 1 .805 .3l.199 .086q .535 .242 .967 .53q .165 .11 .313 .225a3.8 3.8 0 0 1 .669 .668l.091 .128q .07 .105 .129 .211l.07 .139q .163 .35 .2 .73l.01 .211c0 2.477 -4.062 4 -9 4c-4.798 0 -8.77 -1.438 -8.979 -3.795a1 1 0 0 1 -.021 -.205l.005 -.104l.016 -.1c.205 -2.306 4.01 -3.733 8.667 -3.794z" />
     </svg>
   ),
+
   nodejs: (props: IconProps) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -323,6 +325,7 @@ export const LanguageIcons = {
       <path d="M17 9h-3.5a1.5 1.5 0 0 0 0 3h2a1.5 1.5 0 0 1 0 3h-3.5" />
     </svg>
   ),
+
   expressjs: (props: IconProps) => (
     <svg
       {...props}
@@ -336,6 +339,7 @@ export const LanguageIcons = {
       />
     </svg>
   ),
+
   mongodb: (props: IconProps) => (
     <svg
       {...props}
@@ -349,6 +353,7 @@ export const LanguageIcons = {
       />
     </svg>
   ),
+
   mysql: (props: IconProps) => (
     <svg
       {...props}
@@ -370,6 +375,7 @@ export const LanguageIcons = {
       />
     </svg>
   ),
+
   pg: (props: IconProps) => (
     <svg
       {...props}
@@ -389,6 +395,7 @@ export const LanguageIcons = {
       />
     </svg>
   ),
+
   drizzle: (props: IconProps) => (
     <svg
       {...props}
@@ -406,6 +413,7 @@ export const LanguageIcons = {
       />
     </svg>
   ),
+
   env: (props: IconProps) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -426,6 +434,7 @@ export const LanguageIcons = {
       <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
     </svg>
   ),
+
   postcss: (props: IconProps) => (
     <svg
       {...props}
@@ -445,6 +454,7 @@ export const LanguageIcons = {
       />
     </svg>
   ),
+
   css: (props: IconProps) => (
     <svg
       {...props}
@@ -462,6 +472,7 @@ export const LanguageIcons = {
       />
     </svg>
   ),
+
   nextjs: (props: IconProps) => (
     <svg
       {...props}
@@ -475,6 +486,7 @@ export const LanguageIcons = {
       />
     </svg>
   ),
+
   eslint: (props: IconProps) => (
     <svg
       {...props}
@@ -492,32 +504,7 @@ export const LanguageIcons = {
       />
     </svg>
   ),
-  svg: (props: IconProps) => (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 30 30">
-      <path
-        fill="#ffb300"
-        d="M29.168 14.03a2.7 2.7 0 0 0-1.968-.83a2.51 2.51 0 0 0-1.929.8h-4.443l3.078-3.078a2.835 2.835 0 0 0 2.857-2.842a2.6 2.6 0 0 0-.831-1.969a2.82 2.82 0 0 0-2.014-.788a2.67 2.67 0 0 0-1.968.788a2.36 2.36 0 0 0-.812 1.922L18 11.17V6.726a2.51 2.51 0 0 0 .8-1.929a2.7 2.7 0 0 0-.832-1.968a2.745 2.745 0 0 0-3.936 0a2.7 2.7 0 0 0-.832 1.968a2.51 2.51 0 0 0 .8 1.93v4.443l-3.138-3.138a2.36 2.36 0 0 0-.812-1.922a2.66 2.66 0 0 0-1.968-.788a2.83 2.83 0 0 0-2.014.788a2.6 2.6 0 0 0-.831 1.969a2.74 2.74 0 0 0 .831 2.013a2.8 2.8 0 0 0 2.026.829l3.078 3.078H6.729a2.51 2.51 0 0 0-1.929-.8a2.7 2.7 0 0 0-1.968.831a2.745 2.745 0 0 0 0 3.937a2.7 2.7 0 0 0 1.968.832a2.51 2.51 0 0 0 1.929-.8h4.443l-3.078 3.077a2.835 2.835 0 0 0-2.857 2.842a2.6 2.6 0 0 0 .831 1.969a2.82 2.82 0 0 0 2.014.788a2.67 2.67 0 0 0 1.968-.788a2.36 2.36 0 0 0 .812-1.922L14 20.827v4.444a2.51 2.51 0 0 0-.8 1.929a2.784 2.784 0 0 0 4.768 1.968A2.7 2.7 0 0 0 18.8 27.2a2.51 2.51 0 0 0-.8-1.929v-4.444l3.138 3.138a2.36 2.36 0 0 0 .812 1.922a2.66 2.66 0 0 0 1.968.788a2.83 2.83 0 0 0 2.014-.788a2.6 2.6 0 0 0 .831-1.969a2.74 2.74 0 0 0-.831-2.013a2.8 2.8 0 0 0-2.026-.829L20.828 18h4.443a2.51 2.51 0 0 0 1.93.8a2.784 2.784 0 0 0 1.967-4.769Z"
-      />
-    </svg>
-  ),
-  commitlint: (props: IconProps) => (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24">
-      <path
-        fill="#009688"
-        d="M2.47 2.922V8.37h1.813V2.922zm12.708 1.816a7.27 7.27 0 0 0-6.946 5.127L6.1 12l2.133 2.133c.916 2.969 3.677 5.13 6.945 5.13c4.013 0 7.262-3.25 7.262-7.263s-3.25-7.262-7.262-7.262m2.942 3.703l1.342 1.63l-5.49 5.488l-3.179-3.467l1.34-1.34l1.838 1.838zM3.377 10.184c-.998 0-1.816.817-1.816 1.816a1.817 1.817 0 1 0 1.816-1.816M2.47 15.63v5.448h1.814V15.63z"
-      />
-    </svg>
-  ),
+
   prettier: (props: IconProps) => (
     <svg
       {...props}

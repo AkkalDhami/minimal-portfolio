@@ -7,7 +7,7 @@ export function PlaybookCard({ data }: { data: IPlaybook }) {
   const [play] = useSound(cardSlide5Sound);
   return (
     <a
-      href={`/docs/${data.slug}`}
+      href={`/docs/playbook/${data.slug}`}
       onClick={() => play()}
       className={cn(
         "group hover:bg-card-hover screen-line-before relative p-4 duration-300"

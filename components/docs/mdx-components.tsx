@@ -35,6 +35,9 @@ export const mdxComponents: MDXComponents = {
   h4: props => (
     <h4 className="mt-4 mb-4 text-lg font-medium tracking-tight" {...props} />
   ),
+  h5: props => (
+    <h5 className="my-3 text-lg font-medium tracking-tight" {...props} />
+  ),
   p: props => <p className="text-muted-primary my-2 leading-7" {...props} />,
   code: ({ className, ...props }) => (
     <code
@@ -82,7 +85,10 @@ export const mdxComponents: MDXComponents = {
   strong: props => <strong className="text-primary" {...props} />,
   blockquote: ({ className, ...props }: React.ComponentProps<"blockquote">) => (
     <blockquote
-      className={cn("text-primary mt-6 border-l-2 pl-6 italic", className)}
+      className={cn(
+        "text-primary mt-2 border-l-2 border-neutral-500 pl-3 font-mono italic",
+        className
+      )}
       {...props}
     />
   ),

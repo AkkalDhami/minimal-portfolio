@@ -28,7 +28,8 @@ export function PlaybookSection({ home = false }: { home?: boolean }) {
 
       <div
         className={cn(
-          "screen-line-after divide-edge grid divide-x sm:grid-cols-2"
+          "screen-line-after divide-edge grid",
+          home && "divide-x sm:grid-cols-2"
         )}>
         {(home ? PLAYBOOK_DATA.slice(0, 4) : PLAYBOOK_DATA).map(
           (playbook: IPlaybook) => (
