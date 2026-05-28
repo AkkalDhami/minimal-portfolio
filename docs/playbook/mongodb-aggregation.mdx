@@ -1,0 +1,1208 @@
+---
+title: MongoDB Aggregation
+description: MongoDB aggregation is a feature that allows you to perform complex data transformations and analysis on your MongoDB collections.
+---
+
+## 1. What is MongoDB Aggregation?
+
+MongoDB aggregation is a way to process and transform data inside the database.
+
+Think of it like a pipeline:
+
+<Output>
+Documents → Step 1 → Step 2 → Step 3 → Result
+</Output>
+
+Each step modifies, filters, groups, or reshapes the data.
+
+MongoDB uses the Aggregation Pipeline:
+
+```js
+db.collection.aggregate([
+  { stage1 },
+  { stage2 },
+  { stage3 }
+])
+```
+
+<br />
+---
+<br />
+
+## 2. Why Use Aggregation?
+
+Aggregation helps you:
+
+- Filter data
+- Group documents
+- Calculate totals/averages
+- Join collections
+- Transform fields
+- Sort & paginate
+- Build analytics
+
+Similar to:
+- SQL <Highlight>GROUP BY</Highlight>
+- SQL <Highlight>JOIN</Highlight>
+- SQL calculations
+
+<br />
+---
+<br />
+
+## 3. Sample Data
+
+We'll use this sample data to demonstrate aggregation stages:
+
+```js title="products.js"
+[
+  {
+    _id: 101,
+    name: "iPhone 15",
+    category: "Mobile",
+    brand: "Apple",
+    price: 85000,
+    stock: 12,
+    tags: ["electronics", "phone", "ios"],
+    ratings: [5, 4, 5, 3, 4],
+    createdAt: new Date("2025-01-10")
+  },
+  {
+    _id: 102,
+    name: "Samsung S24",
+    category: "Mobile",
+    brand: "Samsung",
+    price: 72000,
+    stock: 20,
+    tags: ["android", "electronics"],
+    ratings: [4, 4, 5],
+    createdAt: new Date("2025-02-11")
+  },
+  {
+    _id: 103,
+    name: "MacBook Air",
+    category: "Laptop",
+    brand: "Apple",
+    price: 120000,
+    stock: 7,
+    tags: ["laptop", "macos"],
+    ratings: [5, 5, 5],
+    createdAt: new Date("2024-09-01")
+  },
+  {
+    _id: 104,
+    name: "Boat Headphones",
+    category: "Accessories",
+    brand: "Boat",
+    price: 2500,
+    stock: 50,
+    tags: ["audio", "music"],
+    ratings: [3, 4, 4],
+    createdAt: new Date("2025-03-14")
+  },
+  {
+    _id: 105,
+    name: "Gaming Mouse",
+    category: "Accessories",
+    brand: "Logitech",
+    price: 1800,
+    stock: 35,
+    tags: ["gaming", "pc"],
+    ratings: [5, 4, 4, 5],
+    createdAt: new Date("2025-01-20")
+  }
+];
+```
+
+<br />
+---
+<br />
+
+```js title="orders.js"
+[
+  {
+    _id: 1001,
+    userId: 1,
+    products: [
+      {
+        productId: 101,
+        quantity: 1
+      },
+      {
+        productId: 104,
+        quantity: 2
+      }
+    ],
+    totalAmount: 90000,
+    status: "DELIVERED",
+    paymentMethod: "UPI",
+    shippingAddress: {
+      city: "Bhagalpur",
+      state: "Bihar"
+    },
+    orderDate: new Date("2025-04-01")
+  },
+  {
+    _id: 1002,
+    userId: 2,
+    products: [
+      {
+        productId: 102,
+        quantity: 1
+      }
+    ],
+    totalAmount: 72000,
+    status: "PENDING",
+    paymentMethod: "Card",
+    shippingAddress: {
+      city: "Patna",
+      state: "Bihar"
+    },
+    orderDate: new Date("2025-04-05")
+  },
+  {
+    _id: 1003,
+    userId: 3,
+    products: [
+      {
+        productId: 103,
+        quantity: 1
+      },
+      {
+        productId: 105,
+        quantity: 2
+      }
+    ],
+    totalAmount: 123600,
+    status: "DELIVERED",
+    paymentMethod: "NetBanking",
+    shippingAddress: {
+      city: "Delhi",
+      state: "Delhi"
+    },
+    orderDate: new Date("2025-04-10")
+  },
+  {
+    _id: 1004,
+    userId: 1,
+    products: [
+      {
+        productId: 105,
+        quantity: 3
+      }
+    ],
+    totalAmount: 5400,
+    status: "CANCELLED",
+    paymentMethod: "COD",
+    shippingAddress: {
+      city: "Bhagalpur",
+      state: "Bihar"
+    },
+    orderDate: new Date("2025-04-15")
+  },
+  {
+    _id: 1011,
+    userId: 2,
+    products: [
+      {
+        productId: 101,
+        quantity: 1
+      },
+      {
+        productId: 104,
+        quantity: 2
+      }
+    ],
+    totalAmount: 90000,
+    status: "DELIVERED",
+    paymentMethod: "UPI",
+    shippingAddress: {
+      city: "Patna",
+      state: "Bihar"
+    },
+    orderDate: new Date()
+  },
+  {
+    _id: 1012,
+    userId: 1,
+    products: [
+      {
+        productId: 103,
+        quantity: 1
+      }
+    ],
+    totalAmount: 120000,
+    status: "DELIVERED",
+    paymentMethod: "Card",
+    shippingAddress: {
+      city: "Bhagalpur",
+      state: "Bihar"
+    },
+    orderDate: new Date(Date.now() - 5 * 60 * 60 * 1000)
+  },
+  {
+    _id: 1013,
+    userId: 3,
+    products: [
+      {
+        productId: 105,
+        quantity: 3
+      }
+    ],
+    totalAmount: 5400,
+    status: "PENDING",
+    paymentMethod: "COD",
+    shippingAddress: {
+      city: "Delhi",
+      state: "Delhi"
+    },
+    orderDate: new Date(Date.now() - 10 * 60 * 60 * 1000)
+  }
+];
+```
+
+<br />
+---
+<br />
+
+
+## 4. Most Important Aggregation Stages
+
+### 4.1. <Code>$match</Code> : Filter Documents
+
+Like SQL <Highlight>WHERE</Highlight>.
+
+<Highlight>$match</Highlight> is used to:
+> Filter documents based on a condition.
+
+##### 1. Filter pending orders.
+
+```js
+db.orders.aggregate([
+  {
+    $match: {
+      status: "PENDING"
+    }
+  }
+]);
+```
+
+#### Output:
+
+```js
+[
+  {
+    _id: 1002,
+    userId: 2,
+    products: [ { productId: 102, quantity: 1 } ],
+    totalAmount: 72000,
+    status: 'PENDING',
+    paymentMethod: 'Card',
+    shippingAddress: { city: 'Patna', state: 'Bihar' },
+    orderDate: ISODate('2025-04-05T00:00:00.000Z')
+  },
+  {
+    _id: 1013,
+    userId: 3,
+    products: [ { productId: 105, quantity: 3 } ],
+    totalAmount: 5400,
+    status: 'PENDING',
+    paymentMethod: 'COD',
+    shippingAddress: { city: 'Delhi', state: 'Delhi' },
+    orderDate: ISODate('2026-05-27T01:30:29.284Z')
+  }
+]
+```
+
+<br />
+---
+<br />
+
+##### 2. Filter all products whose price is greater than 10000.
+
+```js
+db.products.aggregate([
+  {
+    $match: {
+      price: {
+        $gt: 10000
+      }
+    }
+  }
+]);
+```
+
+#### Output:
+
+```js
+[
+  {
+    _id: 101,
+    name: "iPhone 15",
+    category: "Mobile",
+    brand: "Apple",
+    price: 85000,
+    stock: 12,
+    tags: ["electronics", "phone", "ios"],
+    ratings: [5, 4, 5, 3, 4],
+    createdAt: ISODate("2025-01-10T00:00:00.000Z")
+  },
+  {
+    _id: 102,
+    name: "Samsung S24",
+    category: "Mobile",
+    brand: "Samsung",
+    price: 72000,
+    stock: 20,
+    tags: ["android", "electronics"],
+    ratings: [4, 4, 5],
+    createdAt: ISODate("2025-02-11T00:00:00.000Z")
+  },
+  {
+    _id: 103,
+    name: "MacBook Air",
+    category: "Laptop",
+    brand: "Apple",
+    price: 120000,
+    stock: 7,
+    tags: ["laptop", "macos"],
+    ratings: [5, 5, 5],
+    createdAt: ISODate("2024-09-01T00:00:00.000Z")
+  }
+];
+```
+
+<br />
+---
+<br />
+
+### 4.2 <Code>$group</Code> : Group Documents
+
+Like SQL <Highlight>GROUP</Highlight> BY.
+
+<Highlight>$group</Highlight> is used to:
+> Group documents by a common field and apply an aggregation operation to each group.
+
+<Highlight>_id</Highlight> means:
+> “Group by this field”
+
+Not the actual MongoDB document ID.
+
+##### 1. Count how many products are in each category.
+
+```js
+db.products.aggregate([
+  {
+    $group: {
+      _id: "$category",
+      totalProducts: {
+        $sum: 1
+      },
+      products: {
+        $push: {
+          _id: "$_id",
+          name: "$name",
+          price: "$price"
+        }
+      }
+    }
+  }
+]);
+```
+
+#### Output:
+```js
+[
+  {
+    _id: "Accessories",
+    totalProducts: 2,
+    products: [
+      {
+        _id: 104,
+        name: "Boat Headphones",
+        price: 2500
+      },
+      {
+        _id: 105,
+        name: "Gaming Mouse",
+        price: 1800
+      }
+    ]
+  },
+  {
+    _id: "Laptop",
+    totalProducts: 1,
+    products: [
+      {
+        _id: 103,
+        name: "MacBook Air",
+        price: 120000
+      }
+    ]
+  },
+  {
+    _id: "Mobile",
+    totalProducts: 2,
+    products: [
+      {
+        _id: 101,
+        name: "iPhone 15",
+        price: 85000
+      },
+      {
+        _id: 102,
+        name: "Samsung S24",
+        price: 72000
+      }
+    ]
+  }
+];
+```
+
+<br />
+---
+<br />
+
+##### 2. Count total stock & products per category.
+
+```js
+db.products.aggregate([
+  {
+    $group: {
+      _id: "$category",
+      totalProducts: {
+        $sum: 1
+      },
+      totalStock: {
+        $sum: "$stock"
+      }
+    }
+  }
+]);
+```
+
+#### Output:
+```js
+[
+  {
+    _id: "Mobile",
+    totalProducts: 2,
+    totalStock: 32
+  },
+  {
+    _id: "Laptop",
+    totalProducts: 1,
+    totalStock: 7
+  },
+  {
+    _id: "Accessories",
+    totalProducts: 2,
+    totalStock: 85
+  }
+];
+```
+
+<br />
+---
+<br />
+
+##### 3. Count total price per category.
+
+```js
+db.products.aggregate([
+  {
+    $group: {
+      _id: "$category",
+      totalPrice: {
+        $sum: "$price"
+      }
+    }
+  }
+]);
+```
+
+#### Output:
+```js
+[
+  { _id: "Mobile", totalPrice: 157000 },
+  { _id: "Laptop", totalPrice: 120000 },
+  { _id: "Accessories", totalPrice: 4300 }
+];
+```
+
+<br />
+---
+<br />
+
+### 4.3 <Code>$project</Code> : Select/Transform Fields
+
+<Highlight>$project</Highlight> is used to:
+> Select or transform fields in the output documents.
+
+
+```js
+db.products.aggregate([
+  {
+    $match: {
+      brand: "Apple"
+    }
+  },
+  {
+    $project: {
+      name: 1,
+      price: 1,
+      category: 1,
+      brand: 1
+    }
+  }
+]);
+```
+
+#### Output:
+
+```js
+[
+  {
+    _id: 101,
+    name: 'iPhone 15',
+    category: 'Mobile',
+    brand: 'Apple',
+    price: 85000
+  },
+  {
+    _id: 103,
+    name: 'MacBook Air',
+    category: 'Laptop',
+    brand: 'Apple',
+    price: 120000
+  }
+]
+```
+
+<br />
+---
+<br />
+
+### 4.4 <Code>$sort</Code> : Sort Documents
+
+<Highlight>$sort</Highlight> is used to:
+> Sort documents in ascending or descending order.
+
+```js
+db.products.aggregate([
+  {
+    $match: {
+      brand: "Apple"
+    }
+  },
+  {
+    $project: {
+      name: 1,
+      price: 1,
+      category: 1,
+      brand: 1
+    }
+  },
+  {
+    $sort: {
+      price: 1
+    }
+  }
+]);
+```
+<br />
+- <Highlight>1</Highlight> : sort by ascending order.
+- <Highlight>-1</Highlight> : sort by descending order.
+
+#### Output:
+
+```js
+[
+  {
+    _id: 101,
+    name: 'iPhone 15',
+    category: 'Mobile',
+    brand: 'Apple',
+    price: 85000
+  },
+  {
+    _id: 103,
+    name: 'MacBook Air',
+    category: 'Laptop',
+    brand: 'Apple',
+    price: 120000
+  }
+]
+```
+
+<br />
+---
+<br />
+
+### 4.5 <Code>$limit</Code> : Limit Documents
+
+<Highlight>$limit</Highlight> is used to:
+> Limit the number of documents returned.
+
+```js
+db.products.aggregate([
+  {
+    $limit: 3
+  }
+]);
+```
+
+#### Output:
+```js
+[
+  {
+    _id: 101,
+    name: "iPhone 15",
+    category: "Mobile",
+    brand: "Apple",
+    price: 85000,
+    stock: 12,
+    tags: ["electronics", "phone", "ios"],
+    ratings: [5, 4, 5, 3, 4],
+    createdAt: ISODate("2025-01-10T00:00:00.000Z")
+  },
+  {
+    _id: 102,
+    name: "Samsung S24",
+    category: "Mobile",
+    brand: "Samsung",
+    price: 72000,
+    stock: 20,
+    tags: ["android", "electronics"],
+    ratings: [4, 4, 5],
+    createdAt: ISODate("2025-02-11T00:00:00.000Z")
+  },
+  {
+    _id: 103,
+    name: "MacBook Air",
+    category: "Laptop",
+    brand: "Apple",
+    price: 120000,
+    stock: 7,
+    tags: ["laptop", "macos"],
+    ratings: [5, 5, 5],
+    createdAt: ISODate("2024-09-01T00:00:00.000Z")
+  }
+];
+```
+
+
+<br />
+---
+<br />
+
+### 4.6 <Code>$skip</Code> : Skip Documents
+
+<Highlight>$skip</Highlight> is used to:
+> Skip documents before returning the first document. Useful for pagination.
+
+```js
+db.products.aggregate([
+  {
+    $skip: 2
+  }
+]);
+```
+
+#### Output: 
+```js
+[
+  {
+    _id: 103,
+    name: "MacBook Air",
+    category: "Laptop",
+    brand: "Apple",
+    price: 120000,
+    stock: 7,
+    tags: ["laptop", "macos"],
+    ratings: [5, 5, 5],
+    createdAt: ISODate("2024-09-01T00:00:00.000Z")
+  },
+  {
+    _id: 104,
+    name: "Boat Headphones",
+    category: "Accessories",
+    brand: "Boat",
+    price: 2500,
+    stock: 50,
+    tags: ["audio", "music"],
+    ratings: [3, 4, 4],
+    createdAt: ISODate("2025-03-14T00:00:00.000Z")
+  },
+  {
+    _id: 105,
+    name: "Gaming Mouse",
+    category: "Accessories",
+    brand: "Logitech",
+    price: 1800,
+    stock: 35,
+    tags: ["gaming", "pc"],
+    ratings: [5, 4, 4, 5],
+    createdAt: ISODate("2025-01-20T00:00:00.000Z")
+  }
+];
+```
+
+
+<br />
+---
+<br />
+
+### 4.7 <Code>$lookup</Code> : Join Collections
+
+Like SQL <Highlight>JOIN</Highlight>.
+
+<Highlight>$lookup</Highlight> is used to:
+
+> Join data from other collections.
+
+##### 1. Find two orders with products details.
+
+```js
+db.orders.aggregate([
+  {
+    $lookup: {
+      from: "products",
+      localField: "products.productId",
+      foreignField: "_id",
+      as: "productDetails"
+    }
+  },
+  {
+    $limit: 2
+  }
+]);
+```
+
+#### Output: 
+```js
+[
+  {
+    _id: 1001,
+    userId: 1,
+    products: [
+      { productId: 101, quantity: 1 },
+      { productId: 104, quantity: 2 }
+    ],
+    totalAmount: 90000,
+    status: "DELIVERED",
+    paymentMethod: "UPI",
+    shippingAddress: { city: "Bhagalpur", state: "Bihar" },
+    orderDate: ISODate("2025-04-01T00:00:00.000Z"),
+    productDetails: [
+      {
+        _id: 104,
+        name: "Boat Headphones",
+        category: "Accessories",
+        brand: "Boat",
+        price: 2500,
+        stock: 50,
+        tags: ["audio", "music"],
+        ratings: [3, 4, 4],
+        createdAt: ISODate("2025-03-14T00:00:00.000Z")
+      },
+      {
+        _id: 101,
+        name: "iPhone 15",
+        category: "Mobile",
+        brand: "Apple",
+        price: 85000,
+        stock: 12,
+        tags: ["electronics", "phone", "ios"],
+        ratings: [5, 4, 5, 3, 4],
+        createdAt: ISODate("2025-01-10T00:00:00.000Z")
+      }
+    ]
+  },
+  {
+    _id: 1002,
+    userId: 2,
+    products: [{ productId: 102, quantity: 1 }],
+    totalAmount: 72000,
+    status: "PENDING",
+    paymentMethod: "Card",
+    shippingAddress: { city: "Patna", state: "Bihar" },
+    orderDate: ISODate("2025-04-05T00:00:00.000Z"),
+    productDetails: [
+      {
+        _id: 102,
+        name: "Samsung S24",
+        category: "Mobile",
+        brand: "Samsung",
+        price: 72000,
+        stock: 20,
+        tags: ["android", "electronics"],
+        ratings: [4, 4, 5],
+        createdAt: ISODate("2025-02-11T00:00:00.000Z")
+      }
+    ]
+  }
+];
+```
+
+<br />
+---
+<br />
+
+##### 2. Find orders with products details(_id, name, price, brand).
+
+```js {7-15}
+db.orders.aggregate([
+  {
+    $lookup: {
+      from: "products",
+      localField: "products.productId",
+      foreignField: "_id",
+      pipeline: [
+        {
+          $project: {
+            name: 1,
+            price: 1,
+            brand: 1
+          }
+        }
+      ],
+      as: "productDetails"
+    }
+  },
+  {
+    $limit: 2
+  }
+]);
+```
+
+#### Output: 
+```js
+[
+  {
+    _id: 1001,
+    userId: 1,
+    products: [
+      {
+        productId: 101,
+        quantity: 1
+      },
+      { 
+        productId: 104,
+        quantity: 2 
+      }
+    ],
+    totalAmount: 90000,
+    status: "DELIVERED",
+    paymentMethod: "UPI",
+    shippingAddress: {
+      city: "Bhagalpur",
+      state: "Bihar"
+    },
+    orderDate: ISODate("2025-04-01T00:00:00.000Z"),
+    productDetails: [
+      {
+        _id: 101,
+        name: "iPhone 15",
+        brand: "Apple",
+        price: 85000
+      },
+      {
+        _id: 104,
+        name: "Boat Headphones",
+        brand: "Boat",
+        price: 2500
+      }
+    ]
+  },
+  {
+    _id: 1002,
+    userId: 2,
+    products: [
+      {
+        productId: 102,
+        quantity: 1
+      }
+    ],
+    totalAmount: 72000,
+    status: "PENDING",
+    paymentMethod: "Card",
+    shippingAddress: {
+      city: "Patna",
+      state: "Bihar"
+    },
+    orderDate: ISODate("2025-04-05T00:00:00.000Z"),
+    productDetails: [
+      {
+        _id: 102,
+        name: "Samsung S24",
+        brand: "Samsung",
+        price: 72000
+      }
+    ]
+  }
+];
+```
+
+
+<br />
+---
+<br />
+
+### 4.8 <Code>$unwind</Code> : Unwind Arrays
+
+<Highlight>$unwind</Highlight> is used to:
+
+> Break an array into separate documents.
+
+##### 1. Unwind ratings array.
+
+```js
+db.products.aggregate([
+  {
+    $unwind: "$ratings"
+  },
+  {
+    $project: {
+      name: 1,
+      ratings: 1
+    }
+  },
+  {
+    $limit: 4
+  }
+]);
+```
+
+#### Output: 
+```js
+[
+  {
+    _id: 101,
+    name: "iPhone 15",
+    ratings: 5
+  },
+  {
+    _id: 101,
+    name: "iPhone 15",
+    ratings: 4
+  },
+  {
+    _id: 101,
+    name: "iPhone 15",
+    ratings: 5
+  },
+  {
+    _id: 101,
+    name: "iPhone 15",
+    ratings: 3
+  }
+];
+```
+
+<br />
+---
+<br />
+
+##### 2. Count How Many Times Each Rating Appears
+
+```js
+db.products.aggregate([
+  {
+    $unwind: "$ratings"
+  },
+  {
+    $group: {
+      _id: "$ratings",
+      total: {
+        $sum: 1
+      }
+    }
+  },
+  {
+    $sort: {
+      _id: -1
+    }
+  }
+]);
+```
+
+#### Output:
+```js
+[
+  { _id: 5, total: 8 },
+  { _id: 4, total: 8 },
+  { _id: 3, total: 2 }
+];
+```
+
+<br />
+---
+<br />
+
+## 5. Aggregation Pipeline Example
+
+Find the total revenue generated by each category of products in the last 24 hours.
+
+```js
+db.orders.aggregate([
+  {
+    $match: {
+      // last 24 hours
+      orderDate: {
+        $gt: new Date(Date.now() - 24 * 60 * 60 * 1000)
+      }
+    }
+  },
+  {
+    $project: {
+      products: 1
+    }
+  },
+  {
+    $unwind: "$products"
+  },
+  {
+    $lookup: {
+      from: "products",
+      localField: "products.productId",
+      foreignField: "_id",
+    
+      as: "productDetails"
+    }
+  },
+  {
+    $unwind: "$productDetails"
+  },
+  {
+    $group: {
+      _id: "$productDetails.category",
+      totalRevenue: {
+        $sum: {
+          $multiply: ["$products.quantity", "$productDetails.price"]
+        }
+      }
+    }
+  }
+]);
+```
+
+#### Output:
+```js
+[
+  { _id: "Accessories", totalRevenue: 10400 },
+  { _id: "Laptop", totalRevenue: 120000 },
+  { _id: "Mobile", totalRevenue: 85000 }
+];
+```
+
+<br />
+---
+<br />
+
+## 6. MongoDB Aggregation Stages & Their Uses
+<Table>
+  <THead>
+    <TR>
+      <TH>Stage</TH>
+      <TH>Use</TH>
+    </TR>
+  </THead>
+
+  <TBody>
+    <TR>
+      <TD><Highlight>$match</Highlight></TD>
+      <TD>Filter documents</TD>
+    </TR>
+
+    <TR>
+      <TD><Highlight>$group</Highlight></TD>
+      <TD>Group documents and calculate values</TD>
+    </TR>
+
+    <TR>
+      <TD><Highlight>$project</Highlight></TD>
+      <TD>Select, remove, rename, or transform fields</TD>
+    </TR>
+
+    <TR>
+      <TD><Highlight>$sort</Highlight></TD>
+      <TD>Sort documents</TD>
+    </TR>
+
+    <TR>
+      <TD><Highlight>$limit</Highlight></TD>
+      <TD>Limit number of documents</TD>
+    </TR>
+
+    <TR>
+      <TD><Highlight>$skip</Highlight></TD>
+      <TD>Skip documents</TD>
+    </TR>
+
+    <TR>
+      <TD><Highlight>$unwind</Highlight></TD>
+      <TD>Split array into multiple documents</TD>
+    </TR>
+
+    <TR>
+      <TD><Highlight>$lookup</Highlight></TD>
+      <TD>Join another collection</TD>
+    </TR>
+
+    <TR>
+      <TD><Highlight>$addFields</Highlight></TD>
+      <TD>Add new fields</TD>
+    </TR>
+
+    <TR>
+      <TD><Highlight>$set</Highlight></TD>
+      <TD>Same as $addFields</TD>
+    </TR>
+
+    <TR>
+      <TD><Highlight>$unset</Highlight></TD>
+      <TD>Remove fields</TD>
+    </TR>
+
+    <TR>
+      <TD><Highlight>$count</Highlight></TD>
+      <TD>Count total documents</TD>
+    </TR>
+
+    <TR>
+      <TD><Highlight>$sample</Highlight></TD>
+      <TD>Get random documents</TD>
+    </TR>
+
+    <TR>
+      <TD><Highlight>$replaceRoot</Highlight></TD>
+      <TD>Replace entire document</TD>
+    </TR>
+
+    <TR>
+      <TD><Highlight>$replaceWith</Highlight></TD>
+      <TD>Same as $replaceRoot</TD>
+    </TR>
+
+    <TR>
+      <TD><Highlight>$sortByCount</Highlight></TD>
+      <TD>Group, count, and sort documents</TD>
+    </TR>
+
+    <TR>
+      <TD><Highlight>$unionWith</Highlight></TD>
+      <TD>Combine multiple collections</TD>
+    </TR>
+
+    <TR>
+      <TD><Highlight>$out</Highlight></TD>
+      <TD>Save aggregation result into collection</TD>
+    </TR>
+
+    <TR>
+      <TD><Highlight>$geoNear</Highlight></TD>
+      <TD>Find nearby locations</TD>
+    </TR>
+  </TBody>
+</Table>

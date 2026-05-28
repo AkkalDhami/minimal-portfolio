@@ -1,0 +1,683 @@
+---
+title: Basic Arrays Problems
+description: Learn about arrays.
+---
+
+Array is the collection of elements of the same datatype stored in contiguous memory locations.
+We can store multiple values in an array.
+
+#### Example:
+```cpp title="code.cpp"
+#include <iostream>
+using namespace std;
+
+int main() {
+    int arr[] = {1, 2, 3, 4, 5}; //* array declaration & initialization
+    int n = sizeof(arr) / sizeof(arr[0]); //* array size
+
+    //* accessing array elements
+    for (int i = 0; i < n; i++) {
+        cout << arr[i] << endl;
+    }
+
+    return 0;
+}
+```
+
+<br />
+---
+
+#### Output:
+<Output>
+1 2 3 4 5
+</Output>
+
+
+<br />
+---
+<br />
+
+
+## 1. Maximum & minimum element in an array
+
+**Input:**  <Highlight>[1, 2, 3, 4, 5]</Highlight>
+
+**Output:**  <Highlight>5, 1</Highlight>
+
+#### Code:
+
+```cpp title="code.cpp"
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    int n;
+    cout << "Enter no. of element: ";
+    cin >> n;
+
+    int arr[9999];
+    cout << "Enter elements: \n";
+    for (int i = 0; i < n; i++)
+    {
+        cin >> arr[i];
+    }
+
+    int max = arr[0], min = arr[0];
+    for (int i = 0; i < n; i++)
+    {
+        if (arr[i] > max)
+            max = arr[i];
+        if (arr[i] < min)
+            min = arr[i];
+    }
+
+    cout << "Max element: " << max << endl;
+    cout << "Min element: " << min << endl;
+
+    return 0;
+}
+```
+
+<br />
+---
+
+#### Output:
+<Output>
+Enter no. of element: 5
+Enter elements: 
+1 2 3 4 5
+Max element: 5
+Min element: 1
+</Output>
+
+<br />
+---
+<br />
+
+## 2. Sum of elements in an array
+
+**Input:**  <Highlight>[1, 2, 3, 4, 5]</Highlight>
+
+**Output:**  <Highlight>15</Highlight>
+
+#### Code:
+
+```cpp title="code.cpp"
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    int n;
+    cout << "Enter no. of element: ";
+    cin >> n;
+
+    int arr[n], sum = 0;
+    cout << "Enter elements: \n";
+    for (int i = 0; i < n; i++)
+    {
+        cin >> arr[i];
+        sum += arr[i];
+    }
+
+    cout << "Sum: " << sum << endl;
+
+    return 0;
+}
+```
+
+<br />
+---
+
+#### Output:
+<Output>
+Enter no. of element: 5
+Enter elements: 
+1 2 3 4 5
+Sum: 15
+</Output>
+
+<br />
+---
+<br />
+
+## 3. Second largest element in an array
+
+**Input:**  <Highlight>[1, 2, 3, 4, 5]</Highlight>
+
+**Output:**  <Highlight>4</Highlight>
+
+#### Code:
+
+```cpp title="code.cpp"
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+  int n;
+  cout << "Enter no. of element: ";
+  cin >> n;
+
+  int arr[9999];
+  cout << "Enter elements: \n";
+  for (int i = 0; i < n; i++)
+  {
+    cin >> arr[i];
+  }
+
+  int max = INT_MIN, smax = INT_MIN;
+
+  for (int i = 0; i < n; i++)
+  {
+    if (arr[i] > max)
+    {
+      smax = max;
+      max = arr[i];
+    }
+    else if (arr[i] > smax && arr[i] != max)
+    {
+      smax = arr[i];
+    }
+  }
+
+  cout << "Second largest element: " << (smax == INT_MIN ? -1 : smax) << endl;
+
+  return 0;
+}
+```
+
+<br />
+---
+
+#### Output:
+<Output>
+Enter no. of element: 5
+Enter elements: 
+1 2 3 4 5
+Second largest element: 4
+</Output>
+
+<br />
+---
+<br />
+
+## 4. Missing element in an array
+
+**Input:**  <Highlight>[1, 2, 3, 5]</Highlight>
+
+**Output:**  <Highlight>4</Highlight>
+
+#### Code:
+
+```cpp title="code.cpp"
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+  int arr[5] = {1, 2, 3, 5};
+
+  int n = 5;
+
+  int arrSum = 0;
+
+  for (int i = 0; i < 4; i++)
+  {
+    arrSum += arr[i];
+  }
+
+  int numSum = n * (n + 1) / 2;
+
+  cout << "Missing element: " << (numSum - arrSum) << endl;
+
+  return 0;
+}
+```
+
+<br />
+---
+
+#### Output:
+<Output>
+Missing element: 4
+</Output>
+
+<br />
+---
+<br />
+
+## 5. Count even & odd elements in an array
+
+**Input:**  <Highlight>[1, 2, 3, 4, 5, 6]</Highlight>
+
+**Output:**  
+- Even numbers count: 3
+- Odd numbers count: 3
+
+#### Code:
+
+```cpp title="code.cpp"
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+
+    int n;
+    cout << "Enter the length of array: ";
+    cin >> n;
+
+    int arr[n];
+
+    cout << "Enter " << n << " elements:\n";
+    for (int i = 0; i < n; i++)
+    {
+        cin >> arr[i];
+    }
+
+    int even = 0, odd = 0;
+    for (int i = 0; i < n; i++)
+    {
+        if (arr[i] % 2 == 0)
+        {
+            even++;
+        }
+        else
+        {
+            odd++;
+        }
+    }
+
+    cout << "Number of even elements: " << even << endl;
+    cout << "Number of odd elements: " << odd << endl;
+
+    return 0;
+} 
+```
+
+<br />
+---
+
+#### Output:
+<Output>
+Enter the length of array: 5
+Enter 5 elements:
+1 2 3 4 5 
+Number of even elements: 2
+Number of odd elements: 3
+</Output>
+
+<br />
+---
+<br />
+
+## 6. Reverse an array
+
+**Input:**  <Highlight>[1, 2, 3, 4, 5, 6]</Highlight>
+
+**Output:** <Highlight>[6, 5, 4, 3, 2, 1]</Highlight>
+
+#### Code:
+
+```cpp title="code.cpp"
+#include <iostream>
+
+using namespace std;
+
+void reverse(int arr[], int n)
+{
+
+    int start = 0, end = n - 1;
+
+    cout << "Original array:" << endl;
+    for (int i = 0; i < n; i++)
+    {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+
+    cout << "Reversed array:" << endl;
+    while (start < end)
+    {
+        int temp = arr[start];
+        arr[start] = arr[end];
+        arr[end] = temp;
+        start++;
+        end--;
+    }
+
+    for (int i = 0; i < n; i++)
+    {
+        cout << arr[i] << " ";
+    }
+}
+
+int main()
+{
+    int arr[] = {1, 2, 3, 4, 5, 6};
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    reverse(arr, n);
+
+    return 0;
+}
+```
+
+<br />
+---
+
+#### Output:
+<Output>
+Original array:
+1 2 3 4 5 6 
+Reversed array:
+6 5 4 3 2 1 
+</Output>
+
+<br />
+---
+<br />
+
+## 7. Nth fibonacci term
+
+*Fibonacci series: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89...*
+
+**Input:**  <Highlight>n = 4</Highlight>
+
+**Output:** <Highlight>2</Highlight>
+
+#### Code:
+
+```cpp title="code.cpp"
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    int n;
+
+    cout << "Enter nth term: ";
+    cin >> n;
+
+    int arr[20];
+
+    arr[0] = 0;
+    arr[1] = 1;
+
+    for (int i = 2; i < n; i++)
+    {
+        arr[i] = arr[i - 1] + arr[i - 2];
+    }
+
+    cout << "Fibonacci Series:\n";
+
+    for (int i = 0; i < n; i++)
+    {
+        cout << arr[i] << " ";
+    }
+
+    cout << "\nAns: " << arr[n - 1] << endl;
+
+    return 0;
+}
+```
+
+<br />
+---
+
+#### Output:
+<Output>
+Enter nth term: 4
+Fibonacci Series:
+0 1 1 2 
+Ans: 2
+</Output>
+
+<br />
+---
+<br />
+
+## 8. Check if an array is palindrome or not
+
+**Input:**  <Highlight>[1, 2, 3, 2, 1]</Highlight>
+
+**Output:** <Highlight>true</Highlight>
+
+#### Code:
+
+```cpp title="code.cpp"
+#include <iostream>
+
+using namespace std;
+
+bool isPalindrome(int arr[], int size)
+{
+    for (int i = 0; i < size / 2; i++)
+    {
+        if (arr[i] != arr[size - i - 1])
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+int main()
+{
+
+    int arr[] = {1, 2, 3, 2, 1};
+
+    int size = sizeof(arr) / sizeof(arr[0]);
+
+    if (isPalindrome(arr, size))
+    {
+        cout << "The array is a palindrome." << endl;
+    }
+    else
+    {
+        cout << "The array is not a palindrome." << endl;
+    }
+
+    return 0;
+}
+```
+
+<br />
+---
+
+#### Output:
+<Output>
+The array is a palindrome.
+</Output>
+
+<br />
+---
+<br />
+
+## 9. Rotate an array by k steps (left)
+
+**Input:**  <Highlight>[1, 2, 3, 4, 5, 6], k = 2</Highlight>
+
+**Output:** <Highlight>[3, 4, 5, 6, 1, 2]</Highlight>
+
+#### Code:
+
+```cpp title="code.cpp"
+#include <iostream>
+
+using namespace std;
+
+void reverse(int arr[], int i, int j)
+{
+    j = j - 1;
+    while (i < j)
+    {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+        i++;
+        j--;
+    }
+}
+
+int main()
+{
+    int arr[] = {1, 2, 3, 4, 5, 6};
+    int k = 2;
+
+    int n = sizeof(arr) / sizeof(arr[0]);
+    int i = 0;
+
+    reverse(arr, i, n); // 6, 5, 4, 3, 2, 1
+ 
+    reverse(arr, i, n - k);// 3, 4, 5, 6, 2, 1
+  
+    reverse(arr, n - k, n); // 3, 4, 5, 6, 1, 2
+    for (int i = 0; i < n; i++)
+    {
+        cout << arr[i] << " ";
+    }
+
+    return 0;
+}
+```
+
+<br />
+---
+
+#### Output:
+<Output>
+3 4 5 6 1 2 
+</Output>
+
+<br />
+---
+<br />
+
+## 10. Rotate an array by k steps (right)
+
+**Input:**  <Highlight>[1, 2, 3, 4, 5, 6], k = 2</Highlight>
+
+**Output:** <Highlight>[5, 6, 1, 2, 3, 4]</Highlight>
+
+#### Code:
+
+```cpp title="code.cpp"
+#include <iostream>
+
+using namespace std;
+
+void reverse(int arr[], int i, int j)
+{
+    j = j - 1;
+    while (i < j)
+    {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+        i++;
+        j--;
+    }
+}
+
+void printArray(int arr[], int n)
+{
+    for (int i = 0; i < n; i++)
+    {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+}
+
+int main()
+{
+    int arr[] = {1, 2, 3, 4, 5, 6};
+    int k = 2;
+
+    int n = sizeof(arr) / sizeof(arr[0]);
+    int i = 0;
+
+    reverse(arr, i, n); // 6, 5, 4, 3, 2, 1
+
+    reverse(arr, i, i + k); // 5 6 4 3 2 1
+
+    reverse(arr, i + k, n); // 5 6 1 2 3 4
+    printArray(arr, n);
+
+    return 0;
+}
+```
+
+<br />
+---
+
+#### Output:
+<Output>
+5 6 1 2 3 4 
+</Output>
+
+<br />
+---
+<br />
+
+## 11. Move all zeros to the end of the array
+
+[Leetcode: 283. Move Zeroes](https://leetcode.com/problems/move-zeroes)
+
+**Input:**  <Highlight>[0, 1, 0, 3, 12]</Highlight>
+
+**Output:** <Highlight>[1, 3, 12, 0, 0]</Highlight>
+
+#### Code:
+
+```cpp title="code.cpp"
+#include <iostream>
+
+using namespace std;
+
+void moveZeroes(int arr[], int n)
+{
+    int nz = 0;
+    for (int i = 0; i < n; i++)
+    {
+        if (arr[i] != 0)
+        {
+            int temp = arr[i];
+            arr[i] = arr[nz];
+            arr[nz] = temp;
+            nz++;
+        }
+    }
+}
+
+int main()
+{
+    int arr[] = {1, 0, 0, 3, 12};
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    moveZeroes(arr, n);
+
+    for (int i = 0; i < n; i++)
+    {
+        cout << arr[i] << ", ";
+    }
+
+    return 0;
+}
+```
+
+<br />
+---
+
+#### Output:
+<Output>
+1, 3, 12, 0, 0 
+</Output>
