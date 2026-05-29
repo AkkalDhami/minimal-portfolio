@@ -67,7 +67,7 @@ export const mdxComponents: MDXComponents = {
   figcaption: props => {
     const iconExtension =
       "data-language" in props && typeof props["data-language"] === "string"
-        ? getIconForLanguageExtension(props["data-language"])
+        ? getIconForLanguageExtension({ extension: props["data-language"] })
         : null;
 
     return (
