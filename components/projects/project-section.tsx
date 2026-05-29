@@ -38,7 +38,7 @@ export function ProjectsSection({
       </div>
 
       <div className="screen-line-after grid grid-cols-1">
-        {(home ? PROJECTS.slice(0, 7) : PROJECTS).map(project => (
+        {(home ? PROJECTS.slice(0, 4) : PROJECTS).map(project => (
           <div key={project.slug} className="group">
             <ProjectCard project={project} details={details} />
           </div>

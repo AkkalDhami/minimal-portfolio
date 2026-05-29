@@ -38,7 +38,7 @@ export function Pre({
         <CopyButton
           text={code}
           docs={true}
-          className="group absolute right-4 bottom-3.5 z-10 cursor-pointer py-[6.65px] text-xs hover:bg-neutral-800 hover:text-white"
+          className="group absolute right-4 bottom-3.5 z-10 cursor-pointer bg-black py-[6.65px] text-xs hover:bg-neutral-800 hover:text-white"
         />
         {children}
       </pre>

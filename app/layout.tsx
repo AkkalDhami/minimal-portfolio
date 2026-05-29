@@ -94,7 +94,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} selection:bg-foreground selection:text-accent font-sans antialiased`}>
+        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} selection:bg-foreground bg-background selection:text-accent font-sans antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

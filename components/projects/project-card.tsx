@@ -21,10 +21,10 @@ import {
   TooltipProvider,
   TooltipTrigger
 } from "@/components/ui/tooltip";
-import { TECH_ICONS, TechStack } from "@/utils/icon-map";
 import { cn } from "@/lib/utils";
 import { useSound } from "@/hooks/use-sound";
 import { cardSlide5Sound } from "@/sounds/card-slide-5";
+import { getIconForLanguageExtension } from "@/components/docs/icon";
 
 export function ProjectCard({
   project,
@@ -57,18 +57,23 @@ export function ProjectCard({
                 {project.description}
               </p>
 
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-3.5">
                 {project.technologies.map((tech, idx) => {
-                  const Icon =
-                    TECH_ICONS[tech.name.toUpperCase() as TechStack] ||
-                    TECH_ICONS["DEFAULT"];
+                  const Icon = getIconForLanguageExtension({
+                    name: tech.name,
+                    className: "size-7"
+                  });
+                  // const Icon =
+                  //   TECH_ICONS[tech.name.toUpperCase() as TechStack] ||
+                  //   TECH_ICONS["DEFAULT"];
                   return (
                     <TooltipProvider key={idx}>
                       <Tooltip>
                         <TooltipTrigger
                           render={
-                            <div className="group from-background to-muted primary-ring rounded-primary relative bg-linear-to-b px-2 py-2">
-                              <Icon className="text-accent-foreground size-6 rounded" />
+                            <div className="group from-background to-muted primary-ring rounded-primary relative bg-linear-to-b p-1.75">
+                              {Icon}
+                              {/* <Icon className="text-accent-foreground size-6 rounded" /> */}
                               <div className="corner-squircle rounded-primary supports-corner-shape:rounded-primary pointer-events-none absolute inset-0 ring-1 ring-black/10 ring-inset dark:ring-white/15"></div>
                             </div>
                           }></TooltipTrigger>
@@ -183,15 +188,16 @@ export function ProjectCard({
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.3, ease: "easeOut" }}
-              className="flex flex-wrap gap-2">
+              className="flex flex-wrap gap-3">
               {project.technologies.map((tech: Tech, idx: number) => {
-                const Icon =
-                  TECH_ICONS[tech.name.toUpperCase() as TechStack] ||
-                  TECH_ICONS["DEFAULT"];
+                const Icon = getIconForLanguageExtension({
+                  name: tech.name,
+                  className: "size-5"
+                });
                 return (
                   <TechBadge key={idx} className="text-base">
                     <div className="flex items-center gap-2">
-                      <Icon className="size-4" />
+                      {Icon}
                       {tech.name}
                     </div>
                   </TechBadge>

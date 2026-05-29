@@ -31,7 +31,8 @@ export const TEMPLATE_DATA: ITemplate[] = [
       { name: "Nextjs" },
       { name: "React" },
       { name: "TypeScript" },
-      { name: "Tailwind" }
+      { name: "Tailwind" },
+      { name: "Shadcn" }
     ]
   },
   {
@@ -45,7 +46,7 @@ export const TEMPLATE_DATA: ITemplate[] = [
       { name: "Nextjs" },
       { name: "React" },
       { name: "TypeScript" },
-      { name: "Tailwind" },
+      { name: "Tailwind CSS" },
       { name: "Shadcn" }
     ]
   },
@@ -60,7 +61,8 @@ export const TEMPLATE_DATA: ITemplate[] = [
       { name: "Nextjs" },
       { name: "React" },
       { name: "TypeScript" },
-      { name: "Tailwind" }
+      { name: "Tailwind CSS" },
+      { name: "Shadcn" }
     ]
   },
   {
@@ -74,7 +76,8 @@ export const TEMPLATE_DATA: ITemplate[] = [
       { name: "Nextjs" },
       { name: "React" },
       { name: "TypeScript" },
-      { name: "Tailwind" }
+      { name: "Tailwind CSS" },
+      { name: "Shadcn" }
     ]
   },
   {
@@ -87,7 +90,7 @@ export const TEMPLATE_DATA: ITemplate[] = [
     technologies: [
       { name: "React" },
       { name: "TypeScript" },
-      { name: "Tailwind" },
+      { name: "Tailwind CSS" },
       { name: "MongoDB" },
       { name: "Nodejs" },
       { name: "Expressjs" }
@@ -104,7 +107,7 @@ export const TEMPLATE_DATA: ITemplate[] = [
       { name: "HTML" },
       { name: "CSS" },
       { name: "JavaScript" },
-      { name: "Tailwind" }
+      { name: "Tailwind CSS" }
     ]
   },
   {
@@ -118,7 +121,7 @@ export const TEMPLATE_DATA: ITemplate[] = [
       { name: "HTML" },
       { name: "CSS" },
       { name: "JavaScript" },
-      { name: "Tailwind" }
+      { name: "Tailwind CSS" }
     ]
   }
 ];

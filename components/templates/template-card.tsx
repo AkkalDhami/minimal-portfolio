@@ -12,10 +12,10 @@ import {
   TooltipProvider,
   TooltipTrigger
 } from "@/components/ui/tooltip";
-import { TECH_ICONS, TechStack } from "@/utils/icon-map";
 import { ITemplate } from "@/components/templates/template-section";
 import { cardSlide5Sound } from "@/sounds/card-slide-5";
 import { useSound } from "@/hooks/use-sound";
+import { getIconForLanguageExtension } from "@/components/docs/icon";
 
 export function TemplateCard({ template }: { template: ITemplate }) {
   return (
@@ -45,18 +45,22 @@ export function TemplateCard({ template }: { template: ITemplate }) {
               {template.description}
             </p>
 
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-3.5">
               {template.technologies.map((tech, idx) => {
-                const Icon =
-                  TECH_ICONS[tech.name.toUpperCase() as TechStack] ||
-                  TECH_ICONS["DEFAULT"];
+                const Icon = getIconForLanguageExtension({
+                  name: tech.name,
+                  className: "size-7"
+                });
+                // const Icon =
+                //   TECH_ICONS[tech.name.toUpperCase() as TechStack] ||
+                //   TECH_ICONS["DEFAULT"];
                 return (
                   <TooltipProvider key={idx}>
                     <Tooltip>
                       <TooltipTrigger
                         render={
                           <div className="group from-background to-muted primary-ring relative rounded-md bg-linear-to-b px-2 py-2">
-                            <Icon className="text-accent-foreground size-6 rounded" />
+                            {Icon}
                             <div className="corner-squircle rounded-primary supports-corner-shape:rounded-primary pointer-events-none absolute inset-0 ring-1 ring-black/10 ring-inset dark:ring-white/15"></div>
                           </div>
                         }></TooltipTrigger>

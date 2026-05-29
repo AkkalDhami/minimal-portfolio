@@ -6,10 +6,10 @@ import { FlipWords } from "@/components/ui/flip-words";
 
 import { SocialLinks } from "./social-link";
 import { PrimaryButton } from "@/components/ui/primary-button";
-import { TechBadge } from "@/components/projects/tech-badge";
 import { HOME_PAGE_STACKS } from "@/utils/stack";
 import { NAME } from "@/lib/constants";
 import { Route } from "next";
+import { getIconForLanguageExtension } from "@/components/docs/icon";
 
 const HERO_WORDS = [
   "systems that scale under pressure.",
@@ -41,23 +41,29 @@ export function HeroSection() {
 
           <div className="text-muted-foreground w-full text-lg leading-relaxed">
             <div className="flex flex-wrap items-center gap-3">
-              {HOME_PAGE_STACKS.map(tech => (
-                <TechBadge
-                  key={tech.value}
-                  className="rounded-primary border-edge px-2.5 py-1.5">
-                  <div className="flex items-center gap-2">
-                    <tech.icon className="size-4" />
-                    {tech.label}
+              {HOME_PAGE_STACKS.map(tech => {
+                const Icon = getIconForLanguageExtension({
+                  name: tech.value,
+                  className: "size-6"
+                });
+                return (
+                  <div
+                    key={tech.value}
+                    className="bg-secondary rounded-full border-0 border-transparent px-3 py-1.5 ring-0">
+                    <div className="text-accent-foreground flex items-center gap-2">
+                      {Icon}
+                      {tech.label}
+                    </div>
                   </div>
-                </TechBadge>
-              ))}
+                );
+              })}
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-5 lg:justify-start">
             <PrimaryButton
               as="a"
               href="/projects"
-              className="rounded-primary primary-ring w-full py-3.5 sm:w-auto">
+              className="rounded-primary primary-ring w-full px-4 py-3.5 sm:w-auto">
               View My Work
             </PrimaryButton>
             <PrimaryButton
@@ -66,7 +72,7 @@ export function HeroSection() {
               target="_blank"
               rel="noopener noreferrer"
               href={"/resume.pdf" as Route}
-              className="rounded-primary from-background to-muted primary-ring w-full bg-linear-to-br py-3.5 sm:w-auto">
+              className="rounded-primary from-background to-muted primary-ring w-full bg-linear-to-br px-4 py-3.5 sm:w-auto">
               View My Resume
             </PrimaryButton>
           </div>
