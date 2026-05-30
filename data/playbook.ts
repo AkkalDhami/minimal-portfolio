@@ -49,5 +49,12 @@ export const PLAYBOOK_DATA = [
     description:
       "MongoDB aggregation is a feature that allows you to perform complex data transformations and analysis on your MongoDB collections.",
     docs: "/docs/playbook/mongodb-aggregation"
+  },
+  {
+    slug: "yaml",
+    title: "08. YAML",
+    description:
+      "Learn YAML fundamentals including syntax, objects, arrays, nesting, and real-world configuration examples.",
+    docs: "/docs/playbook/yaml"
   }
 ] satisfies IPlaybook[];

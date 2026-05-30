@@ -1,0 +1,457 @@
+---
+title: YAML Basics
+---
+
+YAML stands for YAML Ain't Markup Language.
+
+It is mainly used for:
+- Configuration files
+- DevOps tools
+- APIs
+- Docker
+- Kubernetes
+- CI/CD pipelines
+
+<br />
+---
+<br />
+
+## 1. YAML Syntax Basics
+
+#### Rules
+- Uses indentation (spaces)
+- No tabs
+- Usually <Highlight>.yaml</Highlight> or <Highlight>.yml</Highlight>
+- Key-value format
+
+<br />
+---
+<br />
+
+
+#### Common Data Types
+
+<Table>
+<THead>
+  <TR>
+    <TD>Type</TD>
+    <TD>Example</TD>
+  </TR>
+</THead>
+<TBody>
+  <TR>
+    <TD>String</TD>
+    <TD><Highlight>name: Akkal</Highlight></TD>
+  </TR>
+  <TR>
+    <TD>Number</TD>
+    <TD><Highlight>age: 20</Highlight></TD>
+  </TR>
+  <TR>
+    <TD>Boolean</TD>
+    <TD><Highlight>isAdmin: true</Highlight></TD>
+  </TR>
+  <TR>
+    <TD>Array</TD>
+    <TD><Highlight>- JavaScript</Highlight></TD>
+  </TR>
+  <TR>
+    <TD>Object</TD>
+    <TD><Highlight>user: </Highlight></TD>
+  </TR>
+  <TR>
+    <TD>Null</TD>
+    <TD><Highlight>value: null</Highlight></TD>
+  </TR>
+</TBody>
+</Table>
+
+<br />
+---
+<br />
+
+## 2. Key-Value Pair
+
+```yaml title="first.yaml"
+name: Akkal
+age: 22
+city: Kathmandu
+```
+
+#### Meaning
+- name → <Highlight>key</Highlight>
+- Akkal → <Highlight>value</Highlight>
+
+##### Equivalent JSON:
+
+```json
+{
+  "name": "Akkal",
+  "age": 22,
+  "city": "Kathmandu"
+}
+```
+
+<br />
+<br />
+---
+<br />
+
+## 3. Strings
+
+```yaml title="string.yml"
+message: Hello World
+language: "TypeScript"
+framework: 'Express'
+```
+
+> Quotes are optional unless special characters exist.
+
+<br />
+---
+<br />
+
+## 4. Numbers and Boolean
+
+```yaml title="num_bool.yml"
+age: 22
+price: 99.99
+
+isAdmin: true
+isLoggedIn: false
+```
+
+<br />
+<br />
+---
+<br />
+
+## 5. Arrays (Lists)
+
+```yaml title="array.yml"
+# method - 1
+numbers: [1, 2, 3, 4]
+
+# method - 2
+languages:
+  - JavaScript
+  - TypeScript
+  - Python
+```
+
+<br />
+<br />
+---
+<br />
+
+## 6. Objects
+
+```yaml title="object.yml"
+user:
+  name: Akkal
+  age: 22
+  role: developer
+```
+
+<br />
+<br />
+---
+<br />
+
+## 7. Nested Objects
+
+```yaml title="nested_obj.yml"
+user:
+  name: Akkal
+  age: 22
+
+  address:
+    country: Nepal
+    city: Kathmandu
+    zip: 44600
+```
+
+##### Structure:
+
+```text
+user
+ ├── name
+ ├── age
+ └── address
+      ├── country
+      ├── city
+      └── zip
+```     
+
+<br/>
+---
+<br/>
+
+```yaml title="nested_nested_obj.yml"
+company:
+  name: XYZ
+
+  department:
+    name: Engineering
+
+    manager:
+      name: Akkal
+      experience: 5
+```
+
+##### Structure:
+
+```text
+company
+ └── name
+ └── department
+      └── name
+      └── manager
+           ├── name
+           └── experience
+```      
+
+<br />
+<br />
+---
+<br />
+
+## 8. Array of Objects
+
+```yaml title="arr_of_obj.yml"
+users:
+  - name: Akkal
+    role: admin
+
+  - name: Ram
+    role: user
+```
+
+<br />
+<br />
+---
+<br />
+
+## 9. Comments
+
+```yaml title="comment.yml"
+# This is comment
+name: Akkal
+```
+
+<br />
+<br />
+---
+<br />
+
+## 10. Null Values
+
+```yaml title="null.yml"
+middleName: null
+nickname:
+username: ~
+```
+
+<br />
+<br />
+---
+<br />
+
+## 11. Multiline Strings
+
+#### Pipe <Highlight>|</Highlight> : preserve line breaks
+
+```yaml title="multi_line_str.yml"
+message: |
+  Hello
+  This is YAML
+  Learning basics
+```
+
+##### Output:
+
+<Output>
+Hello
+This is YAML
+Learning basics
+</Output>
+
+---
+
+#### Greater Than  <Highlight>></Highlight> : single line
+
+```yaml title="multi_line_str.yml"
+message: >
+  Hello
+  This becomes
+  one line
+```
+
+##### Output:
+
+<Output>
+Hello This becomes one line
+</Output>
+
+
+<br />
+---
+<br />
+
+## 12. Environment Example
+
+```yaml title="env.yml"
+app:
+  name: auth-service
+  port: 5000
+
+database:
+  host: localhost
+  port: 5432
+  username: postgres
+  password: secret
+```  
+
+<br />
+---
+<br />
+
+## 13. Anchors and Defaults
+
+YAML supports reusable default blocks using anchors <Highlight>&</Highlight> and aliases <Highlight>*</Highlight>.
+
+```yaml title="anchor_default.yml"
+default: &default_settings
+  timeout: 30
+  retries: 3
+
+development:
+  <<: *default_settings
+  host: localhost
+
+production:
+  <<: *default_settings
+  host: prod.server.com
+```  
+
+<br />
+> <Highlight>default_settings</Highlight> is reused in both environments.
+
+<br />
+---
+<br />
+
+
+## 14. Explicit Data Types
+
+```yaml
+value: !!str 123
+
+age: !!int "22"
+
+isAdmin: !!bool "true"
+
+data: !!null ""
+```
+
+<br />
+---
+<br />
+
+## 15. Docker Compose
+
+### 15.1 Simple Node.js App
+```yaml title="docker-compose.yml"
+version: "3"
+
+services:
+  app:
+    image: node:20
+
+    container_name: my-node-app
+
+    ports:
+      - "3000:3000"
+
+    volumes:
+      - .:/app
+
+    working_dir: /app
+
+    comm and: npm start
+```
+
+<br />
+---
+<br />
+
+### 15.2. Node.js + MongoDB
+```yaml title="docker-compose2.yml"
+version: "3"
+
+services:
+  app:
+    image: node:20
+
+    container_name: backend-app
+
+    ports:
+      - "5000:5000"
+
+    volumes:
+      - .:/app
+
+    working_dir: /app
+
+    command: npm run dev
+
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo
+
+    container_name: mongodb
+
+    ports:
+      - "27017:27017"
+
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
+```
+
+<br />
+---
+<br />
+
+### 15.2. Node.js + PostgreSQL
+```yaml title="docker-compose3.yml"
+version: "3"
+
+services:
+  app:
+    image: node:20
+
+    ports:
+      - "5000:5000"
+
+    environment:
+      DATABASE_URL: postgres://postgres:password@db:5432/mydb
+
+    depends_on:
+      - db
+
+  db:
+    image: postgres
+
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydb
+
+    ports:
+      - "5432:5432"
+```
