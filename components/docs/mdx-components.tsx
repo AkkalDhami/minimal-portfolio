@@ -24,16 +24,19 @@ export const mdxComponents: MDXComponents = {
   Note,
   h1: props => <h1 className="text-3xl font-bold tracking-tight" {...props} />,
   h2: props => (
-    <h2 className="my-3 text-2xl font-semibold tracking-tight" {...props} />
+    <h2
+      className="mt-2 mb-3 text-2xl font-semibold tracking-tight"
+      {...props}
+    />
   ),
   h3: props => (
     <h3
-      className="this-page-link mt-4 mb-4 text-xl font-medium tracking-tight"
+      className="this-page-link mt-2 mb-3 text-[22px] font-medium tracking-tight"
       {...props}
     />
   ),
   h4: props => (
-    <h4 className="mt-4 mb-4 text-lg font-medium tracking-tight" {...props} />
+    <h4 className="mt-4 mb-4 text-xl font-medium tracking-tight" {...props} />
   ),
   h5: props => (
     <h5 className="my-3 text-lg font-medium tracking-tight" {...props} />
@@ -56,11 +59,14 @@ export const mdxComponents: MDXComponents = {
     />
   ),
   ul: props => (
-    <ul className="text-muted-primary list-disc space-y-2.5 pl-6" {...props} />
+    <ul
+      className="text-muted-primary mb-3 list-disc space-y-2.5 pl-6"
+      {...props}
+    />
   ),
   ol: props => (
     <ol
-      className="text-muted-primary list-decimal space-y-2.5 pl-6"
+      className="text-muted-primary mb-3 list-decimal space-y-2.5 pl-6"
       {...props}
     />
   ),
@@ -86,7 +92,7 @@ export const mdxComponents: MDXComponents = {
   blockquote: ({ className, ...props }: React.ComponentProps<"blockquote">) => (
     <blockquote
       className={cn(
-        "text-primary mt-2 border-l-2 border-neutral-500 pl-3 font-mono italic",
+        "text-primary mt-2 border-l-2 border-neutral-500 pl-3 font-mono",
         className
       )}
       {...props}
