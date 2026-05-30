@@ -1,5 +1,7 @@
 "use client";
 
+import { useMemo, useState } from "react";
+
 import { Heading } from "@/components/ui/heading";
 import { SubHeading } from "@/components/ui/sub-heading";
 import { PLAYBOOK_DATA } from "@/data/playbook";
@@ -8,8 +10,29 @@ import { IPlaybook } from "@/types/app.types";
 import { cn } from "@/lib/utils";
 import { PrimaryButton } from "@/components/ui/primary-button";
 import { Section } from "@/components/ui/section";
+import { Search } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
 export function PlaybookSection({ home = false }: { home?: boolean }) {
+  const [search, setSearch] = useState("");
+
+  const playbooks = home ? PLAYBOOK_DATA.slice(0, 8) : PLAYBOOK_DATA;
+
+  const filteredPlaybooks = useMemo(() => {
+    const query = search.toLowerCase().trim();
+
+    if (!query) return playbooks;
+
+    return playbooks.filter((playbook: IPlaybook) => {
+      return (
+        playbook.title.toLowerCase().includes(query) ||
+        playbook.description.toLowerCase().includes(query) ||
+        playbook.slug.toLowerCase().includes(query) ||
+        playbook.docs.toLowerCase().includes(query)
+      );
+    });
+  }, [search, playbooks]);
+
   return (
     <Section
       id="playbook"
@@ -19,11 +42,25 @@ export function PlaybookSection({ home = false }: { home?: boolean }) {
           ? "screen-line-before"
           : "bg-[radial-gradient(35%_128px_at_0%_0%,--theme(--color-foreground/.05),transparent)] dark:bg-[radial-gradient(35%_128px_at_0%_0%,--theme(--color-foreground/.08),transparent),radial-gradient(35%_128px_at_100%_0%,--theme(--color-foreground/.08),transparent)]"
       )}>
-      <div className="mb-8 px-4">
+      <div className="mb-6 px-4">
         <Heading>Backend Playbook</Heading>
+
         <SubHeading className="text-muted-foreground mx-0 max-w-2xl text-lg">
           Notes from building backend systems with Node.js and TypeScript.
         </SubHeading>
+
+        {!home && (
+          <div className="relative mt-4">
+            <Search className="text-muted-foreground absolute top-1/2 left-2 size-4 -translate-y-1/2" />
+
+            <Input
+              placeholder="Search playbooks..."
+              className="pl-10"
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+            />
+          </div>
+        )}
       </div>
 
       <div
@@ -31,10 +68,14 @@ export function PlaybookSection({ home = false }: { home?: boolean }) {
           "screen-line-after divide-edge grid",
           home && "divide-x sm:grid-cols-2"
         )}>
-        {(home ? PLAYBOOK_DATA.slice(0, 4) : PLAYBOOK_DATA).map(
-          (playbook: IPlaybook) => (
+        {filteredPlaybooks.length > 0 ? (
+          filteredPlaybooks.map((playbook: IPlaybook) => (
             <PlaybookCard data={playbook} key={playbook.slug} />
-          )
+          ))
+        ) : (
+          <div className="col-span-full px-4 py-10 text-center">
+            <p className="text-muted-foreground">No playbooks found.</p>
+          </div>
         )}
       </div>
 
@@ -43,7 +84,7 @@ export function PlaybookSection({ home = false }: { home?: boolean }) {
           <PrimaryButton
             as="a"
             variant="secondary"
-            href={"/playbook"}
+            href="/playbook"
             className="py-3">
             View More
           </PrimaryButton>

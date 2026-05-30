@@ -67,8 +67,8 @@ export function Navbar() {
             "relative flex items-center justify-between px-4 py-2.5 transition-all duration-500",
             "bg-background w-full max-w-4xl backdrop-blur-md",
             "border-edge border-x",
-            "screen-line-before screen-line-after",
-            "bg-[radial-gradient(35%_128px_at_0%_0%,--theme(--color-foreground/.05),transparent)] dark:bg-[radial-gradient(35%_128px_at_0%_0%,--theme(--color-foreground/.08),transparent),radial-gradient(35%_128px_at_100%_0%,--theme(--color-foreground/.08),transparent)]"
+            "screen-line-before screen-line-after"
+            // "bg-[radial-gradient(35%_128px_at_0%_0%,--theme(--color-foreground/.05),transparent)] dark:bg-[radial-gradient(35%_128px_at_0%_0%,--theme(--color-foreground/.08),transparent),radial-gradient(35%_128px_at_100%_0%,--theme(--color-foreground/.08),transparent)]"
           )}>
           <Profile />
 

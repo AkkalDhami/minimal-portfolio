@@ -16,7 +16,7 @@ export function PlaybookCard({ data }: { data: IPlaybook }) {
         {data.title}
       </h2>
       {data.description && (
-        <p className="text-muted-secondary line-clamp-3">{data.description}</p>
+        <p className="text-muted-secondary line-clamp-2">{data.description}</p>
       )}
     </a>
   );
