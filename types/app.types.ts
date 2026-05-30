@@ -1,6 +1,6 @@
 export interface IPlaybook {
   slug: string;
   title: string;
-  description?: string;
+  description: string;
   docs: string;
 }

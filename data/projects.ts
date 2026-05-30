@@ -25,7 +25,8 @@ export const PROJECTS: Project[] = [
       { name: "Nodejs" },
       { name: "MongoDB" },
       { name: "TypeScript" },
-      { name: "Tailwind CSS" }
+      { name: "Tailwind CSS" },
+      { name: "Shadcn" }
     ],
     thumbnail: "/images/servercn.png",
     images: [
