@@ -52,9 +52,16 @@ export const PLAYBOOK_DATA = [
   },
   {
     slug: "yaml",
-    title: "08. YAML",
+    title: "08. Introduction to YAML",
     description:
       "Learn YAML fundamentals including syntax, objects, arrays, nesting, and real-world configuration examples.",
     docs: "/docs/playbook/yaml"
+  },
+  {
+    slug: "normalization",
+    title: "09. Basics Concepts of Normalization",
+    description:
+      "Learn database normalization concepts including 1NF, 2NF, 3NF, BCNF, and common use cases.",
+    docs: "/docs/playbook/normalization"
   }
 ] satisfies IPlaybook[];

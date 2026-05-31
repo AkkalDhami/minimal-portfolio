@@ -92,7 +92,7 @@ export const mdxComponents: MDXComponents = {
   blockquote: ({ className, ...props }: React.ComponentProps<"blockquote">) => (
     <blockquote
       className={cn(
-        "text-primary mt-2 border-l-2 border-neutral-500 pl-3 font-mono",
+        "text-foreground mt-2 border-l-2 border-neutral-500 pl-3 font-mono",
         className
       )}
       {...props}
