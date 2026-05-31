@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 
 export function Table({ children }: { children: ReactNode }) {
   return (
-    <div className="border-edge my-6 overflow-x-auto rounded-lg border">
+    <div className="border-edge mt-4 mb-4 overflow-x-auto rounded-lg border-x border-t">
       <table className="w-full border-collapse text-sm">{children}</table>
     </div>
   );
@@ -17,7 +17,7 @@ export function TBody({ children }: { children: ReactNode }) {
 }
 
 export function TR({ children }: { children: ReactNode }) {
-  return <tr className="border-edge hover:bg-muted/40 border-b">{children}</tr>;
+  return <tr className="border-edge border-b">{children}</tr>;
 }
 
 export function TH({ children }: { children: ReactNode }) {

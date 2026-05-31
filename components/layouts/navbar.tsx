@@ -90,7 +90,7 @@ export function Navbar() {
                     className={cn(
                       "relative cursor-pointer px-4 py-1.5 text-xs font-medium tracking-widest uppercase transition-all duration-300",
                       isMoving
-                        ? "text-primary"
+                        ? "text-accent"
                         : "text-muted-primary hover:text-primary"
                     )}>
                     <span className="relative z-10">{item.label}</span>
@@ -99,7 +99,7 @@ export function Navbar() {
                         layout
                         layoutId="nav-active"
                         initial={false}
-                        className="bg-secondary group primary-ring border-edge absolute inset-0 rounded-lg border"
+                        className="bg-foreground group absolute inset-0 rounded-full"
                         transition={{
                           type: "spring",
                           bounce: 0.25,
