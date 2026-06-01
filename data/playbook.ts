@@ -31,23 +31,23 @@ export const PLAYBOOK_DATA = [
   },
   {
     slug: "github-oauth",
-    title: "05. GitHub OAuth",
+    title: "05. GitHub OAuth in Node.js Application",
     description:
-      "An end-to-end GitHub OAuth flow designed for scalable backend systems.",
+      "Learn to implement a full GitHub OAuth flow in Node.js, covering request, callback, token exchange, and user data retrieval.",
     docs: "/docs/playbook/github-oauth"
   },
   {
     slug: "google-oauth",
-    title: "06. Google OAuth",
+    title: "06. Google OAuth in Node.js Application",
     description:
-      "An end-to-end Google OAuth flow designed for scalable backend systems.",
+      "Learn to implement Google OAuth flow in Node.js, covering request, callback, token exchange, and user data retrieval.",
     docs: "/docs/playbook/google-oauth"
   },
   {
     slug: "mongodb-aggregation",
     title: "07. MongoDB Aggregation",
     description:
-      "MongoDB aggregation is a feature that allows you to perform complex data transformations and analysis on your MongoDB collections.",
+      "Master MongoDB aggregation using pipelines, $group, $lookup, $match, and complex data processing with real-world examples.",
     docs: "/docs/playbook/mongodb-aggregation"
   },
   {
