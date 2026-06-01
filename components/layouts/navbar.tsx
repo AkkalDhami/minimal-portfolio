@@ -61,11 +61,11 @@ export function Navbar() {
 
   return (
     <>
-      <header className="bg-background fixed top-0 right-0 left-0 z-50 flex justify-center pt-1">
+      <header className="bg-background/70 fixed top-0 right-0 left-0 z-50 flex justify-center pt-1 backdrop-blur-lg">
         <nav
           className={cn(
             "relative flex items-center justify-between px-4 py-2.5 transition-all duration-500",
-            "bg-background w-full max-w-4xl backdrop-blur-md",
+            "w-full max-w-4xl backdrop-blur-md",
             "border-edge border-x",
             "screen-line-before screen-line-after"
             // "bg-[radial-gradient(35%_128px_at_0%_0%,--theme(--color-foreground/.05),transparent)] dark:bg-[radial-gradient(35%_128px_at_0%_0%,--theme(--color-foreground/.08),transparent),radial-gradient(35%_128px_at_100%_0%,--theme(--color-foreground/.08),transparent)]"
@@ -74,7 +74,7 @@ export function Navbar() {
 
           <div className="flex items-center gap-3">
             <div
-              className="border-border/60 hidden items-center gap-1 p-1 backdrop-blur-md md:flex"
+              className="border-edge/60 hidden items-center gap-1 p-1 backdrop-blur-md md:flex"
               onMouseLeave={() => setHoveredIndex(null)}>
               {menuItems.map((item, index) => {
                 const isActive = isActiveLink(pathname, item.href);
@@ -117,7 +117,7 @@ export function Navbar() {
               as="a"
               href={`${GITHUB_URL}/akkal-portfolio` as Route}
               target="_blank"
-              className="primary-ring from-background to-muted relative bg-linear-to-b px-2 py-2 transition-colors">
+              className="relative rounded-lg border-0 px-2 py-2 ring-0">
               <SiGithub onClick={() => play()} className="size-5" />
             </PrimaryButton>
             <ThemeToggle className="py-1.5" />
@@ -144,7 +144,7 @@ export function Navbar() {
                     setMobileMenuOpen(false);
                     chatScrollPlay();
                   }}
-                  className="bg-background/60 fixed inset-0 z-50 backdrop-blur-sm md:hidden"
+                  className="bg-background/40 fixed inset-0 z-10 h-screen backdrop-blur-sm md:hidden"
                 />
                 <motion.div
                   initial={{ x: "100%" }}
@@ -181,10 +181,10 @@ export function Navbar() {
                                 play();
                               }}
                               className={cn(
-                                "group rounded-primary relative flex cursor-pointer items-center gap-4 border border-transparent px-4 py-2.5 transition-all duration-200",
+                                "group relative flex cursor-pointer items-center gap-4 rounded-full px-8 py-2.5 transition-all duration-200",
                                 isActive
-                                  ? "bg-secondary/50 primary-ring border-edge text-primary"
-                                  : "text-muted-foreground hover:text-foreground hover:bg-secondary/30 hover:primary-ring hover:border-edge"
+                                  ? "bg-foreground text-accent"
+                                  : "hover:bg-foreground hover:text-accent"
                               )}>
                               <span className="text-xl font-semibold tracking-widest uppercase">
                                 {item.label}

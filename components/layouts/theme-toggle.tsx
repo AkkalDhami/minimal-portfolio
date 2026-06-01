@@ -24,10 +24,7 @@ export function ThemeToggle({ className }: { className?: string }) {
     <PrimaryButton
       onClick={toggleTheme}
       variant="outline"
-      className={cn(
-        "primary-ring from-background to-muted bg-linear-to-tr px-2 py-2",
-        className
-      )}
+      className={cn("relative rounded-lg border-0 px-2 py-2 ring-0", className)}
       aria-label="Toggle theme">
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
