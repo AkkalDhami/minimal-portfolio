@@ -39,7 +39,7 @@ export function PrimaryButton({
   ...props
 }: PrimaryButtonProps) {
   const commonStyles = cn(
-    "group relative inline-flex primary-ring hover:shadow-secondary items-center justify-center text-sm font-semibold uppercase tracking-[0.2em] transition-all duration-300 border-[1.5px] px-4 py-4 rounded-primary cursor-pointer no-underline",
+    "group relative inline-flex primary-ring items-center justify-center text-sm font-semibold uppercase tracking-[0.2em] transition-all duration-300 border-[1.5px] px-4 py-4 rounded-primary cursor-pointer no-underline",
     variant === "default"
       ? "bg-accent-foreground rounded-primary bg-linear-to-b from-neutral-950 to-neutral-800 dark:from-neutral-50 dark:to-neutral-200 text-background border-neutral-900 dark:border-neutral-300 hover:from-neutral-800 hover:to-neutral-700 dark:hover:from-neutral-50 dark:hover:to-neutral-300 duration-300"
       : variant === "secondary"
