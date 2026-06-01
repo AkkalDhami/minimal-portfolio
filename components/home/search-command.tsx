@@ -28,7 +28,6 @@ import {
   CommandSeparator
 } from "@/components/ui/command";
 import { Kbd, KbdGroup } from "@/components/ui/kbd";
-import { PrimaryButton } from "@/components/ui/primary-button";
 import { IconType } from "react-icons";
 import { useRouter } from "next/navigation";
 import { Route } from "next";
@@ -259,16 +258,16 @@ export function SearchCommand() {
   return (
     <CommandDialog onOpenChange={setOpen} open={open}>
       <CommandDialogTrigger
+        nativeButton={true}
         render={
-          <PrimaryButton
-            variant="outline"
+          <button
             onClick={() => play()}
-            className="primary-ring relative px-2 py-1.75 transition-colors">
+            className="primary-ring active:scale-0.8 relative cursor-pointer rounded-full border px-3 py-1 transition-colors">
             <KbdGroup>
               <Kbd>⌘</Kbd>
               <Kbd>K</Kbd>
             </KbdGroup>
-          </PrimaryButton>
+          </button>
         }></CommandDialogTrigger>
       <CommandDialogPopup className={"group rounded-primary relative"}>
         <Command items={groupedItems}>

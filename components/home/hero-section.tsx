@@ -44,13 +44,13 @@ export function HeroSection() {
               {HOME_PAGE_STACKS.map(tech => {
                 const Icon = getIconForLanguageExtension({
                   name: tech.value,
-                  className: "size-6"
+                  className: "size-5"
                 });
                 return (
                   <div
                     key={tech.value}
-                    className="bg-secondary rounded-full border-0 border-transparent px-3 py-1.5 ring-0">
-                    <div className="text-accent-foreground flex items-center gap-2">
+                    className="from-secondary via-background to-muted ring-edge rounded-full bg-linear-to-b px-3 py-1.5 ring">
+                    <div className="text-accent-foreground flex items-center gap-2 text-base">
                       {Icon}
                       {tech.label}
                     </div>
