@@ -14,7 +14,7 @@ export function TechBadge({
   return (
     <div
       className={cn(
-        `from-background rounded-primary to-card-hover primary-ring text-accent-foreground relative mx-0.5 inline-flex items-center border border-neutral-300 bg-linear-to-r px-2 py-1 text-base dark:border-neutral-700`,
+        `text-accent-foreground border-edge relative mx-0.5 inline-flex items-center border px-3 py-1.5 text-base`,
         className
       )}>
       {children}
