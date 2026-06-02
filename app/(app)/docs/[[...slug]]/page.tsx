@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import matter from "gray-matter";
 import { mdxComponents } from "@/components/docs/mdx-components";
-import rehypePrettyCode, { LineElement } from "rehype-pretty-code";
+import rehypePrettyCode from "rehype-pretty-code";
 import { DEFAULT_CODE_THEME } from "@/lib/constants";
 import { OnThisPage } from "@/components/docs/on-this-page";
 import { Metadata, Route } from "next";
@@ -114,7 +114,9 @@ export default async function DocsPage(props: PageProps<"/docs/[[...slug]]">) {
         <article className="prose prose-neutral dark:prose-invert mb-6 max-w-none">
           <div className="my-4">
             <div className="flex items-center justify-between gap-4 pr-2">
-              <h2 className="text-2xl font-medium">{data.title}</h2>
+              <h2 className="font-inter animate-fade-in-blur text-2xl font-medium">
+                {data.title}
+              </h2>
               <NextSteps next={next} prev={prev} min />
             </div>
             <OnThisPage />
@@ -128,15 +130,11 @@ export default async function DocsPage(props: PageProps<"/docs/[[...slug]]">) {
                   [
                     rehypePrettyCode,
                     {
-                      theme: {
-                        dark: DEFAULT_CODE_THEME || "github-dark-high-contrast",
-                        light: "github-light-default"
-                      },
+                      theme: DEFAULT_CODE_THEME || "vesper",
                       keepBackground: false,
-                      onVisitLine(node: LineElement) {
-                        if (node.children.length === 0) {
-                          node.children = [{ type: "text", value: " " }];
-                        }
+                      defaultLang: {
+                        block: "plaintext",
+                        inline: "plaintext"
                       }
                     }
                   ]

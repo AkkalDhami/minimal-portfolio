@@ -6,6 +6,7 @@
   --color-card-hover: var(--color-card-hover);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-highlight: var(--highlight);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);
@@ -42,11 +43,10 @@
   --color-sidebar-ring: var(--sidebar-ring);
   --color-edge: var(--edge);
 
-  --font-sans: Geist, sans-serif;
-  --font-serif: Georgia, serif;
-  --font-mono: Geist Mono, monospace;
-  --font-code: Fira Code, monospace;
-  --font-inter: Inter, sans-serif;
+  --font-sans: var(--font-sans), sans-serif;
+  --font-mono: var(--font-mono), monospace;
+  --font-code: var(--font-code), monospace;
+  --font-inter: var(--font-inter), sans-serif;
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -71,10 +71,11 @@
 :root {
   --muted-secondary: #666;
   --color-card-hover: color-mix(in oklab, var(--accent) 50%, transparent);
-  --background: #fffdf7;
-  --foreground: #000000;
+  --background: #f4f4f0;
+  --foreground: #080707;
   --card: #ffffff;
   --card-foreground: #000000;
+  --highlight: var(--color-neutral-800);
   --popover: #fcfcfc;
   --popover-foreground: #000000;
   --primary: #000000;
@@ -149,6 +150,7 @@
   --primary-foreground: #000000;
   --secondary: #222222;
   --secondary-foreground: #ffffff;
+  --highlight: var(--color-neutral-900);
   --muted: #1d1d1d;
   --muted-foreground: #a4a4a4;
   --muted-tertiary: var(--color-neutral-800);
@@ -267,16 +269,16 @@ html {
   @apply after:bg-edge relative after:absolute after:bottom-0 after:-left-[100vw] after:-z-1 after:h-px after:w-[200vw];
 }
 
-@utility bg-gradient-b{
+@utility bg-gradient-b {
   @apply from-secondary via-background to-muted bg-linear-to-b;
 }
-@utility bg-gradient-l{
+@utility bg-gradient-l {
   @apply from-secondary via-background to-muted bg-linear-to-l;
 }
-@utility bg-gradient-r{
+@utility bg-gradient-r {
   @apply from-secondary via-background to-muted bg-linear-to-r;
 }
-@utility bg-gradient-t{
+@utility bg-gradient-t {
   @apply from-secondary via-background to-muted bg-linear-to-t;
 }
 
@@ -315,18 +317,17 @@ html {
     max-width: 840px;
   }
 
-  [data-highlighted-line],
-  [data-highlighted-chars] {
-    position: relative;
-    background-color: var(--muted);
+  [data-line] {
+    padding-top: calc(var(--spacing) * 0.5);
+    padding-bottom: calc(var(--spacing) * 0.5);
+    min-height: calc(var(--spacing) * 1);
+    width: 100%;
+    display: inline-block;
   }
 
+  [data-highlighted-line],
   [data-highlighted-chars] {
-    border-radius: var(--radius-sm);
-    padding-inline: 0.3rem;
-    padding-block: 0.1rem;
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
+    @apply bg-highlight relative border-l-2 border-neutral-400;
   }
 
   /* [data-rehype-pretty-code-title] {
@@ -343,18 +344,16 @@ html {
 
     display: inline-block;
     width: 1rem;
-    margin-right: 1rem;
+    margin-right: 1.2rem;
+    margin-left: 0.8rem;
     text-align: right;
-    color: gray;
+    color: var(--color-neutral-400);
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  code[data-theme*=" "],
-  code[data-theme*=" "] span {
-    color: var(--shiki-dark);
-    background-color: var(--shiki-dark-bg);
-  }
+h2,
+h3 {
+  scroll-margin-top: 100px;
 }
 
 ::-webkit-scrollbar {
@@ -369,6 +368,24 @@ html {
 ::-webkit-scrollbar-thumb {
   background: var(--border);
   border-radius: 0px;
+}
+
+@keyframes fadeInBlur {
+  0% {
+    opacity: 0.8;
+    filter: blur(5px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0px);
+  }
+}
+
+.animate-fade-in-blur {
+  animation: fadeInBlur 0.5s ease-out forwards;
+  animation-delay: 0.2s;
+  opacity: 0.4;
+  filter: blur(3px);
 }
 
 * {

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Inter } from "next/font/google";
+import { Geist, Geist_Mono, Inter, Fira_Code } from "next/font/google";
 import "./globals.css";
 import { AnchoredToastProvider, ToastProvider } from "@/components/ui/toast";
 import { ThemeProvider } from "@/components/providers/theme-provider";
@@ -9,17 +9,22 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { HotkeyProvider } from "@/components/providers/hotkey-provider";
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
+  variable: "--font-sans",
   subsets: ["latin"]
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+  variable: "--font-mono",
   subsets: ["latin"]
 });
 
 const inter = Inter({
   variable: "--font-inter",
+  subsets: ["latin"]
+});
+
+const firaCode = Fira_Code({
+  variable: "--font-code",
   subsets: ["latin"]
 });
 
@@ -94,7 +99,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} selection:bg-foreground bg-background selection:text-accent font-sans antialiased`}>
+        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${firaCode.variable} selection:bg-foreground bg-background selection:text-accent scroll-mt-20 font-sans antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

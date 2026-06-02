@@ -30,7 +30,7 @@ export const mdxComponents: MDXComponents = {
   ),
   h2: props => (
     <h2
-      className="animate-fade-in-blur font-inter mt-3 mb-3 text-2xl font-semibold tracking-tight"
+      className="animate-fade-in-blur font-inter mt-3 mb-3 text-2xl font-medium tracking-tight"
       {...props}
     />
   ),
