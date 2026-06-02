@@ -52,6 +52,11 @@ export const STACKS: IStack[] = [
     category: "frontend"
   },
   {
+    label: "ZOD",
+    value: "zod",
+    category: "frontend"
+  },
+  {
     label: "Shadcn/ui",
     value: "shadcnui",
     category: "frontend"
