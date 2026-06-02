@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 
 export function Table({ children }: { children: ReactNode }) {
   return (
-    <div className="border-edge mt-4 mb-4 overflow-x-auto rounded-lg border-x border-t">
+    <div className="border-edge animate-fade-in-blur mt-4 mb-4 overflow-x-auto rounded-lg border-x border-t">
       <table className="w-full border-collapse text-sm">{children}</table>
     </div>
   );
@@ -29,7 +29,7 @@ export function TD({ children }: { children: ReactNode }) {
 
 export function Highlight({ children }: { children: ReactNode }) {
   return (
-    <span className="bg-muted text-foreground rounded-md px-2 py-1 font-mono text-sm">
+    <span className="bg-muted animate-fade-in-blur text-foreground rounded-md px-2 py-1 font-mono text-sm">
       {children}
     </span>
   );

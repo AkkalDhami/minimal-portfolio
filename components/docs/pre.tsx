@@ -31,7 +31,10 @@ export function Pre({
       <pre
         ref={ref}
         {...props}
-        className={cn("thin-scrollbar relative rounded-lg", className)}
+        className={cn(
+          "thin-scrollbar animate-fade-in-blur relative rounded-lg",
+          className
+        )}
         style={{
           backgroundColor: bg
         }}>

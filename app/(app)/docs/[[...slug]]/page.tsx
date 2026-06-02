@@ -16,6 +16,7 @@ import { IPlaybook } from "@/types/app.types";
 import { PrimaryButton } from "@/components/ui/primary-button";
 import siteConfig from "@/lib/site";
 import { cn } from "@/lib/utils";
+import { sliceContent } from "@/utils/slice-content";
 
 export const revalidate = false;
 export const dynamic = "force-dynamic";
@@ -175,7 +176,11 @@ const NextSteps = ({
           href={prev.docs as Route}>
           <div className="flex items-center gap-1">
             <ArrowLeftIcon className="size-4" />
-            {!min && <span className="hidden sm:inline"> {prev.title}</span>}
+            {!min && (
+              <span className="hidden sm:inline">
+                {sliceContent(prev.title, 38)}
+              </span>
+            )}
           </div>
         </PrimaryButton>
       )}
@@ -191,7 +196,11 @@ const NextSteps = ({
             title={next.title}
             href={next.docs as Route}>
             <div className="flex items-center gap-1">
-              {!min && <span className="hidden sm:inline"> {next.title}</span>}
+              {!min && (
+                <span className="hidden sm:inline">
+                  {sliceContent(next.title, 38)}
+                </span>
+              )}
               <ArrowRightIcon className="size-4" />
             </div>
           </PrimaryButton>

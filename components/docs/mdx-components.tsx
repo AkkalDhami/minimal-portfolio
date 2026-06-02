@@ -61,7 +61,7 @@ export const mdxComponents: MDXComponents = {
   code: ({ className, ...props }) => (
     <code
       className={cn(
-        "thin-scrollbar max-h-120 overflow-x-auto py-2.5 font-mono leading-relaxed",
+        "thin-scrollbar animate-fade-in-blur max-h-120 overflow-x-auto py-2.5 font-mono leading-relaxed",
         className
       )}
       {...props}
@@ -70,7 +70,7 @@ export const mdxComponents: MDXComponents = {
   a: props => (
     <a
       target="_blank"
-      className="text-muted-primary animate-fade-in-blur animate-fade-in-blur hover:text-foreground font-medium underline underline-offset-1"
+      className="text-muted-primary animate-fade-in-blur hover:text-foreground font-medium underline underline-offset-1"
       {...props}
     />
   ),
@@ -95,7 +95,7 @@ export const mdxComponents: MDXComponents = {
     return (
       <figcaption
         className={cn(
-          "font-code flex items-center gap-2 border-b border-neutral-800 px-4 py-2 text-neutral-400"
+          "font-code animate-fade-in-blur flex items-center gap-2 border-b border-neutral-800 px-4 py-2 text-neutral-400"
         )}
         {...props}>
         {iconExtension}
@@ -128,7 +128,7 @@ export const mdxComponents: MDXComponents = {
   Steps: ({ className, ...props }: React.ComponentProps<"div">) => (
     <div
       className={cn(
-        "[&>h3]:step steps mb-12 [counter-reset:step] md:ml-4 md:border-l md:pl-8",
+        "[&>h3]:step animate-fade-in-blur steps mb-12 [counter-reset:step] md:ml-4 md:border-l md:pl-8",
         className
       )}
       {...props}
