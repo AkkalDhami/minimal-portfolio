@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { motion } from "motion/react";
 import React from "react";
 
 export function SubHeading({
@@ -10,11 +11,11 @@ export function SubHeading({
   as?: "h3" | "p";
   className?: string;
 }) {
-  const Tag = as || "h3";
+  const Tag = motion[as] || "h3";
   return (
     <Tag
       className={cn(
-        "text-muted-foreground mx-auto max-w-3xl text-base sm:text-lg",
+        "font-inter text-muted-foreground mx-auto max-w-3xl text-base sm:text-lg",
         className
       )}>
       {children}

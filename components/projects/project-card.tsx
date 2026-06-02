@@ -197,7 +197,7 @@ export function ProjectCard({
                 return (
                   <TechBadge
                     key={idx}
-                    className="bg-gradient-t rounded-full text-base">
+                    className="bg-gradient-t rounded-lg text-base">
                     <div className="flex items-center gap-2">
                       {Icon}
                       {tech.name}

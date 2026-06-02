@@ -39,7 +39,7 @@ export function BackToTop() {
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.8 }}
           transition={{ type: "spring", stiffness: 400, damping: 25 }}
-          className="fixed right-6 bottom-6 z-40">
+          className="fixed right-6 bottom-12 z-40">
           <Button
             variant="secondary"
             size="icon"
@@ -49,7 +49,7 @@ export function BackToTop() {
             }}
             className="border-border/50 primary-ring hover:bg-muted bg-muted rounded-primary border backdrop-blur-md transition-all"
             aria-label="Back to top">
-            <ArrowUp className="size-5" />
+            <ArrowUp className="size-4" />
           </Button>
         </motion.div>
       )}
