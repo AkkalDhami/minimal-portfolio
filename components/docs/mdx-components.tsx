@@ -22,30 +22,46 @@ export const mdxComponents: MDXComponents = {
   PackageManagerTabs,
   Code,
   Note,
-  h1: props => <h1 className="text-3xl font-bold tracking-tight" {...props} />,
+  h1: props => (
+    <h1
+      className="animate-fade-in-blur font-inter text-3xl font-bold tracking-tight"
+      {...props}
+    />
+  ),
   h2: props => (
     <h2
-      className="mt-2 mb-3 text-2xl font-semibold tracking-tight"
+      className="animate-fade-in-blur font-inter mt-3 mb-3 text-2xl font-semibold tracking-tight"
       {...props}
     />
   ),
   h3: props => (
     <h3
-      className="this-page-link mt-2 mb-3 text-[22px] font-medium tracking-tight"
+      className="this-page-link font-inter animate-fade-in-blur mt-2 mb-3 text-[22px] font-medium tracking-tight"
       {...props}
     />
   ),
   h4: props => (
-    <h4 className="mt-4 mb-4 text-xl font-medium tracking-tight" {...props} />
+    <h4
+      className="font-inter animate-fade-in-blur mt-4 mb-4 text-xl font-medium tracking-tight"
+      {...props}
+    />
   ),
   h5: props => (
-    <h5 className="my-3 text-lg font-medium tracking-tight" {...props} />
+    <h5
+      className="animate-fade-in-blur my-3 text-lg font-medium tracking-tight"
+      {...props}
+    />
   ),
-  p: props => <p className="text-muted-primary my-2 leading-7" {...props} />,
+  p: props => (
+    <p
+      className="text-muted-primary animate-fade-in-blur my-2 leading-7"
+      {...props}
+    />
+  ),
   code: ({ className, ...props }) => (
     <code
       className={cn(
-        "thin-scrollbar max-h-120 overflow-x-auto px-3 py-2.5 font-mono leading-relaxed",
+        "thin-scrollbar max-h-120 overflow-x-auto py-2.5 font-mono leading-relaxed",
         className
       )}
       {...props}
@@ -54,19 +70,19 @@ export const mdxComponents: MDXComponents = {
   a: props => (
     <a
       target="_blank"
-      className="text-muted-primary hover:text-foreground font-medium underline underline-offset-1"
+      className="text-muted-primary animate-fade-in-blur animate-fade-in-blur hover:text-foreground font-medium underline underline-offset-1"
       {...props}
     />
   ),
   ul: props => (
     <ul
-      className="text-muted-primary mb-3 list-disc space-y-2.5 pl-6"
+      className="text-muted-primary animate-fade-in-blur mb-3 list-disc space-y-2.5 pl-6"
       {...props}
     />
   ),
   ol: props => (
     <ol
-      className="text-muted-primary mb-3 list-decimal space-y-2.5 pl-6"
+      className="text-muted-primary animate-fade-in-blur mb-3 list-decimal space-y-2.5 pl-6"
       {...props}
     />
   ),
@@ -88,11 +104,13 @@ export const mdxComponents: MDXComponents = {
     );
   },
 
-  strong: props => <strong className="text-primary" {...props} />,
+  strong: props => (
+    <strong className="text-primar animate-fade-in-blur" {...props} />
+  ),
   blockquote: ({ className, ...props }: React.ComponentProps<"blockquote">) => (
     <blockquote
       className={cn(
-        "text-foreground mt-2 border-l-2 border-neutral-500 pl-3 font-mono",
+        "text-foreground animate-fade-in-blur mt-2 border-l-2 border-neutral-500 pl-3 font-mono",
         className
       )}
       {...props}
@@ -101,7 +119,7 @@ export const mdxComponents: MDXComponents = {
   Step: ({ className, ...props }: React.ComponentProps<"h3">) => (
     <h3
       className={cn(
-        "text-primary mt-8 mb-3 scroll-m-32 text-xl font-medium tracking-tight",
+        "text-primary animate-fade-in-blur font-inter mt-8 mb-3 scroll-m-32 text-xl font-medium tracking-tight",
         className
       )}
       {...props}

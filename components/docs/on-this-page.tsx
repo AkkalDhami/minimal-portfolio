@@ -95,7 +95,7 @@ export function OnThisPage() {
           duration: 0.35,
           ease: "easeOut"
         }}
-        className="fixed bottom-6 left-1/2 z-40 w-[320px] max-w-[calc(100vw-2rem)] -translate-x-1/2 overflow-hidden rounded-2xl border border-neutral-200/50 bg-neutral-100/80 backdrop-blur-xl dark:border-neutral-800 dark:bg-neutral-900/80">
+        className="fixed bottom-12 left-1/2 z-40 w-[320px] max-w-[calc(100vw-2rem)] -translate-x-1/2 overflow-hidden rounded-2xl border border-neutral-200/50 bg-neutral-100/80 backdrop-blur-xl dark:border-neutral-800 dark:bg-neutral-900/80">
         <div className="relative flex h-full w-full flex-col rounded-2xl px-2 py-3">
           <button
             onClick={() => setOpen(o => !o)}
