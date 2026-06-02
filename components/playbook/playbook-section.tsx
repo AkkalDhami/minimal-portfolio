@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 export function PlaybookSection({ home = false }: { home?: boolean }) {
   const [search, setSearch] = useState("");
 
-  const playbooks = home ? PLAYBOOK_DATA.slice(0, 8) : PLAYBOOK_DATA;
+  const playbooks = home ? PLAYBOOK_DATA.slice(0, 10) : PLAYBOOK_DATA;
 
   const filteredPlaybooks = useMemo(() => {
     const query = search.toLowerCase().trim();

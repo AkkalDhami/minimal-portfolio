@@ -12,7 +12,7 @@ export function PlaybookCard({ data }: { data: IPlaybook }) {
       className={cn(
         "group hover:bg-card-hover screen-line-before relative p-4 duration-300"
       )}>
-      <h2 className="text-muted-primary group-hover:text-foreground font-noraml mb-2 text-lg underline-offset-4 group-hover:underline">
+      <h2 className="text-muted-primary group-hover:text-foreground font-noraml mb-2 line-clamp-1 text-lg underline-offset-4 group-hover:underline">
         {data.title}
       </h2>
       {data.description && (
