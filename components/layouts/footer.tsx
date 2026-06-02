@@ -19,7 +19,7 @@ export function Footer() {
     <>
       <footer
         className={cn(
-          "bg-background relative z-10 w-full max-w-svw overflow-x-hidden pt-0 pb-2"
+          "bg-background relative z-10 w-full max-w-svw overflow-x-hidden pt-0 pb-10"
         )}>
         <div
           className={cn(
