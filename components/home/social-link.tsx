@@ -93,31 +93,29 @@ export function SocialLinks({
   }
 
   return (
-    <div>
-      <div className={cn("grid grid-cols-2 gap-4 md:grid-cols-4", className)}>
-        {socialLinks.map(social => (
-          <a
-            key={social.name}
-            href={social.href}
-            onClick={() => chatScrollPlay()}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:bg-card-hover primary-ring group primary-border rounded-primary relative flex w-full items-center gap-3 border-[1.5px] p-1.5 text-center">
-            <div className="rounded-primary from-background to-muted primary-ring relative bg-linear-to-b p-1.5">
-              <social.icon className="text-muted-foreground group-hover:text-primary size-5 sm:size-6" />
-              <div className="corner-squircle rounded-primary supports-corner-shape:rounded-primary pointer-events-none absolute inset-0 ring-1 ring-black/10 ring-inset dark:ring-white/15"></div>
+    <div className={cn("grid grid-cols-2 gap-4 md:grid-cols-4", className)}>
+      {socialLinks.map(social => (
+        <a
+          key={social.name}
+          href={social.href}
+          onClick={() => chatScrollPlay()}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:bg-card-hover primary-ring group primary-border rounded-primary relative flex w-full items-center gap-3 border-[1.5px] p-1.75 text-center">
+          <div className="rounded-primary from-background to-muted primary-ring relative bg-linear-to-b p-1.5">
+            <social.icon className="text-muted-foreground group-hover:text-primary size-5 sm:size-6" />
+            <div className="corner-squircle rounded-primary supports-corner-shape:rounded-primary pointer-events-none absolute inset-0 ring-1 ring-black/10 ring-inset dark:ring-white/15"></div>
+          </div>
+          <div className="flex w-full flex-col items-start">
+            <div className="flex w-full items-center justify-between">
+              <h3 className="text-muted-primary group-hover:text-accent-foreground text-sm font-medium underline-offset-3 group-hover:underline sm:text-base">
+                {social.name}
+              </h3>
+              <LuArrowUpRight className="text-muted-primary group-hover:text-accent-foreground size-4" />
             </div>
-            <div className="flex w-full flex-col items-start">
-              <div className="flex w-full items-center justify-between">
-                <h3 className="text-muted-primary group-hover:text-accent-foreground text-sm font-medium underline-offset-3 group-hover:underline sm:text-base">
-                  {social.name}
-                </h3>
-                <LuArrowUpRight className="text-muted-primary group-hover:text-accent-foreground size-4" />
-              </div>
-            </div>
-          </a>
-        ))}
-      </div>
+          </div>
+        </a>
+      ))}
     </div>
   );
 }

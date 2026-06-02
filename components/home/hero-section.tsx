@@ -26,55 +26,57 @@ export function HeroSection() {
       className="screen-line relative z-10 px-4 pt-16 pb-4 font-sans font-normal">
       <div className="mt-4">
         <div className="flex items-baseline-last gap-2">
-          <h1 className="font-inter text-4xl font-semibold tracking-wide uppercase sm:text-5xl lg:text-6xl xl:text-7xl">
+          <h1 className="font-inter text-4xl font-semibold tracking-wide uppercase sm:text-4xl lg:text-5xl xl:text-6xl">
             {NAME}
           </h1>
         </div>
         <div className="flex flex-col space-y-5 lg:text-left">
-          <h2 className="text-muted-primary mt-4 hidden overflow-hidden text-lg font-medium sm:block md:text-xl">
-            I build <FlipWords words={HERO_WORDS} />
-          </h2>
-          <p className="text-muted-foreground text-lg leading-relaxed">
-            I design scalable web systems focused on performance,
-            maintainability, and real-world impact.
-          </p>
+          <div className="lex flex-col space-y-5 lg:text-left">
+            <h2 className="text-muted-primary mt-4 hidden overflow-hidden text-lg font-medium sm:block md:text-xl">
+              I build <FlipWords words={HERO_WORDS} />
+            </h2>
+            <p className="text-muted-foreground mt-2 text-lg leading-relaxed sm:mt-0">
+              I design scalable web systems focused on performance,
+              maintainability, and real-world impact.
+            </p>
 
-          <div className="text-muted-foreground w-full text-lg leading-relaxed">
-            <div className="flex flex-wrap items-center gap-3">
-              {HOME_PAGE_STACKS.map(tech => {
-                const Icon = getIconForLanguageExtension({
-                  name: tech.value,
-                  className: "size-5"
-                });
-                return (
-                  <div
-                    key={tech.value}
-                    className="from-secondary via-background to-muted ring-edge rounded-full bg-linear-to-b px-3 py-1.5 ring">
-                    <div className="text-accent-foreground flex items-center gap-2 text-base">
-                      {Icon}
-                      {tech.label}
+            <div className="text-muted-foreground w-full text-lg leading-relaxed">
+              <div className="flex flex-wrap items-center gap-3">
+                {HOME_PAGE_STACKS.map(tech => {
+                  const Icon = getIconForLanguageExtension({
+                    name: tech.value,
+                    className: "size-5"
+                  });
+                  return (
+                    <div
+                      key={tech.value}
+                      className="from-secondary via-background to-muted ring-edge rounded-lg bg-linear-to-b px-3 py-1.5 ring">
+                      <div className="text-accent-foreground flex items-center gap-2 text-base">
+                        {Icon}
+                        {tech.label}
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
-          </div>
-          <div className="flex flex-wrap items-center gap-5 lg:justify-start">
-            <PrimaryButton
-              as="a"
-              href="/projects"
-              className="rounded-primary primary-ring w-full px-4 py-3.5 sm:w-auto">
-              View My Work
-            </PrimaryButton>
-            <PrimaryButton
-              variant="outline"
-              as="a"
-              target="_blank"
-              rel="noopener noreferrer"
-              href={"/resume.pdf" as Route}
-              className="rounded-primary from-background to-muted primary-ring w-full bg-linear-to-br px-4 py-3.5 sm:w-auto">
-              View My Resume
-            </PrimaryButton>
+            <div className="flex flex-wrap items-center gap-5 lg:justify-start">
+              <PrimaryButton
+                as="a"
+                href="/projects"
+                className="rounded-primary primary-ring w-full px-4 py-3.5 sm:w-auto">
+                View My Work
+              </PrimaryButton>
+              <PrimaryButton
+                variant="outline"
+                as="a"
+                target="_blank"
+                rel="noopener noreferrer"
+                href={"/resume.pdf" as Route}
+                className="rounded-primary from-background to-muted primary-ring w-full bg-linear-to-br px-4 py-3.5 sm:w-auto">
+                View My Resume
+              </PrimaryButton>
+            </div>
           </div>
           <div className="mt-1">
             <SocialLinks minimal={false} className="sm:gap-6" />
