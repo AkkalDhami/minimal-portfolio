@@ -63,5 +63,13 @@ export const PLAYBOOK_DATA = [
     description:
       "Learn database normalization concepts including 1NF, 2NF, 3NF, BCNF, and common use cases.",
     docs: "/docs/playbook/normalization"
+  },
+  {
+    slug: "nodejs-tooling-setup",
+    title:
+      "10. Setting Up  ESLint, Commitlint, Lint-Staged, Husky, and Prettier in a Node.js Application",
+    description:
+      "Learn to set up essential development tools in a Node.js application, including ESLint, Commitlint, Lint-Staged, Husky, and Prettier.",
+    docs: "/docs/playbook/nodejs-tooling-setup"
   }
 ] satisfies IPlaybook[];

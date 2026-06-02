@@ -1,0 +1,295 @@
+---
+title: Setting Up ESLint, Commitlint, Lint-Staged, Husky, and Prettier in a Node.js Application
+description: Learn to set up essential development tools in a Node.js application, including ESLint, Commitlint, Lint-Staged, Husky, and Prettier.
+---
+
+Learn to set up essential development tools in a Node.js application, including <Highlight>ESLint</Highlight> for code linting, <Highlight>Commitlint</Highlight> for commit message validation, <Highlight>Lint-Staged</Highlight> for running linters on staged files, <Highlight>Husky</Highlight> for Git hooks, and <Highlight>Prettier</Highlight> for code formatting.
+
+##### Docs:
+- [ESLint](https://eslint.org)
+- [Prettier](https://prettier.io)
+- [Commitlint](https://commitlint.js.org)
+- [Husky](https://typicode.github.io/husky/get-started.html)
+- [Lint-Staged](https://www.npmjs.com/package/lint-staged)
+- [GitHub Repo](https://github.com/AkkalDhami/nodejs-tooling-testing)
+
+<br/>
+---
+
+## Implementation:
+
+<Steps>
+<Step>Install the required dependencies.</Step>
+<PackageManagerTabs command="npm install -D eslint eslint-plugin-prettier @typescript-eslint/parser @typescript-eslint/eslint-plugin" />
+<PackageManagerTabs command="npm install -D @commitlint/cli @commitlint/config-conventional lint-staged prettier husky" />
+
+<Step>Configure ESLint with a suitable configuration file.</Step>
+
+```ts title="eslint.config.mjs" {1, 3}
+import tseslint from "@typescript-eslint/eslint-plugin";
+import tsparser from "@typescript-eslint/parser";
+import prettierPlugin from "eslint-plugin-prettier";
+
+export default [
+  {
+    files: ["**/*.ts"],
+
+    ignores: ["node_modules", "dist", "build", "commitlint.config.ts"],
+
+    languageOptions: {
+      parser: tsparser,
+      sourceType: "module"
+    },
+
+    plugins: {
+      "@typescript-eslint": tseslint,
+      prettier: prettierPlugin
+    },
+
+    rules: {
+      ...tseslint.configs.recommended.rules,
+      "@typescript-eslint/no-unused-vars": "off",
+      "@typescript-eslint/no-unused-expressions": "off",
+      "no-console": "warn",
+      semi: ["error", "always"],
+      quotes: ["error", "double"],
+      "prettier/prettier": "off"
+    }
+  }
+];
+```
+
+Add the following scripts to your <Highlight>package.json</Highlight> to standardize linting across environments:
+
+```json title="package.json" {3-4}
+{
+  "scripts": {
+    "lint:check": "eslint .",
+    "lint:fix": "eslint . --fix"
+  }
+}
+```
+
+<Step>Configure Prettier for code formatting.</Step>
+```json title=".prettierrc"
+{
+  "singleQuote": false,
+  "semi": true,
+  "tabWidth": 2,
+  "trailingComma": "none",
+  "bracketSameLine": true,
+  "arrowParens": "avoid",
+  "endOfLine": "lf"
+}
+```
+
+Add <Highlight>.prettierignore</Highlight> file.
+
+```bash title=".prettierignore"
+node_modules
+.next
+build
+dist
+.env
+**/*.mdx
+**/*.md
+coverage
+```
+
+Add the following scripts to your <Highlight>package.json</Highlight>:
+```json title="package.json" {3-4}
+{
+  "scripts": {
+    "format:check": "npx prettier . --check",
+    "format:fix": "npx prettier . --write"
+  }
+}
+```
+
+
+<Step>Configure Commitlint to validate commit messages.</Step>
+```ts title="commitlint.config.ts"
+export default {
+  /**
+   * Extends the official Conventional Commits rule set.
+   * https://www.conventionalcommits.org/
+   */
+  extends: ["@commitlint/config-conventional"],
+ 
+  rules: {
+
+    "type-enum": [
+      2,
+      "always",
+      [
+        "feat",      // New features
+        "fix",       // Bug fixes
+        "docs",      // Documentation changes only
+        "style",     // Formatting, missing semicolons, etc (no logic change)
+        "refactor",  // Code restructuring without behavior change
+        "test",      // Adding or updating tests
+        "chore",     // Tooling, config, or maintenance tasks
+        "ci",        // CI/CD configuration changes
+        "perf",      // Performance improvements
+        "build",     // Build system or dependency changes
+        "release",   // Release-related commits
+        "workflow",  // GitHub Actions or workflow changes
+        "security"   // Security patches and fixes
+      ]
+    ],
+
+    ignores: [(commit: string) => commit === ""],
+ 
+    "body-max-length": [0, "always", 300],
+ 
+    "header-max-length": [0, "always", 100]
+  }
+};
+```
+
+<Step>Set up Lint-Staged to run linters on staged files.</Step>
+
+```json title="package.json" {4-12}
+{
+  "scripts": {...},
+
+  "lint-staged":{
+    "src/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write",
+    ],
+    "src/**/*.json": [
+      "prettier --write"
+    ]
+  },
+
+  "dependencies": {...},
+  "devDependencies": {...}
+}
+```
+<Step>Initialize Husky and create Git hooks.</Step>
+
+```bash
+npx husky init
+```
+
+```bash title=".husky/pre-commit"
+npx lint-staged
+```
+
+<Step>Add a .gitignore file.</Step>
+
+```bash title=".gitignore"
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+```
+
+</Steps>
+
+---
+<br />
+
+##### After successfully setting up these tools, your <Code>package.json</Code> should look similar to the following:
+
+```json title="package.json"
+{
+  "name": "my-node-app",
+  "version": "1.0.0",
+  "main": "dist/server.js",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "prepare": "husky",
+    "lint:check": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format:check": "npx prettier . --check",
+    "format:fix": "npx prettier . --write"
+  },
+  "lint-staged": {
+    "src/**/*.ts": [
+      "eslint --fix",
+      "prettier --write",
+      "tsc --noEmit"
+    ]
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^21.0.1",
+    "@commitlint/config-conventional": "^21.0.1",
+    "@typescript-eslint/eslint-plugin": "^8.59.4",
+    "@typescript-eslint/parser": "^8.59.4",
+    "eslint": "^10.4.0",
+    "eslint-plugin-prettier": "^5.5.5",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.0.5",
+    "prettier": "^3.8.3",
+  }
+}
+```
+
+<br />
+---
+<br />
+
+## Commands
+
+<PackageManagerTabs command="npm run lint:check" />
+<PackageManagerTabs command="npm run lint:fix" />
+
+<PackageManagerTabs command="npm run format:check" />
+<PackageManagerTabs command="npm run format:fix" />
+
+<br />
+---
+<br />
+
+## Example
+
+```
+ git commit -m 'feat: add src/app.ts file'      
+✔ Backed up original state in git stash (5ed200a)
+✔ Running tasks for staged files...
+✔ Staging changes from tasks...
+✔ Cleaning up temporary files...
+[main d3dc5f3] feat: add src/app.ts file
+ 1 file changed, 7 insertions(+)
+ create mode 100644 src/app.ts
+```
