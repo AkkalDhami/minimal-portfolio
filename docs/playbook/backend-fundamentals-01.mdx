@@ -13,9 +13,6 @@ Node.js handles request asynchronously using the event loop, process them throug
 
 <Note text="In short, a server listens for requests, processes them using middleware and business logic, interacts with the database if needed, and returns a structured response to the client." />
 
-<br />
----
-<br />
 
 ## 2. REST API Design Principles
 
@@ -94,10 +91,6 @@ For detail information: [Rest API Basic](/docs/rest-api-basic)
 
 <Note text="REST API design principles focus on stateless communication, resource-based URLs, proper use of HTTP methods and status codes, and consistent JSON responses to build scalable and maintainable APIs." />
 
-<br />
----
-<br />
-
 ## 3. HTTP Methods & Status Codes
 
 HTTP methods define what action the client wants to perform on a resource, while HTTP status codes indicate the result of that action.
@@ -175,16 +168,13 @@ export type StatusCode = (typeof STATUS_CODES)[keyof typeof STATUS_CODES];
 
 <Note text="HTTP methods define the action like GET, POST, PUT, PATCH, and DELETE, while status codes like 200, 201, 400, 401, and 500 indicate the result of the request." />
 
-<br />
----
-<br />
 
 ## 4. Middleware & Request Flow
 
 Middleware in Node.js is a function that sits between the incoming request and the final response.
 It has access to the request object, response object, and the **next()** function.
 
-**Request Flow in Node.js (Express):**
+##### Request Flow in Node.js (Express):
 
 #### I. A client sends an HTTP request to the server.
 
@@ -206,10 +196,6 @@ It has access to the request object, response object, and the **next()** functio
 #### V. Finally, the server sends a response back to the client.
 
 <Note text="Middleware is a function that runs before the request reaches the controller. It can modify the request, validate data, handle auth, or pass control using next()." />
-
-<br />
----
-<br />
 
 ## 5. Authentication vs Authorization
 
@@ -245,10 +231,6 @@ Authorization determines what the user can access (roles, permissions).
 Then, authorization middleware checks roles or permissions before allowing access to a route."
 />
 
-<br />
----
-<br />
-
 ## 6. Event Loop, libuv, V8 & Non-Blocking I/O
 
 Node.js works on a **single-threaded**, **non-blocking,** event-driven architecture, which is powered by the **Event Loop**, **libuv**, and the **V8 engine**.
@@ -261,8 +243,6 @@ Node.js works on a **single-threaded**, **non-blocking,** event-driven architect
 - Manages memory using garbage collection
 
 > V8 executes JavaScript code.
-
----
 
 ### II. Libuv
 
@@ -279,8 +259,6 @@ It handles:
 - Timers
 
 > Libuv handles async tasks and system-level operations.
-
----
 
 ### III. Event Loop
 
@@ -302,8 +280,6 @@ Event loop phases include:
 
 > The event loop decides when a callback should run.
 
----
-
 ### IV. Non-Blocking I/O
 
 In Node.js:
@@ -315,10 +291,6 @@ In Node.js:
 > This allows Node.js to handle thousands of concurrent requests efficiently.
 
 <Note text="V8 executes JavaScript, libuv handles async operations, the event loop manages execution order, and non-blocking I/O allows Node.js to process multiple requests without blocking the main thread." />
-
-<br />
----
-<br />
 
 ## 7. Async/Await & Promises
 
@@ -334,8 +306,6 @@ It has three states:
 - Rejected
 
 Promises help avoid callback hell and allow chaining using <Code children=".then()" /> and <Code children=".catch()" />.
-
----
 
 ### II. Async / Await
 
@@ -367,10 +337,6 @@ async function getData() {
 
 <Note text="Promises handle async operations using then and catch, while async/await is a cleaner syntax on top of Promises that uses try-catch for error handling." />
 
-<br />
----
-<br />
-
 ## 8. Error Handling & Global Error Middleware
 
 Error handling in Node.js ensures that application failures are handled gracefully without crashing the server.
@@ -384,7 +350,6 @@ In Express, this is commonly done using centralized or global error-handling mid
 
 - This keeps the code clean, consistent, and easier to maintain.
 
----
 
 ### II. Global Error-Handling Middleware
 
@@ -421,10 +386,6 @@ app.use((err, req, res, next) => {
 For more info visit [Global Error Handling](https://servercn.vercel.app/docs/express/components/global-error-handler)
 
 <Note text="Global error middleware in Express is used to catch and handle all application errors in one place using the (err, req, res, next) function." />
-
-<br />
----
-<br />
 
 ## 9. Env Variable & Config Management
 
@@ -469,16 +430,13 @@ export default env;
 
 <Note text="Environment variables store configuration and secrets outside the code, allowing different behavior per environment and improving security." />
 
-<br />
----
-<br />
-
-
 ## 10. Logging & Monitoring
 
 Logging and monitoring are used to observe application behavior, debug issues, and ensure system reliability in production.
 
 ### I. Logging
+
+In Node.js, logs help us debug issues, trace requests, and audit behavior.
 
 Logging is the process of recording application events such as:
 
@@ -487,7 +445,6 @@ Logging is the process of recording application events such as:
 - API requests
 - Important system actions
 
-In Node.js, logs help us debug issues, trace requests, and audit behavior.
 
 ---
 
@@ -507,7 +464,6 @@ logger.info("Server started");
 logger.error("Database connection failed");
 ```
 
-<br />
 ---
 
 ### III. Monitoring

@@ -33,11 +33,11 @@ This focuses on configuration, routing, and controller logic — not theory.
  
 <Step> Install packages </Step>
 
-- #### Dependencies
+- ##### Dependencies
 
 <PackageManagerTabs command="npm install passport passport-google-oauth20 dotenv" />
 
-- #### TypeScript types
+- ##### TypeScript types
 
 <PackageManagerTabs
   command="npm install -D @types/passport @types/passport-google-oauth20
@@ -190,13 +190,7 @@ export default router;
 
 <Step>Initialize passport</Step>
 
-```ts
-import "./configs/passport";
-```
-
-<br />
-
-```ts {8} title="src/app.ts"
+```ts {8} title="src/app.ts" {8}
 import express, { Express, Request, Response } from "express";
 
 import { notFoundHandler } from "./middlewares/not-found-handler";

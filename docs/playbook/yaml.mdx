@@ -12,9 +12,6 @@ It is mainly used for:
 - Kubernetes
 - CI/CD pipelines
 
-<br />
----
-<br />
 
 ## 1. YAML Syntax Basics
 
@@ -24,10 +21,7 @@ It is mainly used for:
 - Usually <Highlight>.yaml</Highlight> or <Highlight>.yml</Highlight>
 - Key-value format
 
-<br />
 ---
-<br />
-
 
 #### Common Data Types
 
@@ -66,9 +60,6 @@ It is mainly used for:
 </TBody>
 </Table>
 
-<br />
----
-<br />
 
 ## 2. Key-Value Pair
 
@@ -92,11 +83,6 @@ city: Kathmandu
 }
 ```
 
-<br />
-<br />
----
-<br />
-
 ## 3. Strings
 
 ```yaml title="string.yml"
@@ -107,9 +93,6 @@ framework: 'Express'
 
 > Quotes are optional unless special characters exist.
 
-<br />
----
-<br />
 
 ## 4. Numbers and Boolean
 
@@ -120,11 +103,6 @@ price: 99.99
 isAdmin: true
 isLoggedIn: false
 ```
-
-<br />
-<br />
----
-<br />
 
 ## 5. Arrays (Lists)
 
@@ -139,10 +117,6 @@ languages:
   - Python
 ```
 
-<br />
-<br />
----
-<br />
 
 ## 6. Objects
 
@@ -152,11 +126,6 @@ user:
   age: 22
   role: developer
 ```
-
-<br />
-<br />
----
-<br />
 
 ## 7. Nested Objects
 
@@ -183,9 +152,6 @@ user
       └── zip
 ```     
 
-<br/>
----
-<br/>
 
 ```yaml title="nested_nested_obj.yml"
 company:
@@ -211,11 +177,6 @@ company
            └── experience
 ```      
 
-<br />
-<br />
----
-<br />
-
 ## 8. Array of Objects
 
 ```yaml title="arr_of_obj.yml"
@@ -227,22 +188,12 @@ users:
     role: user
 ```
 
-<br />
-<br />
----
-<br />
-
 ## 9. Comments
 
 ```yaml title="comment.yml"
 # This is comment
 name: Akkal
 ```
-
-<br />
-<br />
----
-<br />
 
 ## 10. Null Values
 
@@ -251,11 +202,6 @@ middleName: null
 nickname:
 username: ~
 ```
-
-<br />
-<br />
----
-<br />
 
 ## 11. Multiline Strings
 
@@ -293,11 +239,6 @@ message: >
 Hello This becomes one line
 </Output>
 
-
-<br />
----
-<br />
-
 ## 12. Environment Example
 
 ```yaml title="env.yml"
@@ -312,13 +253,11 @@ database:
   password: secret
 ```  
 
-<br />
----
-<br />
-
 ## 13. Anchors and Defaults
 
 YAML supports reusable default blocks using anchors <Highlight>&</Highlight> and aliases <Highlight>*</Highlight>.
+
+> <Highlight>default_settings</Highlight> is reused in both environments.
 
 ```yaml title="anchor_default.yml"
 default: &default_settings
@@ -334,13 +273,6 @@ production:
   host: prod.server.com
 ```  
 
-<br />
-> <Highlight>default_settings</Highlight> is reused in both environments.
-
-<br />
----
-<br />
-
 
 ## 14. Explicit Data Types
 
@@ -353,10 +285,6 @@ isAdmin: !!bool "true"
 
 data: !!null ""
 ```
-
-<br />
----
-<br />
 
 ## 15. Docker Compose
 
@@ -380,10 +308,6 @@ services:
 
     comm and: npm start
 ```
-
-<br />
----
-<br />
 
 ### 15.2. Node.js + MongoDB
 ```yaml title="docker-compose2.yml"
@@ -422,10 +346,6 @@ services:
 volumes:
   mongo-data:
 ```
-
-<br />
----
-<br />
 
 ### 15.2. Node.js + PostgreSQL
 ```yaml title="docker-compose3.yml"

@@ -5,10 +5,6 @@ description: Learn database normalization concepts including 1NF, 2NF, 3NF, BCNF
 
 Normalization is a core concept in Database design that helps you organize data efficiently in a relational database. The goal is to reduce redundancy (duplicate data) and improve data integrity (accuracy and consistency).
 
-<br />
----
-<br />
-
 ## 1. What is Normalization?
 
 Normalization is the process of structuring a database so that:
@@ -16,11 +12,6 @@ Normalization is the process of structuring a database so that:
 - Each piece of data is stored only once
 - Relationships between data are clearly defined
 - Updates, inserts, and deletes don't create inconsistencies
-
-
-<br />
----
-<br />
 
 
 ## 2. Why is Normalization Important?
@@ -35,13 +26,7 @@ Normalization is important because it helps maintain a database that is efficien
     - **Deletion Anomalies:** Accidentally losing valuable information when you delete something seemingly unrelated.
 - **Easier to Understand and Maintain:** A normalized database is generally more logically structured and easier to understand, query, and modify.
 
-<br />
----
-<br />
-
-
 ## 3. First Normal Form (1NF): Atomic Values
-
 
 - All columns contain <Highlight>atomic</Highlight> values (i.e., indivisible values).
 - Each row is <Highlight>unique</Highlight> (i.e., no duplicate rows).
@@ -72,7 +57,6 @@ Normalization is important because it helps maintain a database that is efficien
 </TR>
 </TBody>
 </Table>
-
 
 
 ##### Convert to 1NF:
@@ -113,11 +97,6 @@ Normalization is important because it helps maintain a database that is efficien
 </TR>
 </TBody>
 </Table>
-
-<br />
----
-<br />
-
 
 ## 4. Second Normal Form (2NF): Remove Partial Dependencies
 
@@ -233,11 +212,6 @@ Normalization is important because it helps maintain a database that is efficien
 </TBody>
 </Table>
 
-<br />
----
-<br />
-
-
 ## 5. Third Normal Form (3NF): Remove Transitive Dependencies
 
 - Must already be in <Highlight>2NF</Highlight>
@@ -307,7 +281,6 @@ StudentID → DepartmentName
 
 **Departments:**
 
-
 <Table>
 <THead>
 <TR>
@@ -326,11 +299,6 @@ StudentID → DepartmentName
 </TR>
 </TBody>
 </Table>
-
-
-<br/>
----
-<br/>
 
 ## 6. Boyce-Codd Normal Form (BCNF): Stronger Version of 3NF
 
@@ -430,11 +398,6 @@ This violates <Highlight>BCNF</Highlight>.
 </TR>
 </TBody>
 </Table>
-
-
-<br />
----
-<br />
 
 ## 7. Normalization Summary
 

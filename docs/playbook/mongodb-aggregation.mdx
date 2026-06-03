@@ -25,10 +25,6 @@ db.collection.aggregate([
 ])
 ```
 
-<br />
----
-<br />
-
 ## 2. Why Use Aggregation?
 
 Aggregation helps you:
@@ -46,9 +42,6 @@ Similar to:
 - SQL <Highlight>JOIN</Highlight>
 - SQL calculations
 
-<br />
----
-<br />
 
 ## 3. Sample Data
 
@@ -114,9 +107,6 @@ We'll use this sample data to demonstrate aggregation stages:
 ];
 ```
 
-<br />
----
-<br />
 
 ```js title="orders.js"
 [
@@ -261,10 +251,6 @@ We'll use this sample data to demonstrate aggregation stages:
 ];
 ```
 
-<br />
----
-<br />
-
 
 ## 4. Most Important Aggregation Stages
 
@@ -313,10 +299,6 @@ db.orders.aggregate([
   }
 ]
 ```
-
-<br />
----
-<br />
 
 ##### 2. Filter all products whose price is greater than 10000.
 
@@ -372,9 +354,7 @@ db.products.aggregate([
 ];
 ```
 
-<br />
 ---
-<br />
 
 ### 4.2 <Code>$group</Code> : Group Documents
 
@@ -459,10 +439,6 @@ db.products.aggregate([
 ];
 ```
 
-<br />
----
-<br />
-
 ##### 2. Count total stock & products per category.
 
 ```js
@@ -502,9 +478,6 @@ db.products.aggregate([
 ];
 ```
 
-<br />
----
-<br />
 
 ##### 3. Count total price per category.
 
@@ -530,9 +503,7 @@ db.products.aggregate([
 ];
 ```
 
-<br />
 ---
-<br />
 
 ### 4.3 <Code>$project</Code> : Select/Transform Fields
 
@@ -579,9 +550,7 @@ db.products.aggregate([
 ]
 ```
 
-<br />
 ---
-<br />
 
 ### 4.4 <Code>$sort</Code> : Sort Documents
 
@@ -610,7 +579,6 @@ db.products.aggregate([
   }
 ]);
 ```
-<br />
 - <Highlight>1</Highlight> : sort by ascending order.
 - <Highlight>-1</Highlight> : sort by descending order.
 
@@ -635,9 +603,7 @@ db.products.aggregate([
 ]
 ```
 
-<br />
 ---
-<br />
 
 ### 4.5 <Code>$limit</Code> : Limit Documents
 
@@ -692,9 +658,7 @@ db.products.aggregate([
 ```
 
 
-<br />
 ---
-<br />
 
 ### 4.6 <Code>$skip</Code> : Skip Documents
 
@@ -749,9 +713,7 @@ db.products.aggregate([
 ```
 
 
-<br />
 ---
-<br />
 
 ### 4.7 <Code>$lookup</Code> : Join Collections
 
@@ -844,10 +806,6 @@ db.orders.aggregate([
   }
 ];
 ```
-
-<br />
----
-<br />
 
 ##### 2. Find orders with products details(_id, name, price, brand).
 
@@ -944,10 +902,7 @@ db.orders.aggregate([
 ];
 ```
 
-
-<br />
 ---
-<br />
 
 ### 4.8 <Code>$unwind</Code> : Unwind Arrays
 
@@ -1000,10 +955,6 @@ db.products.aggregate([
 ];
 ```
 
-<br />
----
-<br />
-
 ##### 2. Count How Many Times Each Rating Appears
 
 ```js
@@ -1036,9 +987,6 @@ db.products.aggregate([
 ];
 ```
 
-<br />
----
-<br />
 
 ## 5. Aggregation Pipeline Example
 
@@ -1095,10 +1043,6 @@ db.orders.aggregate([
   { _id: "Mobile", totalRevenue: 85000 }
 ];
 ```
-
-<br />
----
-<br />
 
 ## 6. MongoDB Aggregation Stages & Their Uses
 <Table>

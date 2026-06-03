@@ -5,42 +5,41 @@ description: Backend Fundamentals Interview Questions
 
 ## 1. SQL vs NOSQL (When to Use What)
 
-## What is SQL?
+### 1.1 What is SQL?
 
 **SQL (Structured Query Language) databases** are relational databases that store data in structured tables (rows and columns) with predefined schemas.
 
-### Examples
-
+##### Examples:
 - MySQL
 - PostgreSQL
 - Microsoft SQL Server
 
-### Key Characteristics
+##### Key Characteristics
 
 - Structured schema (schema-on-write)
 - Supports JOIN operations
 - Strong ACID compliance
 - Best for structured and relational data
 
-## What is NoSQL?
+### 1.2 What is NoSQL?
 
 **NoSQL databases** are non-relational databases designed for flexibility, scalability, and handling large volumes of distributed data.
 
-### Types
+##### Types
 
 - Document (e.g., MongoDB)
 - Key-Value (e.g., Redis)
 - Column-Family (e.g., Cassandra)
 - Managed NoSQL (e.g., DynamoDB)
 
-### Key Characteristics
+##### Key Characteristics
 
 - Flexible schema (schema-on-read)
 - Horizontally scalable
 - Optimized for large-scale distributed systems
 - Often follow BASE consistency model
 
-## Core Differences
+### 1.3 Core Differences
 
 ```bash
 | Feature        | SQL                        | NoSQL                           |
@@ -52,7 +51,7 @@ description: Backend Fundamentals Interview Questions
 | Relationships  | Strong (JOIN support)      | Typically denormalized          |
 ```
 
-## When to Use SQL
+### 1.4 When to Use SQL
 
 Use SQL when:
 
@@ -61,13 +60,13 @@ Use SQL when:
 - The system is transactional
 - Data structure is stable and well-defined
 
-### Examples
+##### Examples
 
 - Banking systems
 - ERP systems
 - E-commerce order management
 
-## When to Use NoSQL
+### 1.5 When to Use NoSQL
 
 Use NoSQL when:
 
@@ -76,15 +75,15 @@ Use NoSQL when:
 - Large volume of semi-structured/unstructured data
 - Real-time or distributed systems
 
-### Examples
+##### Examples
 
 - Social media feeds
 - Logging systems
 - IoT platforms
 - Caching layers
 
-<Note text="SQL databases are relational and schema-based, best suited for structured data and complex transactions requiring ACID compliance.
+<Note text="SQL databases are relational and schema-based, best suited for structured data and complex transactions requiring ACID compliance." />
 
-NoSQL databases are non-relational and schema-flexible, optimized for horizontal scalability and handling large volumes of semi-structured data.
+<Note text="NoSQL databases are non-relational and schema-flexible, optimized for horizontal scalability and handling large volumes of semi-structured data." />
 
-I would choose SQL for transactional systems with strong consistency needs, and NoSQL for high-scale, distributed, or rapidly evolving applications."/>
+<Note text="I would choose SQL for transactional systems with strong consistency needs, and NoSQL for high-scale, distributed, or rapidly evolving applications." />
