@@ -30,25 +30,25 @@ export const mdxComponents: MDXComponents = {
   ),
   h2: props => (
     <h2
-      className="animate-fade-in-blur font-inter mt-3 mb-3 text-2xl font-medium tracking-tight"
+      className="animate-fade-in-blur font-inter mt-3 mb-3 border-t pt-6 text-2xl font-medium tracking-tight"
       {...props}
     />
   ),
   h3: props => (
     <h3
-      className="this-page-link font-inter animate-fade-in-blur mt-2 mb-3 text-[22px] font-medium tracking-tight"
+      className="this-page-link font-inter animate-fade-in-blur mt-6 mb-3 text-[22px] font-medium tracking-tight"
       {...props}
     />
   ),
   h4: props => (
     <h4
-      className="font-inter animate-fade-in-blur mt-4 mb-4 text-xl font-medium tracking-tight"
+      className="font-inter animate-fade-in-blur mt-4 mb-5 text-xl font-medium tracking-tight"
       {...props}
     />
   ),
   h5: props => (
     <h5
-      className="animate-fade-in-blur my-3 text-lg font-medium tracking-tight"
+      className="animate-fade-in-blur mt-3 mb-4 text-lg font-medium tracking-tight"
       {...props}
     />
   ),
@@ -76,13 +76,16 @@ export const mdxComponents: MDXComponents = {
   ),
   ul: props => (
     <ul
-      className="text-muted-primary animate-fade-in-blur mb-3 list-disc space-y-2.5 pl-6"
+      className="text-muted-primary animate-fade-in-blur mb-6 list-disc space-y-2.5 pl-6"
       {...props}
     />
   ),
+  li: props => (
+    <li className="text-muted-primary animate-fade-in-blur mb-2.5" {...props} />
+  ),
   ol: props => (
     <ol
-      className="text-muted-primary animate-fade-in-blur mb-3 list-decimal space-y-2.5 pl-6"
+      className="text-muted-primary animate-fade-in-blur mb-6 list-decimal space-y-2.5 pl-6"
       {...props}
     />
   ),

@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 
 export function Table({ children }: { children: ReactNode }) {
   return (
-    <div className="border-edge animate-fade-in-blur mt-4 mb-4 overflow-x-auto rounded-lg border-x border-t">
+    <div className="border-edge animate-fade-in-blur mt-4 mb-8 overflow-x-auto rounded-lg border-x border-t">
       <table className="w-full border-collapse text-sm">{children}</table>
     </div>
   );
