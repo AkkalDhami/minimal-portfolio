@@ -98,7 +98,7 @@ export const mdxComponents: MDXComponents = {
     return (
       <figcaption
         className={cn(
-          "font-code animate-fade-in-blur flex items-center gap-2 border-b border-neutral-800 px-4 py-2 text-neutral-400"
+          "font-code animate-fade-in-blur flex items-center gap-2 rounded-t-lg border-b border-neutral-800 px-4 py-2 text-neutral-400"
         )}
         {...props}>
         {iconExtension}

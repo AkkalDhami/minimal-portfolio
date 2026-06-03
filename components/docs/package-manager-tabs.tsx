@@ -95,7 +95,7 @@ export default function PackageManagerTabs({
     <Tabs
       value={pkgManager}
       className={cn(
-        "my-4 w-full rounded-lg border border-neutral-800 bg-black"
+        "bg-code my-4 w-full rounded-lg border border-neutral-800"
       )}>
       <TabsList
         style={{
