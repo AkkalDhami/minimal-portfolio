@@ -1,22 +1,20 @@
 "use client";
 
 import { ArrowLeft } from "lucide-react";
-import { PrimaryButton } from "@/components/ui/primary-button";
 import { useRouter } from "next/navigation";
 
 export function BackButton() {
   const router = useRouter();
   return (
-    <PrimaryButton
+    <button
       onClick={() => {
         router.back();
       }}
-      variant="secondary"
-      className="group relative px-3 py-2">
+      className="group bg-muted hover:bg-secondary relative cursor-pointer rounded-lg px-3 py-1.5">
       <div className="flex items-center gap-2">
-        <ArrowLeft className="transition-all group-hover:-translate-x-1" /> Go
-        Back
+        <ArrowLeft className="size-4 transition-all group-hover:-translate-x-1" />{" "}
+        Go Back
       </div>
-    </PrimaryButton>
+    </button>
   );
 }

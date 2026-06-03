@@ -68,7 +68,6 @@ export function Navbar() {
             "w-full max-w-4xl backdrop-blur-md",
             "border-edge border-x",
             "screen-line-before screen-line-after"
-            // "bg-[radial-gradient(35%_128px_at_0%_0%,--theme(--color-foreground/.05),transparent)] dark:bg-[radial-gradient(35%_128px_at_0%_0%,--theme(--color-foreground/.08),transparent),radial-gradient(35%_128px_at_100%_0%,--theme(--color-foreground/.08),transparent)]"
           )}>
           <Profile />
 
@@ -115,7 +114,7 @@ export function Navbar() {
             <PrimaryButton
               variant="outline"
               as="a"
-              href={`${GITHUB_URL}/akkal-portfolio` as Route}
+              href={`${GITHUB_URL}/minimal-portfolio` as Route}
               target="_blank"
               className="relative rounded-lg border-0 px-2 py-2 ring-0">
               <SiGithub onClick={() => play()} className="size-5" />
@@ -151,7 +150,7 @@ export function Navbar() {
                   animate={{ x: 0 }}
                   exit={{ x: "100%" }}
                   transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                  className="bg-background border-border fixed top-0 right-0 bottom-0 z-60 h-screen w-70 overflow-y-auto border-l md:hidden">
+                  className="bg-background border-border fixed top-0 right-0 bottom-0 z-60 h-screen w-70 overflow-y-auto border-l pb-10 md:hidden">
                   <div className="bg-background flex h-full flex-col p-6">
                     <div className="mb-8 flex items-center justify-between">
                       <span className="text-muted-foreground text-xs font-medium tracking-[0.2em] uppercase">
@@ -186,7 +185,7 @@ export function Navbar() {
                                   ? "bg-foreground text-accent"
                                   : "hover:bg-foreground hover:text-accent"
                               )}>
-                              <span className="text-xl font-semibold tracking-widest uppercase">
+                              <span className="text-lg font-medium tracking-widest uppercase">
                                 {item.label}
                               </span>
                             </Link>

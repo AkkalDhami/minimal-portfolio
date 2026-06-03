@@ -6,13 +6,16 @@ import {
 } from "@/components/github/contribution";
 import { Section } from "@/components/ui/section";
 import { cn } from "@/lib/utils";
+import { lastYearContributions } from "@/data/contributions";
 
 export async function GitHubContributions({
   home = false,
-  year
+  year,
+  fetch = true
 }: {
   home?: boolean;
   year?: string | number;
+  fetch?: boolean;
 }) {
   const contributions = await getGitHubContributions(year);
 
@@ -20,9 +23,16 @@ export async function GitHubContributions({
     <Section
       id="github-contributions"
       className={cn("z-10 px-4 pt-2", home && "screen-line-before pt-3")}>
-      <Suspense fallback={<GitHubContributionFallback />}>
-        <GitHubContributionGraph initialData={contributions} home={home} />
-      </Suspense>
+      {!fetch ? (
+        <GitHubContributionGraph
+          initialData={lastYearContributions}
+          home={home}
+        />
+      ) : (
+        <Suspense fallback={<GitHubContributionFallback />}>
+          <GitHubContributionGraph initialData={contributions} home={home} />
+        </Suspense>
+      )}
     </Section>
   );
 }
