@@ -8,12 +8,7 @@ import { DSA_DATA } from "@/data/dsa";
 
 export function DsaSection() {
   return (
-    <Section
-      id="templates"
-      className={cn(
-        "px-0",
-        "bg-[radial-gradient(35%_128px_at_0%_0%,--theme(--color-foreground/.05),transparent)] dark:bg-[radial-gradient(35%_128px_at_0%_0%,--theme(--color-foreground/.08),transparent),radial-gradient(35%_128px_at_100%_0%,--theme(--color-foreground/.08),transparent)]"
-      )}>
+    <Section id="templates" className={cn("px-0")}>
       <div className="mb-4 px-4">
         <Heading>Data Structures & Algorithms</Heading>
         <SubHeading className="text-muted-foreground mx-0 max-w-2xl text-lg">
@@ -23,7 +18,9 @@ export function DsaSection() {
 
       <div className="screen-line-before grid grid-cols-1">
         {DSA_DATA.map(t => (
-          <div key={t.title} className="group flex flex-col gap-3">
+          <div
+            key={t.title}
+            className="group animate-fade-in-blur flex flex-col gap-3">
             <a
               href={`${t.docs}`}
               className={cn(

@@ -60,7 +60,7 @@ export function ContactInfo() {
                 <item.icon className="primary-ring rounded-primary text-muted-primary border-edge from-background to-muted size-9 border bg-linear-to-b p-1.5" />
               </div>
               <div className="text-primary flex flex-col space-y-1">
-                <span className="text-muted-foreground text-xs font-medium tracking-widest uppercase">
+                <span className="text-muted-foreground text-xs font-normal tracking-widest uppercase">
                   {item.label}
                 </span>
                 {item.href ? (
@@ -68,7 +68,7 @@ export function ContactInfo() {
                     <Link
                       href={item.href as Route}
                       target="_blank"
-                      className="decoration-primary text-sm font-medium underline-offset-4 hover:underline">
+                      className="decoration-primary text-sm font-normal underline-offset-4 hover:underline">
                       {item.value}
                     </Link>
                     <CopyButton
@@ -81,7 +81,7 @@ export function ContactInfo() {
                     />
                   </div>
                 ) : (
-                  <span className="text-sm font-medium">{item.value}</span>
+                  <span className="text-sm font-normal">{item.value}</span>
                 )}
               </div>
             </div>

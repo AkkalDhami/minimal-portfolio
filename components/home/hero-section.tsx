@@ -1,15 +1,13 @@
 "use client";
 
 import { motion } from "motion/react";
-
 import { FlipWords } from "@/components/ui/flip-words";
 
-import { SocialLinks } from "./social-link";
-import { PrimaryButton } from "@/components/ui/primary-button";
+import { SocialLinks } from "@/components/home/social-link";
 import { HOME_PAGE_STACKS } from "@/utils/stack";
 import { NAME } from "@/lib/constants";
-import { Route } from "next";
 import { getIconForLanguageExtension } from "@/components/docs/icon";
+import { TechBadge } from "@/components/projects/tech-badge";
 
 const HERO_WORDS = [
   "systems that scale under pressure.",
@@ -26,7 +24,7 @@ export function HeroSection() {
       className="screen-line relative z-10 px-4 pt-16 pb-4 font-sans font-normal">
       <div className="mt-4">
         <div className="flex items-baseline-last gap-2">
-          <h1 className="font-inter text-4xl font-semibold tracking-wide uppercase sm:text-4xl lg:text-5xl xl:text-6xl">
+          <h1 className="font-inter text-4xl font-semibold tracking-wide uppercase md:text-6xl">
             {NAME}
           </h1>
         </div>
@@ -48,19 +46,17 @@ export function HeroSection() {
                     className: "size-5"
                   });
                   return (
-                    <div
-                      key={tech.value}
-                      className="from-secondary via-background to-muted ring-edge rounded-lg bg-linear-to-b px-3 py-1.5 ring">
-                      <div className="text-accent-foreground flex items-center gap-2 text-base">
+                    <TechBadge key={tech.value} className="bg-gradient-t">
+                      <div className="text-accent-foreground relative flex items-center gap-2 text-base">
                         {Icon}
                         {tech.label}
                       </div>
-                    </div>
+                    </TechBadge>
                   );
                 })}
               </div>
             </div>
-            <div className="flex flex-wrap items-center gap-5 lg:justify-start">
+            {/* <div className="flex flex-wrap items-center gap-5 lg:justify-start">
               <PrimaryButton
                 as="a"
                 href="/projects"
@@ -76,7 +72,7 @@ export function HeroSection() {
                 className="rounded-primary from-background to-muted primary-ring w-full bg-linear-to-br px-4 py-3.5 sm:w-auto">
                 View My Resume
               </PrimaryButton>
-            </div>
+            </div> */}
           </div>
           <div className="mt-1">
             <SocialLinks minimal={false} className="sm:gap-6" />

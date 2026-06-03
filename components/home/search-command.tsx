@@ -185,7 +185,7 @@ export const others: Item[] = [
   {
     icon: RiGithubFill,
     label: "Source Code",
-    value: `${GITHUB_URL}/akkal-portfolio`,
+    value: `${GITHUB_URL}/minimal-portfolio`,
     link: true,
     newTab: true,
     key: "y"
