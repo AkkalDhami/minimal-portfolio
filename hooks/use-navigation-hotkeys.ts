@@ -35,7 +35,7 @@ export function useNavigationHotkeys(options: Options = {}) {
       b: "/playbook",
       t: "/templates",
       g: GITHUB_URL,
-      y: `${GITHUB_URL}/akkal-portfolio`,
+      y: `${GITHUB_URL}/minimal-portfolio`,
       x: X_URL,
       l: LINKEDIN_URL,
       z: DAILY_DEV_URL
@@ -66,7 +66,7 @@ export function useNavigationHotkeys(options: Options = {}) {
           X_URL,
           LINKEDIN_URL,
           DAILY_DEV_URL,
-          `${GITHUB_URL}/akkal-portfolio`
+          `${GITHUB_URL}/minimal-portfolio`
         ].includes(path)
       ) {
         window.open(path, "_blank");
