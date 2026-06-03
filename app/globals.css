@@ -66,6 +66,8 @@
   --shadow-primary: var(--shadow-primary);
   --shadow-secondary: var(--shadow-secondary);
   --shadow-tertiary: var(--shadow-tertiary);
+
+  --max-width-code: 840px;
 }
 
 :root {
@@ -140,7 +142,7 @@
 .dark {
   --muted-secondary: #888;
   --color-card-hover: #ffffff0f;
-  --background: #040404;
+  --background: var(--color-neutral-950);
   --foreground: #ffffff;
   --card: #090909;
   --card-foreground: #ffffff;
@@ -311,9 +313,7 @@ html {
   }
 
   [data-rehype-pretty-code-figure] {
-    position: relative;
-    margin-top: 4px;
-    @apply rounded-lg border bg-black;
+    @apply relative mt-2 mb-8 rounded-lg border bg-black;
     max-width: 840px;
   }
 

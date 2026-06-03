@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { DsaSection } from "@/components/dsa/dsa-section";
+import { Container } from "@/components/shared/container";
 
 export const metadata: Metadata = {
   title: "Data Structures & Algorithms",
@@ -9,8 +10,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <div className="border-edge mx-auto max-w-4xl border-x pt-16">
+    <Container className="border-edge border-x pt-16">
       <DsaSection />
-    </div>
+    </Container>
   );
 }

@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { SetupSection } from "@/components/setup/setup-section";
 import { cn } from "@/lib/utils";
+import { Container } from "@/components/shared/container";
 
 export const metadata: Metadata = {
   title: "Development Setup",
@@ -10,8 +11,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <div className={cn("border-edge mx-auto max-w-4xl border-x pt-16")}>
+    <Container className={cn("border-edge border-x pt-16")}>
       <SetupSection />
-    </div>
+    </Container>
   );
 }

@@ -6,6 +6,7 @@ import { getPreviousAndNextProject, getProjectBySlug } from "@/utils/project";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { redirect } from "next/navigation";
 import { Route } from "next";
+import { Container } from "@/components/shared/container";
 
 export async function generateMetadata(
   props: PageProps<"/projects/[slug]">
@@ -53,12 +54,12 @@ export default async function Page(props: PageProps<"/projects/[slug]">) {
     slug as string
   );
   return (
-    <div className="border-edge mx-auto max-w-4xl border-x pt-18 pb-4">
+    <Container className="border-edge border-x pt-16 pb-4">
       <div className="px-4 py-0 pt-4">
         <BackButton />
       </div>
       <ProjectCard project={project} details={true} />
-      <div className="flex justify-between px-4">
+      <div className="mt-5 flex justify-between px-4">
         {previousProject && (
           <PrimaryButton
             variant="secondary"
@@ -84,6 +85,6 @@ export default async function Page(props: PageProps<"/projects/[slug]">) {
           </PrimaryButton>
         )}
       </div>
-    </div>
+    </Container>
   );
 }
