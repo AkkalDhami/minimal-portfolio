@@ -15,7 +15,7 @@ export function SetupCard({ item }: { item: SetupItem }) {
       target="_blank"
       onClick={() => play()}
       rel="noopener noreferrer"
-      className="text-muted-foreground hover:text-foreground flex items-center gap-3 underline-offset-2 hover:underline">
+      className="text-muted-foreground animate-fade-in-blur hover:text-foreground flex items-center gap-3 underline-offset-2 hover:underline">
       <h3 className="flex items-center gap-2 text-base font-normal">
         {item.title}
         {item.current && (

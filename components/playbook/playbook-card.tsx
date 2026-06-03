@@ -10,7 +10,8 @@ export function PlaybookCard({ data }: { data: IPlaybook }) {
       href={`/docs/playbook/${data.slug}`}
       onClick={() => play()}
       className={cn(
-        "group hover:bg-card-hover screen-line-before relative p-4 duration-300"
+        "group hover:bg-card-hover screen-line-before relative p-4 duration-300",
+        "animate-fade-in-blur"
       )}>
       <h2 className="text-muted-primary group-hover:text-foreground font-noraml mb-2 line-clamp-1 text-lg underline-offset-4 group-hover:underline">
         {data.title}

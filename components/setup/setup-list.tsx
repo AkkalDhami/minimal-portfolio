@@ -9,7 +9,7 @@ export function SetupList() {
       {SETUP_DATA.map(category => (
         <section
           key={category.title}
-          className="screen-line-after space-y-4 pb-4">
+          className="screen-line-after animate-fade-in-blur space-y-4 pb-4">
           <div className="flex items-center gap-3">
             <div className="from-background to-muted border-edge rounded-primary primary-ring text-primary flex size-7 items-center justify-center border bg-linear-to-b">
               <category.icon className="size-4" />

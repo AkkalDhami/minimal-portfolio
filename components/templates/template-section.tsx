@@ -40,7 +40,7 @@ export const TEMPLATE_DATA: ITemplate[] = [
     description:
       "A modern clean minimal portfolio showcasing scalable web applications, developer tools, and reusable systems, with a focus on clean UI, performance, and developer experience.",
     thumbnail: "/images/og.png",
-    githubUrl: `${GITHUB_URL}/akkal-portfolio`,
+    githubUrl: `${GITHUB_URL}/minimal-portfolio`,
     liveUrl: "https://akkal.com.np",
     technologies: [
       { name: "Nextjs" },
@@ -81,9 +81,9 @@ export const TEMPLATE_DATA: ITemplate[] = [
     ]
   },
   {
-    title: "Full-Stack MERN Portfolio",
+    title: "MERN Stack Portfolio",
     description:
-      "A full-stack portfolio template built with the MERN stack, designed to showcase scalable projects and real-world applications.",
+      "A portfolio template built with the MERN stack, designed to showcase scalable projects and real-world applications.",
     thumbnail: "/assets/templates/temp-3.png",
     githubUrl: `${GITHUB_URL}/MERN-Portfolio`,
     liveUrl: "",
@@ -130,12 +130,7 @@ export function TemplateSection({ home = false }: { home?: boolean }) {
   return (
     <Section
       id="templates"
-      className={cn(
-        "px-0",
-        home
-          ? "screen-line-before"
-          : "bg-[radial-gradient(35%_128px_at_0%_0%,--theme(--color-foreground/.05),transparent)] dark:bg-[radial-gradient(35%_128px_at_0%_0%,--theme(--color-foreground/.08),transparent),radial-gradient(35%_128px_at_100%_0%,--theme(--color-foreground/.08),transparent)]"
-      )}>
+      className={cn("px-0", home && "screen-line-before")}>
       <div className="mb-4 px-4">
         <Heading>Templates</Heading>
         <SubHeading className="text-muted-foreground mx-0 max-w-2xl text-lg">

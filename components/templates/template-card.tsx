@@ -19,7 +19,7 @@ import { getIconForLanguageExtension } from "@/components/docs/icon";
 
 export function TemplateCard({ template }: { template: ITemplate }) {
   return (
-    <div className="group screen-line-after relative p-4 transition-all">
+    <div className="group animate-fade-in-blur screen-line-after relative p-4 transition-all">
       <div className="flex flex-col gap-6 md:flex-row">
         <Image
           src={template.thumbnail}

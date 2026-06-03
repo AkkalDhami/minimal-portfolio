@@ -15,6 +15,7 @@ export function TechBadge({
     <div
       className={cn(
         `text-accent-foreground border-edge relative mx-0.5 inline-flex items-center border px-3 py-1.5 text-base`,
+        "rounded-lg",
         className
       )}>
       {children}

@@ -35,8 +35,8 @@ export function ProjectCard({
 }) {
   if (!details) {
     return (
-      <motion.div className="group screen-line-before relative p-4 transition-all">
-        <div className="flex flex-col gap-6 md:flex-row">
+      <motion.div className="group animate-fade-in-blur screen-line-before relative p-4 transition-all">
+        <motion.div className="flex flex-col gap-6 md:flex-row">
           <Link
             href={`/projects/${project.slug}`}
             className="relative block aspect-video h-48 w-full shrink-0 overflow-hidden md:w-72">
@@ -46,16 +46,35 @@ export function ProjectCard({
               fill
               className="rounded-primary w-full object-cover transition-transform duration-500"
             />
+            {project.status === "ongoing" && (
+              <motion.div
+                style={{
+                  filter: "blur(0px)"
+                }}
+                className="absolute top-1 right-1 z-10 flex items-center justify-center rounded-full border border-amber-400 bg-amber-50 px-2 py-1 text-xs font-medium text-amber-600 uppercase">
+                {"Ongoing"}
+              </motion.div>
+            )}
           </Link>
 
           <div className="flex flex-1 flex-col justify-between py-1">
             <div className="space-y-3">
-              <h3 className="group-hover:text-primary text-xl font-bold transition-colors md:text-2xl">
+              <motion.h3
+                style={{
+                  filter:
+                    project.status === "ongoing" ? "blur(1px)" : "blur(0px)"
+                }}
+                className="group-hover:text-primary text-xl font-bold transition-colors md:text-2xl">
                 {project.title}
-              </h3>
-              <p className="text-muted-foreground line-clamp-2 md:line-clamp-3">
+              </motion.h3>
+              <motion.p
+                style={{
+                  filter:
+                    project.status === "ongoing" ? "blur(1px)" : "blur(0px)"
+                }}
+                className="text-muted-foreground line-clamp-2 md:line-clamp-3">
                 {project.description}
-              </p>
+              </motion.p>
 
               <div className="flex flex-wrap gap-3.5">
                 {project.technologies.map((tech, idx) => {
@@ -91,7 +110,7 @@ export function ProjectCard({
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </motion.div>
     );
   }
@@ -102,7 +121,7 @@ export function ProjectCard({
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
       className="h-full">
-      <Card className="h-full gap-0 overflow-hidden border-transparent dark:bg-transparent">
+      <Card className="animate-fade-in-blur h-full gap-0 overflow-hidden border-transparent py-2 dark:bg-transparent">
         <div className="relative aspect-video">
           <DetailSwapCard
             data={{
@@ -114,6 +133,15 @@ export function ProjectCard({
             showDotIndicator
             showImageCounter={false}
           />
+          {project.status === "ongoing" && (
+            <motion.div
+              style={{
+                filter: "blur(0px)"
+              }}
+              className="absolute top-6 right-6 z-10 flex items-center justify-center rounded-full border border-amber-400 bg-amber-50 px-2 py-1 text-xs font-medium text-amber-600 uppercase">
+              {"Ongoing"}
+            </motion.div>
+          )}
         </div>
 
         <CardContent className="space-y-4 border-0 px-4">

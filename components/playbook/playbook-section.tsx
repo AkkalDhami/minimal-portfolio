@@ -34,14 +34,7 @@ export function PlaybookSection({ home = false }: { home?: boolean }) {
   }, [search, playbooks]);
 
   return (
-    <Section
-      id="playbook"
-      className={cn(
-        "px-0",
-        home
-          ? "screen-line-before"
-          : "bg-[radial-gradient(35%_128px_at_0%_0%,--theme(--color-foreground/.05),transparent)] dark:bg-[radial-gradient(35%_128px_at_0%_0%,--theme(--color-foreground/.08),transparent),radial-gradient(35%_128px_at_100%_0%,--theme(--color-foreground/.08),transparent)]"
-      )}>
+    <Section id="playbook" className={cn("px-0", home && "screen-line-before")}>
       <div className="mb-6 px-4">
         <Heading>Backend Playbook</Heading>
 
@@ -50,7 +43,7 @@ export function PlaybookSection({ home = false }: { home?: boolean }) {
         </SubHeading>
 
         {!home && (
-          <div className="relative mt-4">
+          <div className="animate-fade-in-blur relative mt-4">
             <Search className="text-muted-foreground absolute top-1/2 left-2 size-4 -translate-y-1/2" />
 
             <Input
@@ -80,7 +73,7 @@ export function PlaybookSection({ home = false }: { home?: boolean }) {
       </div>
 
       {home && (
-        <div className="mt-2 mb-2 flex items-center justify-center">
+        <div className="animate-fade-in-blur mt-2 mb-2 flex items-center justify-center">
           <PrimaryButton
             as="a"
             variant="secondary"
