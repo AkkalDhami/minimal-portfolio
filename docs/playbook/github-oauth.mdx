@@ -33,11 +33,11 @@ This focuses on configuration, routing, and controller logic — not theory.
  
 <Step> Install packages </Step>
 
-- #### Dependencies
+- ##### Dependencies
 
 <PackageManagerTabs command="npm install passport passport-github2 dotenv" />
 
-- #### TypeScript types
+- ##### TypeScript types
 
 <PackageManagerTabs
   command="npm install -D @types/passport @types/passport-github2
@@ -187,13 +187,7 @@ export default router;
 
 <Step>Initialize passport</Step>
 
-```ts
-import "./configs/passport";
-```
-
-<br />
-
-```ts title="src/app.ts"
+```ts title="src/app.ts" {8}
 import express, { Express, Request, Response } from "express";
 
 import { notFoundHandler } from "./middlewares/not-found-handler";
