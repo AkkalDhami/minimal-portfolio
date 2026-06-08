@@ -6,9 +6,9 @@ import { SubHeading } from "@/components/ui/sub-heading";
 export function SkillCategoryCard({ description, title, stacks }: ICategory) {
   return (
     <div className="group screen-line-after">
-      <div className="group relative h-full px-4 py-4 transition-all duration-300">
+      <div className="group relative h-full px-4 pt-2 pb-4 transition-all duration-300">
         <div className="p-1">
-          <Heading className="text-muted-primary mb-0.5 text-lg font-medium sm:text-[22px]">
+          <Heading className="text-muted-primary mb-0 text-lg font-medium sm:text-lg sm:text-[22px] sm:font-medium">
             {title}
           </Heading>
 

@@ -10,8 +10,8 @@ import { IPlaybook } from "@/types/app.types";
 import { cn } from "@/lib/utils";
 import { PrimaryButton } from "@/components/ui/primary-button";
 import { Section } from "@/components/ui/section";
-import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { IconSearch } from "@tabler/icons-react";
 
 export function PlaybookSection({ home = false }: { home?: boolean }) {
   const [search, setSearch] = useState("");
@@ -44,7 +44,7 @@ export function PlaybookSection({ home = false }: { home?: boolean }) {
 
         {!home && (
           <div className="animate-fade-in-blur relative mt-4">
-            <Search className="text-muted-foreground absolute top-1/2 left-2 size-4 -translate-y-1/2" />
+            <IconSearch className="text-muted-foreground absolute top-1/2 left-2 size-4 -translate-y-1/2" />
 
             <Input
               placeholder="Search playbooks..."
@@ -73,10 +73,10 @@ export function PlaybookSection({ home = false }: { home?: boolean }) {
       </div>
 
       {home && (
-        <div className="animate-fade-in-blur mt-2 mb-2 flex items-center justify-center">
+        <div className="animate-fade-in-blur mt-2 flex items-center justify-center pb-2">
           <PrimaryButton
             as="a"
-            variant="secondary"
+            variant="outline"
             href="/playbook"
             className="py-3">
             View More

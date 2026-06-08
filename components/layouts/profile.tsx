@@ -15,7 +15,7 @@ export function Profile() {
         alt="Profile"
         width={50}
         height={50}
-        className="primary-ring rounded-primary size-10 object-cover object-left p-0.5"
+        className="primary-ring size-10 rounded-full object-cover object-left p-0.5"
       />
     </Link>
   );

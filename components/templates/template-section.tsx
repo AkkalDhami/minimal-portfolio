@@ -21,21 +21,6 @@ export type ITemplate = Pick<
 
 export const TEMPLATE_DATA: ITemplate[] = [
   {
-    title: "Minimal Developer Portfolio",
-    description:
-      "A sleek developer portfolio with modern UI, subtle animations, and fully responsive layouts built for performance and clarity.",
-    thumbnail: "/assets/templates/temp-1.png",
-    githubUrl: `${GITHUB_URL}/akkal-dhami`,
-    liveUrl: "https://akkaldhami.com.np",
-    technologies: [
-      { name: "Nextjs" },
-      { name: "React" },
-      { name: "TypeScript" },
-      { name: "Tailwind" },
-      { name: "Shadcn" }
-    ]
-  },
-  {
     title: "Minimalistic Portfolio",
     description:
       "A modern clean minimal portfolio showcasing scalable web applications, developer tools, and reusable systems, with a focus on clean UI, performance, and developer experience.",
@@ -50,6 +35,41 @@ export const TEMPLATE_DATA: ITemplate[] = [
       { name: "Shadcn" }
     ]
   },
+
+  {
+    title: "Redesigned Landing Page for sambad.io",
+    description:
+      "A redesigned landing page for sambad.io, a news aggregation platform, focused on clean design, intuitive navigation, and responsive layouts to enhance user engagement.",
+    thumbnail: "/assets/templates/temp-7.png",
+    githubUrl: `${GITHUB_URL}/sambad-landing-page`,
+    liveUrl: "https://sambaad.vercel.app",
+    technologies: [
+      { name: "Nextjs" },
+      { name: "React" },
+      { name: "TypeScript" },
+      { name: "Tailwind CSS" },
+      { name: "Motion" },
+      { name: "Shadcn" }
+    ]
+  },
+
+  {
+    title: "Minimal Developer Portfolio",
+    description:
+      "A sleek developer portfolio with modern UI, subtle animations, and fully responsive layouts built for performance and clarity.",
+    thumbnail: "/assets/templates/temp-1.png",
+    githubUrl: `${GITHUB_URL}/akkal-dhami`,
+    liveUrl: "https://akkaldhami.com.np",
+    technologies: [
+      { name: "Nextjs" },
+      { name: "React" },
+      { name: "TypeScript" },
+      { name: "Tailwind CSS" },
+      { name: "Shadcn" },
+      { name: "Motion" }
+    ]
+  },
+
   {
     title: "Clean Personal Portfolio",
     description:
@@ -62,6 +82,7 @@ export const TEMPLATE_DATA: ITemplate[] = [
       { name: "React" },
       { name: "TypeScript" },
       { name: "Tailwind CSS" },
+      { name: "Motion" },
       { name: "Shadcn" }
     ]
   },
@@ -77,7 +98,8 @@ export const TEMPLATE_DATA: ITemplate[] = [
       { name: "React" },
       { name: "TypeScript" },
       { name: "Tailwind CSS" },
-      { name: "Shadcn" }
+      { name: "Shadcn" },
+      { name: "Motion" }
     ]
   },
   {
@@ -148,7 +170,7 @@ export function TemplateSection({ home = false }: { home?: boolean }) {
       </div>
 
       {home && (
-        <div className="my-2 flex items-center justify-center">
+        <div className="flex items-center justify-center py-3">
           <PrimaryButton
             as="a"
             variant="outline"

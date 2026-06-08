@@ -87,7 +87,7 @@ export function Navbar() {
                     onClick={() => play()}
                     onMouseEnter={() => setHoveredIndex(index)}
                     className={cn(
-                      "relative cursor-pointer px-4 py-1.5 text-xs font-medium tracking-widest uppercase transition-all duration-300",
+                      "relative cursor-pointer px-3 py-1.5 text-xs font-medium tracking-widest uppercase transition-all duration-300",
                       isMoving
                         ? "text-accent"
                         : "text-muted-primary hover:text-primary"
@@ -95,7 +95,6 @@ export function Navbar() {
                     <span className="relative z-10">{item.label}</span>
                     {isMoving && (
                       <motion.div
-                        layout
                         layoutId="nav-active"
                         initial={false}
                         className="bg-foreground group absolute inset-0 rounded-full"

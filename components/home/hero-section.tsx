@@ -8,6 +8,7 @@ import { HOME_PAGE_STACKS } from "@/utils/stack";
 import { NAME } from "@/lib/constants";
 import { getIconForLanguageExtension } from "@/components/docs/icon";
 import { TechBadge } from "@/components/projects/tech-badge";
+import Image from "next/image";
 
 const HERO_WORDS = [
   "systems that scale under pressure.",
@@ -28,6 +29,7 @@ export function HeroSection() {
             {NAME}
           </h1>
         </div>
+
         <div className="flex flex-col space-y-5 lg:text-left">
           <div className="lex flex-col space-y-5 lg:text-left">
             <h2 className="text-muted-primary mt-4 hidden overflow-hidden text-lg font-medium sm:block md:text-xl">
@@ -76,6 +78,59 @@ export function HeroSection() {
           </div>
           <div className="mt-1">
             <SocialLinks minimal={false} className="sm:gap-6" />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function NewHeroSection() {
+  return (
+    <section className="screen-line relative z-10 px-4 pt-16 pb-4 font-sans font-normal">
+      <div className="mt-4">
+        <div className="flex flex-wrap items-center gap-4">
+          <Image
+            width={220}
+            height={220}
+            src="/images/profile.jpg"
+            alt="Profile"
+            className="mx-auto size-40 rounded-full object-cover object-left grayscale-0 duration-200 hover:grayscale-0 sm:mx-0"
+          />
+          <div className="mx-auto space-y-3 sm:mx-0">
+            <h1 className="font-inter text-3xl font-semibold tracking-wide uppercase md:text-4xl">
+              {NAME}
+            </h1>
+            <h3 className="text-muted-primary overflow-hidden text-base font-normal md:text-xl">
+              I build <FlipWords words={HERO_WORDS} />
+            </h3>
+            <SocialLinks minimal={true} className="sm:gap-4" />
+          </div>
+        </div>
+
+        <div className="mt-3 flex flex-col space-y-5 lg:text-left">
+          <div className="flex flex-col space-y-4 lg:text-left">
+            <p className="text-muted-foreground text-lg leading-relaxed sm:mt-0">
+              I design scalable web systems focused on performance,
+              maintainability, and real-world impact.
+            </p>
+
+            <div className="flex flex-wrap items-center gap-3">
+              {HOME_PAGE_STACKS.map(tech => {
+                const Icon = getIconForLanguageExtension({
+                  name: tech.value,
+                  className: "size-5"
+                });
+                return (
+                  <TechBadge key={tech.value} className="bg-gradient-t">
+                    <div className="text-accent-foreground relative flex items-center gap-2 text-base">
+                      {Icon}
+                      {tech.label}
+                    </div>
+                  </TechBadge>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>
