@@ -37,5 +37,17 @@ export const DSA_DATA: IDSA[] = [
     title: "05. Basic Arrays Problems",
     description: "Solve basic arrays problems.",
     docs: "/docs/dsa/arrays"
+  },
+  {
+    slug: "selection-sort",
+    title: "06. Selection Sort",
+    description: "Learn about selection sort.",
+    docs: "/docs/dsa/selection-sort"
+  },
+  {
+    slug: "bubble-sort",
+    title: "06. Bubble Sort",
+    description: "Learn about selection sort.",
+    docs: "/docs/dsa/bubble-sort"
   }
 ];
