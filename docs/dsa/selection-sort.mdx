@@ -1,0 +1,197 @@
+---
+title: Selection Sort
+description: Learn about selection sort.
+---
+
+Selection Sort repeatedly selects the smallest element and places it in its correct position.
+
+<SortingVisualizer
+  algorithm="selection"
+  defaultValues={[5, 3, 8, 1, 9]}
+  showInput={false}
+  title="Selection Sort Demo"
+  maxElements={6}
+/>
+
+
+
+## 1. What is Selection Sort?
+
+Selection Sort is a sorting algorithm that repeatedly:
+
+- finds the minimum element from the unsorted part,
+- places it at the beginning.
+
+## 2. Dry Run Selection Sort.
+
+<Output>
+Input: 96 43 74 72 46
+Output: 43 46 72 74 96
+</Output>
+
+<Output>
+arr[0] = 96
+arr[1] = 43
+arr[2] = 74
+arr[3] = 72
+arr[4] = 46
+</Output>
+
+**Pass 1:**
+
+- Minimum = <Highlight>43</Highlight>
+- Swaps <Highlight>arr[1] = 43</Highlight> and <Highlight>arr[0] = 96</Highlight>
+- Result: <Code>43</Code> <Highlight>96 74 72 46</Highlight>
+
+**Pass 2:**
+
+- Minimum = <Highlight>46</Highlight>
+- Swaps <Highlight>arr[4] = 46</Highlight> and <Highlight>arr[1] = 96</Highlight>
+- Result: <Code>43 46</Code> <Highlight>74 72 96</Highlight>
+
+
+**Pass 3:**
+
+- Minimum = <Highlight>72</Highlight>
+- Swaps <Highlight>arr[3] = 72</Highlight> and <Highlight>arr[2] = 74</Highlight>
+- Result: <Code>43 46 72</Code> <Highlight>74 96</Highlight>
+
+**Pass 4:**
+
+- Minimum = <Highlight>74</Highlight>
+- Result: <Code>43 46 72 74 96</Code>
+
+## 3. Code Implementation
+
+##### Example:
+
+```cpp title="selection-sort.cpp"
+#include <iostream>
+
+using namespace std;
+
+void selectionSort(int arr[], int n)
+{
+    for (int i = 0; i < n - 1; i++)
+    {
+        int idx = i;
+        for (int j = i + 1; j < n; j++)
+        {
+            if (arr[j] < arr[idx])
+            {
+                idx = j;
+            }
+        }
+
+        swap(arr[i], arr[idx]);
+    }
+}
+
+void printArray(int arr[], int n, string msg = "")
+{
+    cout << msg << endl;
+
+    for (int i = 0; i < n; i++)
+    {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+}
+
+int main()
+{
+
+    int arr[] = {5, 16, 4, 71, 2, 11};
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    printArray(arr, n, "Original array:");
+
+    selectionSort(arr, n);
+    printArray(arr, n, "Sorted array(asc):");
+
+    return 0;
+}   
+```
+
+##### Output:
+<Output>
+Original array:
+5 16 4 71 2 11 
+Sorted array(asc):
+2 4 5 11 16 71 
+</Output>
+
+
+## 4. What is the time complexity of Selection Sort?
+
+Best, Average, Worst: <Code>O(n<sup>2</sup>)</Code>
+Because:
+- Two nested loops are always used.
+- Number of comparisons does not depend on input order.
+
+
+## 5. What is the space complexity?
+
+<Code>O(1)</Code>
+
+## 6. Is Selection Sort stable?
+<Code>No</Code>, Equal elements may change their relative order after swapping.
+
+**Example:**
+<Output>
+2a  2b  1
+&nbsp;
+After sorting:
+1  2b  2a
+</Output>
+
+## 7. Is Selection Sort adaptive?
+
+<Code>No</Code>, Even if array is already sorted, it still performs all comparisons.
+
+## 8. Why is Selection Sort called “Selection” Sort?
+Because in every pass:
+
+- it selects the minimum element
+- and places it in correct position.
+
+## 9. How many swaps occur in Selection Sort?
+
+Maximum: <Code>n - 1</Code>
+
+Unlike Bubble Sort, Selection Sort performs fewer swaps.
+
+## 10. Why can Selection Sort be useful despite being slow?
+
+**Because:**
+- it minimizes swaps,
+- useful when swapping cost is expensive.
+
+**Example:**
+- EEPROM memory
+- Flash storage systems
+
+## 11. Why is Selection Sort not preferred for large datasets?
+
+Because:
+- Time complexity is always quadratic. <Code>O(n<sup>2</sup>)</Code>
+- Algorithms like <Highlight>Merge Sort</Highlight> and <Highlight>Quick Sort</Highlight> are much faster.
+
+## 12. Does Selection Sort reduce comparisons if array is already sorted?
+
+<Code>No</Code>, It always performs: <Code>n * (n - 1 ) / 2</Code> comparisons.
+
+## 13. Why is Selection Sort better than Bubble Sort in some cases?
+Because:
+- swaps are expensive,
+- selection Sort minimizes writes/swaps.
+
+## 14. Can Selection Sort be implemented recursively?
+
+<Code>Yes</Code>
+- place minimum element first,
+- recursively sort remaining array.
+
+<SortingVisualizer/>
+
+<Note text="Selection Sort repeatedly selects the minimum element from the unsorted portion and places it at its correct position."/>
