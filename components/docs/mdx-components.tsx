@@ -7,12 +7,14 @@ import Note from "./note";
 import Output from "./output";
 import { cn } from "@/lib/utils";
 import { Table, THead, TBody, TR, TH, TD, Highlight } from "./table";
+import { SortingVisualizer as SortingVisualizerComponent } from "./sorting-visualizer";
 import { getIconForLanguageExtension } from "@/components/docs/icon";
 
 export const mdxComponents: MDXComponents = {
   Table,
   THead,
   TBody,
+  SortingVisualizer: props => <SortingVisualizerComponent {...props} />,
   TR,
   TH,
   TD,

@@ -29,7 +29,7 @@ export function TD({ children }: { children: ReactNode }) {
 
 export function Highlight({ children }: { children: ReactNode }) {
   return (
-    <span className="bg-muted animate-fade-in-blur text-foreground rounded-md px-2 py-1 font-mono text-sm">
+    <span className="dark:bg-muted animate-fade-in-blur text-foreground rounded-md bg-neutral-200 px-2 py-1 font-mono text-sm">
       {children}
     </span>
   );
