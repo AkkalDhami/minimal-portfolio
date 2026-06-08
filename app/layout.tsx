@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Inter, Fira_Code } from "next/font/google";
+import { Geist, Geist_Mono, Inter, Fira_Code, Manrope } from "next/font/google";
 import "./globals.css";
 import { AnchoredToastProvider, ToastProvider } from "@/components/ui/toast";
 import { ThemeProvider } from "@/components/providers/theme-provider";
@@ -20,6 +20,11 @@ const geistMono = Geist_Mono({
 
 const inter = Inter({
   variable: "--font-inter",
+  subsets: ["latin"]
+});
+
+const manrope = Manrope({
+  variable: "--font-manrope",
   subsets: ["latin"]
 });
 
@@ -99,7 +104,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${firaCode.variable} selection:bg-foreground bg-background selection:text-accent scroll-mt-20 font-sans antialiased`}>
+        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${firaCode.variable} ${manrope.variable} selection:bg-foreground bg-background selection:text-accent scroll-mt-20 font-sans antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

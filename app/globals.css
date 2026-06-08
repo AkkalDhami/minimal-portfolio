@@ -3,7 +3,7 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --color-code:#0a0a0a;
+  --color-code: #0a0a0a;
   --color-card-hover: var(--color-card-hover);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -48,6 +48,7 @@
   --font-mono: var(--font-mono), monospace;
   --font-code: var(--font-code), monospace;
   --font-inter: var(--font-inter), sans-serif;
+  --font-manrope: var(--font-manrope), sans-serif;
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -85,7 +86,8 @@
   --primary-foreground: #ffffff;
   --secondary: #f5f5f5;
   --secondary-foreground: #000000;
-  --muted: #f5f5f5;
+  --muted: var(--color-neutral-200);
+  /* --muted: #f5f5f5; */
   --muted-foreground: #525252;
   --muted-primary: #525252;
   --muted-tertiary: var(--color-neutral-300);
@@ -223,6 +225,11 @@
     @apply bg-background text-foreground;
   }
 
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
   .bg-linear-l {
     @apply from-background to-card bg-linear-to-r from-5%;
   }
@@ -314,7 +321,7 @@ html {
   }
 
   [data-rehype-pretty-code-figure] {
-    @apply relative mt-2 mb-8 rounded-lg border bg-code;
+    @apply bg-code relative mt-2 mb-8 rounded-lg border;
     max-width: 840px;
   }
 

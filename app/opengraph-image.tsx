@@ -1,7 +1,7 @@
 import siteConfig from "@/lib/site";
 import { ImageResponse } from "next/og";
 
-export const alt = `${siteConfig.name} — ${siteConfig.tagline}`;
+export const alt = `${siteConfig.name}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -38,9 +38,6 @@ export default function OpenGraphImage() {
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           <div style={{ fontSize: 56, fontWeight: 800, letterSpacing: -1 }}>
             {siteConfig.name}
-          </div>
-          <div style={{ fontSize: 28, color: "#a3a3a3" }}>
-            {siteConfig.tagline}
           </div>
         </div>
       </div>

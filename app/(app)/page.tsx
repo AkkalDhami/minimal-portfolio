@@ -1,5 +1,5 @@
 import { ContactSection } from "@/components/contact/contact-section";
-import { HeroSection } from "@/components/home/hero-section";
+import { NewHeroSection } from "@/components/home/hero-section";
 import { GitHubContributions } from "@/components/github";
 import { ProjectsSection } from "@/components/projects/project-section";
 import { SkillsSection } from "@/components/skills/skill-section";
@@ -11,7 +11,8 @@ import { Container } from "@/components/shared/container";
 export default async function Page() {
   return (
     <Container className="border-edge space-y-2 border-x">
-      <HeroSection />
+      <NewHeroSection />
+      {/* <HeroSection /> */}
       <GitHubContributions fetch={false} year={"2025"} />
       {/* <HeroSectionBackground /> */}
       <ProjectsSection home />
