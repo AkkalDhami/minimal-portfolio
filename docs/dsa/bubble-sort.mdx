@@ -1,0 +1,210 @@
+---
+title: Bubble Sort
+description: Learn about bubble sort.
+---
+
+Bubble Sort repeatedly compares adjacent elements and swaps them if they are in the wrong order.
+
+<SortingVisualizer
+  algorithm="bubble"
+  defaultValues={[5, 3, 8, 1, 9]}
+  showInput={false}
+  title="Bubble Sort Demo"
+  maxElements={6}
+/>
+
+
+
+## 1. What is Bubble Sort?
+
+Bubble Sort repeatedly compares adjacent elements and swaps them if they are in the wrong order.
+
+> Largest element “bubbles” to the end after every pass.
+
+## 2. Dry Run Bubble Sort.
+
+<Output>
+Input: 96 43 74 72 46
+Output: 43 46 72 74 96
+</Output>
+
+<Output>
+arr[0] = 96
+arr[1] = 43
+arr[2] = 74
+arr[3] = 72
+arr[4] = 46
+</Output>
+
+**Pass 1:**
+
+- Comparing <Highlight>96 > 43</Highlight>, If <Highlight>TRUE</Highlight> Swaps <Highlight>96</Highlight> & <Highlight>43</Highlight>, Result: <Code>43</Code> <Highlight>96 74 72 46</Highlight>
+
+- Comparing <Highlight>96 > 74</Highlight>, If <Highlight>TRUE</Highlight> Swaps <Highlight>96</Highlight> & <Highlight>74</Highlight>, Result: <Code>43 74</Code> <Highlight>96 72 46</Highlight>
+
+- Comparing <Highlight>96 > 72</Highlight>, If <Highlight>TRUE</Highlight> Swaps <Highlight>96</Highlight> & <Highlight>72</Highlight>, Result: <Code>43 74 72</Code> <Highlight>96 46</Highlight>
+
+- Comparing <Highlight>96 > 46</Highlight>, If <Highlight>TRUE</Highlight> Swaps <Highlight>96</Highlight> & <Highlight>46</Highlight>, Result: <Code>43 74 72 46</Code> <Highlight>96</Highlight>
+
+**Pass 2:**
+
+- Comparing <Highlight>43 > 74</Highlight>, If <Highlight>FALSE</Highlight> No Swaps, Result: <Code>43 74 72 46</Code> <Highlight>96</Highlight>
+
+- Comparing <Highlight>74 > 72</Highlight>, If <Highlight>TRUE</Highlight> Swaps <Highlight>74</Highlight> & <Highlight>72</Highlight>, Result: <Code>43 72 74 46</Code> <Highlight>96</Highlight>
+
+- Comparing <Highlight>74 > 46</Highlight>, If <Highlight>TRUE</Highlight> Swaps <Highlight>74</Highlight> & <Highlight>46</Highlight>, Result: <Code>43 72 46</Code> <Highlight>74 96</Highlight>
+
+**Pass 3:**
+
+- Comparing <Highlight>43 > 72</Highlight>, If <Highlight>FALSE</Highlight> No Swaps, Result: <Code>43 72 46</Code> <Highlight>74 96</Highlight>
+
+- Comparing <Highlight>72 > 46</Highlight>, If <Highlight>TRUE</Highlight> Swaps <Highlight>72</Highlight> & <Highlight>46</Highlight>, Result: <Code>43 46</Code> <Highlight>72 74 96</Highlight>
+
+
+**Pass 4:**
+
+- Comparing <Highlight>43 > 46</Highlight>, If <Highlight>FALSE</Highlight> No Swaps, Result: <Highlight>43 46 72 74 96</Highlight>
+
+## 3. Code Implementation
+
+##### Example:
+
+```cpp title="bubble-sort.cpp"
+#include <iostream>
+
+using namespace std;
+
+void bubbleSortAscWorst(int arr[], int n)
+{
+    for (int i = n - 2; i >= 0; i--)
+    {
+        for (int j = 0; j <= i; j++)
+        {
+            if (arr[j] > arr[j + 1])
+            {
+                swap(arr[j], arr[j + 1]);
+            }
+        }
+    }
+}
+
+void bubbleSortAscBest(int arr[], int n)
+{
+    for (int i = n - 2; i >= 0; i--)
+    {
+        bool swapped = false;
+        for (int j = 0; j <= i; j++)
+        {
+            if (arr[j] > arr[j + 1])
+            {
+                swap(arr[j], arr[j + 1]);
+                swapped = true;
+            }
+        }
+
+        if (!swapped)
+            break;
+    }
+}
+
+void printArray(int arr[], int n, string msg = "")
+{
+    cout << msg << endl;
+
+    for (int i = 0; i < n; i++)
+    {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+}
+
+int main()
+{
+
+    int arr[] = {5, 16, 4, 71, 2, 11};
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    printArray(arr, n, "Original array:");
+
+    bubbleSortAscWorst(arr, n);
+    printArray(arr, n, "Sorted array(asc) worst case:");
+
+    bubbleSortAscBest(arr, n);
+    printArray(arr, n, "Sorted array(asc) best case:");
+
+    return 0;
+}  
+```
+
+##### Output:
+<Output>
+Original array:
+5 16 4 71 2 11 
+Sorted array(asc) worst case:
+2 4 5 11 16 71 
+Sorted array(asc) best case:
+2 4 5 11 16 71 
+</Output>
+
+
+## 4. What is the time complexity of Bubble Sort?
+
+- Best Case: <Code>O(n)</Code>
+- Worst Case: <Code>O(n<sup>2</sup>)</Code>
+- Average Case: <Code>O(n<sup>2</sup>)</Code>
+
+
+## 5. What is the space complexity?
+
+<Code>O(1)</Code>
+
+## 6. Is Bubble Sort stable?
+<Code>Yes</Code>, Equal elements maintain their relative order.
+
+**Example:**
+<Output>
+2a 2b 1
+&nbsp;
+After sorting:
+1 2a 2b
+</Output>
+
+## 7. Is Bubble Sort adaptive?
+
+<Code>Yes</Code>  (optimized version).
+
+If no swaps occur in a pass:
+- array is already sorted,
+- algorithm stops early.
+
+## 8. Why is Bubble Sort called Bubble Sort?
+Because larger elements “bubble up” to the end after each pass.
+
+## 9. How many passes are required in Bubble Sort?
+
+Maximum: <Code>n - 1</Code>
+
+## 10. How many comparisons occur in Bubble Sort?
+
+Total comparisons: <Code>n(n - 1) / 2</Code> in worst case.
+
+## 11. Can Bubble Sort be implemented recursively?
+<Highlight>Yes</Highlight>, Bubble Sort can be implemented recursively.
+
+- largest element moves to end,
+- recursively sort remaining array.
+
+## 12. Difference between Bubble Sort and Selection Sort?
+
+```bash
+| Feature  | Bubble Sort       | Selection Sort |
+| -------- | ----------------- | -------------- |
+| Swaps    | Many              | Few            |
+| Stable   | Yes               | No             |
+| Adaptive | Yes               | No             |
+| Method   | Adjacent swapping | Select minimum |
+```
+
+<SortingVisualizer/>
+
+<Note text="Bubble Sort repeatedly compares adjacent elements and swaps them until the array becomes sorted."/>
