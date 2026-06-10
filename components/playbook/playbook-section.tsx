@@ -48,7 +48,7 @@ export function PlaybookSection({ home = false }: { home?: boolean }) {
 
             <Input
               placeholder="Search playbooks..."
-              className="pl-10"
+              className="pl-8"
               value={search}
               onChange={e => setSearch(e.target.value)}
             />
