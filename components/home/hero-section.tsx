@@ -93,15 +93,15 @@ export function NewHeroSection() {
           <Image
             width={220}
             height={220}
-            src="/images/profile.jpg"
+            src="/images/profile2.png"
             alt="Profile"
-            className="mx-auto size-40 rounded-full object-cover object-left grayscale-0 duration-200 hover:grayscale-0 sm:mx-0"
+            className="mx-auto hidden size-40 rounded-full object-cover object-left grayscale-0 duration-200 hover:grayscale-0 sm:mx-0 sm:block"
           />
-          <div className="mx-auto space-y-3 sm:mx-0">
+          <div className="space-y-3">
             <h1 className="font-inter text-3xl font-semibold tracking-wide uppercase md:text-4xl">
               {NAME}
             </h1>
-            <h3 className="text-muted-primary overflow-hidden text-base font-normal md:text-xl">
+            <h3 className="text-muted-primary hidden overflow-hidden text-base font-normal sm:block md:text-xl">
               I build <FlipWords words={HERO_WORDS} />
             </h3>
             <SocialLinks minimal={true} className="sm:gap-4" />

@@ -46,6 +46,7 @@ import { click005Sound } from "@/sounds/click-005";
 import { click002Sound } from "@/sounds/click-002";
 import { uChatScrollButtonSound } from "@/sounds/chat-scroll";
 import { DSA_DATA } from "@/data/dsa";
+import { sliceContent } from "@/utils/slice-content";
 
 export interface Item {
   value: string;
@@ -307,7 +308,9 @@ export function SearchCommand() {
                                 <item.icon className="primary-ring border-edge size-6 rounded-md border p-1" />
                               )}
 
-                              <span className="flex-1">{item.label}</span>
+                              <span className="line-clamp-1 flex-1">
+                                {item.label}
+                              </span>
                             </div>
                             {item.key && (
                               <KbdGroup>

@@ -11,7 +11,7 @@ export function Profile() {
       onClick={() => play()}
       className="group relative flex items-center justify-center">
       <Image
-        src="/images/profile.jpg"
+        src="/images/profile2.png"
         alt="Profile"
         width={50}
         height={50}

@@ -697,7 +697,7 @@ function ResultPanel({
 export function SortingVisualizer({
   algorithm,
   defaultValues = DEFAULT_ARRAY,
-  maxElements = 12,
+  maxElements = 16,
   showInput = true,
   showResult = true,
   title = "Sorting Algorithms",
