@@ -47,7 +47,7 @@ export const DSA_DATA: IDSA[] = [
   {
     slug: "bubble-sort",
     title: "07. Bubble Sort",
-    description: "Learn about selection sort.",
+    description: "Learn about bubble sort.",
     docs: "/docs/dsa/bubble-sort"
   }
 ];

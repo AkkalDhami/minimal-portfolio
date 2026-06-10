@@ -15,7 +15,7 @@ export default function NotFound() {
             height={300}
             alt="404"
             src={"/images/skull3.png"}
-            className="blur-in-lg size-56 opacity-60 dark:invert"
+            className="blur-in-lg hidden size-56 opacity-60 sm:inline-block dark:invert"
           />
           <Image
             width={300}
@@ -29,7 +29,7 @@ export default function NotFound() {
             height={300}
             alt="404"
             src={"/images/skull2.png"}
-            className="blur-in-lg size-56 -rotate-12 opacity-60 dark:invert"
+            className="blur-in-lg hidden size-56 -rotate-12 opacity-60 sm:inline-block dark:invert"
           />
         </div>
       </div>
