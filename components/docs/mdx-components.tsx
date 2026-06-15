@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { Table, THead, TBody, TR, TH, TD, Highlight } from "./table";
 import { SortingVisualizer as SortingVisualizerComponent } from "./sorting-visualizer";
 import { getIconForLanguageExtension } from "@/components/docs/icon";
+import { HeadingWithCopy } from "./heading";
 
 export const mdxComponents: MDXComponents = {
   Table,
@@ -25,32 +26,37 @@ export const mdxComponents: MDXComponents = {
   Code,
   Note,
   h1: props => (
-    <h1
-      className="animate-fade-in-blur font-inter text-3xl font-bold tracking-tight"
+    <HeadingWithCopy
+      tag="h1"
+      baseClassName="animate-fade-in-blur font-inter text-3xl font-bold tracking-tight"
       {...props}
     />
   ),
   h2: props => (
-    <h2
-      className="animate-fade-in-blur font-inter mt-3 mb-3 border-t pt-6 text-2xl font-medium tracking-tight"
+    <HeadingWithCopy
+      tag="h2"
+      baseClassName="animate-fade-in-blur font-inter mt-3 mb-3 border-t pt-6 text-2xl font-medium tracking-tight"
       {...props}
     />
   ),
   h3: props => (
-    <h3
-      className="this-page-link font-inter animate-fade-in-blur mt-6 mb-3 text-[22px] font-medium tracking-tight"
+    <HeadingWithCopy
+      tag="h3"
+      baseClassName="this-page-link font-inter animate-fade-in-blur mt-6 mb-3 text-[22px] font-medium tracking-tight"
       {...props}
     />
   ),
   h4: props => (
-    <h4
-      className="font-inter animate-fade-in-blur mt-4 mb-5 text-xl font-medium tracking-tight"
+    <HeadingWithCopy
+      tag="h4"
+      baseClassName="font-inter animate-fade-in-blur mt-4 mb-5 text-xl font-medium tracking-tight"
       {...props}
     />
   ),
   h5: props => (
-    <h5
-      className="animate-fade-in-blur mt-3 mb-4 text-lg font-medium tracking-tight"
+    <HeadingWithCopy
+      tag="h5"
+      baseClassName="animate-fade-in-blur mt-3 mb-4 text-lg font-medium tracking-tight"
       {...props}
     />
   ),

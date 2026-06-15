@@ -265,7 +265,11 @@ function generateInsertionSteps(initial: Bar[]): {
 
     while (j >= 0 && bars[j].value > key) {
       comparisons++;
-      bars[j + 1] = { ...bars[j], state: "swapping" };
+      bars[j + 1] = {
+        value: bars[j].value,
+        id: bars[j + 1].id,
+        state: "swapping"
+      };
       const mv = clone(bars);
       mv[j].state = "comparing";
       steps.push({
@@ -277,7 +281,11 @@ function generateInsertionSteps(initial: Bar[]): {
       swaps++;
       j--;
     }
-    bars[j + 1] = { ...bars[j + 1], value: key, state: "sorted" };
+    bars[j + 1] = {
+      value: key,
+      id: bars[j + 1].id,
+      state: "sorted"
+    };
     for (let s = 0; s <= pass; s++) bars[s].state = "sorted";
     const placed = clone(bars);
     steps.push({
