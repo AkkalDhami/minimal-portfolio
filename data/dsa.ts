@@ -39,15 +39,27 @@ export const DSA_DATA: IDSA[] = [
     docs: "/docs/dsa/arrays"
   },
   {
-    slug: "selection-sort",
-    title: "06. Selection Sort",
-    description: "Learn about selection sort.",
-    docs: "/docs/dsa/selection-sort"
+    slug: "time-space-complexity",
+    title: "06. Time Complexity & Space Complexity",
+    description: "Learn about time and space complexity.",
+    docs: "/docs/dsa/time-space-complexity"
   },
   {
     slug: "bubble-sort",
     title: "07. Bubble Sort",
     description: "Learn about bubble sort.",
     docs: "/docs/dsa/bubble-sort"
+  },
+  {
+    slug: "selection-sort",
+    title: "08. Selection Sort",
+    description: "Learn about selection sort.",
+    docs: "/docs/dsa/selection-sort"
+  },
+  {
+    slug: "insertion-sort",
+    title: "09. Insertion Sort",
+    description: "Learn about insertion sort.",
+    docs: "/docs/dsa/insertion-sort"
   }
 ];

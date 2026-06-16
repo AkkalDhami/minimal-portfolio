@@ -71,5 +71,17 @@ export const PLAYBOOK_DATA = [
     description:
       "Learn to set up essential development tools in a Node.js application, including ESLint, Commitlint, Lint-Staged, Husky, and Prettier.",
     docs: "/docs/playbook/nodejs-tooling-setup"
+  },
+  {
+    slug: "replication-and-sharding",
+    title: "11. Replication and Sharding",
+    description: "Learn about replication and sharding",
+    docs: "/docs/playbook/replication-and-sharding"
+  },
+  {
+    slug: "redis",
+    title: "12. Introduction to Redis",
+    description: "Learn about Redis",
+    docs: "/docs/playbook/redis"
   }
 ] satisfies IPlaybook[];
