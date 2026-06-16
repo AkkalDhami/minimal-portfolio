@@ -1,0 +1,434 @@
+---
+title: Introduction to Redis
+description: Learn about Redis
+---
+
+## 1. What is Redis?
+
+<Code>Redis (Remote Dictionary Server)</Code> is an <Code>in-memory</Code> key-value database.
+
+Instead of storing data primarily on disk like PostgreSQL or MySQL, Redis keeps data in RAM, making it extremely fast (microseconds to milliseconds).
+
+**Example:**
+
+```json
+"user:1": {
+  name: "Akkal",
+  age: 22
+}
+```
+
+> You store data using a key and retrieve it later.
+
+
+## 2. Why Redis?
+
+Suppose your application fetches a user's profile from PostgreSQL.
+
+**Without Redis:**
+```bash
+Client
+   ↓
+Backend
+   ↓
+PostgreSQL
+```
+> Every request hits the database.
+
+**With Redis:**
+```bash
+Client
+   ↓
+Backend
+   ↓
+Redis (cache)
+   ↓ (miss)
+PostgreSQL
+```
+
+- If data exists in Redis (cache hit), response is returned immediately.
+- Otherwise (cache miss), data is fetched from PostgreSQL and stored in Redis for future requests.
+
+**This reduces:**
+
+- Database load
+- Response time
+- Infrastructure costs
+
+## 3. Installing Redis
+
+#### Docker:
+
+```yaml title="docker-compose.yml"
+services:
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
+```
+
+```bash
+docker compose up
+```
+
+**Verify:**
+
+```bash
+redis-cli ping
+```
+
+**Output:**
+```bash
+PONG
+```
+
+### 3.1 Create Redis Client
+
+<PackageManagerTabs command="npm install ioredis"/>
+
+```ts
+import Redis from "ioredis";
+
+const client = new Redis("redis://127.0.0.1:6379");
+
+client.on("error", (err) => console.log("Redis Client Error:", err));
+```
+
+## 4. Redis Basic Commands
+
+### 4.1 SET & get
+
+```ts
+await client.set("name", "John Doe");
+```
+
+```ts
+const value = await client.get("name");
+console.log('Value for "name":', value);
+```
+
+**Output:**
+```bash
+Value for "name": John Doe
+```
+
+### 4.2 DELETE
+
+```ts
+const deleteCount = await client.del("name");
+console.log("Deleted keys count:", deleteCount);
+```
+**Output:**
+```bash
+Deleted keys count: 1
+```
+
+### 4.3 MSET & MGET
+
+```ts
+await client.mset({
+  "user:name": "Akkal Dhami",
+  "user:age": "20",
+  "user:country": "Nepal"
+});
+```
+
+```ts
+const [username, age, country] = await client.mget([
+  "user:name",
+  "user:age",
+  "user:country"
+]);
+console.log(`Name: ${username}, Age: ${age}, Country: ${country}`);
+```
+
+**Output:**
+```bash
+Name: Akkal Dhami, Age: 20, Country: Nepal
+```
+
+### 4.4 LPUSH, RPUSH, LRANGE, LINDEX, LPOP, RPOP
+
+```ts
+await client.lpush("tasks", "Task 1");
+await client.lpush("tasks", ["Task 2", "Task 3"]);
+
+await client.rpush("tasks", "Task 4");
+```
+
+- <Code>LPUSH</Code> inserts at the beginning.
+- <Code>RPUSH</Code> inserts at the end.
+
+#### 1. Get all elements
+
+```ts
+const tasks = await client.lrange("tasks", 0, -1);
+console.log(tasks);
+```
+
+**Output:**
+<Output>
+["Task 3", "Task 2", "Task 1", "Task 4"]
+</Output>
+
+#### 2. Get the first element
+
+```ts
+const task = await client.lindex("tasks", 0);
+console.log(task);
+```
+
+**Output:**
+<Output>
+Task 3
+</Output>
+
+#### 3. Get the last element
+
+```ts
+const task = await client.lindex("tasks", -1);
+console.log(task);
+```
+
+**Output:**
+<Output>
+Task 4
+</Output>
+
+#### 4. Get a range
+
+First two items:
+```ts
+const task = await client.lrange("tasks", 0, 1);
+console.log(task);
+```
+
+**Output:**
+
+<Output>
+["Task 3", "Task 2"]
+</Output>
+
+#### 5. Remove and retrieve an item
+
+From the left:
+```ts
+const task = await client.lpop("tasks");
+console.log(task); // Task 3
+```
+
+From the right:
+```ts
+const task = await client.rpop("tasks");
+console.log(task); // Task 4
+```
+
+### 4.5 SADD, SMEMBERS, SISMEMBER, SREM
+
+Redis Set stores unique unordered values.
+
+```ts
+await client.sadd("fruits", "Apple");
+await client.sadd("fruits", ["Banana", "Orange", "Mango"]);
+```
+
+After these operations, the set contains:
+
+```bash
+Apple
+Banana
+Orange
+Mango
+```
+
+#### 1. Get all members
+
+```ts
+const fruits = await client.smembers("fruits");
+console.log("Fruits:", fruits);
+```
+
+**Output:**
+
+<Output>
+Fruits: [ 'Apple', 'Banana', 'Orange', 'Mango' ]
+</Output>
+> Sets are unordered, so the order may vary.
+
+
+#### 2. Check if a value exists
+
+```ts
+const isMember = await client.sismember("fruits", "Banana");
+console.log("Is Banana a member of fruits set?", isMember);
+```
+
+**Output:**
+
+<Output>
+Is Banana a member of fruits set? 1
+</Output>
+
+<Code>1</Code> means the value exists.
+
+<Code>0</Code> means the value doesnot exist.
+
+#### 3. Remove an item
+
+```ts
+await client.srem("fruits", "Apple");
+```
+
+```ts
+const updatedFruits = await client.smembers("fruits");
+console.log("Updated Fruits:", updatedFruits);
+```
+
+**Output:**
+
+<Output>
+Updated Fruits: [ 'Orange', 'Banana', 'Mango' ]
+</Output>
+
+
+### 4.6 HSET, HGET
+
+#### 1. Creating a Hash
+```ts
+await client.hSet("user:1", {
+  name: "Akkal",
+  email: "akkal@example.com",
+  age: "20",
+});
+```
+
+
+#### 2. Get all fields
+
+```ts
+const user = await client.hGetAll("user:1");
+console.log(user);
+```
+
+**Output:**
+```ts
+{
+  name: "Akkal",
+  email: "akkal@example.com",
+  age: "20"
+}
+```
+
+#### 3. Get a single field
+
+```ts
+const name = await client.hGet("user:1", "name");
+console.log(name);
+```
+
+**Output:**
+<Output>
+Akkal
+</Output>
+
+#### 4. Get multiple fields
+
+```ts
+const values = await client.hmGet(
+  "user:1",
+  ["name", "email"]
+);
+console.log(values);
+```
+
+**Output:**
+<Output>
+[ 'Akkal', 'akkal@example.com' ]
+</Output>
+
+#### 5. Update a field
+
+```ts
+await client.hSet("user:1", "age", "23");
+```
+
+```ts
+const user = await client.hGetAll("user:1");
+console.log(user);
+```
+
+**Output:**
+```ts
+{
+  name: "Akkal",
+  email: "akkal@example.com",
+  age: "23"
+}
+```
+
+
+#### 6. Check if a field exists
+
+```ts
+const exists = await client.hExists(
+  "user:1",
+  "email"
+);
+console.log(exists);
+```
+
+**Output:** <Code>1</Code>
+
+<Code>1</Code> means the field exists.
+
+#### 7. Delete a field
+
+```ts
+await client.hDel("user:1", "age");
+```
+```ts
+console.log(await client.hGetAll("user:1"));
+```
+
+**Output:**
+
+```ts
+{
+  name: "Akkal",
+  email: "akkal@example.com"
+}
+```
+
+#### 8. Count fields
+
+```ts
+const count = await client.hLen("user:1");
+console.log(count);
+```
+
+
+**Output:** <Code>2</Code>
+
+#### 9. Get only field names
+
+```ts
+const fields = await client.hKeys("user:1");
+console.log(fields);
+```
+
+**Output:**
+<Output>
+[ 'name', 'email' ]
+</Output>
+
+#### 10. Get only values
+
+```ts
+const values = await client.hVals("user:1");
+console.log(values);
+```
+
+**Output:**
+```bash
+[ 'Akkal', 'akkal@example.com' ]
+```

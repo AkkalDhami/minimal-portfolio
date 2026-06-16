@@ -1,0 +1,310 @@
+---
+title: Time and Space Complexity
+description: Learn how to measure algorithm efficiency using time and space complexity.
+---
+
+Time complexity measures how the runtime of an algorithm grows as the input size increases.
+Space complexity measures how much extra memory an algorithm needs while running.
+
+## 1. What is Time Complexity?
+
+- Describes how the number of operations changes with input size <Code>n</Code>.
+- Written using Big O notation: <Code>O(1)</Code>, <Code>O(n)</Code>, <Code>O(n<sup>2</sup>)</Code>, etc.
+- Use the fastest-growing term and ignore constants.
+
+### Example: Constant Time
+
+This function always does the same work no matter how large the array is.
+
+```cpp title="constant-time.cpp"
+#include <iostream>
+using namespace std;
+
+int getFirst(int arr[], int n)
+{
+    return arr[0];
+}
+
+int main()
+{
+    int arr[] = {10, 20, 30};
+    cout << getFirst(arr, 3) << endl;
+    return 0;
+}
+```
+
+- Time complexity: <Code>O(1)</Code>
+- Explanation: Single access, independent of <Code>n</Code>.
+
+### Example: Linear Time
+
+This function checks every element once.
+
+```cpp title="linear-time.cpp"
+#include <iostream>
+using namespace std;
+
+bool contains(int arr[], int n, int target)
+{
+    for (int i = 0; i < n; i++)
+    {
+        if (arr[i] == target)
+            return true;
+    }
+    return false;
+}
+
+int main()
+{
+    int arr[] = {4, 7, 1, 9};
+    cout << contains(arr, 4, 9) << endl;
+    return 0;
+}
+```
+
+- Time complexity: <Code>O(n)</Code>
+- Explanation: Work grows in direct proportion to input size.
+
+### Example: Quadratic Time
+
+This function compares every pair of elements.
+
+```cpp title="quadratic-time.cpp"
+#include <iostream>
+using namespace std;
+
+void printPairs(int arr[], int n)
+{
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            cout << arr[i] << "," << arr[j] << endl;
+        }
+    }
+}
+
+int main()
+{
+    int arr[] = {1, 2, 3};
+    printPairs(arr, 3);
+    return 0;
+}
+```
+
+- Time complexity: <Code>O(n<sup>2</sup>)</Code>
+- Explanation: Two nested loops cause quadratic growth.
+
+### Example: Logarithmic Time
+
+Search by splitting the input in half each step.
+
+```cpp title="logarithmic-time.cpp"
+#include <iostream>
+using namespace std;
+
+bool binarySearch(int arr[], int n, int target)
+{
+    int left = 0;
+    int right = n - 1;
+
+    while (left <= right)
+    {
+        int mid = left + (right - left) / 2;
+        if (arr[mid] == target)
+            return true;
+        else if (arr[mid] < target)
+            left = mid + 1;
+        else
+            right = mid - 1;
+    }
+
+    return false;
+}
+
+int main()
+{
+    int arr[] = {1, 3, 5, 7, 9};
+    cout << binarySearch(arr, 5, 7) << endl;
+    return 0;
+}
+```
+
+- Time complexity: <Code>O(log n)</Code>
+- Explanation: Input size halves each step.
+
+### Example: n log n Time
+
+Many efficient sorting algorithms run in <Code>O(n log n)</Code> time.
+
+```cpp title="nlogn-time.cpp"
+#include <algorithm>
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int arr[] = {5, 2, 8, 1, 3};
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    sort(arr, arr + n);
+
+    for (int i = 0; i < n; i++)
+        cout << arr[i] << " ";
+    cout << endl;
+    return 0;
+}
+```
+
+- Time complexity: <Code>O(n log n)</Code>
+- Explanation: Sorting splits work and processes each part.
+
+## 2. Best, Average, and Worst Case
+
+- Best case: the fastest possible input for the algorithm.
+- Average case: expected performance for a typical input.
+- Worst case: the slowest possible input.
+
+### Example: Linear Search
+
+- Best case: <Code>O(1)</Code> when the target is at the first position.
+- Worst case: <Code>O(n)</Code> when the target is missing or at the end.
+
+### Example: Bubble Sort
+
+- Best case: <Code>O(n)</Code> if the array is already sorted and the algorithm checks for no swaps.
+- Worst case: <Code>O(n<sup>2</sup>)</Code> when the array is in reverse order.
+
+### Example: Binary Search
+
+- Best case: <Code>O(1)</Code> if the middle element is the target.
+- Worst case: <Code>O(log n)</Code> if the target is not found.
+
+### Example: Quick Sort
+
+- Average case: <Code>O(n log n)</Code>
+- Worst case: <Code>O(n<sup>2</sup>)</Code> when the pivot is always the smallest or largest element.
+
+## 3. What is Space Complexity?
+
+- Measures extra memory used by the algorithm.
+- Focuses on additional data structures or recursion stack.
+- Ignore the space used by the input itself.
+
+### Example: Constant Space
+
+This function uses only a few variables.
+
+```cpp title="constant-space.cpp"
+#include <iostream>
+using namespace std;
+
+int sumFirstTwo(int arr[], int n)
+{
+    int sum = arr[0] + arr[1];
+    return sum;
+}
+
+int main()
+{
+    int arr[] = {5, 6, 7};
+    cout << sumFirstTwo(arr, 3) << endl;
+    return 0;
+}
+```
+
+- Space complexity: <Code>O(1)</Code>
+- Explanation: Only a fixed number of extra variables are used.
+
+### Example: Linear Space
+
+This function creates a new array of size <Code>n</Code>.
+
+```cpp title="linear-space.cpp"
+#include <iostream>
+using namespace std;
+
+int* copyArray(int arr[], int n)
+{
+    int* copy = new int[n];
+    for (int i = 0; i < n; i++)
+    {
+        copy[i] = arr[i];
+    }
+    return copy;
+}
+
+int main()
+{
+    int arr[] = {2, 4, 6};
+    int* copy = copyArray(arr, 3);
+    cout << copy[0] << " " << copy[1] << " " << copy[2] << endl;
+    delete[] copy;
+    return 0;
+}
+```
+
+- Space complexity: <Code>O(n)</Code>
+- Explanation: Extra memory grows with input size.
+
+### Example: Recursion Space
+
+Recursive functions use stack memory for each call.
+
+```cpp title="recursive-space.cpp"
+#include <iostream>
+using namespace std;
+
+int factorial(int n)
+{
+    if (n == 0)
+        return 1;
+    return n * factorial(n - 1);
+}
+
+int main()
+{
+    cout << factorial(5) << endl;
+    return 0;
+}
+```
+
+- Space complexity: <Code>O(n)</Code>
+- Explanation: Recursion adds one stack frame per call.
+
+## 3. Common Complexity Patterns
+
+- <Code>O(1)</Code>: single access or fixed operations.
+- <Code>O(log n)</Code>: divide-and-conquer (binary search).
+- <Code>O(n)</Code>: single loop over input.
+- <Code>O(n log n)</Code>: efficient sorting algorithms.
+- <Code>O(n<sup>2</sup>)</Code>: nested loops over input.
+
+## 4. Time Complexity Priority from Best to Worst
+
+From best to worst, use this ordering when comparing growth rates:
+
+1. <Code>O(1)</Code> - constant time
+2. <Code>O(log n)</Code> - logarithmic time
+3. <Code>O(n)</Code> - linear time
+4. <Code>O(n log n)</Code> - linearithmic time
+5. <Code>O(n<sup>2</sup>)</Code> - quadratic time
+6. <Code>O(n<sup>3</sup>)</Code> - cubic time
+7. <Code>O(2<sup>n</sup>)</Code> - exponential time
+8. <Code>O(n!)</Code> - factorial time
+
+> Smaller growth means better performance as input size increases.
+
+## 5. How to Compare Algorithms
+
+- Choose the algorithm with lower growth for large <Code>n</Code>.
+- If two algorithms have the same Big O, compare constant factors and memory use.
+- For small inputs, readability and simplicity also matter.
+
+## 5. Quick Rules
+
+- Ignore constant multipliers: <Code>O(2n)</Code> becomes <Code>O(n)</Code>.
+- Ignore lower-order terms: <Code>O(n + n<sup>2</sup>)</Code> becomes <Code>O(n<sup>2</sup>)</Code>.
+- Count loops, recursion depth, and extra data structures.
+
+<Note text="Time complexity tells how fast code runs as input grows. Space complexity tells how much extra memory it needs."/>

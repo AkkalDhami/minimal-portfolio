@@ -1,0 +1,161 @@
+---
+title: Insertion Sort
+description: Learn about insertion sort.
+---
+
+Insertion Sort builds the sorted array one element at a time by inserting each element into its correct position.
+
+<SortingVisualizer
+  algorithm="insertion"
+  defaultValues={[5, 3, 8, 1, 9]}
+  showInput={false}
+  title="Insertion Sort Demo"
+  maxElements={6}
+/>
+
+## 1. What is Insertion Sort?
+
+Insertion Sort processes the array from left to right.
+
+- It takes the next element from the unsorted part,
+- inserts it into the correct position in the sorted part.
+
+## 2. Dry Run Insertion Sort.
+
+<Output>
+Input: 96 43 74 72 46
+Output: 43 46 72 74 96
+</Output>
+
+<Output>
+arr[0] = 96
+arr[1] = 43
+arr[2] = 74
+arr[3] = 72
+arr[4] = 46
+</Output>
+
+**Pass 1:**
+
+- Key = <Highlight>43</Highlight>
+- Insert before <Highlight>96</Highlight>
+- Result: <Code>43 96</Code> <Highlight>74 72 46</Highlight>
+
+**Pass 2:**
+
+- Key = <Highlight>74</Highlight>
+- Insert after <Highlight>43</Highlight>
+- Result: <Code>43 74 96</Code> <Highlight>72 46</Highlight>
+
+**Pass 3:**
+
+- Key = <Highlight>72</Highlight>
+- Shift <Highlight>96</Highlight> and insert before it
+- Result: <Code>43 74 72 96</Code> <Highlight>46</Highlight>
+
+**Pass 4:**
+
+- Key = <Highlight>46</Highlight>
+- Shift <Highlight>96 72 74</Highlight> and insert before them
+- Result: <Highlight>43 46 72 74 96</Highlight>
+
+## 3. Code Implementation
+
+##### Example:
+
+```cpp title="insertion-sort.cpp"
+#include <iostream>
+
+using namespace std;
+
+void insertionSort(int arr[], int n)
+{
+    for (int i = 1; i < n; i++)
+    {
+        for (int j = i; j > 0; j--)
+        {
+            if (arr[j] < arr[j - 1])
+            {
+                swap(arr[j], arr[j - 1]);
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+}
+
+void printArray(int arr[], int n, string msg = "")
+{
+    cout << msg << endl;
+ 
+    for (int i = 0; i < n; i++)
+    {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+}
+
+int main()
+{
+    int arr[] = {51, 14, 33, 2, 11};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    
+    printArray(arr, n, "Original array:");
+    
+    insertionSort(arr, n);
+    printArray(arr, n, "Sorted array(asc):");
+
+    return 0;
+}
+```
+
+##### Output:
+<Output>
+Original array:
+51 14 33 2 11 
+Sorted array(asc):
+2 11 14 33 51
+</Output>
+
+## 4. What is the time complexity of Insertion Sort?
+
+- Best: <Code>O(n)</Code>
+- Average: <Code>O(n<sup>2</sup>)</Code>
+- Worst: <Code>O(n<sup>2</sup>)</Code>
+
+Because:
+- Best case occurs when the array is already sorted.
+- Worst case occurs when the array is sorted in reverse.
+
+## 5. What is the space complexity?
+
+<Code>O(1)</Code>
+
+## 6. Is Insertion Sort stable?
+
+<Code>Yes</Code>, Equal elements remain in the same relative order.
+
+## 7. Is Insertion Sort adaptive?
+
+<Code>Yes</Code>, it runs faster when the array is nearly sorted.
+
+## 8. Why is Insertion Sort called “Insertion” Sort?
+Because it inserts each element into the correct place in the sorted portion of the array.
+
+## 9. When is Insertion Sort useful?
+
+- Small arrays.
+- Nearly sorted data.
+- When stability matters.
+
+## 10. How many shifts does Insertion Sort make?
+
+Worst case: <Code>O(n<sup>2</sup>)</Code> shifts.
+
+In the best case, it only checks each element once.
+
+<SortingVisualizer/>
+
+<Note text="Insertion Sort inserts each item into the sorted left side by shifting larger elements to the right."/>
