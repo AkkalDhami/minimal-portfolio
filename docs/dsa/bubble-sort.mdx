@@ -193,16 +193,100 @@ Total comparisons: <Code>n(n - 1) / 2</Code> in worst case.
 - largest element moves to end,
 - recursively sort remaining array.
 
-## 12. Difference between Bubble Sort and Selection Sort?
 
-```bash
-| Feature  | Bubble Sort       | Selection Sort |
-| -------- | ----------------- | -------------- |
-| Swaps    | Many              | Few            |
-| Stable   | Yes               | No             |
-| Adaptive | Yes               | No             |
-| Method   | Adjacent swapping | Select minimum |
-```
+## 12. Differences between bubble, insertion & selection sort.
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Feature</TH>
+      <TH>Bubble Sort</TH>
+      <TH>Insertion Sort</TH>
+      <TH>Selection Sort</TH>
+    </TR>
+  </THead>
+
+  <TBody>
+    <TR>
+      <TD>Basic Idea</TD>
+      <TD>Repeatedly swap adjacent elements if they are in the wrong order.</TD>
+      <TD>Insert each element into its correct position in the sorted part.</TD>
+      <TD>Find the minimum element and place it at its correct position.</TD>
+    </TR>
+
+    <TR>
+      <TD>How It Works</TD>
+      <TD>Largest element "bubbles" to the end in each pass.</TD>
+      <TD>Builds a sorted portion one element at a time.</TD>
+      <TD>Selects the smallest element from the unsorted portion.</TD>
+    </TR>
+
+    <TR>
+      <TD>Best Case</TD>
+      <TD>O(n)</TD>
+      <TD>O(n)</TD>
+      <TD>O(n²)</TD>
+    </TR>
+
+    <TR>
+      <TD>Average Case</TD>
+      <TD>O(n²)</TD>
+      <TD>O(n²)</TD>
+      <TD>O(n²)</TD>
+    </TR>
+
+    <TR>
+      <TD>Worst Case</TD>
+      <TD>O(n²)</TD>
+      <TD>O(n²)</TD>
+      <TD>O(n²)</TD>
+    </TR>
+
+    <TR>
+      <TD>Space Complexity</TD>
+      <TD>O(1)</TD>
+      <TD>O(1)</TD>
+      <TD>O(1)</TD>
+    </TR>
+
+    <TR>
+      <TD>Stable?</TD>
+      <TD>✅ Yes</TD>
+      <TD>✅ Yes</TD>
+      <TD>❌ No</TD>
+    </TR>
+
+    <TR>
+      <TD>Adaptive?</TD>
+      <TD>✅ Yes</TD>
+      <TD>✅ Yes</TD>
+      <TD>❌ No</TD>
+    </TR>
+
+    <TR>
+      <TD>Number of Swaps</TD>
+      <TD>High</TD>
+      <TD>Low (mostly shifts)</TD>
+      <TD>Minimum</TD>
+    </TR>
+
+    <TR>
+      <TD>Best For</TD>
+      <TD>Learning sorting basics.</TD>
+      <TD>Small or nearly sorted arrays.</TD>
+      <TD>When minimizing swaps is important.</TD>
+    </TR>
+
+    <TR>
+      <TD>Real-Life Analogy</TD>
+      <TD>Bubbles rising to the surface.</TD>
+      <TD>Arranging playing cards in your hand.</TD>
+      <TD>Picking the smallest item repeatedly from a pile.</TD>
+    </TR>
+  </TBody>
+</Table>
+
+---
 
 <SortingVisualizer/>
 

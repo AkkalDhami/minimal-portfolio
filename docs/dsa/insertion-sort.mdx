@@ -3,7 +3,9 @@ title: Insertion Sort
 description: Learn about insertion sort.
 ---
 
-Insertion Sort builds the sorted array one element at a time by inserting each element into its correct position.
+Insertion Sort is a comparison-based sorting algorithm that builds the sorted array one element at a time. 
+
+It assumes the first element is already sorted, then repeatedly takes the next element and inserts it into its correct position within the sorted portion of the array.
 
 <SortingVisualizer
   algorithm="insertion"
@@ -156,6 +158,101 @@ Worst case: <Code>O(n<sup>2</sup>)</Code> shifts.
 
 In the best case, it only checks each element once.
 
+
+## 11. Differences between bubble, insertion & selection sort.
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Feature</TH>
+      <TH>Bubble Sort</TH>
+      <TH>Insertion Sort</TH>
+      <TH>Selection Sort</TH>
+    </TR>
+  </THead>
+
+  <TBody>
+    <TR>
+      <TD>Basic Idea</TD>
+      <TD>Repeatedly swap adjacent elements if they are in the wrong order.</TD>
+      <TD>Insert each element into its correct position in the sorted part.</TD>
+      <TD>Find the minimum element and place it at its correct position.</TD>
+    </TR>
+
+    <TR>
+      <TD>How It Works</TD>
+      <TD>Largest element "bubbles" to the end in each pass.</TD>
+      <TD>Builds a sorted portion one element at a time.</TD>
+      <TD>Selects the smallest element from the unsorted portion.</TD>
+    </TR>
+
+    <TR>
+      <TD>Best Case</TD>
+      <TD>O(n)</TD>
+      <TD>O(n)</TD>
+      <TD>O(n²)</TD>
+    </TR>
+
+    <TR>
+      <TD>Average Case</TD>
+      <TD>O(n²)</TD>
+      <TD>O(n²)</TD>
+      <TD>O(n²)</TD>
+    </TR>
+
+    <TR>
+      <TD>Worst Case</TD>
+      <TD>O(n²)</TD>
+      <TD>O(n²)</TD>
+      <TD>O(n²)</TD>
+    </TR>
+
+    <TR>
+      <TD>Space Complexity</TD>
+      <TD>O(1)</TD>
+      <TD>O(1)</TD>
+      <TD>O(1)</TD>
+    </TR>
+
+    <TR>
+      <TD>Stable?</TD>
+      <TD>✅ Yes</TD>
+      <TD>✅ Yes</TD>
+      <TD>❌ No</TD>
+    </TR>
+
+    <TR>
+      <TD>Adaptive?</TD>
+      <TD>✅ Yes</TD>
+      <TD>✅ Yes</TD>
+      <TD>❌ No</TD>
+    </TR>
+
+    <TR>
+      <TD>Number of Swaps</TD>
+      <TD>High</TD>
+      <TD>Low (mostly shifts)</TD>
+      <TD>Minimum</TD>
+    </TR>
+
+    <TR>
+      <TD>Best For</TD>
+      <TD>Learning sorting basics.</TD>
+      <TD>Small or nearly sorted arrays.</TD>
+      <TD>When minimizing swaps is important.</TD>
+    </TR>
+
+    <TR>
+      <TD>Real-Life Analogy</TD>
+      <TD>Bubbles rising to the surface.</TD>
+      <TD>Arranging playing cards in your hand.</TD>
+      <TD>Picking the smallest item repeatedly from a pile.</TD>
+    </TR>
+  </TBody>
+</Table>
+
+---
+
 <SortingVisualizer/>
 
-<Note text="Insertion Sort inserts each item into the sorted left side by shifting larger elements to the right."/>
+<Note text="Insertion Sort repeatedly takes an element from the unsorted portion and inserts it into its correct position in the sorted portion of the array."/>
