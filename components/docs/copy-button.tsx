@@ -36,7 +36,7 @@ export function CopyStateIcon({
           "scale-100 opacity-100",
           docs
             ? "stroke-white group-hover/icon:stroke-white"
-            : "stroke-muted-foreground group-hover/icon:stroke-primary"
+            : "stroke-primary group-hover/icon:stroke-primary"
         )}
       />
     </span>
