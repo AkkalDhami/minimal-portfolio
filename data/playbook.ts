@@ -83,5 +83,11 @@ export const PLAYBOOK_DATA = [
     title: "12. Introduction to Redis",
     description: "Learn about Redis",
     docs: "/docs/playbook/redis"
+  },
+  {
+    slug: "kafka",
+    title: "13. Introduction to Kafka",
+    description: "Learn about basics of kafka",
+    docs: "/docs/playbook/kafka"
   }
 ] satisfies IPlaybook[];
