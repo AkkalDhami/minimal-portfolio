@@ -1,0 +1,436 @@
+---
+title: Kafka
+description: Kafka is an event streaming platform.
+---
+
+Kafka is a distributed event streaming platform.
+
+Event streaming is the practice of capturing real-time data from applications, databases and IoT devices and transporting it to various destinations for immediate processing and storage, or for real-time analysis and analytics reporting.
+
+## 1. Why Kafka Exists
+
+Imagine you're building an ecommerce website.
+
+#### Without Kafka:
+
+```bash
+Client
+   |
+   v
+API Server
+   |
+   +--> Save Order
+   |
+   +--> Send Email
+   |
+   +--> Update Inventory
+   |
+   +--> Notify Warehouse
+   |
+   +--> Generate Invoice
+```
+
+One API request does everything.
+
+#### Problems:
+
+- Slow response
+- If email fails → API fails
+- Hard to scale
+- Tight coupling(highly dependent on each other)
+
+Now imagine there are 1000 orders per second.
+
+Your API has to
+
+```bash
+1000 Database writes
+1000 Emails
+1000 Inventory updates
+1000 Notifications
+1000 Invoices
+```
+
+Everything becomes overloaded.
+
+#### With Kafka:
+
+Instead of doing everything immediately:
+
+```bash
+  Client
+    |
+    v
+   API
+    |
+    v
+  Kafka
+```
+
+The API simply says:
+
+> "Someone placed an order."
+
+Kafka stores that event.
+
+Later...
+```bash
+  Kafka
+    |
+    +------> Email Service
+    |
+    +------> Inventory Service
+    |
+    +------> Analytics Service
+    |
+    +------> Warehouse Service
+    |
+    +------> Billing Service
+```
+
+> Each service works independently.
+
+Think of Kafka as a giant post office.
+
+Instead of calling everyone directly,
+
+you drop a letter into a mailbox.
+
+Anyone interested can collect it later.
+
+##### Tips:
+- Kafka does not process data.
+- It only stores and delivers messages.
+
+## 2. Real Life Analogy(Instagram)
+
+When someone uploads a photo:
+
+<Code>Upload API</Code>
+#### does NOT immediately
+
+- generate thumbnails
+- notify followers
+- update search
+- run AI moderation
+
+#### Instead:
+
+```bash
+  Upload API
+    |
+    ↓
+  Kafka
+```
+
+
+Then
+
+```bash
+Thumbnail Service
+     |
+     ↓
+Notification Service
+     |
+     ↓
+Search Index
+     |
+     ↓
+AI Moderation
+     |
+     ↓
+Analytics
+```
+
+Each service works separately.
+
+
+## 3. Core Vocabulary
+
+Before writing any code, you only need to know these six terms.
+
+### 1. Producer
+
+Produces messages.
+
+**Example:**
+
+```ts
+producer.send({
+  topic: "orders",
+  message: ...
+})
+```
+
+### 2. Consumer
+
+Reads messages.
+
+```bash
+Kafka
+  |
+  ↓
+Consumer
+```
+
+### 3. Topic
+
+Think of a topic as a folder.
+
+```bash
+orders
+
+payments
+
+emails
+
+notifications
+```
+
+Messages are grouped into topics.
+
+### 4. Message
+
+Actual data.
+
+```json
+{
+  "userId": 10,
+  "product": "Laptop"
+}
+```
+
+### 5. Broker
+
+Kafka server.
+
+```bash
+Broker
+
+stores
+
+messages
+```
+
+### 6. Offset
+
+Every message gets a unique position.
+
+```bash
+Message A
+
+Offset 0
+
+Message B
+
+Offset 1
+
+Message C
+
+Offset 2
+```
+
+Consumers remember the last offset they processed, allowing them to resume where they left off.
+
+
+#### A Complete Flow
+
+```bash
+  Node API
+      |
+      | Producer
+      |
+      v
++-------------------+
+|       Kafka       |
+|                   |
+| Topic: orders     |
++-------------------+
+      |
+      |
+      +------------------+
+      |                  |
+      v                  v
+Email Consumer     Inventory Consumer
+      |                  |
+      v                  v
+Send Email        Update Stock
+```
+
+Notice that the producer doesn't know who is consuming the message. It only writes to the <Code>orders</Code> topic.
+
+
+<Note text="Kafka is an event log where producers write events and consumers read them independently."/>
+<Note text="It's not a database, not an API framework, and not a replacement for your backend. It's the communication backbone between different parts of your system."/>
+
+## 4. Common Interview Question
+
+### 1. Why can't an API directly call every service in a large system?
+
+In a large system, an API may need to communicate with many services such as email, inventory, billing, notifications, and analytics. If it calls all of them synchronously, the response time increases because the client has to wait for every service to finish. 
+
+If one service is slow or unavailable, the entire request can fail. This creates <Code>tight coupling</Code> between services and makes the system difficult to scale and maintain. Instead, we use an event broker like Kafka to decouple these services.
+
+<Note text="Tight coupling means one service directly depends on another service being available. If one service fails or changes, it can impact other services."/>
+
+---
+
+### 2. What problem does Kafka solve?
+
+Kafka solves the problem of <Code>asynchronous communication</Code> between services. Instead of services calling each other directly, producers publish events to Kafka, and consumers process those events independently. 
+
+This reduces <Code>coupling</Code>, improves <Code>scalability</Code>, increases <Code>fault tolerance</Code>, and allows multiple services to react to the same event without affecting the producer.
+
+<br />
+---
+
+### 3. What is a Producer?
+
+A producer is an application or service that publishes messages or events to a Kafka topic. It doesn't know who will consume the message; it only sends the event to Kafka.
+
+**Example:**
+
+
+<Output>
+Order API
+↓
+Kafka Topic: orders
+</Output>
+The Order API is the producer.
+
+<br />
+---
+
+### 4. What is a Consumer?
+
+A consumer is an application that reads messages from a Kafka topic and processes them. Multiple consumers can read the same events for different purposes.
+
+**Example:**
+```bash
+Order Created
+  ↓
+Kafka
+  ↓
+Email Service
+  ↓
+Inventory Service
+  ↓
+Analytics Service
+```
+
+Each service acts as a consumer.
+
+<br />
+---
+
+### 5. What is a Topic?
+
+A topic is a logical category or channel where Kafka stores related messages. Producers write messages to a topic, and consumers subscribe to topics to receive those messages.
+
+**Examples:**
+
+```bash
+orders
+
+payments
+
+notifications
+
+users
+```
+Each topic contains events related to that domain.
+
+<br />
+---
+
+### 6. What is an Offset?
+
+An offset is the unique sequential position of a message within a partition. Kafka uses offsets to keep track of which messages a consumer has already processed, allowing consumers to resume reading from where they left off.
+
+**Example:**
+
+```bash
+Offset 0 → Order 101
+
+Offset 1 → Order 102
+
+Offset 2 → Order 103
+```
+If a consumer crashes after processing Offset 1, it can restart from Offset 2.
+
+<br />
+---
+
+### 7. Why are Producers and Consumers loosely coupled?
+
+Producers and consumers are loosely coupled because they communicate through Kafka instead of directly with each other. A producer only sends messages to a topic and doesn't know which consumers exist. 
+
+Consumers can be added, removed, or updated without changing the producer, making the system more flexible and scalable.
+
+<br />
+---
+
+### 8. What is a Partition?
+
+A partition is a subdivision of a Kafka topic. Instead of storing all messages in a single file, Kafka splits a topic into multiple partitions. This allows messages to be processed in parallel by multiple consumers, improving scalability and <Code>throughput</Code>.
+
+Every message within a partition has a unique offset. By distributing partitions across brokers, Kafka can scale horizontally and allow multiple consumers to process messages in parallel.
+
+<Note text="Throughput is the amount of data or the number of requests, messages, or transactions a system can process in a given amount of time. In Kafka, partitions increase throughput because they allow multiple consumers to process messages in parallel, enabling the system to handle a much larger volume of messages per second."/>
+
+##### Real Example:
+
+Suppose your e-commerce application receives: <Code>3000 orders/sec</Code>
+
+One consumer may only process:  <Code>1000 orders/sec</Code>
+
+That's too slow.
+
+Instead:
+
+```bash {3-4, 6-7, 9-10}
+Topic: orders
+
+Partition 0:
+1000 orders → Consumer A
+
+Partition 1:
+1000 orders → Consumer B
+
+Partition 2:
+1000 orders → Consumer C
+```
+
+---
+
+### 9. How does Kafka decide which partition receives a message?
+
+Kafka can choose a partition in several ways:
+
+- <Code>Round-robin</Code> if no key is provided (messages are distributed evenly).
+
+- <Code>Key-based partitioning</Code> if a key is provided. Kafka hashes the key so all messages with the same key go to the same partition.
+
+- <Code>Custom partitioner</Code> if you implement your own partitioning logic.
+
+For example:
+
+```json
+{
+  key: "user-123",
+  value: {
+    orderId: 101
+  }
+}
+```
+
+All messages with the key <Code>"user-123"</Code> will always be written to the same partition, preserving their order.
+
+<br />
+---
+
+### 10. What is Kafka?
+
+In distributed systems, it's common for one service to need to communicate with many other services. Direct communication makes systems tightly coupled and harder to scale. 
+
+Kafka solves this by acting as a distributed event streaming platform where producers publish events to topics and consumers process those events asynchronously. This enables scalable, fault-tolerant, and loosely coupled communication between services
