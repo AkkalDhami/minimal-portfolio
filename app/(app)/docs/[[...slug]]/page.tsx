@@ -17,6 +17,7 @@ import { PrimaryButton } from "@/components/ui/primary-button";
 import siteConfig from "@/lib/site";
 import { cn } from "@/lib/utils";
 import { sliceContent } from "@/utils/slice-content";
+import { ShareMenu } from "@/components/ui/share-menu";
 
 export const revalidate = false;
 export const dynamic = "force-dynamic";
@@ -102,8 +103,10 @@ export default async function DocsPage(props: PageProps<"/docs/[[...slug]]">) {
   const lastSlug =
     lastComponentIndex >= 0 ? slug[lastComponentIndex] : undefined;
 
+  const type = slug[0] === "dsa" ? "dsa" : "playbook";
+
   const { next, prev } = lastSlug
-    ? findNeighbour(slug[0] === "dsa" ? "dsa" : "playbook", lastSlug as string)
+    ? findNeighbour(type, lastSlug as string)
     : { next: undefined, prev: undefined };
 
   const source = fs.readFileSync(filePath, "utf8");
@@ -118,7 +121,13 @@ export default async function DocsPage(props: PageProps<"/docs/[[...slug]]">) {
               <h2 className="font-inter animate-fade-in-blur text-2xl font-medium">
                 {data.title}
               </h2>
-              <NextSteps next={next} prev={prev} min />
+              <div className="flex items-center gap-3">
+                <ShareMenu
+                  title={data.title}
+                  url={`/docs/${type}/${lastSlug}`}
+                />
+                <NextSteps next={next} prev={prev} min />
+              </div>
             </div>
             <OnThisPage />
           </div>
