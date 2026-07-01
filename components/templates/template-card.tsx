@@ -19,24 +19,16 @@ import { getIconForLanguageExtension } from "@/components/docs/icon";
 
 export function TemplateCard({ template }: { template: ITemplate }) {
   return (
-    <div className="group animate-fade-in-blur screen-line-after relative p-4 transition-all">
-      <div className="flex flex-col gap-6 md:flex-row">
+    <div className="group animate-fade-in-blur screen-line-before relative p-4 transition-all">
+      <div className="flex flex-col gap-6">
         <Image
           src={template.thumbnail}
           alt={template.title}
           width={200}
           height={200}
-          className="rounded-primary hidden h-auto w-auto object-cover transition-transform duration-500 sm:block"
+          className="rounded-primary h-56 w-auto object-cover transition-transform duration-500"
         />
-        <Image
-          src={template.thumbnail}
-          alt={template.title}
-          width={200}
-          height={200}
-          className="rounded-primary w-full object-cover transition-transform duration-500 sm:hidden"
-        />
-
-        <div className="flex flex-1 flex-col justify-between py-1">
+        <div className="p1 flex flex-1 flex-col justify-between">
           <div className="space-y-3">
             <h3 className="group-hover:text-primary text-xl font-bold transition-colors md:text-2xl">
               {template.title}
@@ -49,11 +41,8 @@ export function TemplateCard({ template }: { template: ITemplate }) {
               {template.technologies.map((tech, idx) => {
                 const Icon = getIconForLanguageExtension({
                   name: tech.name,
-                  className: "size-7"
+                  className: "size-5"
                 });
-                // const Icon =
-                //   TECH_ICONS[tech.name.toUpperCase() as TechStack] ||
-                //   TECH_ICONS["DEFAULT"];
                 return (
                   <TooltipProvider key={idx}>
                     <Tooltip>
@@ -86,9 +75,9 @@ export function TemplateCard({ template }: { template: ITemplate }) {
 export function Links({ template }: { template: ITemplate }) {
   const [play] = useSound(cardSlide5Sound);
   const baseClassName =
-    "px-3 border border-neutral-500/40 bg-transparent py-2 flex items-center justify-center";
+    "border border-neutral-500/40 bg-transparent flex items-center justify-center";
   const linkClassName =
-    "text-muted-foreground bg-muted rounded-primary primary-ring relative px-2 py-2.5 transition-colors hover:text-foreground hover:bg-muted duration-300 from-background to-muted bg-linear-to-b";
+    "text-muted-foreground bg-muted rounded-primary primary-ring relative px-2.25 py-2 transition-colors hover:text-foreground hover:bg-muted duration-300 from-background to-muted bg-linear-to-b";
   return (
     <div className="flex items-center gap-4">
       {template.liveUrl && (
@@ -102,7 +91,7 @@ export function Links({ template }: { template: ITemplate }) {
                   target="_blank"
                   onClick={() => play()}
                   className={linkClassName}>
-                  <LinkIcon className="size-4" />
+                  <LinkIcon className="size-3.5" />
                 </Link>
               }
             />
@@ -123,7 +112,7 @@ export function Links({ template }: { template: ITemplate }) {
                   target="_blank"
                   onClick={() => play()}
                   className={linkClassName}>
-                  <SiGithub className="size-4" />
+                  <SiGithub className="size-3.5" />
                 </Link>
               }
             />

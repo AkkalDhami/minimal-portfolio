@@ -23,7 +23,7 @@ export const TEMPLATE_DATA: ITemplate[] = [
   {
     title: "Minimalistic Portfolio",
     description:
-      "A modern clean minimal portfolio showcasing scalable web applications, developer tools, and reusable systems, with a focus on clean UI, performance, and developer experience.",
+      "A modern portfolio showcasing scalable web applications, clean UI, and developer-focused solutions.",
     thumbnail: "/images/og.png",
     githubUrl: `${GITHUB_URL}/minimal-portfolio`,
     liveUrl: "https://akkal.com.np",
@@ -37,9 +37,9 @@ export const TEMPLATE_DATA: ITemplate[] = [
   },
 
   {
-    title: "Redesigned Landing Page for sambad.io",
+    title: "Redesigned Landing Page",
     description:
-      "A redesigned landing page for sambad.io, a news aggregation platform, focused on clean design, intuitive navigation, and responsive layouts to enhance user engagement.",
+      "A redesigned landing page for sambad.io featuring a clean, responsive, and user-focused experience.",
     thumbnail: "/assets/templates/temp-7.png",
     githubUrl: `${GITHUB_URL}/sambad-landing-page`,
     liveUrl: "https://sambaad.vercel.app",
@@ -56,7 +56,7 @@ export const TEMPLATE_DATA: ITemplate[] = [
   {
     title: "Minimal Developer Portfolio",
     description:
-      "A sleek developer portfolio with modern UI, subtle animations, and fully responsive layouts built for performance and clarity.",
+      "A sleek developer portfolio with modern UI, subtle animations, and responsive design.",
     thumbnail: "/assets/templates/temp-1.png",
     githubUrl: `${GITHUB_URL}/akkal-dhami`,
     liveUrl: "https://akkaldhami.com.np",
@@ -89,7 +89,7 @@ export const TEMPLATE_DATA: ITemplate[] = [
   {
     title: "Retro-Inspired Portfolio",
     description:
-      "A unique and retro-inspired portfolio website designed for developers who want to showcase their work with a nostalgic touch.",
+      "A retro-inspired portfolio for developers to showcase their work.",
     thumbnail: "/assets/templates/temp-6.png",
     githubUrl: `${GITHUB_URL}/8bit-portfolio-template`,
     liveUrl: "https://8bit-portfolio-template.vercel.app",
@@ -102,22 +102,7 @@ export const TEMPLATE_DATA: ITemplate[] = [
       { name: "Motion" }
     ]
   },
-  {
-    title: "MERN Stack Portfolio",
-    description:
-      "A portfolio template built with the MERN stack, designed to showcase scalable projects and real-world applications.",
-    thumbnail: "/assets/templates/temp-3.png",
-    githubUrl: `${GITHUB_URL}/MERN-Portfolio`,
-    liveUrl: "",
-    technologies: [
-      { name: "React" },
-      { name: "TypeScript" },
-      { name: "Tailwind CSS" },
-      { name: "MongoDB" },
-      { name: "Nodejs" },
-      { name: "Expressjs" }
-    ]
-  },
+
   {
     title: "Terminal-Style Portfolio",
     description:
@@ -145,10 +130,28 @@ export const TEMPLATE_DATA: ITemplate[] = [
       { name: "JavaScript" },
       { name: "Tailwind CSS" }
     ]
+  },
+  {
+    title: "MERN Stack Portfolio",
+    description:
+      "A portfolio template built with the MERN stack, designed to showcase scalable projects.",
+    thumbnail: "/assets/templates/temp-3.png",
+    githubUrl: `${GITHUB_URL}/MERN-Portfolio`,
+    liveUrl: "",
+    technologies: [
+      { name: "React" },
+      { name: "TypeScript" },
+      { name: "Tailwind CSS" },
+      { name: "MongoDB" },
+      { name: "Nodejs" },
+      { name: "Expressjs" }
+    ]
   }
 ];
 
 export function TemplateSection({ home = false }: { home?: boolean }) {
+  const hasShowMore = TEMPLATE_DATA.length > 8;
+
   return (
     <Section
       id="templates"
@@ -161,15 +164,15 @@ export function TemplateSection({ home = false }: { home?: boolean }) {
         </SubHeading>
       </div>
 
-      <div className="divide-edge screen-line-before grid grid-cols-1 divide-x">
-        {(home ? TEMPLATE_DATA.slice(0, 4) : TEMPLATE_DATA).map(t => (
+      <div className="divide-edge screen-line-before grid grid-cols-1 divide-x sm:grid-cols-2">
+        {(home ? TEMPLATE_DATA.slice(0, 8) : TEMPLATE_DATA).map(t => (
           <div key={t.githubUrl} className="group">
             <TemplateCard template={t} />
           </div>
         ))}
       </div>
 
-      {home && (
+      {hasShowMore && (
         <div className="flex items-center justify-center py-3">
           <PrimaryButton
             as="a"
