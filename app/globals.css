@@ -5,6 +5,8 @@
 @theme inline {
   --color-code: #0a0a0a;
   --color-card-hover: var(--color-card-hover);
+  --color-drizzle: var(--color-drizzle);
+  --color-motion: var(--color-motion);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-highlight: var(--highlight);
@@ -75,6 +77,8 @@
 :root {
   --muted-secondary: #666;
   --color-card-hover: color-mix(in oklab, var(--accent) 50%, transparent);
+  --color-drizzle: #89bb14;
+  --color-motion: #dfd508;
   --background: #f4f4f0;
   --foreground: #080707;
   --card: #ffffff;
@@ -145,6 +149,8 @@
 .dark {
   --muted-secondary: #888;
   --color-card-hover: #ffffff0f;
+  --color-drizzle: #c5f74f;
+  --color-motion: #fff312;
   --background: var(--color-neutral-950);
   --foreground: #ffffff;
   --card: #090909;

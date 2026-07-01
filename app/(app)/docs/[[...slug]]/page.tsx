@@ -121,7 +121,7 @@ export default async function DocsPage(props: PageProps<"/docs/[[...slug]]">) {
               <h2 className="font-inter animate-fade-in-blur text-2xl font-medium">
                 {data.title}
               </h2>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-4">
                 <ShareMenu
                   title={data.title}
                   url={`/docs/${type}/${lastSlug}`}
