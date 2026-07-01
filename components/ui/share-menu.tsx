@@ -1,8 +1,5 @@
 "use client";
 
-import { toast } from "sonner";
-
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,6 +8,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ShareIcon, LinkIcon, EllipsisIcon } from "lucide-react";
 import { PrimaryButton } from "./primary-button";
+import { toast } from "./toast";
+import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
 
 export type ShareMenuProps = {
   /** Title passed to the native share sheet. */
@@ -20,6 +19,15 @@ export type ShareMenuProps = {
 };
 
 export function ShareMenu({ title, url }: ShareMenuProps) {
+  const { copy } = useCopyToClipboard({
+    onCopySuccess: () => {
+      toast.add({
+        title: "Link copied",
+        description: "Link copied to clipboard",
+        type: "success"
+      });
+    }
+  });
   const absoluteUrl = url.startsWith("http")
     ? url
     : typeof window !== "undefined"
@@ -41,11 +49,7 @@ export function ShareMenu({ title, url }: ShareMenuProps) {
         className="w-fit rounded-lg"
         align="start"
         alignOffset={-6}>
-        <DropdownMenuItem
-          onClick={() => {
-            copyText(absoluteUrl);
-            toast.success("Link copied");
-          }}>
+        <DropdownMenuItem onClick={() => copy(absoluteUrl)}>
           <LinkIcon />
           Copy link
         </DropdownMenuItem>
@@ -86,15 +90,6 @@ export function ShareMenu({ title, url }: ShareMenuProps) {
     </DropdownMenu>
   );
 }
-
-const copyText = async (text: string) => {
-  try {
-    await navigator.clipboard.writeText(text);
-    return true;
-  } catch {
-    return false;
-  }
-};
 
 type IconProps = React.ComponentProps<"svg">;
 
