@@ -36,10 +36,10 @@ export function ProjectCard({
   if (!details) {
     return (
       <motion.div className="group animate-fade-in-blur screen-line-before relative p-4 transition-all">
-        <motion.div className="flex flex-col gap-6 md:flex-row">
+        <motion.div className="flex flex-col gap-6">
           <Link
             href={`/projects/${project.slug}`}
-            className="relative block aspect-video h-48 w-full shrink-0 overflow-hidden md:w-72">
+            className="relative block aspect-video h-60 w-full shrink-0 overflow-hidden">
             <Image
               src={project.thumbnail}
               alt={project.title}
@@ -80,7 +80,7 @@ export function ProjectCard({
                 {project.technologies.map((tech, idx) => {
                   const Icon = getIconForLanguageExtension({
                     name: tech.name,
-                    className: "size-7"
+                    className: "size-5"
                   });
                   // const Icon =
                   //   TECH_ICONS[tech.name.toUpperCase() as TechStack] ||
@@ -90,14 +90,13 @@ export function ProjectCard({
                       <Tooltip>
                         <TooltipTrigger
                           render={
-                            <div className="group from-background to-muted primary-ring rounded-primary relative bg-linear-to-b p-1.75">
+                            <div className="group from-background to-muted primary-ring rounded-primary relative bg-linear-to-b p-1.5">
                               {Icon}
-                              {/* <Icon className="text-accent-foreground size-6 rounded" /> */}
                               <div className="corner-squircle rounded-primary supports-corner-shape:rounded-primary pointer-events-none absolute inset-0 ring-1 ring-black/10 ring-inset dark:ring-white/15"></div>
                             </div>
                           }></TooltipTrigger>
                         <TooltipContent>
-                          <p className="text-base">{tech.name}</p>
+                          <p className="text-sm">{tech.name}</p>
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
@@ -276,9 +275,9 @@ export function ProjectLinks({
 
   if (!details) {
     const baseClassName =
-      "px-3 border border-neutral-500/40 rounded-primary bg-transparent py-2 flex items-center justify-center";
+      "border border-neutral-500/40 rounded-primary bg-transparent flex items-center justify-center";
     const linkClassName =
-      "text-muted-foreground relative primary-ring rounded-primary bg-muted px-2 py-2.5 transition-colors hover:text-foreground hover:bg-muted duration-300 from-background to-muted bg-linear-to-br";
+      "text-muted-foreground relative primary-ring rounded-primary bg-muted px-2.25 py-2 transition-colors hover:text-foreground hover:bg-muted duration-300 from-background to-muted bg-linear-to-br";
     return (
       <div className="flex items-center gap-4">
         {project.liveUrl && (
@@ -292,7 +291,7 @@ export function ProjectLinks({
                     onClick={() => play()}
                     target="_blank"
                     className={cn("primary-ring", linkClassName)}>
-                    <LinkIcon className="size-4" />
+                    <LinkIcon className="size-3.5" />
                   </Link>
                 }
               />
@@ -313,7 +312,7 @@ export function ProjectLinks({
                     target="_blank"
                     onClick={() => play()}
                     className={linkClassName}>
-                    <SiGithub className="size-4" />
+                    <SiGithub className="size-3.5" />
                     <div className="corner-squircle rounded-primary supports-corner-shape:rounded-primary ring-muted pointer-events-none absolute inset-0 ring-1 ring-inset dark:ring-white/15"></div>
                   </Link>
                 }
@@ -333,7 +332,7 @@ export function ProjectLinks({
                   href={`/projects/${project.slug}`}
                   onClick={() => play()}
                   className={linkClassName}>
-                  <ArrowUpRight className="size-4" />
+                  <ArrowUpRight className="size-3.5" />
                 </Link>
               }
             />
