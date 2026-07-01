@@ -47,7 +47,7 @@ function SkillCardTooltip({ skill }: { skill: IStack }) {
       <Tooltip>
         <TooltipTrigger
           render={
-            <div className="group from-background to-muted primary-ring rounded-primary relative bg-linear-to-b px-2.5 py-2">
+            <div className="group from-background to-muted primary-ring rounded-primary relative bg-linear-to-b px-2.5 py-2 grayscale-100 duration-300 hover:grayscale-0">
               {Icon}
 
               <div className="corner-squircle rounded-primary supports-corner-shape:rounded-primary pointer-events-none absolute inset-0 ring-1 ring-black/10 ring-inset dark:ring-white/15"></div>

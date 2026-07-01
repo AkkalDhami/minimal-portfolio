@@ -26,7 +26,7 @@ export function TemplateCard({ template }: { template: ITemplate }) {
           alt={template.title}
           width={200}
           height={200}
-          className="rounded-primary h-56 w-auto object-cover transition-transform duration-500"
+          className="rounded-primary h-56 w-auto object-cover grayscale-100 transition-all duration-300 group-hover:grayscale-0"
         />
         <div className="p1 flex flex-1 flex-col justify-between">
           <div className="space-y-3">
@@ -48,7 +48,7 @@ export function TemplateCard({ template }: { template: ITemplate }) {
                     <Tooltip>
                       <TooltipTrigger
                         render={
-                          <div className="group from-background to-muted primary-ring relative rounded-md bg-linear-to-b px-2 py-2">
+                          <div className="group from-background to-muted primary-ring relative rounded-md bg-linear-to-b px-2 py-2 grayscale-100 duration-300 group-hover:grayscale-0">
                             {Icon}
                             <div className="corner-squircle rounded-primary supports-corner-shape:rounded-primary pointer-events-none absolute inset-0 ring-1 ring-black/10 ring-inset dark:ring-white/15"></div>
                           </div>

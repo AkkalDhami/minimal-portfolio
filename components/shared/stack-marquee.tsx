@@ -40,7 +40,7 @@ function StackMarqueeItem({
   return (
     <MarqueeItem
       className={cn(
-        "group flex items-center gap-2 text-xl font-medium",
+        "group flex items-center gap-2 text-xl font-medium grayscale-100 duration-300 hover:grayscale-0",
         className
       )}>
       <div className="p-1.5">{Icon}</div>

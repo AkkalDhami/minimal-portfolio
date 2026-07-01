@@ -95,7 +95,7 @@ export function NewHeroSection() {
             height={220}
             src="/images/profile2.png"
             alt="Profile"
-            className="mx-auto hidden size-40 rounded-full object-cover object-left grayscale-0 duration-200 hover:grayscale-0 sm:mx-0 sm:block"
+            className="mx-auto hidden size-40 rounded-full object-cover object-left grayscale-100 duration-200 hover:grayscale-0 sm:mx-0 sm:block"
           />
           <div className="space-y-3">
             <h1 className="font-inter text-3xl font-semibold tracking-wide uppercase md:text-4xl">
@@ -123,7 +123,7 @@ export function NewHeroSection() {
                 });
                 return (
                   <TechBadge key={tech.value} className="bg-gradient-t">
-                    <div className="text-accent-foreground relative flex items-center gap-2 text-base">
+                    <div className="text-accent-foreground relative flex items-center gap-2 text-base grayscale-100 duration-300 hover:grayscale-0">
                       {Icon}
                       {tech.label}
                     </div>

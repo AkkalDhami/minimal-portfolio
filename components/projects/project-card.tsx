@@ -44,7 +44,7 @@ export function ProjectCard({
               src={project.thumbnail}
               alt={project.title}
               fill
-              className="rounded-primary w-full object-cover transition-transform duration-500"
+              className="rounded-primary w-full object-cover grayscale-100 transition-all duration-300 group-hover:grayscale-0"
             />
             {project.status === "ongoing" && (
               <motion.div
@@ -90,7 +90,7 @@ export function ProjectCard({
                       <Tooltip>
                         <TooltipTrigger
                           render={
-                            <div className="group from-background to-muted primary-ring rounded-primary relative bg-linear-to-b p-1.5">
+                            <div className="group from-background to-muted primary-ring rounded-primary relative bg-linear-to-b p-1.5 grayscale-100 group-hover:grayscale-0">
                               {Icon}
                               <div className="corner-squircle rounded-primary supports-corner-shape:rounded-primary pointer-events-none absolute inset-0 ring-1 ring-black/10 ring-inset dark:ring-white/15"></div>
                             </div>
