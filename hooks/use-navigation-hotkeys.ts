@@ -9,6 +9,7 @@ import { cardSlide5Sound } from "@/sounds/card-slide-5";
 
 import {
   DAILY_DEV_URL,
+  DISCORD_URL,
   GITHUB_URL,
   LINKEDIN_URL,
   X_URL
@@ -35,6 +36,7 @@ export function useNavigationHotkeys(options: Options = {}) {
       b: "/playbook",
       t: "/templates",
       g: GITHUB_URL,
+      i: DISCORD_URL,
       y: `${GITHUB_URL}/minimal-portfolio`,
       x: X_URL,
       l: LINKEDIN_URL,
@@ -64,6 +66,7 @@ export function useNavigationHotkeys(options: Options = {}) {
         [
           GITHUB_URL,
           X_URL,
+          DISCORD_URL,
           LINKEDIN_URL,
           DAILY_DEV_URL,
           `${GITHUB_URL}/minimal-portfolio`

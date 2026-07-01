@@ -92,6 +92,16 @@ export const STACKS: IStack[] = [
     category: "backend"
   },
   {
+    label: "Nest.js",
+    value: "nestjs",
+    category: "backend"
+  },
+  {
+    label: "Nginx",
+    value: "nginx",
+    category: "backend"
+  },
+  {
     label: "Drizzle ORM",
     value: "drizzle",
     category: "backend"
@@ -109,6 +119,11 @@ export const STACKS: IStack[] = [
   {
     label: "Docker",
     value: "docker",
+    category: "tools"
+  },
+  {
+    label: "Vercel",
+    value: "vercel",
     category: "tools"
   },
   {

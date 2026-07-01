@@ -21,7 +21,7 @@ export const PROJECTS: Project[] = [
     slug: "servercn",
     title: "Servercn",
     description:
-      "Servercn is a component registry for building Node.js backends by composition. Shadcn ecosystem for node.js backends. Open Source.",
+      "Servercn is a component registry for building Node.js backends. Shadcn ecosystem for node.js backends. Open Source.",
     technologies: [
       { name: "Nextjs" },
       { name: "Nodejs" },

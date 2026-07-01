@@ -15,6 +15,8 @@ export const X_URL = `https://x.com/${X_USERNAME}`;
 export const DAILY_DEV_USERNAME = `akkal`;
 export const DAILY_DEV_URL = `https://app.daily.dev/${DAILY_DEV_USERNAME}`;
 
+export const DISCORD_URL = `https://discord.com/users/1364265336714563625`;
+
 export const EMAIL = "dhamiakkal21@gmail.com";
 
 export const SECONDARY_EMAIL = "aavashdhami21@gmail.com";
