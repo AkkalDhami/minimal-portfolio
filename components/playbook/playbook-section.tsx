@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 import { PrimaryButton } from "@/components/ui/primary-button";
 import { Section } from "@/components/ui/section";
 import { Input } from "@/components/ui/input";
-import { IconSearch } from "@tabler/icons-react";
+import { IconSearch, IconX } from "@tabler/icons-react";
 
 export function PlaybookSection({ home = false }: { home?: boolean }) {
   const [search, setSearch] = useState("");
@@ -48,10 +48,16 @@ export function PlaybookSection({ home = false }: { home?: boolean }) {
 
             <Input
               placeholder="Search playbooks..."
-              className="pl-8"
+              className="px-8"
               value={search}
               onChange={e => setSearch(e.target.value)}
             />
+
+            <button
+              onClick={() => setSearch("")}
+              className="text-muted-foreground hover:text-foreground absolute top-1/2 right-2 -translate-y-1/2">
+              <IconX className="size-4" />
+            </button>
           </div>
         )}
       </div>
@@ -59,7 +65,7 @@ export function PlaybookSection({ home = false }: { home?: boolean }) {
       <div
         className={cn(
           "screen-line-after divide-edge grid",
-          home && "divide-x sm:grid-cols-2"
+          "sm:grid-cols-2 sm:divide-x"
         )}>
         {filteredPlaybooks.length > 0 ? (
           filteredPlaybooks.map((playbook: IPlaybook) => (

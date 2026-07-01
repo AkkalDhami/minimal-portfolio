@@ -9,6 +9,7 @@ import { SocialLinks } from "@/components/home/social-link";
 import { cn } from "@/lib/utils";
 import { cardSlide5Sound } from "@/sounds/card-slide-5";
 import { useSound } from "@/hooks/use-sound";
+import { TextHoverEffect } from "@/components/ui/text-hover-effect";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -27,8 +28,8 @@ export function Footer() {
             "screen-line-after",
             "border-edge border-x"
           )}>
-          <div className="screen-line-before mb-8 flex flex-wrap justify-between gap-8 py-4">
-            <div className="space-y-6">
+          <div className="screen-line-before flex flex-wrap justify-between gap-8 py-4">
+            <div className="space-y-4">
               <div className="flex items-center gap-3">
                 <Profile />
                 <div className="flex flex-col gap-1">
@@ -45,6 +46,27 @@ export function Footer() {
                 scalability, and clean architecture.
               </p>
               <SocialLinks minimal />
+
+              <div className="flex flex-col gap-3">
+                <p className="text-muted-foreground text-sm">
+                  &copy; {currentYear} | {NAME} | All rights reserved
+                </p>
+
+                <div className="text-muted-foreground flex items-center gap-2 text-sm font-medium">
+                  <span>Built with</span>
+                  <div className="text-primary relative flex items-center gap-1">
+                    <Axe size={16} strokeWidth={2.5} />
+                  </div>
+                  by
+                  <Link
+                    href={GITHUB_URL}
+                    onClick={() => play()}
+                    target="_blank"
+                    className="hover:text-primary underline underline-offset-2">
+                    {NAME}
+                  </Link>
+                </div>
+              </div>
             </div>
 
             <div className="space-y-4">
@@ -75,30 +97,10 @@ export function Footer() {
           </div>
 
           <div>
-            <p className="mask-b-from-0.5 text-center text-3xl font-bold tracking-widest text-neutral-300 uppercase sm:text-6xl xl:text-8xl dark:text-neutral-700">
+            {/* <p className="mask-b-from-0.5 text-center text-3xl font-bold tracking-widest text-neutral-300 uppercase sm:text-6xl xl:text-8xl dark:text-neutral-700">
               {NAME}
-            </p>
-          </div>
-
-          <div className="flex flex-col items-center justify-between gap-4 pt-8 md:flex-row">
-            <p className="text-muted-foreground text-sm">
-              &copy; {currentYear} | {NAME} | All rights reserved
-            </p>
-
-            <div className="text-muted-foreground flex items-center gap-2 text-sm font-medium">
-              <span>Built with</span>
-              <div className="text-primary relative flex items-center gap-1">
-                <Axe size={16} strokeWidth={2.5} />
-              </div>
-              by
-              <Link
-                href={GITHUB_URL}
-                onClick={() => play()}
-                target="_blank"
-                className="hover:text-primary underline underline-offset-2">
-                {NAME}
-              </Link>
-            </div>
+            </p> */}
+            <TextHoverEffect text="AKKAL DHAMI" />
           </div>
         </div>
       </footer>

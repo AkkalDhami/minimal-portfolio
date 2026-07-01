@@ -16,7 +16,9 @@ export function DocsSidebar() {
   const items = getDocsItems(isDsa ? "dsa" : "playbook");
 
   return (
-    <aside className="primary-ring fixed top-1/2 left-1 hidden w-[280px] -translate-y-1/2 rounded-lg border p-2 lg:block">
+    <aside className="primary-ring fixed top-1/2 left-1 hidden w-70 -translate-y-1/2 rounded-lg border p-2 lg:block">
+      <h2 className="font-inter font-medium">{isDsa ? "DSA" : "Playbook"}</h2>
+
       <LineNav activeHref={pathname} items={items} onItemClick={() => play()} />
     </aside>
   );
