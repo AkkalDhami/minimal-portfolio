@@ -36,12 +36,14 @@ const YEARS = [
 
 interface GithubContributionsProps {
   initialData: Activity[];
+  fetch?: boolean;
   home?: boolean;
 }
 
 export function GitHubContributionGraph({
   initialData,
-  home = false
+  home = false,
+  fetch = true
 }: GithubContributionsProps) {
   const [year, setYear] = useState<string>(
     home
@@ -59,6 +61,8 @@ export function GitHubContributionGraph({
       return;
     }
 
+    if (!fetch) return;
+
     const fetchData = async () => {
       try {
         setLoading(true);
@@ -71,7 +75,7 @@ export function GitHubContributionGraph({
       }
     };
     fetchData();
-  }, [year, initialData]);
+  }, [year, initialData, fetch]);
 
   return (
     <div className="w-full space-y-2">

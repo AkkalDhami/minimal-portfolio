@@ -17,7 +17,9 @@ export async function GitHubContributions({
   year?: string | number;
   fetch?: boolean;
 }) {
-  const contributions = await getGitHubContributions(year);
+  const contributions = !fetch
+    ? lastYearContributions
+    : await getGitHubContributions(year);
 
   return (
     <Section
@@ -27,6 +29,7 @@ export async function GitHubContributions({
         <GitHubContributionGraph
           initialData={lastYearContributions}
           home={home}
+          fetch={false}
         />
       ) : (
         <Suspense fallback={<GitHubContributionFallback />}>

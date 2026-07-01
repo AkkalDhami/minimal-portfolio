@@ -1,5 +1,6 @@
 import {
   DAILY_DEV_URL,
+  DISCORD_URL,
   GITHUB_URL,
   LINKEDIN_URL,
   X_URL
@@ -16,7 +17,12 @@ import {
   TooltipTrigger
 } from "@/components/ui/tooltip";
 
-import { RiLinkedinFill, RiGithubFill, RiTwitterXFill } from "react-icons/ri";
+import {
+  RiLinkedinFill,
+  RiGithubFill,
+  RiTwitterXFill,
+  RiDiscordFill
+} from "react-icons/ri";
 import { IconType } from "react-icons";
 import { uChatScrollButtonSound } from "@/sounds/chat-scroll";
 import { useSound } from "@/hooks/use-sound";
@@ -36,16 +42,22 @@ export const socialLinks: SocialLink[] = [
     key: "g"
   },
   {
-    name: "LinkedIn",
-    href: LINKEDIN_URL,
-    icon: RiLinkedinFill,
-    key: "l"
-  },
-  {
     name: "X (Twitter)",
     href: X_URL,
     icon: RiTwitterXFill,
     key: "x"
+  },
+  {
+    name: "Discord",
+    href: DISCORD_URL,
+    icon: RiDiscordFill,
+    key: "i"
+  },
+  {
+    name: "LinkedIn",
+    href: LINKEDIN_URL,
+    icon: RiLinkedinFill,
+    key: "l"
   },
   {
     name: "daily.dev",
