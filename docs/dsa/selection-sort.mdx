@@ -5,6 +5,33 @@ description: Learn about selection sort.
 
 Selection Sort repeatedly selects the smallest element and places it in its correct position.
 
+## Algorithm:
+
+- Start from the first element of the array.
+- Assume the current element is the smallest.
+- Compare it with all the remaining elements in the unsorted part of the array.
+- Find the smallest element.
+- Swap the smallest element with the first unsorted element.
+- Move to the next position and repeat the process until the array is sorted.
+
+## Pseudocode:
+
+```
+SelectionSort(arr, n)
+
+for i = 0 to n - 2 do
+    min = i
+    for j = i + 1 to n - 1 do
+        if arr[j] < arr[min] then
+            min = j
+    end for
+
+    if min != i then
+        swap arr[i] and arr[min]
+    end if
+end for
+```
+
 <SortingVisualizer
   algorithm="selection"
   defaultValues={[5, 3, 8, 1, 9]}
