@@ -59,7 +59,7 @@ export const TEMPLATE_DATA: ITemplate[] = [
       "A sleek developer portfolio with modern UI, subtle animations, and responsive design.",
     thumbnail: "/assets/templates/temp-1.png",
     githubUrl: `${GITHUB_URL}/akkal-dhami`,
-    liveUrl: "https://akkaldhami.com.np",
+    liveUrl: "https://akkal.vercel.app",
     technologies: [
       { name: "Nextjs" },
       { name: "React" },
