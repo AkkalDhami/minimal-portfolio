@@ -54,7 +54,7 @@ export function PlaybookSection({ home = false }: { home?: boolean }) {
             />
 
             <button
-              disabled={!search}
+              disabled={!search?.trim()?.length}
               onClick={() => setSearch("")}
               className="text-muted-foreground hover:text-foreground absolute top-1/2 right-2 -translate-y-1/2">
               <IconX className="size-4" />

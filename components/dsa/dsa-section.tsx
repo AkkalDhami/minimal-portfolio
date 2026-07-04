@@ -42,6 +42,7 @@ export function DsaSection({ home = false }: { home?: boolean }) {
             <Input
               placeholder="Search here..."
               className="pl-8"
+              disabled={!search?.trim()?.length}
               value={search}
               onChange={e => setSearch(e.target.value)}
             />
