@@ -42,7 +42,6 @@ export function DsaSection({ home = false }: { home?: boolean }) {
             <Input
               placeholder="Search here..."
               className="pl-8"
-              disabled={!search?.trim()?.length}
               value={search}
               onChange={e => setSearch(e.target.value)}
             />
@@ -58,7 +57,7 @@ export function DsaSection({ home = false }: { home?: boolean }) {
             <a
               href={`${t.docs}`}
               className={cn(
-                "group hover:bg-card-hover screen-line-before relative p-4 duration-300"
+                "group hover:bg-card-hover screen-line-before relative p-4"
               )}>
               <h2 className="text-foreground font-noraml mb-2 text-lg underline-offset-4 group-hover:underline">
                 {t.title}

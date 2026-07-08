@@ -98,7 +98,7 @@ export function NewHeroSection() {
             className="mx-auto hidden size-40 rounded-full object-cover object-left grayscale-100 duration-200 hover:grayscale-0 sm:mx-0 sm:block"
           />
           <div className="space-y-3">
-            <h1 className="font-inter text-3xl font-semibold tracking-wide uppercase md:text-4xl">
+            <h1 className="font-inter text-4xl font-semibold tracking-wide uppercase md:text-4xl">
               {NAME}
             </h1>
             <h3 className="text-muted-primary hidden overflow-hidden text-base font-normal sm:block md:text-xl">

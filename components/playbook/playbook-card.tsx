@@ -10,7 +10,7 @@ export function PlaybookCard({ data }: { data: IPlaybook }) {
       href={`/docs/playbook/${data.slug}`}
       onClick={() => play()}
       className={cn(
-        "group hover:bg-card-hover screen-line-before relative p-4 duration-300",
+        "group hover:bg-card-hover screen-line-before relative p-4",
         "animate-fade-in-blur",
         "last:border-r"
       )}>
