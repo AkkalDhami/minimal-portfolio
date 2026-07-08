@@ -47,7 +47,7 @@ export function BackToTop() {
               scrollToTop();
               play();
             }}
-            className="border-border/50 primary-ring hover:bg-muted bg-muted rounded-primary border backdrop-blur-md transition-all"
+            className="hover:bg-muted bg-muted rounded-primary border backdrop-blur-md"
             aria-label="Back to top">
             <ArrowUp className="size-4" />
           </Button>
