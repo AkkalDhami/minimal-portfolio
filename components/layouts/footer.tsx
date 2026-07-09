@@ -80,6 +80,7 @@ export function Footer() {
                   "Templates",
                   "Dev-Setup",
                   "Playbook",
+                  "Networking",
                   "Contacts",
                   "DSA"
                 ].map(item => (
