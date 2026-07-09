@@ -10,6 +10,8 @@ import { Table, THead, TBody, TR, TH, TD, Highlight } from "./table";
 import { SortingVisualizer as SortingVisualizerComponent } from "./sorting-visualizer";
 import { getIconForLanguageExtension } from "@/components/docs/icon";
 import { HeadingWithCopy } from "./heading";
+import { NetworkingModule } from "./networking-module";
+import { NetworkingCard } from "@/components/networking/networking-card";
 
 export const mdxComponents: MDXComponents = {
   Table,
@@ -25,6 +27,9 @@ export const mdxComponents: MDXComponents = {
   PackageManagerTabs,
   Code,
   Note,
+  NetworkingCard,
+  NetworkingModule,
+  HR: props => <hr className="my-6" {...props} />,
   h1: props => (
     <HeadingWithCopy
       tag="h1"
@@ -116,7 +121,10 @@ export const mdxComponents: MDXComponents = {
   },
 
   strong: props => (
-    <strong className="text-primar animate-fade-in-blur" {...props} />
+    <strong
+      className="text-primary animate-fade-in-blur font-semibold"
+      {...props}
+    />
   ),
   blockquote: ({ className, ...props }: React.ComponentProps<"blockquote">) => (
     <blockquote
