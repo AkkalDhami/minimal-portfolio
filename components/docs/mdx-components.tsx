@@ -11,6 +11,8 @@ import { SortingVisualizer as SortingVisualizerComponent } from "./sorting-visua
 import { getIconForLanguageExtension } from "@/components/docs/icon";
 import { HeadingWithCopy } from "./heading";
 import { NetworkingModule } from "./networking-module";
+import { ClientServerDiagram } from "./client-server-diagram";
+import { HowBrowserLoadsWebsite } from "./how-browser-loads-website";
 import { NetworkingCard } from "@/components/networking/networking-card";
 
 export const mdxComponents: MDXComponents = {
@@ -20,6 +22,7 @@ export const mdxComponents: MDXComponents = {
   TR,
   TH,
   TD,
+
   SortingVisualizer: props => <SortingVisualizerComponent {...props} />,
   Output,
   Highlight,
@@ -29,7 +32,13 @@ export const mdxComponents: MDXComponents = {
   Note,
   NetworkingCard,
   NetworkingModule,
+  ClientServerDiagram,
+  HowBrowserLoadsWebsite,
+
   HR: props => <hr className="my-6" {...props} />,
+  HLink: props => (
+    <a className="underline-offset-4 hover:underline" {...props} />
+  ),
   h1: props => (
     <HeadingWithCopy
       tag="h1"
@@ -67,7 +76,7 @@ export const mdxComponents: MDXComponents = {
   ),
   p: props => (
     <p
-      className="text-muted-primary animate-fade-in-blur my-2 leading-7"
+      className="text-muted-primary animate-fade-in-blur my-3 leading-7"
       {...props}
     />
   ),

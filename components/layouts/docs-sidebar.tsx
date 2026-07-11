@@ -55,8 +55,10 @@ export function DocsSidebar() {
               <Link
                 href={m.href as Route}
                 className={cn(
-                  "font-inter hover:text-primary font-medium",
-                  pathname === m.href ? "text-primary" : "text-muted-foreground"
+                  "font-inter hover:text-primary font-medium underline-offset-2 hover:underline",
+                  pathname === m.href
+                    ? "text-primary underline"
+                    : "text-muted-foreground"
                 )}>
                 {m.title}
               </Link>
