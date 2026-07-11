@@ -28,3 +28,5 @@ export const NAME = "Akkal Dhami";
 export const LOCATION = "Kathmandu, Nepal";
 
 export const DEFAULT_CODE_THEME = "vesper";
+
+export const MODULE_SECTIONS = ["networking", "dsa", "playbook"] as const;

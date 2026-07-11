@@ -96,11 +96,16 @@ export const STACKS: IStack[] = [
     value: "nestjs",
     category: "backend"
   },
-  {
-    label: "Nginx",
-    value: "nginx",
-    category: "backend"
-  },
+  // {
+  //   label: "Nginx",
+  //   value: "nginx",
+  //   category: "backend"
+  // },
+  // {
+  //   label: "Kafka",
+  //   value: "kafka",
+  //   category: "backend"
+  // },
   {
     label: "Drizzle ORM",
     value: "drizzle",

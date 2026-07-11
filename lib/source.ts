@@ -1,7 +1,8 @@
-import { IPlaybook } from "@/types/app.types";
+import { IPlaybook, ModuleSection } from "@/types/app.types";
 import { PLAYBOOK_DATA } from "@/data/playbook";
 import { DSA_DATA } from "@/data/dsa";
 import { sliceContent } from "@/utils/slice-content";
+import { NETWORKING_DATA } from "@/data/networking";
 
 export const findNeighbour = (
   type: "playbook" | "dsa",
@@ -28,12 +29,29 @@ export const findNeighbour = (
   };
 };
 
-export const getDocsItems = (type: "playbook" | "dsa") => {
-  const items = type === "playbook" ? PLAYBOOK_DATA : DSA_DATA;
+export const getDocsItems = (type: ModuleSection) => {
+  const items =
+    type === "playbook"
+      ? PLAYBOOK_DATA
+      : type === "dsa"
+        ? DSA_DATA
+        : NETWORKING_DATA;
 
   return items.map(i => ({
     href: i.docs,
     // title: i.slug.replaceAll("-", " ")
     title: sliceContent(i.title, 30)
   }));
+};
+
+export const getNetworkingTopics = (moduleSlug: string) => {
+  const mod = NETWORKING_DATA.find(m => m.slug === moduleSlug);
+
+  return mod?.topics ?? [];
+};
+
+export const getNetworkingModuleWithTopics = (moduleSlug: string) => {
+  const mod = NETWORKING_DATA.find(m => m.slug === moduleSlug);
+
+  return mod;
 };
