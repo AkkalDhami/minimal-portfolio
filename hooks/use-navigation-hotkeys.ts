@@ -35,6 +35,7 @@ export function useNavigationHotkeys(options: Options = {}) {
       s: "/dev-setup",
       b: "/playbook",
       t: "/templates",
+      n: "/networking",
       g: GITHUB_URL,
       i: DISCORD_URL,
       y: `${GITHUB_URL}/minimal-portfolio`,
