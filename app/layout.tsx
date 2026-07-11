@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Inter, Fira_Code, Manrope } from "next/font/google";
-import "./globals.css";
+import "./styles/globals.css";
 import { AnchoredToastProvider, ToastProvider } from "@/components/ui/toast";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import siteConfig from "@/lib/site";
