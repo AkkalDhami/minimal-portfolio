@@ -5,19 +5,21 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import matter from "gray-matter";
 import { mdxComponents } from "@/components/docs/mdx-components";
 import rehypePrettyCode from "rehype-pretty-code";
-import { DEFAULT_CODE_THEME } from "@/lib/constants";
+import { DEFAULT_CODE_THEME, MODULE_SECTIONS } from "@/lib/constants";
 import { OnThisPage } from "@/components/docs/on-this-page";
 import { Metadata, Route } from "next";
 import { findNeighbour } from "@/lib/source";
 import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
 
 import { PLAYBOOK_DATA } from "@/data/playbook";
-import { IPlaybook } from "@/types/app.types";
+import { IPlaybook, ModuleSection } from "@/types/app.types";
 import { PrimaryButton } from "@/components/ui/primary-button";
 import siteConfig from "@/lib/site";
 import { cn } from "@/lib/utils";
 import { sliceContent } from "@/utils/slice-content";
 import { ShareMenu } from "@/components/ui/share-menu";
+import { NETWORKING_DATA } from "@/data/networking";
+import { DSA_DATA } from "@/data/dsa";
 
 export const revalidate = false;
 export const dynamic = "force-dynamic";
@@ -26,12 +28,27 @@ export const dynamicParams = false;
 const DOCS_PATH = path.join(process.cwd(), "/docs");
 
 export async function generateStaticParams() {
-  const registryParams = PLAYBOOK_DATA.map(({ docs }) => {
-    const slugArray = docs.replace("/docs/", "").split("/").filter(Boolean);
-    return [...slugArray];
+  const playbookParams = PLAYBOOK_DATA.map(doc =>
+    doc.docs.replace("/docs/", "").split("/").filter(Boolean)
+  );
+
+  const dsaParams = DSA_DATA.flatMap(doc =>
+    doc.docs.replace("/docs/", "").split("/").filter(Boolean)
+  );
+
+  const networkingParams = NETWORKING_DATA.flatMap(module => {
+    const params = [
+      module.docs.replace("/docs/", "").split("/").filter(Boolean)
+    ];
+
+    const topics = module.topics.map(topic =>
+      topic.docs.replace("/docs/", "").split("/").filter(Boolean)
+    );
+
+    return [...params, ...topics];
   });
 
-  return [...registryParams];
+  return [...playbookParams, ...dsaParams, ...networkingParams];
 }
 
 export async function generateMetadata(props: {
@@ -76,18 +93,39 @@ export async function generateMetadata(props: {
 }
 
 function getDocPath(slug?: string[]) {
-  if (!slug || slug.length === 0) {
-    notFound();
+  if (!slug?.length) {
+    return path.join(DOCS_PATH, "index.mdx");
   }
 
-  if (slug.length === 2 && slug[1] === "dsa") {
-    return path.join(DOCS_PATH, "dsa", `${slug.join("/")}.mdx`);
+  const [section] = slug;
+
+  if (section === "playbook") {
+    return path.join(DOCS_PATH, ...slug) + ".mdx";
   }
-  if (slug.length === 2 && slug[1] === "playbook") {
-    return path.join(DOCS_PATH, "playbook", `${slug.join("/")}.mdx`);
+
+  if (MODULE_SECTIONS.includes(section as ModuleSection)) {
+    const dir = path.join(DOCS_PATH, ...slug);
+    const index = path.join(dir, "index.mdx");
+
+    return fs.existsSync(index) ? index : `${dir}.mdx`;
   }
-  return path.join(DOCS_PATH, `${slug.join("/")}.mdx`);
+
+  notFound();
 }
+
+// function getDocPath(slug?: string[]) {
+//   if (!slug || slug.length === 0) {
+//     notFound();
+//   }
+
+//   if (slug.length === 2 && slug[1] === "dsa") {
+//     return path.join(DOCS_PATH, "dsa", `${slug.join("/")}.mdx`);
+//   }
+//   if (slug.length === 2 && slug[1] === "playbook") {
+//     return path.join(DOCS_PATH, "playbook", `${slug.join("/")}.mdx`);
+//   }
+//   return path.join(DOCS_PATH, `${slug.join("/")}.mdx`);
+// }
 
 export default async function DocsPage(props: PageProps<"/docs/[[...slug]]">) {
   const params = await props.params;
@@ -153,9 +191,11 @@ export default async function DocsPage(props: PageProps<"/docs/[[...slug]]">) {
             }}
           />
         </article>
-        <div className="border-edge border-t px-2 py-2 pt-4">
-          <NextSteps next={next} prev={prev} className="mt-3" />
-        </div>
+        {(next || prev) && (
+          <div className="border-edge border-t px-2 py-2 pt-4">
+            <NextSteps next={next} prev={prev} className="mt-3" />
+          </div>
+        )}
       </div>
     </div>
   );
