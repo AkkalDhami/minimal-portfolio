@@ -1,0 +1,93 @@
+---
+title: How the Internet Works?
+description: Learn how the Internet works, what protocols are used, and how data is transmitted over the network.
+---
+
+
+## 1. The Big Picture
+
+The internet is just a **giant network of computers** that talk to each other.
+When you open a website, your computer (the **client**) asks another computer
+(the **server**) for information.
+
+<ClientServerDiagram />
+
+That's it. **Everything else is just details on how that request travels.**
+
+<br />
+## 2. Step-by-Step: What Happens When You Visit a Website
+
+- 1. You type: **www.example.com**
+- 2. Your computer asks DNS: "What is the address of example.com?"
+- 3. DNS replies: "It's at 93.184.216.34" (an IP address)
+- 4. Your computer sends a request to that IP address
+- 5. The server finds the webpage and sends it back
+- 6. Your browser displays the page 🎉
+
+<HowBrowserLoadsWebsite />
+
+## 3. DNS – The Internet's Phonebook
+
+Computers don't understand names like <Code>example.com</Code>. They understand **numbers**
+called **IP addresses**. DNS (Domain Name System) converts names into numbers.
+
+```
+        "example.com"
+               │
+               ⌄
+      ┌─────────────────┐
+      │   DNS Server    │   "That's 93.184.216.34"
+      │ (Phonebook)     │ ─────────────────────────>
+      └─────────────────┘
+```
+
+Think of it like your phone's contact list: you tap **Mom** instead of dialing
+her actual phone number.
+
+
+<br />
+## 4. IP Addresses – Everyone's Home Address
+
+Every device on the internet has a unique **IP address**, like a home address
+for mail delivery.
+
+```
+IP Address Example:  93.184.216.34
+
+┌──────────────────────────────┐
+│   Think of it like:          │
+│   House Number:  93          │
+│   Street:        184         │
+│   City:          216         │
+│   Country:       34          │
+└──────────────────────────────┘
+```
+
+
+## 5. Data Travels in Packets
+
+Your webpage isn't sent all at once — it's broken into small pieces called
+**packets**, sent separately, and reassembled at the destination.
+
+```
+ Original Data: "HELLO WORLD"
+
+ Broken into packets:
+ ┌────┐ ┌────┐ ┌────┐
+ │ HE │ │LLO │ │WOR │  ...
+ └────┘ └────┘ └────┘
+    │      │      │
+ (travel through different paths on the internet)
+    │      │      │
+ ┌─────────────────────┐
+ │ Reassembled at the  │
+ │ destination:        │
+ │ "HELLO WORLD"       │
+ └─────────────────────┘
+```
+
+This is efficient — packets can take different routes and still arrive, then
+get put back in order.
+
+
+<Note text="The internet works by breaking your request into small packets, using DNS to find the right address, routing those packets through many computers, and reassembling the response on your screen — all in a fraction of a second."/>
