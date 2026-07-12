@@ -198,7 +198,7 @@ function CommandItem({
 }: React.ComponentProps<typeof AutocompleteItem>) {
   return (
     <AutocompleteItem
-      className={cn("rounded-primary px-3 py-1.5", className)}
+      className={cn("rounded-lg px-3 py-1.5", className)}
       data-slot="command-item"
       {...props}
     />

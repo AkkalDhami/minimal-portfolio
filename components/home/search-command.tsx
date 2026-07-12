@@ -39,14 +39,13 @@ import { cn } from "@/lib/utils";
 import { GITHUB_URL } from "@/lib/constants";
 import { LuMoonStar } from "react-icons/lu";
 import { useTheme } from "next-themes";
-import { TEMPLATE_DATA } from "../templates/template-section";
+import { TEMPLATE_DATA } from "@/components/templates/template-section";
 import { socialLinks } from "./social-link";
 import { useSound } from "@/hooks/use-sound";
 import { click005Sound } from "@/sounds/click-005";
 import { click002Sound } from "@/sounds/click-002";
 import { uChatScrollButtonSound } from "@/sounds/chat-scroll";
 import { DSA_DATA } from "@/data/dsa";
-import { sliceContent } from "@/utils/slice-content";
 
 export interface Item {
   value: string;
@@ -289,7 +288,7 @@ export function SearchCommand() {
                             onClick={() => handleItemClick(item)}
                             value={item.value}
                             className={
-                              "ml-2 flex items-center justify-between py-1.5"
+                              "ml-2 flex items-center justify-between px-2 py-1.5"
                             }>
                             <div className="flex items-center gap-2">
                               {image ? (
