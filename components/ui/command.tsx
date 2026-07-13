@@ -14,6 +14,7 @@ import {
   AutocompleteList,
   AutocompleteSeparator
 } from "@/components/ui/autocomplete";
+import { IconSearch } from "@tabler/icons-react";
 
 const CommandDialog = CommandDialogPrimitive.Root;
 
@@ -107,11 +108,12 @@ function CommandInput({
   ...props
 }: React.ComponentProps<typeof AutocompleteInput>) {
   return (
-    <div className="px-2.5 py-2.5">
+    <div className="text-muted-foreground relative flex items-center gap-2 px-2.5 py-1.75">
+      <IconSearch className="absolute top-1/2 left-5 size-4 -translate-y-1/2" />
       <AutocompleteInput
         autoFocus
         className={cn(
-          "border-edge border bg-transparent! shadow-none before:hidden",
+          "border-transparent bg-transparent! pl-9 shadow-none before:hidden hover:border-transparent focus-visible:border-transparent focus-visible:ring-transparent",
           className
         )}
         placeholder={placeholder}
@@ -152,7 +154,7 @@ function CommandPanel({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       className={cn(
-        "relative -mx-px min-h-0 border border-b-0 bg-clip-padding shadow-xs/5 [clip-path:inset(0_1px)] not-has-[+[data-slot=command-footer]]:-mb-px not-has-[+[data-slot=command-footer]]:rounded-b-2xl not-has-[+[data-slot=command-footer]]:[clip-path:inset(0_1px_1px_1px_round_0_0_calc(var(--radius-2xl)-1px)_calc(var(--radius-2xl)-1px))] before:pointer-events-none before:absolute before:inset-0 before:rounded-t-[calc(var(--radius-xl)-1px)] **:data-[slot=scroll-area-scrollbar]:mt-2 dark:bg-neutral-950",
+        "relative -mx-px min-h-0 border border-b-0 bg-clip-padding shadow-xs/5 [clip-path:inset(0_1px)] not-has-[+[data-slot=command-footer]]:-mb-px not-has-[+[data-slot=command-footer]]:rounded-b-2xl not-has-[+[data-slot=command-footer]]:[clip-path:inset(0_1px_1px_1px_round_0_0_calc(var(--radius-2xl)-1px)_calc(var(--radius-2xl)-1px))] before:pointer-events-none before:absolute before:inset-0 before:rounded-t-[calc(var(--radius-xl)-1px)] **:data-[slot=scroll-area-scrollbar]:mt-2",
         className
       )}
       {...props}
