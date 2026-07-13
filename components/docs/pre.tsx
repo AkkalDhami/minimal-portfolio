@@ -24,12 +24,12 @@ export function Pre({
   }, [children]);
 
   return (
-    <div className="sm:max-w-code relative overflow-x-auto [font-variant-ligatures:none]">
+    <div className="sm:max-w-code scroll-fade relative overflow-x-auto [font-variant-ligatures:none]">
       <pre
         ref={ref}
         {...props}
         className={cn(
-          "thin-scrollbar bg-code animate-fade-in-blur relative rounded-lg text-neutral-300",
+          "thin-scrollbar not-typeset bg-code animate-fade-in-blur relative rounded-lg font-mono text-neutral-300",
           className
         )}>
         <CopyButton

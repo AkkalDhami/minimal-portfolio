@@ -462,7 +462,7 @@ function ArrayInputPanel({
               }}
               onKeyDown={e => e.key === "Enter" && handleApply()}
               placeholder="e.g. 38, 27, 43, 3, 9, 82"
-              className="focus:ring-muted-foreground w-full rounded-lg border border-neutral-500/30 px-3 py-2 pr-8 text-lg focus:ring-2 focus:outline-none"
+              className="focus:ring-muted-foreground w-full rounded-lg px-3 py-2 pr-8 text-lg"
             />
             <CopyButton
               text={raw}

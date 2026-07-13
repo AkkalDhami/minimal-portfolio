@@ -21,14 +21,14 @@ type StepProps = {
 
 function Step({ icon, title, subtitle }: StepProps) {
   return (
-    <div className="flex flex-col items-center">
+    <div className="items flex max-w-80 flex-col items-center">
       <div className="bg-card flex w-auto items-center gap-3 rounded-lg border px-3 py-2.5">
         {icon && <div className="bg-muted rounded-lg p-2">{icon}</div>}
 
-        <div>
-          <h4 className="font-medium">{title}</h4>
+        <div className="mt-0 flex flex-col">
+          <h4 className="mt-0 font-medium">{title}</h4>
           {subtitle && (
-            <p className="text-muted-foreground text-sm">{subtitle}</p>
+            <p className="text-muted-foreground mt-0 text-sm">{subtitle}</p>
           )}
         </div>
       </div>
@@ -40,7 +40,7 @@ function Step({ icon, title, subtitle }: StepProps) {
 
 export function HowBrowserLoadsWebsite() {
   return (
-    <div className="flex flex-col items-center py-8">
+    <div className="no-typeset hidden w-auto flex-col py-8 md:flex">
       <Step
         icon={<IconDeviceDesktop size={24} />}
         title='Type "google.com"'
@@ -53,22 +53,22 @@ export function HowBrowserLoadsWebsite() {
         subtitle="Chrome, Edge, Firefox, Safari..."
       />
 
-      <div className="flex flex-col items-center">
+      <div className="flex max-w-80 flex-col">
         <div className="flex flex-col items-center">
-          <div className="bg-card w-64 rounded-xl border p-4 shadow-sm">
+          <div className="bg-card rounded-xl border p-4 shadow-sm">
             <div className="flex items-center gap-3">
               <IconDatabaseSearch size={24} />
               <div>
-                <p className="font-medium">DNS Server</p>
-                <p className="text-muted-foreground text-sm">
+                <p className="mt-0 font-medium">DNS Server</p>
+                <p className="text-muted-foreground mt-0 text-sm">
                   Finds Google&rsquo;s IP address
                 </p>
               </div>
             </div>
           </div>
-        </div>
 
-        <IconArrowDown className="text-muted-foreground my-2 size-5" />
+          <IconArrowDown className="text-muted-foreground my-2 size-5" />
+        </div>
       </div>
 
       <Step
@@ -109,8 +109,8 @@ export function HowBrowserLoadsWebsite() {
 
       <div className="bg-muted w-72 rounded-xl border p-5 text-center shadow-sm">
         <IconHome className="mx-auto mb-2" size={30} />
-        <h4 className="font-semibold">Google Home Page</h4>
-        <p className="text-muted-foreground mt-1 text-sm">
+        <h4 className="mt-0 font-medium">Google Home Page</h4>
+        <p className="text-muted-foreground mt-0 text-sm">
           The webpage is now displayed.
         </p>
       </div>

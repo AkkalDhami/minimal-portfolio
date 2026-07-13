@@ -133,7 +133,7 @@ export default function PackageManagerTabs({
         return (
           <TabsContent key={key} value={key}>
             <CodeWrapper code={cmd}>
-              <pre className="overflow-x-auto overscroll-x-contain px-4 pt-1 pb-3">
+              <pre className="not-typeset overflow-x-auto overscroll-x-contain px-4 pt-1 pb-3">
                 <code
                   data-slot="code-block"
                   data-language="bash"
