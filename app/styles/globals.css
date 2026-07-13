@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "shadcn/tailwind.css";
 @import "./typeset.css";
 @custom-variant dark (&:is(.dark *));
 
@@ -52,6 +53,7 @@
   --font-code: var(--font-code), monospace;
   --font-inter: var(--font-inter), sans-serif;
   --font-manrope: var(--font-manrope), sans-serif;
+  --font-jetbrains-mono: var(--font-jetbrains-mono), monospace;
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -269,6 +271,20 @@
 
 .thin-scrollbar {
   scrollbar-width: thin;
+}
+
+code[data-theme*=" "],
+code[data-theme*=" "] span {
+  color: var(--shiki-light);
+  background-color: var(--shiki-light-bg);
+}
+
+@media (prefers-color-scheme: dark) {
+  code[data-theme*=" "],
+  code[data-theme*=" "] span {
+    color: var(--shiki-dark);
+    background-color: var(--shiki-dark-bg);
+  }
 }
 
 html {
