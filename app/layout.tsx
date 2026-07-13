@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next";
-import { Geist, Geist_Mono, Inter, Fira_Code, Manrope } from "next/font/google";
+import { Geist, Geist_Mono, Inter, Fira_Code } from "next/font/google";
 import "./styles/globals.css";
 import { AnchoredToastProvider, ToastProvider } from "@/components/ui/toast";
 import { ThemeProvider } from "@/components/providers/theme-provider";
@@ -24,10 +24,10 @@ const inter = Inter({
   subsets: ["latin"]
 });
 
-const manrope = Manrope({
-  variable: "--font-manrope",
-  subsets: ["latin"]
-});
+// const manrope = Manrope({
+//   variable: "--font-manrope",
+//   subsets: ["latin"]
+// });
 
 const firaCode = Fira_Code({
   variable: "--font-code",
@@ -105,7 +105,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${firaCode.variable} ${manrope.variable} selection:bg-foreground bg-background selection:text-accent scroll-mt-20 font-sans antialiased`}>
+        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${firaCode.variable} selection:bg-foreground bg-background selection:text-accent scroll-mt-20 font-sans antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

@@ -5,14 +5,13 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import matter from "gray-matter";
 import { mdxComponents } from "@/components/docs/mdx-components";
 import rehypePrettyCode from "rehype-pretty-code";
-import { DEFAULT_CODE_THEME, MODULE_SECTIONS } from "@/lib/constants";
-import { OnThisPage } from "@/components/docs/on-this-page";
+import { DEFAULT_CODE_THEME } from "@/lib/constants";
 import { Metadata, Route } from "next";
 import { findNeighbour } from "@/lib/source";
 import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
 
 import { PLAYBOOK_DATA } from "@/data/playbook";
-import { IPlaybook, ModuleSection } from "@/types/app.types";
+import { IPlaybook } from "@/types/app.types";
 import { PrimaryButton } from "@/components/ui/primary-button";
 import siteConfig from "@/lib/site";
 import { cn } from "@/lib/utils";
@@ -20,35 +19,36 @@ import { sliceContent } from "@/utils/slice-content";
 import { ShareMenu } from "@/components/ui/share-menu";
 import { NETWORKING_DATA } from "@/data/networking";
 import { DSA_DATA } from "@/data/dsa";
+import { DocsLayout } from "@/components/layouts/docs-layout";
 
-export const revalidate = false;
-export const dynamic = "force-dynamic";
+export const dynamic = "force-static";
 export const dynamicParams = false;
 
-const DOCS_PATH = path.join(process.cwd(), "/docs");
+const DOCS_PATH = path.join(process.cwd(), "docs");
 
 export async function generateStaticParams() {
   const playbookParams = PLAYBOOK_DATA.map(doc =>
     doc.docs.replace("/docs/", "").split("/").filter(Boolean)
   );
 
-  const dsaParams = DSA_DATA.flatMap(doc =>
+  const dsaParams = DSA_DATA.map(doc =>
     doc.docs.replace("/docs/", "").split("/").filter(Boolean)
   );
 
   const networkingParams = NETWORKING_DATA.flatMap(module => {
-    const params = [
-      module.docs.replace("/docs/", "").split("/").filter(Boolean)
-    ];
+    const moduleSlug = module.docs
+      .replace("/docs/", "")
+      .split("/")
+      .filter(Boolean);
 
-    const topics = module.topics.map(topic =>
-      topic.docs.replace("/docs/", "").split("/").filter(Boolean)
-    );
+    const topicSlugs = module.topics.map(topic => [...moduleSlug, topic.slug]);
 
-    return [...params, ...topics];
+    return [moduleSlug, ...topicSlugs];
   });
 
-  return [...playbookParams, ...dsaParams, ...networkingParams];
+  return [...playbookParams, ...dsaParams, ...networkingParams].map(slug => ({
+    slug
+  }));
 }
 
 export async function generateMetadata(props: {
@@ -97,35 +97,21 @@ function getDocPath(slug?: string[]) {
     return path.join(DOCS_PATH, "index.mdx");
   }
 
-  const [section] = slug;
+  const dir = path.join(DOCS_PATH, ...slug);
 
-  if (section === "playbook") {
-    return path.join(DOCS_PATH, ...slug) + ".mdx";
+  const indexFile = path.join(dir, "index.mdx");
+  const mdxFile = `${dir}.mdx`;
+
+  if (fs.existsSync(indexFile)) {
+    return indexFile;
   }
 
-  if (MODULE_SECTIONS.includes(section as ModuleSection)) {
-    const dir = path.join(DOCS_PATH, ...slug);
-    const index = path.join(dir, "index.mdx");
-
-    return fs.existsSync(index) ? index : `${dir}.mdx`;
+  if (fs.existsSync(mdxFile)) {
+    return mdxFile;
   }
 
   notFound();
 }
-
-// function getDocPath(slug?: string[]) {
-//   if (!slug || slug.length === 0) {
-//     notFound();
-//   }
-
-//   if (slug.length === 2 && slug[1] === "dsa") {
-//     return path.join(DOCS_PATH, "dsa", `${slug.join("/")}.mdx`);
-//   }
-//   if (slug.length === 2 && slug[1] === "playbook") {
-//     return path.join(DOCS_PATH, "playbook", `${slug.join("/")}.mdx`);
-//   }
-//   return path.join(DOCS_PATH, `${slug.join("/")}.mdx`);
-// }
 
 export default async function DocsPage(props: PageProps<"/docs/[[...slug]]">) {
   const params = await props.params;
@@ -151,12 +137,12 @@ export default async function DocsPage(props: PageProps<"/docs/[[...slug]]">) {
   const { content, data } = matter(source);
 
   return (
-    <div className="flex w-full max-w-4xl gap-8 overflow-x-auto px-4 sm:p-0">
-      <div id="docs-content" className="w-full [font-variant-ligatures:none]">
-        <article className="typeset typeset-docs mb-6 max-w-none">
+    <div className="flex w-full gap-8 overflow-x-auto">
+      <DocsLayout>
+        <article className="typeset typeset-docs mb-6 w-full min-w-0 wrap-break-word">
           {/* <article className="prose prose-neutral dark:prose-invert mb-6 max-w-none"> */}
-          <div className="my-4">
-            <div className="flex items-center justify-between gap-4 pr-2">
+          <div className="mt-12 mb-4 w-full">
+            <div className="not-typeset flex w-full items-center justify-between gap-4 pr-2">
               <h2 className="font-inter animate-fade-in-blur text-2xl font-medium">
                 {data.title}
               </h2>
@@ -168,7 +154,6 @@ export default async function DocsPage(props: PageProps<"/docs/[[...slug]]">) {
                 <NextSteps next={next} prev={prev} min />
               </div>
             </div>
-            <OnThisPage />
           </div>
           <MDXRemote
             source={content}
@@ -193,11 +178,11 @@ export default async function DocsPage(props: PageProps<"/docs/[[...slug]]">) {
           />
         </article>
         {(next || prev) && (
-          <div className="border-edge border-t px-2 py-2 pt-4">
+          <div className="border-edge border-t px-2 py-2 pt-4 pb-8">
             <NextSteps next={next} prev={prev} className="mt-3" />
           </div>
         )}
-      </div>
+      </DocsLayout>
     </div>
   );
 }
