@@ -413,7 +413,7 @@ h3 {
   }
 }
 
-.animate-fade-in-blur {
+@utility animate-fade-in-blur {
   animation: fadeInBlur 0.5s ease-out forwards;
   animation-delay: 0.2s;
   opacity: 0.4;

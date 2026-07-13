@@ -269,9 +269,15 @@ export function SearchCommand() {
             </KbdGroup>
           </button>
         }></CommandDialogTrigger>
-      <CommandDialogPopup className={"group rounded-primary relative"}>
+      <CommandDialogPopup
+        className={
+          "group primary-ring rounded-primary relative border dark:bg-neutral-950"
+        }>
         <Command items={groupedItems}>
-          <CommandInput placeholder="Search for apps and commands..." />
+          <CommandInput
+            placeholder="Search for apps and commands..."
+            className={"py-0"}
+          />
           <CommandPanel>
             <CommandEmpty>No results found.</CommandEmpty>
             <CommandList>
@@ -288,7 +294,7 @@ export function SearchCommand() {
                             onClick={() => handleItemClick(item)}
                             value={item.value}
                             className={
-                              "ml-2 flex items-center justify-between px-2 py-1.5"
+                              "ml-2 flex items-center justify-between px-2.5 py-2"
                             }>
                             <div className="flex items-center gap-2">
                               {image ? (

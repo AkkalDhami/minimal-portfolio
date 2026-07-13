@@ -9,6 +9,7 @@ import Link from "next/link";
 import { NETWORKING_DATA } from "@/data/networking";
 import { Route } from "next";
 import { cn } from "@/lib/utils";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const title = {
   dsa: "DSA",
@@ -43,40 +44,42 @@ export function DocsSidebar() {
   }));
 
   return (
-    <aside className="primary-ring fixed top-1/2 left-1 hidden w-74 -translate-y-1/2 space-y-2 rounded-lg border p-2 lg:block">
+    <aside className="primary-ring not-typeset bg-background fixed top-26 left-1.5 z-40 hidden h-full w-74 space-y-2 rounded-lg border p-2 lg:block">
       <h2 className="font-inter text-lg font-medium">
         {title[isDsa ? "dsa" : isPlaybook ? "playbook" : "networking"]}
       </h2>
 
-      {moduleSlug?.trim() ? (
-        <>
-          {filteredModules?.map((m, i) => (
-            <div key={i}>
-              <Link
-                href={m.href as Route}
-                className={cn(
-                  "font-inter hover:text-primary font-medium underline-offset-2 hover:underline",
-                  pathname === m.href
-                    ? "text-primary underline"
-                    : "text-muted-foreground"
-                )}>
-                {m.title}
-              </Link>
-              <LineNav
-                activeHref={pathname}
-                items={m.topics}
-                onItemClick={() => play()}
-              />
-            </div>
-          ))}
-        </>
-      ) : (
-        <LineNav
-          activeHref={pathname}
-          items={items}
-          onItemClick={() => play()}
-        />
-      )}
+      <ScrollArea className={"scroll-fade h-full max-h-120"}>
+        {moduleSlug?.trim() ? (
+          <>
+            {filteredModules?.map((m, i) => (
+              <div key={i}>
+                <Link
+                  href={m.href as Route}
+                  className={cn(
+                    "font-inter hover:text-primary font-medium underline-offset-2 hover:underline",
+                    pathname === m.href
+                      ? "text-primary underline"
+                      : "text-muted-foreground"
+                  )}>
+                  {m.title}
+                </Link>
+                <LineNav
+                  activeHref={pathname}
+                  items={m.topics}
+                  onItemClick={() => play()}
+                />
+              </div>
+            ))}
+          </>
+        ) : (
+          <LineNav
+            activeHref={pathname}
+            items={items}
+            onItemClick={() => play()}
+          />
+        )}
+      </ScrollArea>
     </aside>
   );
 }

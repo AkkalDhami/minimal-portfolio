@@ -23,6 +23,7 @@ interface MenuItem {
   label: string;
   href: Route;
 }
+
 const menuItems: MenuItem[] = [
   {
     label: "Projects",
@@ -119,8 +120,7 @@ export function Navbar() {
               <SiGithub onClick={() => play()} className="size-5" />
             </PrimaryButton>
             <ThemeToggle className="py-1.5" />
-            <PrimaryButton
-              variant="outline"
+            <button
               onClick={() => {
                 setMobileMenuOpen(!mobileMenuOpen);
                 chatScrollPlay();
@@ -128,7 +128,7 @@ export function Navbar() {
               }}
               className="relative px-2 py-1.5 transition-colors md:hidden">
               {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
-            </PrimaryButton>
+            </button>
           </div>
 
           <AnimatePresence>

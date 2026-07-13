@@ -139,7 +139,7 @@ export default async function DocsPage(props: PageProps<"/docs/[[...slug]]">) {
   return (
     <div className="flex w-full gap-8 overflow-x-auto">
       <DocsLayout>
-        <article className="typeset typeset-docs mb-6 w-full min-w-0 wrap-break-word">
+        <article className="typeset animate-fade-in-blur typeset-docs mb-6 w-full min-w-0 wrap-break-word ease-out">
           {/* <article className="prose prose-neutral dark:prose-invert mb-6 max-w-none"> */}
           <div className="mt-12 mb-4 w-full">
             <div className="not-typeset flex w-full items-center justify-between gap-4 pr-2">
