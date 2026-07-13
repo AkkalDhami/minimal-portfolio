@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { Geist, Geist_Mono, Inter, Fira_Code, Manrope } from "next/font/google";
 import "./styles/globals.css";
 import { AnchoredToastProvider, ToastProvider } from "@/components/ui/toast";
@@ -113,7 +114,10 @@ export default function RootLayout({
           <HotkeyProvider>
             <ToastProvider position="top-center">
               <AnchoredToastProvider>
-                <TooltipProvider>{children}</TooltipProvider>
+                <TooltipProvider>
+                  {children}
+                  <Analytics />
+                </TooltipProvider>
               </AnchoredToastProvider>
             </ToastProvider>
           </HotkeyProvider>

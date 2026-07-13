@@ -1,9 +1,10 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "./typeset.css";
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --color-code: #0a0a0a;
+  --color-code: var(--color-neutral-950);
   --color-card-hover: var(--color-card-hover);
   --color-drizzle: var(--color-drizzle);
   --color-motion: var(--color-motion);
@@ -102,7 +103,7 @@
   --border: #e4e4e4;
   --edge: color-mix(in oklab, var(--border) 94%, var(--background));
   --border-hover: var(--color-neutral-400);
-  --input: #ebebeb;
+  --input: var(--color-neutral-300);
   --ring: #000000;
   --chart-1: #ffae04;
   --chart-2: #2d62ef;
@@ -151,7 +152,8 @@
   --color-card-hover: #ffffff0f;
   --color-drizzle: #c5f74f;
   --color-motion: #fff312;
-  --background: var(--color-neutral-950);
+  --background: #000000;
+  /* --background: var(--color-neutral-950); */
   --foreground: #ffffff;
   --card: #090909;
   --card-foreground: #ffffff;
@@ -327,7 +329,7 @@ html {
   }
 
   [data-rehype-pretty-code-figure] {
-    @apply bg-code relative mt-2 mb-8 rounded-lg border;
+    @apply bg-code relative rounded-lg;
     max-width: 840px;
   }
 
