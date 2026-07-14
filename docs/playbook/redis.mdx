@@ -20,6 +20,7 @@ Instead of storing data primarily on disk like PostgreSQL or MySQL, Redis keeps 
 
 > You store data using a key and retrieve it later.
 
+---
 
 ## 2. Why Redis?
 
@@ -54,6 +55,8 @@ PostgreSQL
 - Database load
 - Response time
 - Infrastructure costs
+
+---
 
 ## 3. Installing Redis
 
@@ -94,6 +97,8 @@ const client = new Redis("redis://127.0.0.1:6379");
 client.on("error", (err) => console.log("Redis Client Error:", err));
 ```
 
+---
+
 ## 4. Redis Basic Commands
 
 ### 4.1 SET & get
@@ -112,6 +117,8 @@ console.log('Value for "name":', value);
 Value for "name": John Doe
 ```
 
+---
+
 ### 4.2 DELETE
 
 ```ts
@@ -122,6 +129,8 @@ console.log("Deleted keys count:", deleteCount);
 ```bash
 Deleted keys count: 1
 ```
+
+---
 
 ### 4.3 MSET & MGET
 
@@ -147,6 +156,8 @@ console.log(`Name: ${username}, Age: ${age}, Country: ${country}`);
 Name: Akkal Dhami, Age: 20, Country: Nepal
 ```
 
+---
+
 ### 4.4 LPUSH, RPUSH, LRANGE, LINDEX, LPOP, RPOP
 
 ```ts
@@ -158,6 +169,8 @@ await client.rpush("tasks", "Task 4");
 
 - <Code>LPUSH</Code> inserts at the beginning.
 - <Code>RPUSH</Code> inserts at the end.
+
+<HR />
 
 #### 1. Get all elements
 
@@ -171,6 +184,8 @@ console.log(tasks);
 ["Task 3", "Task 2", "Task 1", "Task 4"]
 </Output>
 
+<HR />
+
 #### 2. Get the first element
 
 ```ts
@@ -183,6 +198,8 @@ console.log(task);
 Task 3
 </Output>
 
+<HR />
+
 #### 3. Get the last element
 
 ```ts
@@ -194,6 +211,8 @@ console.log(task);
 <Output>
 Task 4
 </Output>
+
+<HR />
 
 #### 4. Get a range
 
@@ -209,6 +228,8 @@ console.log(task);
 ["Task 3", "Task 2"]
 </Output>
 
+<HR />
+
 #### 5. Remove and retrieve an item
 
 From the left:
@@ -222,6 +243,8 @@ From the right:
 const task = await client.rpop("tasks");
 console.log(task); // Task 4
 ```
+
+---
 
 ### 4.5 SADD, SMEMBERS, SISMEMBER, SREM
 
@@ -241,6 +264,8 @@ Orange
 Mango
 ```
 
+<HR />
+
 #### 1. Get all members
 
 ```ts
@@ -255,6 +280,7 @@ Fruits: [ 'Apple', 'Banana', 'Orange', 'Mango' ]
 </Output>
 > Sets are unordered, so the order may vary.
 
+<HR />
 
 #### 2. Check if a value exists
 
@@ -273,6 +299,8 @@ Is Banana a member of fruits set? 1
 
 <Code>0</Code> means the value doesnot exist.
 
+<HR />
+
 #### 3. Remove an item
 
 ```ts
@@ -290,6 +318,7 @@ console.log("Updated Fruits:", updatedFruits);
 Updated Fruits: [ 'Orange', 'Banana', 'Mango' ]
 </Output>
 
+---
 
 ### 4.6 HSET, HGET
 
@@ -302,6 +331,7 @@ await client.hSet("user:1", {
 });
 ```
 
+<HR />
 
 #### 2. Get all fields
 
@@ -319,6 +349,8 @@ console.log(user);
 }
 ```
 
+<HR />
+
 #### 3. Get a single field
 
 ```ts
@@ -330,6 +362,8 @@ console.log(name);
 <Output>
 Akkal
 </Output>
+
+<HR />
 
 #### 4. Get multiple fields
 
@@ -345,6 +379,8 @@ console.log(values);
 <Output>
 [ 'Akkal', 'akkal@example.com' ]
 </Output>
+
+<HR />
 
 #### 5. Update a field
 
@@ -366,6 +402,7 @@ console.log(user);
 }
 ```
 
+<HR />
 
 #### 6. Check if a field exists
 
@@ -380,6 +417,8 @@ console.log(exists);
 **Output:** <Code>1</Code>
 
 <Code>1</Code> means the field exists.
+
+<HR />
 
 #### 7. Delete a field
 
@@ -399,6 +438,8 @@ console.log(await client.hGetAll("user:1"));
 }
 ```
 
+<HR />
+
 #### 8. Count fields
 
 ```ts
@@ -408,6 +449,8 @@ console.log(count);
 
 
 **Output:** <Code>2</Code>
+
+<HR />
 
 #### 9. Get only field names
 
@@ -420,6 +463,8 @@ console.log(fields);
 <Output>
 [ 'name', 'email' ]
 </Output>
+
+<HR />
 
 #### 10. Get only values
 

@@ -12,6 +12,7 @@ It is mainly used for:
 - Kubernetes
 - CI/CD pipelines
 
+---
 
 ## 1. YAML Syntax Basics
 
@@ -60,6 +61,7 @@ It is mainly used for:
 </TBody>
 </Table>
 
+---
 
 ## 2. Key-Value Pair
 
@@ -83,6 +85,8 @@ city: Kathmandu
 }
 ```
 
+---
+
 ## 3. Strings
 
 ```yaml title="string.yml"
@@ -94,6 +98,8 @@ framework: 'Express'
 > Quotes are optional unless special characters exist.
 
 
+---
+
 ## 4. Numbers and Boolean
 
 ```yaml title="num_bool.yml"
@@ -103,6 +109,8 @@ price: 99.99
 isAdmin: true
 isLoggedIn: false
 ```
+
+---
 
 ## 5. Arrays (Lists)
 
@@ -117,6 +125,7 @@ languages:
   - Python
 ```
 
+---
 
 ## 6. Objects
 
@@ -126,6 +135,8 @@ user:
   age: 22
   role: developer
 ```
+
+---
 
 ## 7. Nested Objects
 
@@ -175,7 +186,9 @@ company
       └── manager
            ├── name
            └── experience
-```      
+``` 
+
+---
 
 ## 8. Array of Objects
 
@@ -188,12 +201,16 @@ users:
     role: user
 ```
 
+---
+
 ## 9. Comments
 
 ```yaml title="comment.yml"
 # This is comment
 name: Akkal
 ```
+
+---
 
 ## 10. Null Values
 
@@ -202,6 +219,8 @@ middleName: null
 nickname:
 username: ~
 ```
+
+---
 
 ## 11. Multiline Strings
 
@@ -239,6 +258,8 @@ message: >
 Hello This becomes one line
 </Output>
 
+---
+
 ## 12. Environment Example
 
 ```yaml title="env.yml"
@@ -252,6 +273,8 @@ database:
   username: postgres
   password: secret
 ```  
+
+---
 
 ## 13. Anchors and Defaults
 
@@ -273,6 +296,7 @@ production:
   host: prod.server.com
 ```  
 
+---
 
 ## 14. Explicit Data Types
 
@@ -286,6 +310,8 @@ isAdmin: !!bool "true"
 data: !!null ""
 ```
 
+---
+
 ## 15. Docker Compose
 
 ### 15.1 Simple Node.js App
@@ -295,19 +321,16 @@ version: "3"
 services:
   app:
     image: node:20
-
     container_name: my-node-app
-
     ports:
       - "3000:3000"
-
     volumes:
       - .:/app
-
     working_dir: /app
-
-    comm and: npm start
+    command: npm start
 ```
+
+<HR />
 
 ### 15.2. Node.js + MongoDB
 ```yaml title="docker-compose2.yml"
@@ -316,30 +339,21 @@ version: "3"
 services:
   app:
     image: node:20
-
     container_name: backend-app
-
     ports:
       - "5000:5000"
-
     volumes:
       - .:/app
-
     working_dir: /app
-
     command: npm run dev
-
     depends_on:
       - mongo
 
   mongo:
     image: mongo
-
     container_name: mongodb
-
     ports:
       - "27017:27017"
-
     volumes:
       - mongo-data:/data/db
 
@@ -347,31 +361,28 @@ volumes:
   mongo-data:
 ```
 
-### 15.2. Node.js + PostgreSQL
+<HR />
+
+### 15.3. Node.js + PostgreSQL
 ```yaml title="docker-compose3.yml"
 version: "3"
 
 services:
   app:
     image: node:20
-
     ports:
       - "5000:5000"
-
     environment:
-      DATABASE_URL: postgres://postgres:password@db:5432/mydb
-
+      - DATABASE_URL=postgres://postgres:password@db:5432/mydb
     depends_on:
       - db
 
   db:
     image: postgres
-
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: mydb
-
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=mydb
     ports:
       - "5432:5432"
 ```

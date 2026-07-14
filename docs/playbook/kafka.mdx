@@ -7,6 +7,8 @@ Kafka is a distributed event streaming platform.
 
 Event streaming is the practice of capturing real-time data from applications, databases and IoT devices and transporting it to various destinations for immediate processing and storage, or for real-time analysis and analytics reporting.
 
+---
+
 ## 1. Why Kafka Exists
 
 Imagine you're building an ecommerce website.
@@ -53,6 +55,9 @@ Your API has to
 
 Everything becomes overloaded.
 
+
+<HR />
+ 
 #### With Kafka:
 
 Instead of doing everything immediately:
@@ -102,6 +107,8 @@ Anyone interested can collect it later.
 - Kafka does not process data.
 - It only stores and delivers messages.
 
+---
+
 ## 2. Real Life Analogy(Instagram)
 
 When someone uploads a photo:
@@ -123,7 +130,6 @@ When someone uploads a photo:
   Kafka
 ```
 
-
 Then
 
 ```bash
@@ -144,6 +150,7 @@ Analytics
 
 Each service works separately.
 
+---
 
 ## 3. Core Vocabulary
 
@@ -162,6 +169,8 @@ producer.send({
 })
 ```
 
+<HR />
+
 ### 2. Consumer
 
 Reads messages.
@@ -172,6 +181,8 @@ Kafka
   ↓
 Consumer
 ```
+
+<HR />
 
 ### 3. Topic
 
@@ -189,6 +200,8 @@ notifications
 
 Messages are grouped into topics.
 
+<HR />
+
 ### 4. Message
 
 Actual data.
@@ -199,6 +212,8 @@ Actual data.
   "product": "Laptop"
 }
 ```
+
+<HR />
 
 ### 5. Broker
 
@@ -211,6 +226,8 @@ stores
 
 messages
 ```
+
+<HR />
 
 ### 6. Offset
 
@@ -232,6 +249,7 @@ Offset 2
 
 Consumers remember the last offset they processed, allowing them to resume where they left off.
 
+<HR />
 
 #### A Complete Flow
 
@@ -263,6 +281,8 @@ Notice that the producer doesn't know who is consuming the message. It only writ
 <Note text="Kafka is an event log where producers write events and consumers read them independently."/>
 <Note text="It's not a database, not an API framework, and not a replacement for your backend. It's the communication backbone between different parts of your system."/>
 
+---
+
 ## 4. Common Interview Question
 
 ### 1. Why can't an API directly call every service in a large system?
@@ -273,7 +293,7 @@ If one service is slow or unavailable, the entire request can fail. This creates
 
 <Note text="Tight coupling means one service directly depends on another service being available. If one service fails or changes, it can impact other services."/>
 
----
+<HR />
 
 ### 2. What problem does Kafka solve?
 
@@ -281,8 +301,7 @@ Kafka solves the problem of <Code>asynchronous communication</Code> between serv
 
 This reduces <Code>coupling</Code>, improves <Code>scalability</Code>, increases <Code>fault tolerance</Code>, and allows multiple services to react to the same event without affecting the producer.
 
-<br />
----
+<HR />
 
 ### 3. What is a Producer?
 
@@ -298,8 +317,7 @@ Kafka Topic: orders
 </Output>
 The Order API is the producer.
 
-<br />
----
+<HR />
 
 ### 4. What is a Consumer?
 
@@ -320,8 +338,7 @@ Analytics Service
 
 Each service acts as a consumer.
 
-<br />
----
+<HR />
 
 ### 5. What is a Topic?
 
@@ -340,8 +357,7 @@ users
 ```
 Each topic contains events related to that domain.
 
-<br />
----
+<HR />
 
 ### 6. What is an Offset?
 
@@ -358,8 +374,7 @@ Offset 2 → Order 103
 ```
 If a consumer crashes after processing Offset 1, it can restart from Offset 2.
 
-<br />
----
+<HR />
 
 ### 7. Why are Producers and Consumers loosely coupled?
 
@@ -367,16 +382,17 @@ Producers and consumers are loosely coupled because they communicate through Kaf
 
 Consumers can be added, removed, or updated without changing the producer, making the system more flexible and scalable.
 
-<br />
----
+<HR />
 
 ### 8. What is a Partition?
 
-A partition is a subdivision of a Kafka topic. Instead of storing all messages in a single file, Kafka splits a topic into multiple partitions. This allows messages to be processed in parallel by multiple consumers, improving scalability and <Code>throughput</Code>.
+A partition is a subdivision of a Kafka topic. Instead of storing all messages in a single file, Kafka splits a topic into multiple partitions. This allows messages to be processed in parallel by multiple consumers, improving <Code>scalability</Code> and <Code>throughput</Code>.
 
 Every message within a partition has a unique offset. By distributing partitions across brokers, Kafka can scale horizontally and allow multiple consumers to process messages in parallel.
 
 <Note text="Throughput is the amount of data or the number of requests, messages, or transactions a system can process in a given amount of time. In Kafka, partitions increase throughput because they allow multiple consumers to process messages in parallel, enabling the system to handle a much larger volume of messages per second."/>
+
+<HR />
 
 ##### Real Example:
 
@@ -401,7 +417,7 @@ Partition 2:
 1000 orders → Consumer C
 ```
 
----
+<HR />
 
 ### 9. How does Kafka decide which partition receives a message?
 
@@ -426,8 +442,7 @@ For example:
 
 All messages with the key <Code>"user-123"</Code> will always be written to the same partition, preserving their order.
 
-<br />
----
+<HR />
 
 ### 10. What is Kafka?
 

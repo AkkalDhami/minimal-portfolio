@@ -5,6 +5,8 @@ description: Replication and Sharding are two fundamental techniques used to sca
 
 <Code>Replication</Code> and <Code>Sharding</Code> are two fundamental techniques used to scale databases, but they solve different problems.
 
+<HR />
+
 ## 1. What Problem Are We Trying to Solve?
 As applications grow, databases face two major challenges:
 
@@ -15,12 +17,16 @@ As applications grow, databases face two major challenges:
 - News websites
 > One database server may become overloaded.
 
+<HR />
+
 ### ii. Too much data
 **Example:**
 
 - Billions of records
 - Terabytes of storage
 - Single machine runs out of memory and disk
+
+<HR />
 
 ##### Different solutions exist for each problem:
 
@@ -43,6 +49,8 @@ As applications grow, databases face two major challenges:
 </TBody>
 </Table>
 
+---
+
 ## 2. Replication
 
 Replication means keeping multiple copies of the same database on different servers.
@@ -63,6 +71,8 @@ Replication means keeping multiple copies of the same database on different serv
 The primary database receives writes.
 
 > Replicas contain copies of the primary database and mainly serve reads.
+
+<HR />
 
 ### 2.1 Primary-Replica Architecture
 
@@ -87,6 +97,8 @@ Suppose Instagram has:
 - 10 million users.
 - Most requests are reading feeds.
 
+<HR />
+
 #### Without replication:
 ```bash
 Users
@@ -95,6 +107,8 @@ Single Database
 ```
 
 > All traffic hits one server.
+
+<HR />
 
 #### With replication:
 
@@ -108,6 +122,7 @@ Single Database
 
 > Reads are distributed among replicas.
 
+<HR />
 
 ### 2.2 Benefits of Replication
 
@@ -134,6 +149,8 @@ Single Database
 
 - #### Backup and disaster recovery
   Copies exist on multiple machines.
+
+<HR />
 
 ### 2.3 Replication Types
 - #### 1. Synchronous Replication
@@ -179,6 +196,8 @@ Single Database
   **Cons:**
   - Replica may lag behind.
 
+<HR />
+
 ### 2.4 Replication Lag
 
 Suppose: <Highlight>User updates profile picture.</Highlight>
@@ -190,7 +209,9 @@ Replica: <Highlight>Image = old-image.png</Highlight>
 For a few milliseconds or seconds, replicas may contain stale data.
 
 This is called <Code>Replication lag</Code>.
-<br />
+
+---
+
 ## 3. Sharding
 
 Sharding means splitting data across multiple databases. Instead of copies, each server stores only part of the data.
@@ -227,6 +248,8 @@ User IDs 2M - 3M
  (1-1M users)   (1M-2M users)   (2M-3M users)
 ```
 
+<HR />
+
 ### 3.1 Benefits of Sharding
 
 - #### Horizontal scaling:
@@ -241,6 +264,8 @@ User IDs 2M - 3M
 
 - #### No single machine limit:
   Can store billions or trillions of rows.
+
+<HR />
 
 ### 3.2 Sharding Strategies
 
@@ -277,6 +302,8 @@ User IDs 2M - 3M
 
   Useful for reducing latency.
 
+---
+
 ## 4. Replication vs Sharding
 
 ```bash
@@ -290,6 +317,8 @@ User IDs 2M - 3M
 | Data size capacity | Same         | Increased               |
 | Complexity         | Medium       | High                    |
 ```
+
+---
 
 ## 5. Can We Use Both Together?
 
@@ -315,6 +344,7 @@ This gives:
 - Faster reads
 - Fault tolerance
 
+---
 
 ## 6. Mental Model
 
@@ -330,7 +360,7 @@ Room C: Harry Potter
 
 > More people can read simultaneously.
 
-<br />
+---
 
 <Code>Sharding</Code>: Splitting the books among rooms.
 

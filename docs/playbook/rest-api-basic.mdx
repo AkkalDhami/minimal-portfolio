@@ -7,6 +7,8 @@ description: A complete guide to REST API principles and theory with Node.js and
 
 REST is not a protocol or a standard but a **set of architectural constraints**. API developers can implement REST in a variety of ways.
 
+---
+
 ## Core Principles
 
 For an API to be considered RESTful, it typically conforms to the following constraints:
@@ -15,13 +17,19 @@ For an API to be considered RESTful, it typically conforms to the following cons
 
 The client (frontend) and server (backend) act independently. The client should know how to fetch data, and the server should know how to serve it. This separation allows for portability and scalability.
 
+<HR />
+
 ### 2. Statelessness
 
 The server does not store any state about the client session on the server side. Each request from the client to server must contain all of the information necessary to understand the request, and cannot take advantage of any stored context on the server.
 
+<HR />
+
 ### 3. Cacheable
 
 Clients can cache responses. Responses must define themselves as cacheable or not to prevent clients from reusing stale or inappropriate data in response to further requests.
+
+<HR />
 
 ### 4. Resource-Based URLs (Nouns, Not Verbs)
 
@@ -31,6 +39,8 @@ URLs should represent resources, not actions. Use nouns instead of verbs.
 - **Good**: <Code>/api/users</Code>, <Code>/api/users/:id</Code> ✅
 
 <Note text="REST APIs use nouns in URLs and actions are defined by HTTP methods." />
+
+<HR />
 
 ### 5. Proper Use of HTTP Methods
 
@@ -53,6 +63,8 @@ Always use HTTP methods semantically to improve clarity and consistency. Each HT
 
 <Note text="Status codes help clients understand the result without parsing the response body." />
 
+<HR />
+
 ### 6. Consistent Response Structure
 
 Responses should follow a consistent format. Consistency makes APIs easier to consume and debug.
@@ -68,6 +80,8 @@ Responses should follow a consistent format. Consistency makes APIs easier to co
 }
 ```
 
+<HR />
+
 ### 7. Versioning
 
 Always version your API to handle breaking changes gracefully.
@@ -77,9 +91,13 @@ Always version your API to handle breaking changes gracefully.
 /api/v2/users
 ```
 
+<HR />
+
 ### 8. Code on Demand (Optional)
 
 Servers can temporarily extend or customize the functionality of a client by the transfer of executable code (e.g., scripts).
+
+<HR />
 
 ### 9. Filtering, Sorting, and Pagination (Optional)
 
@@ -101,6 +119,8 @@ app.get("/api/users", (req, res) => {
   res.json(result);
 });
 ```
+
+---
 
 ## HTTP Methods
 
@@ -133,6 +153,8 @@ app.get("/api/users/:id", (req, res) => {
 });
 ```
 
+<HR />
+
 ### POST
 
 **Create** a new resource. The payload is sent in the request body.
@@ -153,6 +175,8 @@ app.post("/api/users", (req, res) => {
 });
 ```
 
+<HR />
+
 ### PUT
 
 **Update** or **Replace** a resource entirely. If the resource doesn't exist, it can be created (depending on implementation).
@@ -170,6 +194,8 @@ app.put("/api/users/:id", (req, res) => {
 });
 ```
 
+<HR />
+
 ### PATCH
 
 **Partially Update** a resource. Only the fields sent in the body are updated.
@@ -186,6 +212,8 @@ app.patch("/api/users/:id", (req, res) => {
 });
 ```
 
+<HR />
+
 ### DELETE
 
 **Remove** a resource.
@@ -201,6 +229,8 @@ app.delete("/api/users/:id", (req, res) => {
   res.status(204).send();
 });
 ```
+
+---
 
 ## HTTP Status Codes
 
@@ -252,6 +282,8 @@ export const STATUS_CODES = {
 } as const;
 ```
 
+---
+
 ## Security Best Practices
 
 Securing a REST API is critical for production environments. Below are practical measures you can implement in Node.js.
@@ -259,6 +291,8 @@ Securing a REST API is critical for production environments. Below are practical
 ### 1. Use HTTPS
 
 Always serve your API over HTTPS. SSL/TLS encrypts data in transit, preventing man-in-the-middle attacks.
+
+<HR />
 
 ### 2. Set Security Headers
 
@@ -273,6 +307,8 @@ import helmet from "helmet";
 
 app.use(helmet());
 ```
+
+<HR />
 
 ### 3. Rate Limiting
 
@@ -295,6 +331,8 @@ const limiter = rateLimit({
 app.use(limiter);
 ```
 
+<HR />
+
 ### 4. Configure CORS
 
 Cross-Origin Resource Sharing (CORS) controls which domains can access your API.
@@ -314,6 +352,8 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 ```
+
+<HR />
 
 ### 5. Input Validation
 
@@ -345,6 +385,8 @@ app.post("/api/users", (req, res) => {
 });
 ```
 
+<HR />
+
 ### 6. Authentication & Authorization
 
 Ensure only authenticated users can access protected resources.
@@ -368,6 +410,8 @@ app.get("/api/protected", authenticateToken, (req, res) => {
   // ...
 });
 ```
+
+<HR />
 
 ### 7. Secure Error Handling
 
