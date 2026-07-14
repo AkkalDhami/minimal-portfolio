@@ -27,7 +27,7 @@ export function NetworkingModule({ module }: { module: IModule }) {
     }
   }, [open]);
   return (
-    <div className={"w-full"}>
+    <div className={"no-typeset w-full"}>
       <div
         data-open={open}
         onClick={() => setOpen(open => !open)}

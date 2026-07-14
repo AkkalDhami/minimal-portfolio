@@ -26,6 +26,7 @@ import {
 import { IconType } from "react-icons";
 import { uChatScrollButtonSound } from "@/sounds/chat-scroll";
 import { useSound } from "@/hooks/use-sound";
+import Link from "next/link";
 
 export type SocialLink = {
   name: string;
@@ -107,9 +108,9 @@ export function SocialLinks({
   return (
     <div className={cn("grid grid-cols-2 gap-4 md:grid-cols-4", className)}>
       {socialLinks.map(social => (
-        <a
+        <Link
           key={social.name}
-          href={social.href}
+          href={social.href as Route}
           onClick={() => chatScrollPlay()}
           target="_blank"
           rel="noopener noreferrer"
@@ -126,7 +127,7 @@ export function SocialLinks({
               <LuArrowUpRight className="text-muted-primary group-hover:text-accent-foreground size-4" />
             </div>
           </div>
-        </a>
+        </Link>
       ))}
     </div>
   );
