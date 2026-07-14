@@ -37,6 +37,125 @@ export const NETWORKING_DATA: IModule[] = createModules([
         docs: "/how-the-internet-works",
         description:
           "Learn how the Internet works, what protocols are used, and how data is transmitted over the network."
+      },
+      {
+        slug: "network-architectures",
+        title: "Network Architectures (Client-Server vs Peer-to-Peer)",
+        docs: "/network-architectures",
+        description:
+          "Learn the two primary network architectures—Client-Server and Peer-to-Peer—how they work, their advantages, disadvantages, and real-world use cases."
+      },
+      {
+        slug: "host-and-node",
+        title: "Host vs Node",
+        docs: "/host-and-node",
+        description:
+          "Understand the difference between hosts and nodes and their roles within a computer network."
+      },
+      {
+        slug: "network-interface-card",
+        title: "Network Interface Card (NIC)",
+        docs: "/network-interface-card",
+        description:
+          "Discover how a Network Interface Card enables devices to connect and communicate over a network."
+      },
+      {
+        slug: "mac-address",
+        title: "MAC Address",
+        docs: "/mac-address",
+        description:
+          "Learn what a MAC address is, how it uniquely identifies network interfaces, and how it differs from an IP address."
+      },
+      {
+        slug: "ip-address",
+        title: "IP Address",
+        docs: "/ip-address",
+        description:
+          "Understand IP addresses, their purpose, types, and how devices are identified on a network."
+      },
+      {
+        slug: "hub",
+        title: "Hub",
+        docs: "/hub",
+        description:
+          "Learn how a hub connects devices, broadcasts data, and why it has largely been replaced by switches."
+      },
+      {
+        slug: "switch",
+        title: "Switch",
+        docs: "/switch",
+        description:
+          "Understand how switches intelligently forward data between devices using MAC addresses."
+      },
+      {
+        slug: "router",
+        title: "Router",
+        docs: "/router",
+        description:
+          "Learn how routers connect different networks and direct data packets to their destinations."
+      },
+      {
+        slug: "modem",
+        title: "Modem",
+        docs: "/modem",
+        description:
+          "Understand what a modem does, how it connects your home network to your ISP, and how it differs from a router."
+      },
+      {
+        slug: "gateway",
+        title: "Gateway",
+        docs: "/gateway",
+        description:
+          "Learn what a gateway is and how it enables communication between different networks."
+      },
+      {
+        slug: "firewall",
+        title: "Firewall",
+        docs: "/firewall",
+        description:
+          "Explore how firewalls monitor and control incoming and outgoing network traffic to improve security."
+      },
+      {
+        slug: "network-topologies",
+        title: "Network Topologies",
+        docs: "/network-topologies",
+        description:
+          "Learn about Bus, Star, Ring, Mesh, Tree, and Hybrid topologies, along with their advantages and disadvantages."
+      },
+      {
+        slug: "bandwidth",
+        title: "Bandwidth",
+        docs: "/bandwidth",
+        description:
+          "Understand bandwidth, how it affects network performance, and common misconceptions about Internet speed."
+      },
+      {
+        slug: "latency",
+        title: "Latency",
+        docs: "/latency",
+        description:
+          "Learn what latency is, why it matters, and how it impacts real-time applications."
+      },
+      {
+        slug: "throughput",
+        title: "Throughput",
+        docs: "/throughput",
+        description:
+          "Understand throughput and how it differs from bandwidth in measuring actual network performance."
+      },
+      {
+        slug: "jitter",
+        title: "Jitter",
+        docs: "/jitter",
+        description:
+          "Learn what jitter is, what causes it, and why it affects voice and video communication."
+      },
+      {
+        slug: "packet-loss",
+        title: "Packet Loss",
+        docs: "/packet-loss",
+        description:
+          "Discover what packet loss is, its causes, effects on network performance, and ways to reduce it."
       }
     ]
   }

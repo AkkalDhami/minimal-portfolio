@@ -4,6 +4,8 @@ import { memo, useEffect, useRef } from "react";
 import { motion } from "motion/react";
 
 import { cn } from "@/lib/utils";
+import Link from "next/link";
+import { Route } from "next";
 
 const lineVariants = {
   normal: { width: 24 },
@@ -75,6 +77,8 @@ export function LineNav({
   );
 }
 
+const MotionLink = motion.create(Link);
+
 const LineNavItem = memo(function LineNavItem({
   ref,
   title,
@@ -97,11 +101,11 @@ const LineNavItem = memo(function LineNavItem({
         navigation in Next.js, swap `motion.a` for `motion.create(Link)`
         (import Link from "next/link").
       */}
-      <motion.a
+      <MotionLink
         ref={ref}
         aria-current={active ? "page" : undefined}
         className="group relative flex h-px items-center gap-3 after:absolute after:top-1/2 after:left-0 after:size-full after:-translate-y-1/2 after:p-3.5"
-        href={href}
+        href={href as Route}
         initial={false}
         animate={active ? "active" : "normal"}
         whileHover="hover"
@@ -114,7 +118,7 @@ const LineNavItem = memo(function LineNavItem({
         <span className="text-muted-foreground group-hover:text-foreground group-aria-[current=page]:text-foreground line-clamp-1 text-sm whitespace-nowrap transition-[color] ease-out">
           {title}
         </span>
-      </motion.a>
+      </MotionLink>
 
       {!isLast && (
         <>

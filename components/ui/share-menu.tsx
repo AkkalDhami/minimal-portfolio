@@ -10,6 +10,7 @@ import { ShareIcon, LinkIcon, EllipsisIcon } from "lucide-react";
 import { PrimaryButton } from "./primary-button";
 import { toast } from "./toast";
 import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
+import Link from "next/link";
 
 export type ShareMenuProps = {
   /** Title passed to the native share sheet. */
@@ -56,24 +57,24 @@ export function ShareMenu({ title, url }: ShareMenuProps) {
 
         <DropdownMenuItem
           render={
-            <a
+            <Link
               href={`https://x.com/intent/tweet?url=${urlEncoded}`}
               target="_blank"
               rel="noopener">
               <XIcon />
               Share on X
-            </a>
+            </Link>
           }></DropdownMenuItem>
 
         <DropdownMenuItem
           render={
-            <a
+            <Link
               href={`https://www.linkedin.com/sharing/share-offsite?url=${urlEncoded}`}
               target="_blank"
               rel="noopener">
               <LinkedInIcon />
               Share on LinkedIn
-            </a>
+            </Link>
           }></DropdownMenuItem>
 
         {typeof navigator !== "undefined" && "share" in navigator && (

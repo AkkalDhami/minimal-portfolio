@@ -2,11 +2,12 @@ import { IPlaybook } from "@/types/app.types";
 import { cn } from "@/lib/utils";
 import { cardSlide5Sound } from "@/sounds/card-slide-5";
 import { useSound } from "@/hooks/use-sound";
+import Link from "next/link";
 
 export function PlaybookCard({ data }: { data: IPlaybook }) {
   const [play] = useSound(cardSlide5Sound);
   return (
-    <a
+    <Link
       href={`/docs/playbook/${data.slug}`}
       onClick={() => play()}
       className={cn(
@@ -20,6 +21,6 @@ export function PlaybookCard({ data }: { data: IPlaybook }) {
       {data.description && (
         <p className="text-muted-secondary line-clamp-2">{data.description}</p>
       )}
-    </a>
+    </Link>
   );
 }
