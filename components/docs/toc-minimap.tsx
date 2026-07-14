@@ -8,6 +8,8 @@ import {
   HoverCardTrigger
 } from "@/components/ui/hover-card";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
+import { Route } from "next";
 
 export type TOCItemType = {
   title: React.ReactNode;
@@ -75,13 +77,13 @@ export function TOCMinimap({ items, className }: TOCMinimapProps) {
                     "data-active:[&_a]:text-accent-foreground flex py-1",
                     "data-[depth=3]:pl-4 data-[depth=4]:pl-8"
                   )}>
-                  <a
-                    href={item.url}
+                  <Link
+                    href={item.url as Route}
                     data-depth={item.depth}
                     className="text-muted-foreground hover:text-accent-foreground line-clamp-2 transition-[color] duration-200"
                     onClick={handleItemClick}>
                     {item.title}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>

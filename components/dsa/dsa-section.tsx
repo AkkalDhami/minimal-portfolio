@@ -8,6 +8,8 @@ import { DSA_DATA, IDSA } from "@/data/dsa";
 import { useMemo, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { IconSearch } from "@tabler/icons-react";
+import Link from "next/link";
+import { Route } from "next";
 
 export function DsaSection({ home = false }: { home?: boolean }) {
   const [search, setSearch] = useState("");
@@ -54,8 +56,9 @@ export function DsaSection({ home = false }: { home?: boolean }) {
           <div
             key={t.title}
             className="group animate-fade-in-blur flex flex-col gap-3">
-            <a
-              href={`${t.docs}`}
+            <Link
+              href={t.docs as Route}
+              rel="noopener noreferrer"
               className={cn(
                 "group hover:bg-card-hover screen-line-before relative p-4"
               )}>
@@ -65,7 +68,7 @@ export function DsaSection({ home = false }: { home?: boolean }) {
               <p className="text-muted-secondary line-clamp-3">
                 {t.description}
               </p>
-            </a>
+            </Link>
           </div>
         ))}
       </div>

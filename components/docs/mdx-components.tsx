@@ -14,6 +14,7 @@ import { NetworkingModule } from "./networking-module";
 import { ClientServerDiagram } from "./client-server-diagram";
 import { HowBrowserLoadsWebsite } from "./how-browser-loads-website";
 import { NetworkingCard } from "@/components/networking/networking-card";
+import Link from "next/link";
 
 export const mdxComponents: MDXComponents = {
   Table,
@@ -37,7 +38,10 @@ export const mdxComponents: MDXComponents = {
 
   HR: props => <hr className="my-6" {...props} />,
   HLink: props => (
-    <a className="not-typeset underline-offset-4 hover:underline" {...props} />
+    <Link
+      className="not-typeset underline-offset-4 hover:underline"
+      {...props}
+    />
   ),
   h1: props => (
     <HeadingWithCopy
@@ -86,7 +90,7 @@ export const mdxComponents: MDXComponents = {
     />
   ),
   a: props => (
-    <a
+    <Link
       target="_blank"
       className="text-muted-primary not-typeset animate-fade-in-blur hover:text-foreground underline underline-offset-2"
       {...props}

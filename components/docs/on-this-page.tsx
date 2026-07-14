@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils";
 
 import { TOCItemType, TOCMinimap } from "@/components/docs/toc-minimap";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import Link from "next/link";
 
 type Heading = {
   id: string;
@@ -246,7 +247,7 @@ export function OnThisPage({ docsRef }: Props) {
                         style={{
                           paddingLeft: `${(h.level - 2) * 16}px`
                         }}>
-                        <a
+                        <Link
                           href={`#${h.id}`}
                           className={cn(
                             "block rounded-lg px-3 py-2 transition-all duration-200",
@@ -255,7 +256,7 @@ export function OnThisPage({ docsRef }: Props) {
                               : "text-muted-foreground hover:bg-secondary hover:text-foreground"
                           )}>
                           {h.text}
-                        </a>
+                        </Link>
                       </motion.li>
                     ))}
                   </motion.ul>
