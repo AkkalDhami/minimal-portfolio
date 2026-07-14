@@ -23,6 +23,7 @@ import { DocsLayout } from "@/components/layouts/docs-layout";
 
 export const dynamic = "force-static";
 export const dynamicParams = false;
+export const revalidate = false;
 
 const DOCS_PATH = path.join(process.cwd(), "docs");
 
