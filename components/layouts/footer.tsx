@@ -10,6 +10,23 @@ import { cn } from "@/lib/utils";
 import { cardSlide5Sound } from "@/sounds/card-slide-5";
 import { useSound } from "@/hooks/use-sound";
 import { TextHoverEffect } from "@/components/ui/text-hover-effect";
+import { menuItems } from "./navbar";
+
+const footerLinks = [
+  ...menuItems,
+  {
+    label: "Networking",
+    href: "/networking"
+  },
+  {
+    label: "SQL Playground",
+    href: "/playground/sql"
+  },
+  {
+    label: "DSA",
+    href: "/dsa"
+  }
+];
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -74,22 +91,13 @@ export function Footer() {
                 Navigation
               </h4>
               <ul className="space-y-2">
-                {[
-                  "Home",
-                  "Projects",
-                  "Templates",
-                  "Dev-Setup",
-                  "Playbook",
-                  "Networking",
-                  "Contacts",
-                  "DSA"
-                ].map(item => (
-                  <li key={item}>
+                {footerLinks.map(item => (
+                  <li key={item.href}>
                     <Link
-                      href={`/${item.toLowerCase()}` as Route}
+                      href={item.href as Route}
                       onClick={() => play()}
                       className="text-muted-foreground hover:text-primary text-sm transition-colors">
-                      {item.replaceAll("-", " ")}
+                      {item.label}
                     </Link>
                   </li>
                 ))}

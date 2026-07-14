@@ -18,28 +18,31 @@ import { ThemeToggle } from "@/components/layouts/theme-toggle";
 import { cardSlide5Sound } from "@/sounds/card-slide-5";
 import { useSound } from "@/hooks/use-sound";
 import { uChatScrollButtonSound } from "@/sounds/chat-scroll";
+import { Button } from "@/components/ui/button";
+import { IconVolume, IconVolumeOff } from "@tabler/icons-react";
+import { usePreferencesStore } from "@/hooks/use-preferences";
 
 interface MenuItem {
   label: string;
   href: Route;
 }
 
-const menuItems: MenuItem[] = [
+export const menuItems: MenuItem[] = [
   {
     label: "Projects",
-    href: "/projects" as Route
+    href: "/projects"
   },
   {
     label: "Dev Setup",
-    href: "/dev-setup" as Route
+    href: "/dev-setup"
   },
   {
     label: "Playbook",
-    href: "/playbook" as Route
+    href: "/playbook"
   },
   {
     label: "Templates",
-    href: "/templates" as Route
+    href: "/templates"
   }
 ];
 
@@ -50,7 +53,7 @@ export function Navbar() {
 
   const [play] = useSound(cardSlide5Sound);
   const [chatScrollPlay] = useSound(uChatScrollButtonSound);
-
+  const { soundEnabled, toggleSound } = usePreferencesStore();
   const pathname = usePathname();
 
   useEffect(() => {
@@ -116,7 +119,7 @@ export function Navbar() {
               as="a"
               href={`${GITHUB_URL}/minimal-portfolio` as Route}
               target="_blank"
-              className="relative rounded-lg border-0 px-2 py-2 ring-0">
+              className="relative hidden rounded-lg border-0 px-2 py-2 ring-0 sm:block">
               <SiGithub onClick={() => play()} className="size-5" />
             </PrimaryButton>
             <ThemeToggle className="py-1.5" />
@@ -129,6 +132,9 @@ export function Navbar() {
               className="relative px-2 py-1.5 transition-colors md:hidden">
               {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
+            <Button variant="ghost" size="icon" onClick={toggleSound}>
+              {soundEnabled ? <IconVolume /> : <IconVolumeOff />}
+            </Button>
           </div>
 
           <AnimatePresence>

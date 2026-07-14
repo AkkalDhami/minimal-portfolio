@@ -57,20 +57,7 @@ export const mdxComponents: MDXComponents = {
       {...props}
     />
   ),
-  h3: props => (
-    <HeadingWithCopy
-      tag="h3"
-      baseClassName="this-page-link font-inter"
-      {...props}
-    />
-  ),
-  // h4: props => (
-  //   <HeadingWithCopy
-  //     tag="h4"
-  //     baseClassName="font-inter animate-fade-in-blur mt-4 mb-5 text-xl font-medium tracking-tight"
-  //     {...props}
-  //   />
-  // ),
+  h3: props => <h3 className="this-page-link font-inter" {...props} />,
   h5: props => (
     <h5
       className="animate-fade-in-blur text-accent-foreground text-[18px] font-normal tracking-tight"

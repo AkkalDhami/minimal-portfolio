@@ -273,20 +273,6 @@
   scrollbar-width: thin;
 }
 
-code[data-theme*=" "],
-code[data-theme*=" "] span {
-  color: var(--shiki-light);
-  background-color: var(--shiki-light-bg);
-}
-
-@media (prefers-color-scheme: dark) {
-  code[data-theme*=" "],
-  code[data-theme*=" "] span {
-    color: var(--shiki-dark);
-    background-color: var(--shiki-dark-bg);
-  }
-}
-
 html {
   scroll-behavior: smooth;
 }
@@ -381,6 +367,9 @@ html {
     text-align: right;
     color: var(--color-neutral-400);
   }
+  .shiki {
+    @apply font-mono;
+  }
 }
 
 h2,
@@ -423,4 +412,29 @@ h3 {
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--border) transparent;
+}
+
+/* --- shiki reset: strip its own box/font styling, let our layout own it --- */
+.shiki,
+.shiki pre,
+.shiki code {
+  background-color: transparent !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  overflow: visible !important;
+
+  font-family: inherit !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+  font-weight: inherit !important;
+  letter-spacing: inherit !important;
+  tab-size: inherit !important;
+
+  white-space: inherit !important;
+}
+
+.shiki code {
+  display: inline;
+  counter-reset: line;
 }
