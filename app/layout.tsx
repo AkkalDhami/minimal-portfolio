@@ -8,6 +8,7 @@ import siteConfig from "@/lib/site";
 import { PORTFOLIO_URL, X_USERNAME } from "@/lib/constants";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { HotkeyProvider } from "@/components/providers/hotkey-provider";
+import { ExternalLinkProvider } from "@/components/providers/external-link-provider";
 
 const geistSans = Geist({
   variable: "--font-sans",
@@ -23,11 +24,6 @@ const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"]
 });
-
-// const manrope = Manrope({
-//   variable: "--font-manrope",
-//   subsets: ["latin"]
-// });
 
 const firaCode = Fira_Code({
   variable: "--font-code",
@@ -113,6 +109,7 @@ export default function RootLayout({
           disableTransitionOnChange>
           <HotkeyProvider>
             <ToastProvider position="top-center">
+              <ExternalLinkProvider />
               <AnchoredToastProvider>
                 <TooltipProvider>
                   {children}

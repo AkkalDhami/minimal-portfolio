@@ -19,6 +19,7 @@ import { sliceContent } from "@/utils/slice-content";
 import { ShareMenu } from "@/components/ui/share-menu";
 import { NETWORKING_DATA } from "@/data/networking";
 import { DSA_DATA } from "@/data/dsa";
+import { SQL_DATA } from "@/data/sql";
 import { DocsLayout } from "@/components/layouts/docs-layout";
 
 export const dynamic = "force-static";
@@ -47,7 +48,23 @@ export async function generateStaticParams() {
     return [moduleSlug, ...topicSlugs];
   });
 
-  return [...playbookParams, ...dsaParams, ...networkingParams].map(slug => ({
+  const sqlParams = SQL_DATA.flatMap(module => {
+    const moduleSlug = module.docs
+      .replace("/docs/", "")
+      .split("/")
+      .filter(Boolean);
+
+    const topicSlugs = module.topics.map(topic => [...moduleSlug, topic.slug]);
+
+    return [moduleSlug, ...topicSlugs];
+  });
+
+  return [
+    ...playbookParams,
+    ...dsaParams,
+    ...networkingParams,
+    ...sqlParams
+  ].map(slug => ({
     slug
   }));
 }
