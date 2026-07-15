@@ -14,6 +14,7 @@ import { NetworkingModule } from "./networking-module";
 import { ClientServerDiagram } from "./client-server-diagram";
 import { HowBrowserLoadsWebsite } from "./how-browser-loads-website";
 import { NetworkingCard } from "@/components/networking/networking-card";
+import { SqlPlayground } from "@/components/sql-playground/sql-playground";
 import Link from "next/link";
 
 export const mdxComponents: MDXComponents = {
@@ -35,6 +36,7 @@ export const mdxComponents: MDXComponents = {
   NetworkingModule,
   ClientServerDiagram,
   HowBrowserLoadsWebsite,
+  SqlPlayground: props => <SqlPlayground docs={true} {...props} />,
 
   HR: props => <hr className="my-6" {...props} />,
   HLink: props => (

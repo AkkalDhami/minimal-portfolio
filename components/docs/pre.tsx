@@ -29,7 +29,7 @@ export function Pre({
         ref={ref}
         {...props}
         className={cn(
-          "thin-scrollbar not-typeset bg-code animate-fade-in-blur relative rounded-lg font-mono text-neutral-300",
+          "thin-scrollbar not-typeset bg-code animate-fade-in-blur relative rounded-lg font-mono text-sm text-neutral-300",
           className
         )}>
         <CopyButton

@@ -133,7 +133,11 @@ export function Navbar() {
               {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
             <Button variant="ghost" size="icon" onClick={toggleSound}>
-              {soundEnabled ? <IconVolume /> : <IconVolumeOff />}
+              {soundEnabled ? (
+                <IconVolume className="size-5" />
+              ) : (
+                <IconVolumeOff className="size-5" />
+              )}
             </Button>
           </div>
 

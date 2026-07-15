@@ -10,11 +10,14 @@ import { NETWORKING_DATA } from "@/data/networking";
 import { Route } from "next";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { SQL_DATA } from "@/data/sql";
+import { buttonVariants } from "../ui/button";
 
 const title = {
   dsa: "DSA",
   playbook: "Playbook",
-  networking: "Computer Networking"
+  networking: "Computer Networking",
+  sql: "MySQL"
 };
 
 export function DocsSidebar() {
@@ -25,29 +28,65 @@ export function DocsSidebar() {
   const isDsa = pathname.includes("/docs/dsa");
   const isPlaybook = pathname.includes("/docs/playbook");
   const isNetworking = pathname.includes("/docs/networking");
+  const isSql = pathname.includes("/docs/sql");
 
   const items = getDocsItems(
-    isDsa ? "dsa" : isPlaybook ? "playbook" : "networking"
+    isDsa
+      ? "dsa"
+      : isPlaybook
+        ? "playbook"
+        : isNetworking
+          ? "networking"
+          : "sql"
   );
 
-  const slug = isNetworking ? pathname.split("/docs/networking/")[1] : "";
+  const slug = isNetworking
+    ? pathname.split("/docs/networking/")[1]
+    : pathname.split("/docs/sql/")[1];
 
   const moduleSlug = slug?.split("/")[0];
 
-  const filteredModules = NETWORKING_DATA?.map(m => ({
-    title: m.title,
-    href: `${m.docs}`,
-    topics: m.topics.map(t => ({
-      title: `${t.order}. ${t.title}`,
-      href: `${m.docs}${t.docs}`
-    }))
-  }));
+  const filteredModules = (isNetworking ? NETWORKING_DATA : SQL_DATA || []).map(
+    m => ({
+      title: m.title,
+      href: `${m.docs}`,
+      topics: m.topics.map(t => ({
+        title: `${t.order}. ${t.title}`,
+        href: `${m.docs}${t.docs}`
+      }))
+    })
+  );
 
   return (
-    <aside className="primary-ring not-typeset bg-background fixed top-26 left-1.5 z-40 hidden h-full w-74 space-y-2 rounded-lg border p-2 lg:block">
+    <aside className="primary-ring not-typeset bg-background fixed top-26 left-1.5 z-40 hidden h-full w-74 space-y-2 rounded-lg border p-2 xl:block">
       <h2 className="font-inter text-lg font-medium">
-        {title[isDsa ? "dsa" : isPlaybook ? "playbook" : "networking"]}
+        {
+          title[
+            isDsa
+              ? "dsa"
+              : isPlaybook
+                ? "playbook"
+                : isNetworking
+                  ? "networking"
+                  : "sql"
+          ]
+        }
       </h2>
+
+      {isSql && (
+        <Link
+          target="_blank"
+          href={"/playground/sql"}
+          className={cn(
+            buttonVariants({
+              variant: "outline",
+              size: "sm"
+            }),
+            "w-full font-normal"
+          )}>
+          MySQL Playground
+        </Link>
+      )}
 
       <ScrollArea className={"scroll-fade h-full max-h-120"}>
         {moduleSlug?.trim() ? (
