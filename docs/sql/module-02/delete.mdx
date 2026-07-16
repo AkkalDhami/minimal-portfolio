@@ -1,0 +1,151 @@
+---
+title: Delete - DELETE
+description: Remove rows safely with DELETE and WHERE.
+---
+
+<Code>DELETE</Code> removes rows from a table. Same rule as <Code>UPDATE</Code>: always pair it with <Code>WHERE</Code>, or it removes **every row**.
+
+---
+
+## Basic syntax
+
+```sql title="example.sql"
+DELETE FROM table_name
+WHERE condition;
+```
+
+---
+
+## Deleting one row
+
+```sql title="example.sql"
+DELETE FROM books
+WHERE title = 'Brave New World';
+```
+
+---
+
+## Deleting multiple rows
+
+Any row matching the condition gets removed:
+
+```sql title="example.sql"
+DELETE FROM books
+WHERE in_stock = FALSE;
+```
+
+---
+
+## The most important rule
+
+Leaving off <Code>WHERE</Code> deletes every row in the table:
+
+```sql title="example.sql"
+-- Danger: this deletes ALL books
+DELETE FROM books;
+```
+
+The table itself still exists afterward — just empty. Compare that to <Code>DROP TABLE books;</Code>, which removes the table's structure entirely.
+
+---
+
+## Preview before you delete
+
+Run the same condition as a <Code>SELECT</Code> first, so you know exactly what's about to disappear:
+
+```sql title="example.sql"
+SELECT * FROM books WHERE in_stock = FALSE;
+```
+
+If that returns the rows you expect, swap it for <Code>DELETE</Code>.
+
+---
+
+## DELETE vs TRUNCATE vs DROP
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Command</TH>
+      <TH>What it does</TH>
+      <TH>Keeps table structure?</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD><Code>DELETE</Code></TD>
+      <TD>Removes specific rows matching a condition</TD>
+      <TD>Yes</TD>
+    </TR>
+    <TR>
+      <TD><Code>TRUNCATE</Code></TD>
+      <TD>Removes all rows, resets auto-increment</TD>
+      <TD>Yes</TD>
+    </TR>
+    <TR>
+      <TD><Code>DROP</Code></TD>
+      <TD>Deletes the table entirely, structure included</TD>
+      <TD>No</TD>
+    </TR>
+  </TBody>
+</Table>
+
+<Code>TRUNCATE</Code> is faster than a <Code>DELETE</Code> with no <Code>WHERE</Code>, but it can't be filtered — it always removes everything:
+
+```sql title="example.sql"
+TRUNCATE TABLE books;
+```
+
+---
+
+## MySQL's safety net
+
+Just like <Code>UPDATE</Code>, MySQL's "safe update mode" can block a <Code>DELETE</Code> that doesn't reference a key column in <Code>WHERE</Code> (**Error 1175**). That's intentional protection against accidental mass deletes.
+
+---
+
+## Quick Reference
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Goal</TH>
+      <TH>Example</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>Delete one row</TD>
+      <TD><Code>DELETE FROM books WHERE title = 'Brave New World';</Code></TD>
+    </TR>
+    <TR>
+      <TD>Delete multiple rows</TD>
+      <TD><Code>WHERE in_stock = FALSE</Code></TD>
+    </TR>
+    <TR>
+      <TD>Preview before deleting</TD>
+      <TD>Run the same <Code>WHERE</Code> as a <Code>SELECT</Code> first</TD>
+    </TR>
+    <TR>
+      <TD>Wipe all rows, keep table</TD>
+      <TD><Code>TRUNCATE TABLE books;</Code></TD>
+    </TR>
+    <TR>
+      <TD>Remove table entirely</TD>
+      <TD><Code>DROP TABLE books;</Code></TD>
+    </TR>
+  </TBody>
+</Table>
+
+```sql title="delete-reference.sql"
+-- Deleting one row
+DELETE FROM books
+WHERE title = 'Brave New World';
+
+-- Deleting multiple rows
+DELETE FROM books
+WHERE price > 15;
+
+-- Deleting all rows (be careful!)
+DELETE FROM books;
+```

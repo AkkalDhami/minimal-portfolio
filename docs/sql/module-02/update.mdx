@@ -1,0 +1,157 @@
+---
+title: Update - UPDATE
+description: Modify existing rows safely with UPDATE and WHERE.
+---
+
+<Code>UPDATE</Code> modifies existing rows in a table. Always pair it with <Code>WHERE</Code> — leave that off and it changes **every row** in the table.
+
+---
+
+## Basic syntax
+
+```sql title="example.sql"
+UPDATE table_name
+SET column = value
+WHERE condition;
+```
+
+- <Code>UPDATE</Code> — which table to modify
+- <Code>SET</Code> — the new value(s)
+- <Code>WHERE</Code> — which rows to apply it to
+
+---
+
+## Updating one row
+
+```sql title="example.sql"
+UPDATE books
+SET price = 11.99
+WHERE title = 'Dune';
+```
+
+#### Output:
+
+``` text {5, 14}
+# Before update:
++----+-----------------+---------------+-------+----------+---------------------+
+| id | title           | author        | price | in_stock | created_at          |
++----+-----------------+---------------+-------+----------+---------------------+
+|  1 | Dune            | Frank Herbert | 15.50 |        1 | 2026-07-15 16:34:45 |
+|  2 | 1984            | George Orwell |  9.99 |        1 | 2026-07-15 16:34:45 |
+|  3 | Brave New World | Aldous Huxley | 10.25 |        1 | 2026-07-15 16:34:45 |
++----+-----------------+---------------+-------+----------+---------------------+
+
+# After update:
++----+-----------------+---------------+-------+----------+---------------------+
+| id | title           | author        | price | in_stock | created_at          |
++----+-----------------+---------------+-------+----------+---------------------+
+|  1 | Dune            | Frank Herbert | 11.99 |        1 | 2026-07-15 16:34:45 |
+|  2 | 1984            | George Orwell |  9.99 |        1 | 2026-07-15 16:34:45 |
+|  3 | Brave New World | Aldous Huxley | 10.25 |        1 | 2026-07-15 16:34:45 |
++----+-----------------+---------------+-------+----------+---------------------+
+```
+
+---
+
+## Updating multiple columns at once
+
+Separate each column with a comma:
+
+```sql title="example.sql"
+UPDATE books
+SET price = 8.99, in_stock = FALSE
+WHERE title = '1984';
+```
+
+---
+
+## Updating multiple rows
+
+<Code>WHERE</Code> can match more than one row — every matching row gets updated:
+
+```sql title="example.sql"
+UPDATE books
+SET in_stock = FALSE
+WHERE price > 15;
+```
+
+---
+
+## The most important rule
+
+Forgetting <Code>WHERE</Code> updates the entire table:
+
+```sql title="example.sql"
+-- Danger: this sets EVERY book's price to 0
+UPDATE books
+SET price = 0;
+```
+
+There's no built-in undo once this runs (unless you're inside a transaction — covered in Module 03).
+
+---
+
+## Preview before you update
+
+Run the same condition as a <Code>SELECT</Code> first, to see exactly which rows will be affected:
+
+```sql title="example.sql"
+SELECT * FROM books WHERE title = 'Dune';
+```
+
+If that returns the rows you expect, swap it for the <Code>UPDATE</Code> with confidence.
+
+---
+
+## MySQL's safety net
+
+MySQL's "safe update mode" can block an <Code>UPDATE</Code> that doesn't use a key column in <Code>WHERE</Code>, throwing **Error 1175**. If you hit this, it's protecting you from an accidental mass update — not a bug.
+
+---
+
+## Quick Reference
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Goal</TH>
+      <TH>Example</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>Update one row</TD>
+      <TD><Code>UPDATE books SET price = 11.99 WHERE title = 'Dune';</Code></TD>
+    </TR>
+    <TR>
+      <TD>Update multiple columns</TD>
+      <TD><Code>SET price = 8.99, in_stock = FALSE</Code></TD>
+    </TR>
+    <TR>
+      <TD>Update multiple rows</TD>
+      <TD><Code>WHERE price &gt; 15</Code></TD>
+    </TR>
+    <TR>
+      <TD>Preview before updating</TD>
+      <TD>Run the same <Code>WHERE</Code> as a <Code>SELECT</Code> first</TD>
+    </TR>
+  </TBody>
+</Table>
+
+
+```sql title="update-reference.sql"
+-- Updating one row
+UPDATE books
+SET price = 11.99
+WHERE title = 'Dune';
+
+-- Updating multiple columns at once
+UPDATE books
+SET price = 8.99, in_stock = FALSE
+WHERE title = '1984';
+
+-- Updating multiple rows
+UPDATE books
+SET in_stock = FALSE
+WHERE price > 15;
+```

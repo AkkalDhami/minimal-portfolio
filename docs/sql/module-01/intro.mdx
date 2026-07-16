@@ -1,0 +1,223 @@
+---
+title: Introduction to Databases, SQL, and MySQL
+description: The core theory you need before diving into MySQL — explained simply.
+---
+
+
+Before writing a single query, it helps to understand *what* these things are and *why* they exist. This page covers the basic theory in plain language.
+
+---
+
+## What is a database?
+
+A **database** is an organized place to store data so it can be saved, searched, and updated reliably.
+
+Think of it like a digital filing cabinet:
+- A **spreadsheet** works fine for a few hundred rows.
+- A **database** is built for millions of rows, many people using it at once, and rules that keep the data correct.
+
+**Why not just use files (like a giant CSV or JSON file)?**
+- Files get slow and messy at scale.
+- Multiple people editing the same file at once causes conflicts.
+- Files don't enforce rules — nothing stops you from typing <Code>"twelve"</Code> into a price column.
+
+A database solves all three problems.
+
+---
+
+## What is a DBMS?
+
+A **DBMS (Database Management System)** is the software that actually stores, organizes, and lets you interact with a database. MySQL, PostgreSQL, and SQLite are all examples of a DBMS.
+
+There are two broad families:
+
+<Table>
+<THead>
+<TR>
+<TD>Type</TD>
+<TD>How data is organized</TD>
+<TD>Examples</TD>
+</TR>
+</THead>
+<TBody>
+<TR>
+<TD>**Relational (SQL)**</TD>
+<TD>Structured tables with rows and columns, connected by relationships</TD>
+<TD>MySQL, PostgreSQL, SQL Server</TD>
+</TR>
+<TR>
+<TD>**Non-relational (NoSQL)**</TD>
+<TD>Flexible formats — documents, key-value pairs, graphs</TD>
+<TD>MongoDB, Redis, Cassandra</TD>
+</TR>
+</TBody>
+
+</Table>
+
+This course focuses on **relational databases**, which is where MySQL fits in.
+
+---
+
+## What is a relational database?
+
+A relational database stores data in **tables** — similar to spreadsheet tabs — where:
+
+- Each **table** represents one type of thing (e.g. <Code>books</Code>, <Code>customers</Code>, <Code>orders</Code>)
+- Each **row** is one record (one specific book)
+- Each **column** is one attribute of that record (title, author, price)
+
+Tables can be **related** to each other. For example, an <Code>orders</Code> table can reference which <Code>customer</Code> placed it. That's where the word "relational" comes from.
+
+---
+
+## What is SQL?
+
+**SQL (Structured Query Language)** is the language used to talk to a relational database — to create tables, insert data, ask questions about it, and change it.
+
+SQL isn't tied to one specific database — it's a standard, and most relational databases (MySQL, PostgreSQL, SQL Server) understand a common core of it, with small differences in syntax here and there.
+
+SQL commands generally fall into a few categories:
+
+
+<Table>
+<THead>
+<TR>
+<TD>Category</TD>
+<TD>Purpose</TD>
+<TD>Example commands</TD>
+</TR>
+</THead>
+<TBody>
+<TR>
+<TD>**DDL** (Data Definition Language)</TD>
+<TD>Define the structure of your data</TD>
+<TD><Code>CREATE</Code>, <Code>ALTER</Code>, <Code>DROP</Code></TD>
+</TR>
+<TR>
+<TD>**DML** (Data Manipulation Language)</TD>
+<TD>Work with the actual data</TD>
+<TD><Code>INSERT</Code>, <Code>UPDATE</Code>, <Code>DELETE</Code></TD>
+</TR>
+<TR>
+<TD>**DQL** (Data Query Language)</TD>
+<TD>Ask questions / retrieve data</TD>
+<TD><Code>SELECT</Code></TD>
+</TR>
+<TR>
+<TD>**DCL** (Data Control Language)</TD>
+<TD>Manage permissions</TD>
+<TD><Code>GRANT</Code>, <Code>REVOKE</Code></TD>
+</TR>
+</TBody>
+</Table>
+
+You'll spend most of your early learning in **DDL** and **DML/DQL**.
+
+---
+
+## What is MySQL specifically?
+
+**MySQL** is one specific, very popular implementation of a relational database (a DBMS). It's:
+
+- **Open source** — free to use, widely adopted
+- **Fast and reliable** for typical web applications
+- The database behind huge platforms like Facebook, YouTube, and WordPress-powered sites
+
+MySQL runs as a **server** — a background process that listens for connections and handles queries. Your app (or you, via a terminal or tool like VS Code) connects to that server and sends it SQL commands.
+
+---
+
+## Client-server model
+
+This is the mental model worth locking in early:
+
+1. **MySQL server** — runs somewhere (your laptop, a cloud machine, a Docker container) and manages the actual data
+2. **Client** — anything that connects to the server and sends commands: the <Code>mysql</Code> CLI, VS Code with SQLTools, or your application's code
+
+You (or your app) never touch the data files directly — everything goes through the server, which enforces the rules and keeps things consistent.
+
+[Learn more about the client-server model](/docs/networking/module-01/network-architectures)
+
+---
+
+## A few theory concepts worth knowing early
+
+### Schema
+The **schema** is the blueprint of your database — what tables exist, what columns they have, what types those columns are, and how tables relate to each other. In MySQL, "schema" and "database" are often used interchangeably.
+
+### Record
+A **record** is one row in a table, which represents one specific thing. For example, one row in the <Code>customers</Code> table might represent one specific customer.
+
+### Primary key
+A column (usually <Code>id</Code>) that **uniquely identifies** each row in a table. No two rows can share the same primary key value, and it can never be empty.
+
+### Foreign key
+A column in one table that **points to** the primary key of another table, creating a relationship. Example: an <Code>orders</Code> table might have a <Code>customer_id</Code> column pointing to the <Code>customers</Code> table.
+
+### Data types
+Every column has a declared type — <Code>INT</Code>, <Code>VARCHAR</Code>, <Code>DECIMAL</Code>, <Code>DATE</Code>, and so on — which controls what kind of data it can hold and how it's stored and compared.
+
+### ACID
+
+A set of guarantees that reliable databases follow when handling changes:
+
+<Table> 
+<THead>
+<TR>
+<TD>Letter</TD>
+<TD>Meaning</TD>
+</TR>
+</THead>
+
+<TBody>
+<TR>
+<TD>**A**tomicity</TD>
+<TD>A set of changes either all happen, or none do </TD>
+</TR>
+
+<TR>
+<TD>**C**onsistency</TD>
+<TD>Data always follows the rules you've defined (types, constraints) </TD>
+</TR>
+
+<TR>
+<TD>**I**solation</TD>
+<TD>Multiple things happening at once don't interfere with each other </TD>
+</TR>
+<TR>
+<TD>**D**urability</TD>
+<TD>Once saved, data survives crashes or power loss </TD>
+</TR>
+</TBody>
+</Table>
+
+You don't need to memorize this deeply yet — just know it's *why* databases are trusted for important data like bank transactions.
+
+### Normalization (just the idea, not the full theory)
+Organizing your tables to avoid storing the same piece of information in multiple places. Instead of repeating a customer's name in every order row, you store it once in a <Code>customers</Code> table and reference it by ID. This avoids inconsistencies and wasted space.
+
+[Learn more about normalization](/docs/playbook/normalization)
+
+---
+
+## Putting it together
+
+Here's the flow you'll actually work through:
+
+1. **Design** — decide what tables and columns you need (the schema)
+2. **Create** — use DDL (<Code>CREATE TABLE</Code>) to build that structure in MySQL
+3. **Populate** — use DML (<Code>INSERT</Code>) to add real data
+4. **Query** — use DQL (<Code>SELECT</Code>) to ask questions of that data
+5. **Maintain** — use DML (<Code>UPDATE</Code>, <Code>DELETE</Code>) and constraints to keep it accurate over time
+
+---
+
+## What's next
+
+With this foundation in place, the next docs walk through:
+
+- Setting up MySQL locally with Docker Compose
+- Creating your first table
+- Inserting, reading, updating, and deleting data (CRUD)
+
+Everything from here on is hands-on — you'll be writing real SQL against a real database.

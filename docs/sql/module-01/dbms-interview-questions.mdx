@@ -1,0 +1,234 @@
+---
+title: "DBMS Interview Questions"
+description: "Commonly asked DBMS theory questions and simple, clear answers for interviews."
+---
+
+Common theory questions asked in interviews, with short, clear answers. Good to review after finishing the DBMS Theory Concepts page.
+
+---
+
+### 1. What is a DBMS?
+
+A **DBMS (Database Management System)** is software that stores, organizes, and lets you interact with data reliably — handling storage, retrieval, security, and consistency so applications don't have to manage raw files themselves.
+
+---
+
+### 2. What's the difference between a DBMS and RDBMS?
+
+A DBMS just manages data in general. An **RDBMS (Relational DBMS)** specifically stores data in structured tables with rows and columns, and enforces relationships between them using keys. **MySQL** and **PostgreSQL** are RDBMS; **MongoDB** is a DBMS but not relational.
+
+---
+
+### 3. What is SQL?
+
+**SQL (Structured Query Language)** is the standard language used to create, query, update, and manage data in a relational database.
+
+---
+
+### 4. What's the difference between a Primary Key and a Foreign Key?
+
+A **Primary Key** uniquely identifies each row within its own table and can't be empty or duplicated.
+ 
+A **Foreign Key** is a column in one table that references a Primary Key in another table, creating a relationship between them.
+
+Example: <Code>id</Code> in <Code>customers</Code> is a primary key. <Code>customer_id</Code> in <Code>orders</Code> is a foreign key pointing back to it.
+
+---
+
+### 5. What is normalization? Why is it used?
+
+**Normalization** is organizing tables so each piece of data is stored in exactly one place, avoiding duplication. It's used to prevent inconsistent data, reduce storage waste, and make updates simpler — change a fact once instead of in many rows.
+
+---
+
+### 6. What is denormalization?
+
+**Denormalization** is a database optimization technique that intentionally introduces redundant data into a previously normalized schema to improve read performance and simplify queries.
+
+Unlike **normalization**, which splits data into separate tables to eliminate duplication and ensure consistency, **denormalization** merges tables or duplicates attributes to reduce the computational cost of JOIN operations during data retrieval.
+
+---
+
+### 7. What are ACID properties?
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Property</TH>
+      <TH>Meaning</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>Atomicity</TD>
+      <TD>A set of changes either all succeed or none do</TD>
+    </TR>
+    <TR>
+      <TD>Consistency</TD>
+      <TD>Data always follows defined rules and constraints</TD>
+    </TR>
+    <TR>
+      <TD>Isolation</TD>
+      <TD>Concurrent operations don't interfere with each other</TD>
+    </TR>
+    <TR>
+      <TD>Durability</TD>
+      <TD>Saved changes survive crashes or power loss</TD>
+    </TR>
+  </TBody>
+</Table>
+
+---
+
+### 8. What is a JOIN? Name the common types.
+
+A **JOIN** combines rows from two or more tables based on a related column, usually a foreign key.
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Join Type</TH>
+      <TH>Returns</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>INNER JOIN</TD>
+      <TD>Only rows that match in both tables</TD>
+    </TR>
+    <TR>
+      <TD>LEFT JOIN</TD>
+      <TD>All rows from the left table, matched rows from the right (NULL if no match)</TD>
+    </TR>
+    <TR>
+      <TD>RIGHT JOIN</TD>
+      <TD>All rows from the right table, matched rows from the left (NULL if no match)</TD>
+    </TR>
+    <TR>
+      <TD>FULL JOIN</TD>
+      <TD>All rows from both tables, matched where possible</TD>
+    </TR>
+  </TBody>
+</Table>
+
+---
+
+### 9. What's the difference between <Code>DELETE</Code>, <Code>TRUNCATE</Code>, and <Code>DROP</Code>?
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Command</TH>
+      <TH>What it does</TH>
+      <TH>Can be rolled back?</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD><Code>DELETE</Code></TD>
+      <TD>Removes specific rows matching a condition</TD>
+      <TD>Yes, if inside a transaction</TD>
+    </TR>
+    <TR>
+      <TD><Code>TRUNCATE</Code></TD>
+      <TD>Removes all rows, resets auto-increment, keeps table structure</TD>
+      <TD>Usually no</TD>
+    </TR>
+    <TR>
+      <TD><Code>DROP</Code></TD>
+      <TD>Deletes the entire table, including its structure</TD>
+      <TD>No</TD>
+    </TR>
+  </TBody>
+</Table>
+
+---
+
+### 10. What is a transaction?
+
+A **transaction** is a group of one or more SQL operations executed as a single unit — either all of them succeed, or none do. Managed with <Code>START TRANSACTION</Code>, <Code>COMMIT</Code>, and <Code>ROLLBACK</Code>. Used whenever multiple related changes need to happen together, like transferring money between two accounts.
+
+---
+
+### 11. What is an index? What's the trade-off?
+
+An **index** is a data structure that speeds up how fast the database can find rows matching a condition, similar to a book's index. The trade-off: indexes speed up reads (<Code>SELECT</Code>) but slow down writes (<Code>INSERT</Code>, <Code>UPDATE</Code>, <Code>DELETE</Code>) slightly, since the index has to be updated too.
+
+---
+
+### 12. What is a constraint? Name a few common ones.
+
+A **constraint** is a rule attached to a column that blocks invalid data from being saved. Common ones: <Code>NOT NULL</Code>, <Code>UNIQUE</Code>, <Code>PRIMARY KEY</Code>, <Code>FOREIGN KEY</Code>, <Code>CHECK</Code>, <Code>DEFAULT</Code>.
+
+---
+
+### 13. What's the difference between <Code>WHERE</Code> and <Code>HAVING</Code>?
+
+<Code>WHERE</Code> filters rows *before* grouping happens. <Code>HAVING</Code> filters groups *after* aggregation (like after a <Code>GROUP BY</Code> with <Code>COUNT</Code> or <Code>SUM</Code>). You can't use aggregate functions in <Code>WHERE</Code>, but you can in <Code>HAVING</Code>.
+
+---
+
+### 14. What's the difference between a Primary Key and a Unique Key?
+
+Both prevent duplicate values, but a table can have only **one** Primary Key (and it can't be <Code>NULL</Code>), while it can have **multiple** Unique Keys, and those can allow one <Code>NULL</Code> value depending on the database.
+
+---
+
+### 15. What is the difference between a clustered and non-clustered index?
+
+### Clustered Index
+- Stores the actual table rows in sorted order.
+- A table can have **only one** clustered index.
+- Best for range queries, sorting, and retrieving ordered data.
+
+### Non-Clustered Index
+- Stores a separate index that points to the actual table rows.
+- A table can have **multiple** non-clustered indexes.
+- Best for quickly searching specific columns without changing the table's physical order.
+
+> **Simple analogy:** A clustered index is like arranging books on a shelf alphabetically, while a non-clustered index is like using the index at the back of a book to find a topic.
+
+---
+
+### 16. What is a Foreign Key constraint used for, beyond just linking tables?
+
+It also enforces **referential integrity** — the database will reject an insert or update that references a non-existent row in the parent table, and can be configured to cascade updates/deletes automatically (<Code>ON DELETE CASCADE</Code>).
+
+---
+
+## Quick Recap Table
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Topic</TH>
+      <TH>Key takeaway</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>DBMS vs RDBMS</TD>
+      <TD>RDBMS is relational, structured, uses keys</TD>
+    </TR>
+    <TR>
+      <TD>Primary vs Foreign Key</TD>
+      <TD>One identifies a row, the other links tables</TD>
+    </TR>
+    <TR>
+      <TD>Normalization</TD>
+      <TD>Store each fact once</TD>
+    </TR>
+    <TR>
+      <TD>ACID</TD>
+      <TD>Guarantees safe, reliable transactions</TD>
+    </TR>
+    <TR>
+      <TD>Index</TD>
+      <TD>Faster reads, slightly slower writes</TD>
+    </TR>
+    <TR>
+      <TD>Transaction</TD>
+      <TD>All-or-nothing group of operations</TD>
+    </TR>
+  </TBody>
+</Table>
