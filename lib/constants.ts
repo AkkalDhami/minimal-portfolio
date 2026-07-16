@@ -29,4 +29,9 @@ export const LOCATION = "Kathmandu, Nepal";
 
 export const DEFAULT_CODE_THEME = "vesper";
 
-export const MODULE_SECTIONS = ["networking", "dsa", "playbook"] as const;
+export const MODULE_SECTIONS = [
+  "networking",
+  "dsa",
+  "playbook",
+  "sql"
+] as const;
