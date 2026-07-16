@@ -14,6 +14,7 @@ import {
 } from "@/lib/constants";
 import { CopyButton } from "@/components/docs/copy-button";
 import { cn } from "@/lib/utils";
+import { withUTM } from "@/utils/link";
 
 export const CONTACT_INFO = [
   {
@@ -66,7 +67,7 @@ export function ContactInfo() {
                 {item.href ? (
                   <div className="flex w-full items-center justify-between">
                     <Link
-                      href={item.href as Route}
+                      href={withUTM(item.href) as Route}
                       target="_blank"
                       className="decoration-primary text-sm font-normal underline-offset-4 hover:underline">
                       {item.value}

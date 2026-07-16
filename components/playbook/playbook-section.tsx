@@ -35,7 +35,7 @@ export function PlaybookSection({ home = false }: { home?: boolean }) {
 
   return (
     <Section id="playbook" className={cn("px-0", home && "screen-line-before")}>
-      <div className="mb-6 px-4">
+      <div className="mb-4 px-4">
         <Heading>Backend Playbook</Heading>
 
         <SubHeading className="text-muted-foreground mx-0 max-w-2xl text-lg">

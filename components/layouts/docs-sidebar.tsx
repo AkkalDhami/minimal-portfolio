@@ -12,12 +12,13 @@ import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { SQL_DATA } from "@/data/sql";
 import { buttonVariants } from "../ui/button";
+import { sliceContent } from "@/utils/slice-content";
 
 const title = {
   dsa: "DSA",
   playbook: "Playbook",
   networking: "Computer Networking",
-  sql: "MySQL"
+  sql: "SQL - MySQL"
 };
 
 export function DocsSidebar() {
@@ -51,7 +52,7 @@ export function DocsSidebar() {
       title: m.title,
       href: `${m.docs}`,
       topics: m.topics.map(t => ({
-        title: `${t.order}. ${t.title}`,
+        title: sliceContent(`${t.order}. ${t.title}`, 32),
         href: `${m.docs}${t.docs}`
       }))
     })
@@ -73,22 +74,7 @@ export function DocsSidebar() {
         }
       </h2>
 
-      {isSql && (
-        <Link
-          target="_blank"
-          href={"/playground/sql"}
-          className={cn(
-            buttonVariants({
-              variant: "outline",
-              size: "sm"
-            }),
-            "w-full font-normal"
-          )}>
-          MySQL Playground
-        </Link>
-      )}
-
-      <ScrollArea className={"scroll-fade h-full max-h-120"}>
+      <ScrollArea className={"scroll-fade relative h-full max-h-120"}>
         {moduleSlug?.trim() ? (
           <>
             {filteredModules?.map((m, i) => (
@@ -117,6 +103,20 @@ export function DocsSidebar() {
             items={items}
             onItemClick={() => play()}
           />
+        )}
+        {isSql && (
+          <Link
+            target="_blank"
+            href={"/playground/sql"}
+            className={cn(
+              buttonVariants({
+                variant: "outline",
+                size: "sm"
+              }),
+              "absolute bottom-2 w-full font-normal"
+            )}>
+            MySQL Playground
+          </Link>
         )}
       </ScrollArea>
     </aside>
