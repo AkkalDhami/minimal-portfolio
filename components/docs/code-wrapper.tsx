@@ -13,8 +13,8 @@ export function CodeWrapper({
     <div className="relative bg-transparent">
       <CopyButton
         text={code}
-        docs={true}
-        className="group bg-code absolute top-1/2 right-2 z-10 w-auto -translate-y-1/2 cursor-pointer p-1.5 text-xs hover:bg-neutral-800 dark:hover:bg-neutral-800"
+        docs={false}
+        className="group hover:bg-muted absolute right-2 bottom-2.5 z-10 w-auto cursor-pointer p-1.5 text-xs"
       />
       {children}
     </div>

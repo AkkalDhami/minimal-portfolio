@@ -25,7 +25,7 @@ export async function CodeBlock({
 
   return (
     <div
-      className="relative [&_pre]:max-h-80 [&_pre]:overflow-x-hidden [&_pre]:rounded-b-md [&_pre]:px-4 [&_pre]:py-4 sm:[&_pre]:max-w-[695px]"
+      className="relative [&_pre]:max-h-80 [&_pre]:overflow-x-hidden [&_pre]:rounded-b-md [&_pre]:px-4 [&_pre]:py-4 sm:[&_pre]:max-w-173.75"
       dangerouslySetInnerHTML={{ __html: html }}
     />
   );

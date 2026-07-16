@@ -7,6 +7,8 @@ import { usePackageManager } from "@/hooks/use-package-manager";
 import { click003Sound } from "@/sounds/click-003";
 import { useSound } from "@/hooks/use-sound";
 import { getPackageManagerIcon } from "./icon";
+import { getCodeHighlighter } from "@/lib/code-highlight";
+import { useEffect, useState } from "react";
 
 type ConvertNpmCommandResult = {
   pnpm: string;
@@ -84,10 +86,31 @@ export default function PackageManagerTabs({
   const { pkgManager, setPkgManager } = usePackageManager();
 
   const [play] = useSound(click003Sound);
+  const [html, setHtml] = useState(command);
 
   function onChangePackageManager(pkgManager: PackageManager) {
     setPkgManager(pkgManager);
   }
+
+  useEffect(() => {
+    let cancelled = false;
+    getCodeHighlighter("bash").then(highlighter => {
+      if (cancelled) return;
+      // Trailing space keeps the last blank line's caret position accurate.
+      const out = highlighter.codeToHtml(command.length ? command : " ", {
+        lang: "bash",
+        themes: {
+          light: "min-light",
+          dark: "vesper"
+        },
+        defaultColor: "light-dark()"
+      });
+      setHtml(out);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [command]);
 
   const Icon = getPackageManagerIcon(pkgManager, "size-5.5");
 
@@ -95,15 +118,16 @@ export default function PackageManagerTabs({
     <Tabs
       value={pkgManager}
       className={cn(
-        "bg-code my-4 w-full rounded-lg border border-neutral-800"
+        "dark:bg-code my-4 w-full rounded-lg border bg-neutral-100"
       )}>
       <TabsList
         style={{
-          paddingTop: "3px"
+          paddingTop: "3px",
+          paddingBottom: "3px"
         }}
         variant="underline"
         className={cn(
-          "w-full justify-start border-b border-neutral-800 bg-transparent pt-1 pb-2 pl-3"
+          "w-full justify-start border-b bg-transparent pt-1 pb-2 pl-3"
         )}>
         <div className="mr-3 flex w-5 items-center gap-3 pt-1 pb-1">{Icon}</div>
         <div className="flex items-center gap-1 pt-0">
@@ -113,7 +137,7 @@ export default function PackageManagerTabs({
                 key={m}
                 value={m}
                 className={cn(
-                  "flex items-center gap-3 text-neutral-400 hover:text-white",
+                  "text-muted-foreground hover:text-foreground flex items-center gap-3",
                   "text-base"
                 )}
                 onClick={() => {
@@ -128,19 +152,14 @@ export default function PackageManagerTabs({
       </TabsList>
 
       {Object.entries(convertNpmCommand(command)).map(([key, cmd]) => {
-        const [bin, ...rest] = cmd.split(" ");
-        const remaining = rest.join(" ");
         return (
           <TabsContent key={key} value={key}>
             <CodeWrapper code={cmd}>
-              <pre className="not-typeset overflow-x-auto overscroll-x-contain px-4 pt-1 pb-3">
-                <code
-                  data-slot="code-block"
-                  data-language="bash"
-                  className="font-code leading-none">
-                  <span className="text-[#ffc799]">{bin}</span>{" "}
-                  <span className="text-[#52e1e3]">{remaining}</span>
-                </code>
+              <pre className="not-typeset overflow-x-auto overscroll-x-contain px-4 pt-2 pb-4">
+                <div
+                  dangerouslySetInnerHTML={{ __html: html }}
+                  className="font-code text-base leading-none"
+                />
               </pre>
             </CodeWrapper>
           </TabsContent>
