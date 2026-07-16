@@ -1,0 +1,387 @@
+---
+title: Read - SELECT
+description: Query rows with SELECT, WHERE, ORDER BY, and LIMIT.
+---
+
+
+<Code>SELECT</Code> is how you ask the database questions. If <Code>INSERT</Code> is writing rows into the table, <Code>SELECT</Code> is reading them back out — and you can ask for all of them, some of them, sorted a certain way, or just a few at a time.
+
+We'll use this table for every example below:
+
+```sql title="example.sql"
+INSERT INTO books (title, author, price)
+VALUES
+('Dune', 'Frank Herbert', 15.50),
+('1984', 'George Orwell', 9.99),
+('Brave New World', 'Aldous Huxley', 10.25);
+```
+
+---
+
+## Basic syntax
+
+```sql title="example.sql"
+SELECT column1, column2
+FROM table_name;
+```
+
+- <Code>SELECT</Code> — which columns you want
+- <Code>FROM</Code> — which table to read from
+
+---
+
+## Selecting all columns
+
+Use <Code>*</Code> to get every column, without listing each one:
+
+```sql title="example.sql"
+SELECT * FROM books;
+```
+
+#### Output:
+
+<Output>
++----+-----------------+---------------+-------+----------+---------------------+
+| id | title           | author        | price | in_stock | created_at          |
++----+-----------------+---------------+-------+----------+---------------------+
+|  1 | Dune            | Frank Herbert | 15.50 |        1 | 2026-07-15 16:34:45 |
+|  2 | 1984            | George Orwell |  9.99 |        1 | 2026-07-15 16:34:45 |
+|  3 | Brave New World | Aldous Huxley | 10.25 |        1 | 2026-07-15 16:34:45 |
++----+-----------------+---------------+-------+----------+---------------------+
+</Output>
+
+
+---
+
+## Selecting specific columns
+
+Only pull what you actually need — faster, and easier to read:
+
+```sql title="example.sql"
+SELECT title, price FROM books;
+```
+
+#### Output:
+
+<Output>
++-----------------+-------+
+| title           | price |
++-----------------+-------+
+| Dune            | 15.50 |
+| 1984            |  9.99 |
+| Brave New World | 10.25 |
++-----------------+-------+
+</Output>
+
+---
+
+## Filtering with WHERE
+
+<Code>WHERE</Code> narrows down which rows come back, based on a condition.
+
+```sql title="example.sql"
+SELECT * FROM books
+WHERE price < 12;
+```
+
+<Output>
++----+-----------------+---------------+-------+----------+---------------------+
+| id | title           | author        | price | in_stock | created_at          |
++----+-----------------+---------------+-------+----------+---------------------+
+|  2 | 1984            | George Orwell |  9.99 |        1 | 2026-07-15 16:34:45 |
+|  3 | Brave New World | Aldous Huxley | 10.25 |        1 | 2026-07-15 16:34:45 |
++----+-----------------+---------------+-------+----------+---------------------+
+</Output>
+
+### Common comparison operators
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Operator</TH>
+      <TH>Meaning</TH>
+      <TH>Example</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>=</TD>
+      <TD>Equal to</TD>
+      <TD><Code>WHERE author = 'Frank Herbert'</Code></TD>
+    </TR>
+    <TR>
+      <TD>!= or &lt;&gt;</TD>
+      <TD>Not equal to</TD>
+      <TD><Code>WHERE author != 'Frank Herbert'</Code></TD>
+    </TR>
+    <TR>
+      <TD>&gt; / &lt;</TD>
+      <TD>Greater than / less than</TD>
+      <TD><Code>WHERE price &gt; 10</Code></TD>
+    </TR>
+    <TR>
+      <TD>&gt;= / &lt;=</TD>
+      <TD>Greater/less than or equal to</TD>
+      <TD><Code>WHERE price &lt;= 15</Code></TD>
+    </TR>
+    <TR>
+      <TD>BETWEEN</TD>
+      <TD>Within a range (inclusive)</TD>
+      <TD><Code>WHERE price BETWEEN 10 AND 15</Code></TD>
+    </TR>
+    <TR>
+      <TD>IN</TD>
+      <TD>Matches any value in a list</TD>
+      <TD><Code>WHERE author IN ('George Orwell', 'Aldous Huxley')</Code></TD>
+    </TR>
+    <TR>
+      <TD>LIKE</TD>
+      <TD>Pattern match on text</TD>
+      <TD><Code>WHERE title LIKE 'D%'</Code></TD>
+    </TR>
+    <TR>
+      <TD>IS NULL</TD>
+      <TD>Column has no value</TD>
+      <TD><Code>WHERE author IS NULL</Code></TD>
+    </TR>
+  </TBody>
+</Table>
+
+---
+
+### Combining conditions
+
+Use <Code>AND</Code> / <Code>OR</Code> to combine multiple conditions:
+
+```sql title="example.sql"
+SELECT * FROM books
+WHERE price < 15 AND author = 'George Orwell';
+```
+
+#### Output:
+<Output>
++----+-------+---------------+-------+----------+---------------------+
+| id | title | author        | price | in_stock | created_at          |
++----+-------+---------------+-------+----------+---------------------+
+|  2 | 1984  | George Orwell |  9.99 |        1 | 2026-07-15 16:34:45 |
++----+-------+---------------+-------+----------+---------------------+
+</Output>
+
+---
+
+### Pattern matching with LIKE
+
+<Code>%</Code> matches any number of characters, <Code>_</Code> matches exactly one character.
+
+```sql title="example.sql"
+-- Titles starting with "The"
+SELECT * FROM books WHERE title LIKE 'The%';
+
+-- Titles containing "world" anywhere
+SELECT * FROM books WHERE title LIKE '%world%';
+```
+
+---
+
+## Aliasing — SELECT ... AS
+
+<Code>AS</Code> renames a column (or table) in the query's output, without changing anything in the actual table. It's purely cosmetic for the result set.
+
+
+```sql title="example.sql"
+-- Aliases with AS
+SELECT title AS Title FROM books;
+
+-- Aliases without AS
+SELECT title Title FROM books; 
+
+-- Aliases with AS & quotes
+SELECT title AS "Book Title" FROM books; 
+
+-- Aliases without AS & quotes
+SELECT title Book Title FROM books; -- WRONG
+```
+
+---
+
+```sql title="example.sql"
+SELECT title as "Book Title", price Price FROM books;
+```
+
+#### Output:
+<Output>
++-----------------+-------+
+| Book Title      | Price |
++-----------------+-------+
+| Dune            | 15.50 |
+| 1984            |  9.99 |
+| Brave New World | 10.25 |
++-----------------+-------+
+</Output>
+
+#### Key points:
+
+- <Code>AS</Code> is optional: <Code>SELECT title Title FROM books</Code>;
+- Great for calculated columns: <Code>SELECT price * 0.9 AS discounted_price FROM books</Code>;
+- Table aliases too: <Code>SELECT b.title FROM books AS b</Code>;
+
+
+---
+
+## Sorting with ORDER BY
+
+Controls the order results come back in.
+
+```sql title="example.sql"
+-- Cheapest to most expensive
+SELECT * FROM books
+ORDER BY price ASC;
+
+-- Most expensive to cheapest
+SELECT * FROM books
+ORDER BY price DESC;
+```
+
+<Code>ASC</Code> (ascending) is the default, so you can leave it off if that's what you want.
+
+You can sort by multiple columns — the second column only matters when the first has ties:
+
+```sql title="example.sql"
+SELECT * FROM books
+ORDER BY author ASC, price DESC;
+```
+
+#### Output:
+
+<Output>
++----+-----------------+---------------+-------+----------+---------------------+
+| id | title           | author        | price | in_stock | created_at          |
++----+-----------------+---------------+-------+----------+---------------------+
+|  3 | Brave New World | Aldous Huxley | 10.25 |        1 | 2026-07-15 16:34:45 |
+|  1 | Dune            | Frank Herbert | 15.50 |        1 | 2026-07-15 16:34:45 |
+|  2 | 1984            | George Orwell |  9.99 |        1 | 2026-07-15 16:34:45 |
++----+-----------------+---------------+-------+----------+---------------------+
+</Output>
+
+---
+
+## Limiting results with LIMIT
+
+Restricts how many rows come back — useful for previews, or "top N" queries.
+
+```sql title="example.sql"
+SELECT * FROM books
+ORDER BY price DESC
+LIMIT 2;
+```
+
+This returns just the 2 most expensive books.
+
+---
+
+### Skipping rows with OFFSET
+
+Combine with <Code>OFFSET</Code> to skip a number of rows first — useful for pagination:
+
+```sql title="example.sql"
+-- Skip the first 2 rows, then take the next 2
+SELECT * FROM books
+ORDER BY id
+LIMIT 2 OFFSET 2;
+```
+
+---
+
+## Putting it all together
+
+A realistic query combining everything above:
+
+```sql title="example.sql"
+SELECT title, author, price
+FROM books
+WHERE price < 15
+ORDER BY price DESC
+LIMIT 2;
+```
+
+#### Output:
+
+<Output>
++-----------------+---------------+-------+
+| title           | author        | price |
++-----------------+---------------+-------+
+| Brave New World | Aldous Huxley | 10.25 |
+| 1984            | George Orwell |  9.99 |
++-----------------+---------------+-------+
+</Output>
+
+**Read it like a sentence:** "Give me the title, author, and price from books, where the price is under 15, sorted most expensive first, and only give me the top 2."
+
+Note the order these clauses must appear in: <Code>SELECT</Code> → <Code>FROM</Code> → <Code>WHERE</Code> → <Code>ORDER BY</Code> → <Code>LIMIT</Code>. MySQL will error if you write them out of order.
+
+---
+
+## Quick Reference
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Clause</TH>
+      <TH>Purpose</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD><Code>SELECT</Code></TD>
+      <TD>Choose which columns to return</TD>
+    </TR>
+    <TR>
+      <TD><Code>FROM</Code></TD>
+      <TD>Choose which table to read from</TD>
+    </TR>
+    <TR>
+      <TD><Code>WHERE</Code></TD>
+      <TD>Filter which rows are returned</TD>
+    </TR>
+    <TR>
+      <TD><Code>ORDER BY</Code></TD>
+      <TD>Sort the results</TD>
+    </TR>
+    <TR>
+      <TD><Code>LIMIT</Code></TD>
+      <TD>Cap the number of rows returned</TD>
+    </TR>
+    <TR>
+      <TD><Code>OFFSET</Code></TD>
+      <TD>Skip a number of rows before returning results</TD>
+    </TR>
+  </TBody>
+</Table>
+
+
+```sql title="select-reference.sql"
+-- Select all columns
+SELECT * FROM books;
+
+-- Select specific columns
+SELECT title, author FROM books;
+
+-- Filter by price and author
+SELECT * FROM books
+WHERE price < 15 AND author = 'George Orwell';
+
+-- Cheapest to most expensive
+SELECT * FROM books
+ORDER BY price ASC;
+ 
+-- Most expensive to cheapest
+SELECT * FROM books
+ORDER BY price DESC;
+
+-- Limit results to 2 rows
+SELECT title, author, price
+FROM books
+WHERE price < 15
+ORDER BY price DESC
+LIMIT 2;
+```

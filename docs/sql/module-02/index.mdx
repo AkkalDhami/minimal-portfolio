@@ -1,0 +1,181 @@
+---
+title: MySQL CRUD Operations
+description: A comprehensive guide to MySQL CRUD operations, covering foundational concepts, setup, and real-world applications.
+---
+
+
+## <HLink href="/docs/sql/module-02/create">1. CREATE & INSERT</HLink>
+
+<Code>CREATE TABLE</Code> creates a new table in MySQL. Think of a table as a spreadsheet — <Code>CREATE TABLE</Code> is you typing a new sheet at the bottom.
+
+<Code>CREATE DATABASE</Code> creates a new database in MySQL.
+
+<Code>INSERT</Code> adds new rows into a table. Think of a table as a spreadsheet — <Code>INSERT</Code> is you typing a new row at the bottom.
+
+```sql title="create-reference.sql"
+-- Create database if not exists
+CREATE DATABASE IF NOT EXISTS my_database;
+
+-- Use the database
+USE my_database;
+
+-- Basic table creation
+CREATE TABLE books (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    author VARCHAR(255),
+    price DECIMAL(6,2),
+    in_stock BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- List all tables
+SHOW TABLES;
+
+-- View table structure
+DESCRIBE books;
+-- or
+SHOW COLUMNS FROM books;
+```
+
+
+```sql title="insert-reference.sql"
+-- Single row
+INSERT INTO books (title, author, price)
+VALUES ('The Hobbit', 'J.R.R. Tolkien', 12.99);
+
+-- Multiple rows (bulk insert)
+INSERT INTO books (title, author, price) VALUES
+    ('Dune', 'Frank Herbert', 15.50),
+    ('1984', 'George Orwell', 9.99),
+    ('Brave New World', 'Aldous Huxley', 10.25);
+
+-- All columns, no column list (order-dependent, use with caution)
+INSERT INTO books VALUES 
+(DEFAULT, 'Fahrenheit 451', 'Ray Bradbury', 8.50, TRUE, DEFAULT);
+
+-- Skip row silently if duplicate
+INSERT IGNORE INTO books (title, author, price)
+VALUES ('The Hobbit', 'J.R.R. Tolkien', 12.99);
+```
+
+---
+
+
+## <HLink href="/docs/sql/module-02/select">2. Read - SELECT</HLink> 
+
+<Code>SELECT</Code> is how you ask the database questions. If <Code>INSERT</Code> is writing rows into the table, <Code>SELECT</Code> is reading them back out — and you can ask for all of them, some of them, sorted a certain way, or just a few at a time.
+
+```sql title="select-reference.sql"
+-- Select all columns
+SELECT * FROM books;
+
+-- Select specific columns
+SELECT title, author FROM books;
+
+-- Filter by price and author
+SELECT * FROM books
+WHERE price < 15 AND author = 'George Orwell';
+
+-- Cheapest to most expensive
+SELECT * FROM books
+ORDER BY price ASC;
+ 
+-- Most expensive to cheapest
+SELECT * FROM books
+ORDER BY price DESC;
+
+-- Limit results to 2 rows
+SELECT title, author, price
+FROM books
+WHERE price < 15
+ORDER BY price DESC
+LIMIT 2;
+```
+
+
+---
+
+## <HLink href="/docs/sql/module-02/update">3. Update - UPDATE</HLink>
+
+<Code>UPDATE</Code> modifies existing rows in a table. Always pair it with <Code>WHERE</Code> — leave that off and it changes **every row** in the table.
+
+```sql title="update-reference.sql"
+-- Updating one row
+UPDATE books
+SET price = 11.99
+WHERE title = 'Dune';
+
+-- Updating multiple columns at once
+UPDATE books
+SET price = 8.99, in_stock = FALSE
+WHERE title = '1984';
+
+-- Updating multiple rows
+UPDATE books
+SET in_stock = FALSE
+WHERE price > 15;
+```
+
+---
+
+## <HLink href="/docs/sql/module-02/delete">4. Delete - DELETE</HLink>
+
+<Code>DELETE</Code> removes rows from a table. Same rule as <Code>UPDATE</Code>: always pair it with <Code>WHERE</Code>, or it removes **every row**.
+
+
+```sql title="delete-reference.sql"
+-- Deleting one row
+DELETE FROM books
+WHERE title = 'Brave New World';
+
+-- Deleting multiple rows
+DELETE FROM books
+WHERE price > 15;
+
+-- Deleting all rows (be careful!)
+DELETE FROM books;
+```
+
+---
+
+## <HLink href="/docs/sql/module-02/alter">5. Modify - ALTER</HLink>
+
+```sql title="alter-reference.sql"
+-- Add a column
+ALTER TABLE books
+ADD COLUMN published_year INT;
+
+-- Add a column with a default value
+ALTER TABLE books
+ADD COLUMN currency VARCHAR(3) DEFAULT 'USD';
+
+-- Drop a column (permanently deletes its data)
+ALTER TABLE books
+DROP COLUMN currency;
+
+-- Modify a column's type/size/constraints
+ALTER TABLE books
+MODIFY COLUMN price DECIMAL(8,2);
+
+-- Rename a column
+ALTER TABLE books
+RENAME COLUMN author TO author_name;
+
+-- Rename the table itself
+ALTER TABLE books
+RENAME TO book_catalog;
+
+-- Add a constraint after table creation
+ALTER TABLE books
+ADD CONSTRAINT unique_title UNIQUE (title);
+
+-- Add a foreign key constraint
+ALTER TABLE books
+ADD CONSTRAINT fk_author
+FOREIGN KEY (author_id) REFERENCES authors(id);
+
+-- Drop a constraint
+ALTER TABLE books
+DROP CONSTRAINT unique_title;
+```

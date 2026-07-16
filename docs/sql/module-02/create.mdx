@@ -1,0 +1,531 @@
+---
+title: MySQL - CREATE & INSERT
+description: Learn how to create tables and insert rows in MySQL tables with INSERT.
+---
+
+<Code>CREATE TABLE</Code> creates a new table in MySQL. Think of a table as a spreadsheet — <Code>CREATE TABLE</Code> is you typing a new sheet at the bottom.
+
+<Code>CREATE DATABASE</Code> creates a new database in MySQL.
+
+<Code>INSERT</Code> adds new rows into a table. Think of a table as a spreadsheet — <Code>INSERT</Code> is you typing a new row at the bottom.
+
+---
+
+
+## 1. MySQL CREATE DATABASE
+
+### Syntax
+
+```sql title="syntax.sql"
+CREATE DATABASE database_name;
+```
+
+- <Code>database_name</Code> — the name of the database you're creating
+
+---
+
+### Example
+```sql title="example.sql"
+CREATE DATABASE my_db;
+```
+
+---
+
+### Use the Database
+
+```sql title="use.sql"
+USE my_db;
+```
+
+---
+
+
+### Drop the Database
+
+```sql title="drop.sql"
+DROP DATABASE database_name;
+```
+- <Code>database_name</Code> — the name of the database you're dropping
+
+---
+
+
+## 2. MySQL CREATE TABLE 
+
+### Basic syntax
+
+```sql title="syntax.sql"
+CREATE TABLE table_name (
+    column1 datatype constraints,
+    column2 datatype constraints,
+    column3 datatype constraints
+);
+```
+
+- <Code>table_name</Code> — the name of the table you're creating
+- <Code>column1</Code>, <Code>column2</Code>, <Code>column3</Code> — the names of the columns you're creating
+- <Code>datatype</Code> — the data type of the column
+- <Code>constraints</Code> — any constraints or rules for the column, such as NOT NULL or DEFAULT
+
+---
+
+### Example
+```sql title="example.sql"
+CREATE TABLE books (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    author VARCHAR(255),
+    price DECIMAL(6,2),
+    in_stock BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+Let's break down each line:
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Column</TH>
+      <TH>Meaning</TH>
+    </TR>
+  </THead>
+
+  <TBody>
+    <TR>
+      <TD>
+        <Code>id INT AUTO_INCREMENT PRIMARY KEY</Code>
+      </TD>
+      <TD>
+        A whole number that MySQL generates automatically (1, 2, 3, ...)
+        and uses as the unique identifier for each row.
+      </TD>
+    </TR>
+
+    <TR>
+      <TD>
+        <Code>title VARCHAR(255) NOT NULL</Code>
+      </TD>
+      <TD>
+        Text with a maximum length of 255 characters. This field is
+        required and cannot be empty.
+      </TD>
+    </TR>
+
+    <TR>
+      <TD>
+        <Code>author VARCHAR(255)</Code>
+      </TD>
+      <TD>
+        Text field up to 255 characters. Optional, so it can contain
+        <Code>NULL</Code>.
+      </TD>
+    </TR>
+
+    <TR>
+      <TD>
+        <Code>price DECIMAL(6,2)</Code>
+      </TD>
+      <TD>
+        A fixed-point number with up to 6 digits in total and 2 digits
+        after the decimal point. Ideal for storing money.
+      </TD>
+    </TR>
+
+    <TR>
+      <TD>
+        <Code>in_stock BOOLEAN DEFAULT TRUE</Code>
+      </TD>
+      <TD>
+        Stores a <Code>TRUE</Code> or <Code>FALSE</Code> value. Defaults
+        to <Code>TRUE</Code> if no value is provided.
+      </TD>
+    </TR>
+
+    <TR>
+      <TD>
+        <Code>created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP</Code>
+      </TD>
+      <TD>
+        Automatically stores the date and time when the row is created.
+      </TD>
+    </TR>
+  </TBody>
+</Table>
+
+
+---
+
+### Common MySQL data types
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Type</TH>
+      <TH>Use</TH>
+    </TR>
+  </THead>
+
+  <TBody>
+    <TR>
+      <TD>
+        <Code>INT</Code>
+      </TD>
+      <TD>
+        Whole numbers.
+      </TD>
+    </TR>
+
+    <TR>
+      <TD>
+        <Code>VARCHAR(n)</Code>
+      </TD>
+      <TD>
+        Short text with a maximum length of <Code>n</Code> characters.
+      </TD>
+    </TR>
+
+    <TR>
+      <TD>
+        <Code>TEXT</Code>
+      </TD>
+      <TD>
+        Long text content such as articles, descriptions, or comments.
+      </TD>
+    </TR>
+
+    <TR>
+      <TD>
+        <Code>DECIMAL(p,s)</Code>
+      </TD>
+      <TD>
+        Exact numbers used for money and measurements.
+      </TD>
+    </TR>
+
+    <TR>
+      <TD>
+        <Code>BOOLEAN</Code>
+      </TD>
+      <TD>
+        Stores a true or false value.
+      </TD>
+    </TR>
+
+    <TR>
+      <TD>
+        <Code>DATE</Code>
+      </TD>
+      <TD>
+        Stores only a date, for example <Code>2026-07-14</Code>.
+      </TD>
+    </TR>
+
+    <TR>
+      <TD>
+        <Code>TIMESTAMP</Code> / <Code>DATETIME</Code>
+      </TD>
+      <TD>
+        Stores both date and time together.
+      </TD>
+    </TR>
+  </TBody>
+</Table>
+
+#### Key building blocks (constraints)
+
+- <Code>PRIMARY KEY</Code> — uniquely identifies each row; every table should have one
+- <Code>AUTO_INCREMENT</Code> — MySQL fills this in for you, counting up automatically
+- <Code>NOT NULL</Code> — this column can't be left blank
+- <Code>DEFAULT</Code> <Code> value</Code> — if you don't provide a value, use this one instead
+- <Code>UNIQUE</Code> <Code>value</Code> — no two rows can have the same value in this column (e.g. <Code>email VARCHAR(255) UNIQUE</Code>)
+
+### Common MySQL constraints
+<Table>
+  <THead>
+    <TR>
+      <TH>Constraint</TH>
+      <TH>Purpose</TH>
+      <TH>Example</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD><Code>PRIMARY KEY</Code></TD>
+      <TD>Uniquely identifies each row; can't be NULL, only one per table</TD>
+      <TD><Code>id INT PRIMARY KEY</Code></TD>
+    </TR>
+    <TR>
+      <TD><Code>AUTO_INCREMENT</Code></TD>
+      <TD>Automatically generates the next number for a column</TD>
+      <TD><Code>id INT AUTO_INCREMENT</Code></TD>
+    </TR>
+    <TR>
+      <TD><Code>NOT NULL</Code></TD>
+      <TD>Column must always have a value, can't be left empty</TD>
+      <TD><Code>title VARCHAR(255) NOT NULL</Code></TD>
+    </TR>
+    <TR>
+      <TD><Code>UNIQUE</Code></TD>
+      <TD>No two rows can share the same value in this column</TD>
+      <TD><Code>email VARCHAR(255) UNIQUE</Code></TD>
+    </TR>
+    <TR>
+      <TD><Code>DEFAULT</Code></TD>
+      <TD>Sets a fallback value used when none is provided</TD>
+      <TD><Code>in_stock BOOLEAN DEFAULT TRUE</Code></TD>
+    </TR>
+    <TR>
+      <TD><Code>CHECK</Code></TD>
+      <TD>Validates that a value meets a condition before it's saved</TD>
+      <TD><Code>price DECIMAL(6,2) CHECK (price &gt; 0)</Code></TD>
+    </TR>
+    <TR>
+      <TD><Code>FOREIGN KEY</Code></TD>
+      <TD>Links a column to a primary key in another table, enforcing valid references</TD>
+      <TD><Code>author_id INT, FOREIGN KEY (author_id) REFERENCES authors(id)</Code></TD>
+    </TR>
+    <TR>
+      <TD><Code>INDEX / KEY</Code></TD>
+      <TD>Speeds up lookups on a column, without enforcing uniqueness</TD>
+      <TD><Code>INDEX idx_title (title)</Code></TD>
+    </TR>
+  </TBody>
+</Table>
+
+
+---
+
+### See the Table Structure
+
+```sql title="describe.sql"
+DESC books;
+
+# or
+
+SHOW COLUMNS FROM books;
+```
+
+**Output**
+```
+mysql> DESC books;
++------------+--------------+------+-----+-------------------+-------------------+
+| Field      | Type         | Null | Key | Default           | Extra             |
++------------+--------------+------+-----+-------------------+-------------------+
+| id         | int          | NO   | PRI | NULL              | auto_increment    |
+| title      | varchar(255) | NO   |     | NULL              |                   |
+| author     | varchar(255) | YES  |     | NULL              |                   |
+| price      | decimal(6,2) | YES  |     | NULL              |                   |
+| in_stock   | tinyint(1)   | YES  |     | 1                 |                   |
+| created_at | timestamp    | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
++------------+--------------+------+-----+-------------------+-------------------+
+6 rows in set (0.03 sec)
+```
+
+---
+
+### Drop the Table
+```sql title="drop.sql"
+DROP TABLE table_name;
+```
+- <Code>table_name</Code> — the name of the table you're dropping
+
+---
+
+## 3. MySQL INSERT
+
+### Basic syntax
+
+```sql title="syntax.sql"
+INSERT INTO table_name (column1, column2, column3)
+VALUES (value1, value2, value3);
+```
+
+- <Code>table_name</Code> — which table you're adding to
+- The column list tells MySQL which columns you're filling in
+- <Code>VALUES</Code> supplies the actual data, in the same order as the columns
+
+
+---
+
+### Examples
+
+#### Inserting one row
+
+```sql title="example.sql"
+INSERT INTO books (title, author, price)
+VALUES ('The Hobbit', 'J.R.R. Tolkien', 12.99);
+```
+
+Notice <Code>id</Code> isn't mentioned — because it's <Code>AUTO_INCREMENT</Code>, MySQL assigns it automatically (1, 2, 3...). Same with <Code>in_stock</Code> if it has a <Code>DEFAULT</Code> value — you can skip columns that have defaults or are optional.
+
+
+#### Confirming the insertion
+
+```
+mysql> SELECT * FROM books;
++----+------------+----------------+-------+----------+---------------------+
+| id | title      | author         | price | in_stock | created_at          |
++----+------------+----------------+-------+----------+---------------------+
+|  1 | The Hobbit | J.R.R. Tolkien | 12.99 |        1 | 2026-07-14 18:41:39 |
++----+------------+----------------+-------+----------+---------------------+
+1 row in set (0.00 sec)
+```
+
+---
+
+
+#### Bulk insert — multiple rows at once
+
+```sql title="example.sql"
+INSERT INTO books (title, author, price) 
+VALUES
+('Dune', 'Frank Herbert', 15.50),
+('1984', 'George Orwell', 9.99),
+('Brave New World', 'Aldous Huxley', 10.25);
+```
+
+##### Always name your columns
+
+You can skip the column list, but then you must supply a value for every column in exact table order:
+
+```sql title="example.sql"
+INSERT INTO books VALUES
+(DEFAULT, 'Fahrenheit 451', 'Ray Bradbury', 8.50, TRUE, DEFAULT);
+```
+
+Avoid this pattern because it depends on the current table order. If columns are added, removed, or reordered later, your query may fail or insert data into unexpected columns. Always mention the column names explicitly.
+
+---
+
+### Handling duplicates
+If <Code>title</Code> had a <Code>UNIQUE</Code> constraint and you tried inserting a duplicate, MySQL would throw an error. Two ways to handle it:
+
+```sql title="example.sql"
+-- Skip silently instead of erroring
+INSERT IGNORE INTO books (title, author, price)
+VALUES ('The Hobbit', 'J.R.R. Tolkien', 12.99);
+
+-- Or update the existing row instead
+INSERT INTO books (title, author, price)
+VALUES ('The Hobbit', 'J.R.R. Tolkien', 13.99)
+ON DUPLICATE KEY UPDATE price = 13.99;
+```
+
+---
+
+### Common mistake
+
+Mixing up column order:
+
+```sql title="test.sql"
+-- WRONG — price and author swapped
+INSERT INTO books (title, author, price)
+VALUES ('Dune', 15.50, 'Frank Herbert');
+```
+
+This either errors out or silently inserts garbage — always double-check the order matches.
+
+---
+
+## 4. CREATE commands — quick reference
+
+```sql title="example.sql"
+-- Create database if not exists
+CREATE DATABASE IF NOT EXISTS my_database;
+
+-- Use the database
+USE my_database;
+
+-- Basic table creation
+CREATE TABLE books (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    author VARCHAR(255),
+    price DECIMAL(6,2),
+    in_stock BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- List all tables
+SHOW TABLES;
+
+-- View table structure
+DESCRIBE books;
+-- or
+SHOW COLUMNS FROM books;
+```
+---
+
+## 5. INSERT commands — quick reference
+
+```sql title="example.sql"
+-- Single row
+INSERT INTO books (title, author, price)
+VALUES ('The Hobbit', 'J.R.R. Tolkien', 12.99);
+
+-- Multiple rows (bulk insert)
+INSERT INTO books (title, author, price) VALUES
+    ('Dune', 'Frank Herbert', 15.50),
+    ('1984', 'George Orwell', 9.99),
+    ('Brave New World', 'Aldous Huxley', 10.25);
+
+-- All columns, no column list (order-dependent, use with caution)
+INSERT INTO books VALUES 
+(DEFAULT, 'Fahrenheit 451', 'Ray Bradbury', 8.50, TRUE, DEFAULT);
+
+-- Skip row silently if duplicate
+INSERT IGNORE INTO books (title, author, price)
+VALUES ('The Hobbit', 'J.R.R. Tolkien', 12.99);
+
+-- Update existing row if duplicate found
+INSERT INTO books (title, author, price)
+VALUES ('The Hobbit', 'J.R.R. Tolkien', 13.99)
+ON DUPLICATE KEY UPDATE price = 13.99;
+
+-- Verify
+SELECT * FROM books;
+```
+
+{/* <SqlPlayground  query="-- Basic table creation
+CREATE TABLE books (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    author VARCHAR(255),
+    price DECIMAL(6,2),
+    in_stock BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+ 
+-- List all tables
+SHOW TABLES;
+ 
+-- View table structure
+DESCRIBE books;
+-- or
+SHOW COLUMNS FROM books;
+
+-- Single row
+INSERT INTO books (title, author, price)
+VALUES ('The Hobbit', 'J.R.R. Tolkien', 12.99);
+ 
+-- Multiple rows (bulk insert)
+INSERT INTO books (title, author, price) VALUES
+    ('Dune', 'Frank Herbert', 15.50),
+    ('1984', 'George Orwell', 9.99),
+    ('Brave New World', 'Aldous Huxley', 10.25);
+ 
+-- All columns, no column list (order-dependent, use with caution)
+INSERT INTO books VALUES (DEFAULT, 'Fahrenheit 451', 'Ray Bradbury', 8.50, TRUE, DEFAULT);
+ 
+-- Skip row silently if duplicate
+INSERT IGNORE INTO books (title, author, price)
+VALUES ('The Hobbit', 'J.R.R. Tolkien', 12.99);
+ 
+-- Update existing row if duplicate found
+INSERT INTO books (title, author, price)
+VALUES ('The Hobbit', 'J.R.R. Tolkien', 13.99)
+ON DUPLICATE KEY UPDATE price = 13.99;
+ 
+-- Verify
+SELECT * FROM books;"/> */}

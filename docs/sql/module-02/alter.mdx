@@ -1,0 +1,211 @@
+---
+title: Alter - ALTER TABLE
+description: Change a table's structure - add, modify, rename, or drop columns.
+---
+
+
+<Code>ALTER TABLE</Code> changes a table's *structure* — adding, removing, renaming, or changing columns. This is different from CRUD, which changes the *data inside* the table. Think of <Code>ALTER</Code> as editing the spreadsheet's columns, not the rows.
+
+---
+
+## Adding a column
+
+```sql title="example.sql"
+ALTER TABLE books
+ADD COLUMN published_year INT;
+```
+
+#### Before adding a column
+
+```
+mysql> SHOW COLUMNS FROM books;
++------------+--------------+------+-----+-------------------+-------------------+
+| Field      | Type         | Null | Key | Default           | Extra             |
++------------+--------------+------+-----+-------------------+-------------------+
+| id         | int          | NO   | PRI | NULL              | auto_increment    |
+| title      | varchar(255) | NO   |     | NULL              |                   |
+| author     | varchar(255) | YES  |     | NULL              |                   |
+| price      | decimal(6,2) | YES  |     | NULL              |                   |
+| in_stock   | tinyint(1)   | YES  |     | 1                 |                   |
+| created_at | timestamp    | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
++------------+--------------+------+-----+-------------------+-------------------+
+```
+
+#### After adding a column
+
+```text {10}
++----------------+--------------+------+-----+-------------------+-------------------+
+| Field          | Type         | Null | Key | Default           | Extra             |
++----------------+--------------+------+-----+-------------------+-------------------+
+| id             | int          | NO   | PRI | NULL              | auto_increment    |
+| title          | varchar(255) | NO   |     | NULL              |                   |
+| author         | varchar(255) | YES  |     | NULL              |                   |
+| price          | decimal(6,2) | YES  |     | NULL              |                   |
+| in_stock       | tinyint(1)   | YES  |     | 1                 |                   |
+| created_at     | timestamp    | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
+| published_year | int          | YES  |     | NULL              |                   |
++----------------+--------------+------+-----+-------------------+-------------------+
+```
+
+New rows can now include a value for <Code>published_year</Code>; existing rows get <Code>NULL</Code> for it unless you also set a <Code>DEFAULT</Code>.
+
+```sql title="example.sql"
+ALTER TABLE books
+ADD COLUMN currency VARCHAR(3) DEFAULT 'USD';
+```
+
+---
+
+## Dropping a column
+
+```sql title="example.sql"
+ALTER TABLE books
+DROP COLUMN currency;
+```
+
+This permanently removes the column **and all data in it** — no undo.
+
+---
+
+## Modifying a column's type or constraints
+
+```sql title="example.sql"
+ALTER TABLE books
+MODIFY COLUMN price DECIMAL(8,2);
+```
+
+<Code>MODIFY COLUMN</Code> changes the definition (type, size, nullability) while keeping the column name the same.
+
+---
+
+## Renaming a column
+
+```sql title="example.sql"
+ALTER TABLE books
+RENAME COLUMN author TO author_name;
+```
+
+---
+
+## Renaming a table
+
+```sql title="example.sql"
+ALTER TABLE books
+RENAME TO book_catalog;
+```
+
+---
+
+## Adding a constraint after the fact
+
+You don't have to define constraints only at <Code>CREATE TABLE</Code> time — you can add them later:
+
+```sql title="example.sql"
+ALTER TABLE books
+ADD CONSTRAINT unique_title UNIQUE (title);
+```
+
+Or add a foreign key once a related table exists:
+
+```sql title="example.sql"
+ALTER TABLE books
+ADD CONSTRAINT fk_author
+FOREIGN KEY (author_id) REFERENCES authors(id);
+```
+
+---
+
+## Dropping a constraint
+
+```sql title="example.sql"
+ALTER TABLE books
+DROP CONSTRAINT unique_title;
+```
+
+---
+
+## A word of caution
+
+<Code>ALTER TABLE</Code> on a large table (millions of rows) can be slow and, in some cases, lock the table while it runs — meaning other queries have to wait. This matters more once you're working with real production data; for now, on a small learning table, it's instant and safe to experiment with.
+
+---
+
+## Quick Reference
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Goal</TH>
+      <TH>Example</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>Add a column</TD>
+      <TD><Code>ALTER TABLE books ADD COLUMN published_year INT;</Code></TD>
+    </TR>
+    <TR>
+      <TD>Drop a column</TD>
+      <TD><Code>ALTER TABLE books DROP COLUMN currency;</Code></TD>
+    </TR>
+    <TR>
+      <TD>Change a column's type</TD>
+      <TD><Code>ALTER TABLE books MODIFY COLUMN price DECIMAL(8,2);</Code></TD>
+    </TR>
+    <TR>
+      <TD>Rename a column</TD>
+      <TD><Code>ALTER TABLE books RENAME COLUMN author TO author_name;</Code></TD>
+    </TR>
+    <TR>
+      <TD>Rename a table</TD>
+      <TD><Code>ALTER TABLE books RENAME TO book_catalog;</Code></TD>
+    </TR>
+    <TR>
+      <TD>Add a constraint</TD>
+      <TD><Code>ALTER TABLE books ADD CONSTRAINT unique_title UNIQUE (title);</Code></TD>
+    </TR>
+    <TR>
+      <TD>Drop a constraint</TD>
+      <TD><Code>ALTER TABLE books DROP CONSTRAINT unique_title;</Code></TD>
+    </TR>
+  </TBody>
+</Table>
+
+```sql title="alter-reference.sql"
+-- Add a column
+ALTER TABLE books
+ADD COLUMN published_year INT;
+
+-- Add a column with a default value
+ALTER TABLE books
+ADD COLUMN currency VARCHAR(3) DEFAULT 'USD';
+
+-- Drop a column (permanently deletes its data)
+ALTER TABLE books
+DROP COLUMN currency;
+
+-- Modify a column's type/size/constraints
+ALTER TABLE books
+MODIFY COLUMN price DECIMAL(8,2);
+
+-- Rename a column
+ALTER TABLE books
+RENAME COLUMN author TO author_name;
+
+-- Rename the table itself
+ALTER TABLE books
+RENAME TO book_catalog;
+
+-- Add a constraint after table creation
+ALTER TABLE books
+ADD CONSTRAINT unique_title UNIQUE (title);
+
+-- Add a foreign key constraint
+ALTER TABLE books
+ADD CONSTRAINT fk_author
+FOREIGN KEY (author_id) REFERENCES authors(id);
+
+-- Drop a constraint
+ALTER TABLE books
+DROP CONSTRAINT unique_title;
+```
