@@ -21,7 +21,8 @@ const buttonVariants = cva(
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         link: "text-primary underline-offset-4 hover:underline !p-0 !h-auto",
         glass:
-          "bg-background/20 backdrop-blur-md border border-white/10 text-foreground hover:bg-background/30 hover:border-white/20"
+          "bg-background/20 backdrop-blur-md border border-white/10 text-foreground hover:bg-background/30 hover:border-white/20",
+        success: "bg-green-600 text-white hover:bg-green-600/90"
       },
       size: {
         default: "h-10 px-6 gap-2",
