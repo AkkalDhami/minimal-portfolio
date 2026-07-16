@@ -1,0 +1,44 @@
+---
+title: "Setup PostgreSQL (Docker Compose edition)"
+description: "Learn how to setup PostgreSQL in Docker."
+---
+
+
+Docker Compose is a great way to run MySQL — no messy local installs, and it's easy to wipe and restart if you mess something up.
+
+---
+
+## 1. Create a Docker Compose file
+
+Create a file named <Code>docker-compose.yml</Code> in the same directory as your MySQL setup script.
+
+```yml title="docker-compose.yml"
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql-learn
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DB: mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysqldata:/var/lib/mysql
+
+volumes:
+  mysqldata:
+```
+
+---
+
+## 2. Start the MySQL container
+```bash
+docker compose up -d
+```
+
+```bash
+docker compose down        # stops the container, keeps your data
+docker compose down -v     # stops it AND deletes the data volume (full reset)
+```

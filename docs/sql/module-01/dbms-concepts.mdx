@@ -1,0 +1,254 @@
+---
+title: "DBMS Theory Concepts"
+description: "Relational vs non-relational, keys, normalization, ACID, and schema design basics."
+---
+
+
+These are the core ideas every relational database is built on. Understanding them makes everything you do later — tables, queries, joins — click into place faster.
+
+---
+
+## Relational vs Non-Relational Databases
+
+A **relational database** stores data in tables made of rows and columns, connected to each other through relationships. A **non-relational database** stores data in more flexible shapes, like documents or key-value pairs.
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Aspect</TH>
+      <TH>Relational (SQL)</TH>
+      <TH>Non-Relational (NoSQL)</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>Structure</TD>
+      <TD>Fixed schema, tables with rows and columns</TD>
+      <TD>Flexible schema, documents or key-value pairs</TD>
+    </TR>
+    <TR>
+      <TD>Relationships</TD>
+      <TD>Enforced via foreign keys</TD>
+      <TD>Usually handled in application code</TD>
+    </TR>
+    <TR>
+      <TD>Consistency</TD>
+      <TD>Strong, follows ACID</TD>
+      <TD>Often eventual consistency</TD>
+    </TR>
+    <TR>
+      <TD>Examples</TD>
+      <TD>MySQL, PostgreSQL, SQL Server</TD>
+      <TD>MongoDB, Redis, Cassandra</TD>
+    </TR>
+  </TBody>
+</Table>
+
+Neither is "better" — relational fits data with clear structure and relationships (like <Code>orders</Code> linked to <Code>customers</Code>); non-relational fits data that's flexible or changes shape often.
+
+---
+
+## Tables, Rows, and Columns
+
+A **table** represents one type of thing — for example <Code>books</Code> or <Code>customers</Code>. Each **row** in that table is one specific record. Each **column** is one attribute shared by every row.
+
+Example: in a <Code>books</Code> table, each row is one book, and columns like <Code>title</Code>, <Code>author</Code>, and <Code>price</Code> describe that book.
+
+---
+
+## Schema
+
+The **schema** is the blueprint of a database — which tables exist, what columns they have, what data types those columns use, and how tables relate to one another.
+
+Think of the schema as the architecture plan drawn up before any actual data (rows) gets added.
+
+---
+
+## Keys
+
+Keys are how rows are uniquely identified and how tables connect to each other.
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Key Type</TH>
+      <TH>What it does</TH>
+      <TH>Example</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>Primary Key</TD>
+      <TD>Uniquely identifies each row in a table; can't be empty or duplicated</TD>
+      <TD><Code>id</Code> in <Code>books</Code></TD>
+    </TR>
+    <TR>
+      <TD>Foreign Key</TD>
+      <TD>A column that references a primary key in another table, creating a relationship</TD>
+      <TD><Code>customer_id</Code> in <Code>orders</Code> referencing <Code>id</Code> in <Code>customers</Code></TD>
+    </TR>
+    <TR>
+      <TD>Composite Key</TD>
+      <TD>A primary key made of two or more columns combined</TD>
+      <TD><Code>order_id</Code> + <Code>product_id</Code> in an <Code>order_items</Code> table</TD>
+    </TR>
+    <TR>
+      <TD>Candidate Key</TD>
+      <TD>Any column (or set of columns) that *could* qualify as the primary key</TD>
+      <TD><Code>email</Code> in <Code>customers</Code>, if it's unique</TD>
+    </TR>
+  </TBody>
+</Table>
+
+---
+
+## Normalization
+
+**Normalization** is the process of organizing tables to avoid storing the same information more than once.
+
+**Without normalization:** every row in an <Code>orders</Code> table repeats the customer's full name and address.
+
+**With normalization:** the customer's details live once in a <Code>customers</Code> table, and <Code>orders</Code> just stores a <Code>customer_id</Code> pointing to it.
+
+**Why it matters:**
+- Avoids inconsistencies (the same customer's name spelled two different ways in two rows)
+- Saves storage space
+- Makes updates easier — change the customer's address once, not in every order
+
+Normalization is usually described in stages called **normal forms** (1NF, 2NF, 3NF), each removing a specific kind of duplication. At a basic level, just remember the core idea: **one fact, stored in one place.**
+
+[Learn more about normalization](/docs/playbook/normalization)
+
+---
+
+## ACID Properties
+
+ACID is a set of guarantees that a reliable database follows whenever it makes changes to data.
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Letter</TH>
+      <TH>Property</TH>
+      <TH>Meaning</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>A</TD>
+      <TD>Atomicity</TD>
+      <TD>A group of changes either all happen, or none happen — no partial updates</TD>
+    </TR>
+    <TR>
+      <TD>C</TD>
+      <TD>Consistency</TD>
+      <TD>Data always follows the rules defined (types, constraints, relationships)</TD>
+    </TR>
+    <TR>
+      <TD>I</TD>
+      <TD>Isolation</TD>
+      <TD>Multiple operations happening at the same time don't interfere with each other</TD>
+    </TR>
+    <TR>
+      <TD>D</TD>
+      <TD>Durability</TD>
+      <TD>Once a change is saved, it survives even a crash or power loss</TD>
+    </TR>
+  </TBody>
+</Table>
+
+**Simple example:** transferring money between two bank accounts involves subtracting from one and adding to the other. Atomicity guarantees both happen together — you'll never end up with money deducted from one account but not added to the other.
+
+---
+
+## Constraints
+
+Constraints are rules attached to columns that stop invalid data from being saved.
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Constraint</TH>
+      <TH>What it enforces</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD><Code>NOT NULL</Code></TD>
+      <TD>Column can never be left empty</TD>
+    </TR>
+    <TR>
+      <TD><Code>UNIQUE</Code></TD>
+      <TD>No two rows can share the same value in this column</TD>
+    </TR>
+    <TR>
+      <TD><Code>CHECK</Code></TD>
+      <TD>Value must satisfy a specific condition before it's saved</TD>
+    </TR>
+    <TR>
+      <TD><Code>DEFAULT</Code></TD>
+      <TD>Supplies a fallback value when none is given</TD>
+    </TR>
+    <TR>
+      <TD><Code>FOREIGN KEY</Code></TD>
+      <TD>Value must match an existing value in another table's key column</TD>
+    </TR>
+  </TBody>
+</Table>
+
+---
+
+## Indexes (brief preview)
+
+An **index** is a structure that speeds up how quickly the database can find rows — similar to an index at the back of a book. **Indexes make reads faster but add a small cost to writes.** This gets covered in depth in the Performance module, but it's worth knowing the term exists.
+
+---
+
+## Client-Server Model
+
+A database like MySQL runs as a **server** — a background process managing the actual data. Anything that connects to it — a terminal, an app, VS Code — is a **client** sending it commands. All reads and writes go through the server, which is what keeps the ACID guarantees intact even when many clients connect at once.
+
+[Learn more about the client-server model](/docs/networking/module-01/network-architectures)
+
+---
+
+## Quick Recap
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Concept</TH>
+      <TH>One-line summary</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>Schema</TD>
+      <TD>The blueprint of tables, columns, and relationships</TD>
+    </TR>
+    <TR>
+      <TD>Primary Key</TD>
+      <TD>Uniquely identifies a row</TD>
+    </TR>
+    <TR>
+      <TD>Foreign Key</TD>
+      <TD>Links one table to another</TD>
+    </TR>
+    <TR>
+      <TD>Normalization</TD>
+      <TD>Store each fact once, avoid duplication</TD>
+    </TR>
+    <TR>
+      <TD>ACID</TD>
+      <TD>Guarantees that keep data safe and consistent</TD>
+    </TR>
+    <TR>
+      <TD>Constraint</TD>
+      <TD>A rule that blocks invalid data</TD>
+    </TR>
+    <TR>
+      <TD>Index</TD>
+      <TD>Speeds up finding rows</TD>
+    </TR>
+  </TBody>
+</Table>

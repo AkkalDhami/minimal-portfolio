@@ -1,0 +1,266 @@
+---
+title: Network Architectures (Client-Server vs Peer-to-Peer)
+description: Learn the two primary network architectures — Client-Server and Peer-to-Peer — how they work, their advantages, disadvantages, and real-world use cases.
+---
+
+
+Imagine you want to communicate with your friends. There are multiple ways you can do it. You can either send your message through a **group administrator**, or you can send it **directly** to your friend.
+
+Computer networks work in a similar way. Depending on how devices communicate with each other, networks are designed using different **architectures**.
+
+The two most common network architectures are:
+
+- **Client-Server Architecture**
+- **Peer-to-Peer (P2P) Architecture**
+
+Almost every application you use today—from Google and YouTube to WhatsApp and ChatGPT—uses one of these architectures.
+
+---
+
+## What is Network Architecture?
+
+A **Network Architecture** defines **how devices (computers, servers, phones, printers, etc.) are organized and how they communicate with each other over a network**.
+
+It acts like a blueprint that describes:
+
+- Who requests information?
+- Who provides information?
+- How data flows between devices?
+- How resources are shared?
+
+Simply put,
+
+> Network architecture is the design or structure of a computer network.
+
+---
+
+## Why Do We Need Different Network Architectures?
+
+Not every network has the same requirements.
+
+For example:
+
+- Google serves billions of users every day.
+- Your home computer shares files with only one or two devices.
+
+Obviously, both networks don't need the same design.
+
+Some networks require:
+
+- High security
+- Centralized management
+- Easy maintenance
+- High scalability
+
+Others require:
+
+- Simplicity
+- Low cost
+- Direct communication
+
+This is why different network architectures exist.
+
+---
+
+# Client-Server Architecture
+
+## Definition
+
+A **Client-Server Architecture** is a network model where one or more **clients** request services or resources from a **central server**, and the server processes the requests and sends back responses.
+
+Think of it as a **customer and restaurant**.
+
+- Customer places an order.
+- Kitchen prepares the food.
+- Waiter delivers it.
+
+Similarly,
+
+- Client sends a request.
+- Server processes it.
+- Server sends a response.
+
+---
+
+## Real-World Analogy
+
+Imagine visiting a restaurant.
+
+```text
+Customer
+    │
+"I want a Pizza"
+    │
+    ▼
+ Waiter
+    │
+    ▼
+ Kitchen
+    │
+Pizza Ready
+    │
+    ▼
+Customer
+```
+
+The customer never cooks the food.
+
+The kitchen does all the work.
+
+Likewise, the client doesn't usually store or process all the data. The server does.
+
+---
+
+## How It Works
+
+```text
+            Request
+
+ Client --------------------► Server
+        "Give me data"
+
+ Client ◄-------------------- Server
+
+            Response
+```
+
+### Example
+
+When you visit **google.com**:
+
+```text
+Your Browser
+      │
+      │ Request
+      ▼
+ Google Server
+      │
+      │ Response
+      ▼
+Your Browser
+```
+
+The browser (client) requests the webpage.
+
+Google's server processes the request and sends the webpage back.
+
+---
+
+## ASCII Diagram
+
+```text
+              Internet
+
+        ┌──────────────┐
+        │    Server    │
+        └──────┬───────┘
+               │
+    ┌──────────┼──────────┐
+    │          │          │
+ Client A   Client B   Client C
+```
+
+Many clients communicate with a single server.
+
+---
+
+## Characteristics
+
+- Centralized architecture
+- Dedicated server
+- Multiple clients
+- Easy to manage
+- High security
+- Scalable
+- Reliable
+
+---
+
+## Common Technologies
+
+- HTTP / HTTPS
+- TCP/IP
+- DNS
+- Web Servers (Apache, Nginx)
+- Database Servers (MySQL, PostgreSQL)
+- REST APIs
+- GraphQL
+
+---
+
+## Examples
+
+- Google
+- YouTube
+- Facebook
+- Instagram
+- Netflix
+- ChatGPT
+- Gmail
+- Amazon
+
+---
+
+## Use Cases
+
+- Websites
+- Banking systems
+- Cloud storage
+- Online games
+- E-commerce
+- Email services
+- Social media
+
+---
+
+## Advantages
+
+### 1. Centralized Management
+
+Everything is controlled from one place.
+
+---
+
+### 2. Better Security
+
+Data remains on the server.
+
+---
+
+### 3. Easy Maintenance
+
+Software updates happen on the server.
+
+---
+
+### 4. Highly Scalable
+
+Thousands or even millions of clients can connect.
+
+---
+
+### 5. Reliable
+
+Professional servers usually have backups and redundancy.
+
+---
+
+## Disadvantages
+
+### 1. Single Point of Failure
+
+If the server goes down, clients cannot access the service.
+
+---
+
+### 2. Higher Cost
+
+Servers and infrastructure can be expensive.
+
+---
+
+### 3. Requires Administration
+
+Dedicated administrators are needed to maintain servers.
+
+---
