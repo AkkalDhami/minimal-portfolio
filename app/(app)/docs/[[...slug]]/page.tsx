@@ -145,7 +145,8 @@ export default async function DocsPage(props: PageProps<"/docs/[[...slug]]">) {
   const lastSlug =
     lastComponentIndex >= 0 ? slug[lastComponentIndex] : undefined;
 
-  const type = slug[0] === "dsa" ? "dsa" : "playbook";
+  const type =
+    slug[0] === "dsa" ? "dsa" : slug[0] === "sql" ? "sql" : "playbook";
 
   const { next, prev } = lastSlug
     ? findNeighbour(type, lastSlug as string)
