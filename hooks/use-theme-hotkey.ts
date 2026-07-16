@@ -38,5 +38,5 @@ export function useThemeToggleHotkey(options: Options = {}) {
 
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [key, requireShift, resolvedTheme, setTheme]);
+  }, [key, play, requireShift, resolvedTheme, setTheme]);
 }

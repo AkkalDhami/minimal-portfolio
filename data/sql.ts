@@ -1,45 +1,46 @@
 import { IModule } from "@/types/app.types";
 import { createModules } from "@/utils/networking";
-import { IconSql } from "@tabler/icons-react";
+import { IconDatabase, IconDatabaseEdit } from "@tabler/icons-react";
 
 export const SQL_DATA: IModule[] = createModules([
-  // {
-  //   slug: "module-00",
-  //   title: "Module 00 - Setup and Basics",
-  //   description:
-  //     "Get a database running locally and understand the core mental model.",
-  //   docs: "/docs/sql/module-00",
-  //   icon: IconSql,
-  //   topics: [
-  //     {
-  //       slug: "setup-mysql",
-  //       title: "Setup MySQL (Docker Compose edition)",
-  //       docs: "/docs/sql/module-00/setup-mysql",
-  //       description:
-  //         "Run MySQL locally with Docker Compose, connect via CLI and VS Code."
-  //     },
-  //     {
-  //       slug: "docker-volumes",
-  //       title: "Understanding Docker volumes",
-  //       docs: "/docs/sql/module-00/docker-volumes",
-  //       description:
-  //         "Why volumes matter and how they keep your data safe across restarts."
-  //     },
-  //     {
-  //       slug: "vscode-query-runner",
-  //       title: "Running queries in VS Code",
-  //       docs: "/docs/sql/module-00/vscode-query-runner",
-  //       description:
-  //         "Set up SQLTools to connect and run queries directly from your editor."
-  //     }
-  //   ]
-  // },
   {
     slug: "module-01",
-    title: "Module 01 - CRUD Operations",
-    description: "Create, read, update, and delete data in a table.",
+    title: "Module 01 - Database Theory",
+    description:
+      "Core database and DBMS concepts you should know before writing any SQL.",
     docs: "/docs/sql/module-01",
-    icon: IconSql,
+    icon: IconDatabase,
+    topics: [
+      {
+        slug: "intro",
+        title: "Introduction to Databases",
+        docs: "/intro",
+        description:
+          "Core theory before hands-on work: databases, DBMS, SQL, MySQL, and key concepts."
+      },
+      {
+        slug: "dbms-concepts",
+        title: "DBMS Theory Concepts",
+        docs: "/dbms-concepts",
+        description:
+          "Relational vs non-relational, keys, normalization, ACID, and schema design basics."
+      },
+      {
+        slug: "dbms-interview-questions",
+        title: "DBMS Interview Questions",
+        docs: "/dbms-interview-questions",
+        description:
+          "Commonly asked DBMS theory questions and simple, clear answers for interviews."
+      }
+    ]
+  },
+
+  {
+    slug: "module-02",
+    title: "Module 02 - CRUD Operations",
+    description: "Create, read, update, and delete data in a table.",
+    docs: "/docs/sql/module-02",
+    icon: IconDatabaseEdit,
     topics: [
       {
         slug: "create",
@@ -49,15 +50,15 @@ export const SQL_DATA: IModule[] = createModules([
           "Add new rows to a MySQL table with INSERT, including bulk inserts."
       },
       {
-        slug: "read",
+        slug: "select",
         title: "Read - SELECT",
-        docs: "/read",
+        docs: "/select",
         description: "Query rows with SELECT, WHERE, ORDER BY, and LIMIT."
       },
       {
         slug: "update",
         title: "Update - UPDATE",
-        docs: "/docs/sql/module-01/update",
+        docs: "/update",
         description: "Modify existing rows safely with UPDATE and WHERE."
       },
       {
@@ -65,6 +66,13 @@ export const SQL_DATA: IModule[] = createModules([
         title: "Delete - DELETE",
         docs: "/delete",
         description: "Remove rows safely with DELETE and WHERE."
+      },
+      {
+        slug: "alter",
+        title: "Alter - ALTER TABLE",
+        docs: "/alter",
+        description:
+          "Change a table's structure: add, modify, rename, or drop columns."
       }
     ]
   }

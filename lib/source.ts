@@ -3,12 +3,20 @@ import { PLAYBOOK_DATA } from "@/data/playbook";
 import { DSA_DATA } from "@/data/dsa";
 import { sliceContent } from "@/utils/slice-content";
 import { NETWORKING_DATA } from "@/data/networking";
+import { SQL_DATA } from "@/data/sql";
 
 export const findNeighbour = (
-  type: "playbook" | "dsa",
+  type: ModuleSection,
   slug: string
 ): { prev: IPlaybook | undefined; next: IPlaybook | undefined } => {
-  const DATA = type === "playbook" ? PLAYBOOK_DATA : DSA_DATA;
+  const options: Record<ModuleSection, IPlaybook[]> = {
+    dsa: DSA_DATA,
+    networking: NETWORKING_DATA,
+    playbook: PLAYBOOK_DATA,
+    sql: SQL_DATA
+  };
+
+  const DATA = options[type];
 
   const currentItem = DATA.find(item => item.slug === slug);
 

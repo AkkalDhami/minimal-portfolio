@@ -7,16 +7,17 @@ import type {
   UseSoundOptions,
   UseSoundReturn
 } from "@/lib/sound-types";
+import { usePreferencesStore } from "./use-preferences";
 
 export function useSound(
   sound: SoundAsset,
   options: UseSoundOptions = {}
 ): UseSoundReturn {
+  const { soundEnabled } = usePreferencesStore(state => state);
   const {
     volume = 1,
     playbackRate = 1,
     interrupt = false,
-    soundEnabled = true,
     onPlay,
     onEnd,
     onPause,
