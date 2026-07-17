@@ -81,6 +81,7 @@ export function DocsSidebar() {
               <div key={i}>
                 <Link
                   href={m.href as Route}
+                  onClick={() => play()}
                   className={cn(
                     "font-inter hover:text-primary font-medium underline-offset-2 hover:underline",
                     pathname === m.href

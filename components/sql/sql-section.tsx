@@ -13,7 +13,7 @@ export function SQLSection({ home = false }: { home?: boolean }) {
       id="sql"
       className={cn("no-typeset px-0", home && "screen-line-before")}>
       <div className="mb-6 px-4">
-        <Heading>SQL</Heading>
+        <Heading>SQL - MySQL</Heading>
 
         <SubHeading className="text-muted-foreground mx-0 max-w-2xl text-lg">
           A comprehensive guide to SQL, covering foundational concepts, setup,
@@ -23,8 +23,8 @@ export function SQLSection({ home = false }: { home?: boolean }) {
 
       <div
         className={cn(
-          "screen-line-after screen-line-before",
-          "divide-edge divide-y"
+          "screen-line-after screen-line-before"
+          // "divide-edge divide-y"
         )}>
         {SQL_DATA.map(module => (
           <NetworkingModule key={module.slug} module={module} />
