@@ -46,6 +46,10 @@ import { click005Sound } from "@/sounds/click-005";
 import { click002Sound } from "@/sounds/click-002";
 import { uChatScrollButtonSound } from "@/sounds/chat-scroll";
 import { DSA_DATA } from "@/data/dsa";
+import { IconDatabase, IconWorld } from "@tabler/icons-react";
+import { NETWORKING_DATA } from "@/data/networking";
+import { padString } from "@/utils/pad-string";
+import { SQL_DATA } from "@/data/sql";
 
 export interface Item {
   value: string;
@@ -54,6 +58,8 @@ export interface Item {
   link?: boolean;
   newTab?: boolean;
   key?: string;
+
+  // children?: Omit<Item, "icon">[];
 }
 
 export interface Group {
@@ -98,6 +104,20 @@ export const navigations: Item[] = [
     key: "p"
   },
   {
+    icon: IconWorld,
+    label: "Computer Networking",
+    value: "/networking",
+    link: true,
+    key: "n"
+  },
+  {
+    icon: IconDatabase,
+    label: "SQL - MySQL",
+    value: "/sql",
+    link: true,
+    key: "o"
+  },
+  {
     icon: LuLayoutTemplate,
     label: "Templates",
     value: "/templates",
@@ -119,6 +139,7 @@ export const navigations: Item[] = [
     key: "a"
   }
 ];
+
 export const projects: Item[] = PROJECTS.map(proj => {
   return {
     value: `/projects/${proj.slug}`,
@@ -138,6 +159,24 @@ export const playbooks: Item[] = PLAYBOOK_DATA.map(play => {
     newTab: true
   };
 });
+
+export const networking = NETWORKING_DATA.flatMap(net =>
+  net.topics.map(topic => ({
+    icon: IconWorld,
+    value: `${net.docs}${topic.docs}`,
+    label: `Module - ${padString(topic.module.toString(), 2, "0")}. ${topic.title}`,
+    link: true
+  }))
+);
+
+export const sql = SQL_DATA.flatMap(net =>
+  net.topics.map(topic => ({
+    icon: IconWorld,
+    value: `${net.docs}${topic.docs}`,
+    label: `Module - ${padString(topic.module.toString(), 2, "0")}. ${topic.title}`,
+    link: true
+  }))
+);
 
 export const dsa: Item[] = DSA_DATA.map(play => {
   return {
@@ -203,6 +242,8 @@ export const groupedItems: Group[] = [
   { items: navigations, value: "NAVIGATION" },
   { items: projects, value: "PROJECTS" },
   { items: playbooks, value: "BACKEND PLAYBOOK" },
+  { items: networking, value: "COMPUTER NETWORKING" },
+  { items: sql, value: "Structured Query Language - MYSQL" },
   { items: dsa, value: "DATA STRUCTURES & ALGORITHMS" },
   { items: templates, value: "TEMPLATES" },
   { items: contacts, value: "CONTACT INFO" },
@@ -294,34 +335,36 @@ export function SearchCommand() {
                             onClick={() => handleItemClick(item)}
                             value={item.value}
                             className={
-                              "ml-2 flex items-center justify-between px-2.5 py-2"
+                              "ml-2 flex w-full flex-col items-start px-2.5 py-2"
                             }>
-                            <div className="flex items-center gap-2">
-                              {image ? (
-                                <Image
-                                  src={item.icon as string}
-                                  alt={item.label}
-                                  width={16}
-                                  height={16}
-                                  className={cn(
-                                    "text-muted-primary group-hover:text-accent-foreground size-6",
-                                    item.label.toLocaleLowerCase() ===
-                                      "email" && "dark:invert"
-                                  )}
-                                />
-                              ) : (
-                                <item.icon className="primary-ring border-edge size-6 rounded-md border p-1" />
-                              )}
+                            <div className="flex w-full items-center justify-between">
+                              <div className="flex items-center gap-2">
+                                {image ? (
+                                  <Image
+                                    src={item.icon as string}
+                                    alt={item.label}
+                                    width={16}
+                                    height={16}
+                                    className={cn(
+                                      "text-muted-primary group-hover:text-accent-foreground size-6",
+                                      item.label.toLocaleLowerCase() ===
+                                        "email" && "dark:invert"
+                                    )}
+                                  />
+                                ) : (
+                                  <item.icon className="primary-ring border-edge size-6 rounded-md border p-1" />
+                                )}
 
-                              <span className="line-clamp-1 flex-1">
-                                {item.label}
-                              </span>
+                                <span className="line-clamp-1 flex-1">
+                                  {item.label}
+                                </span>
+                              </div>
+                              {item.key && (
+                                <KbdGroup>
+                                  <Kbd>{item?.key}</Kbd>
+                                </KbdGroup>
+                              )}
                             </div>
-                            {item.key && (
-                              <KbdGroup>
-                                <Kbd>{item?.key}</Kbd>
-                              </KbdGroup>
-                            )}
                           </CommandItem>
                         );
                       }}

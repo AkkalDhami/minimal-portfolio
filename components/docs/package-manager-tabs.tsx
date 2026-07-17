@@ -86,31 +86,49 @@ export default function PackageManagerTabs({
   const { pkgManager, setPkgManager } = usePackageManager();
 
   const [play] = useSound(click003Sound);
-  const [html, setHtml] = useState(command);
-
-  function onChangePackageManager(pkgManager: PackageManager) {
-    setPkgManager(pkgManager);
-  }
+  const [html, setHtml] = useState<Record<PackageManager, string>>({
+    pnpm: "",
+    yarn: "",
+    npm: "",
+    bun: ""
+  });
 
   useEffect(() => {
     let cancelled = false;
-    getCodeHighlighter("bash").then(highlighter => {
+
+    async function highlight() {
+      const highlighter = await getCodeHighlighter("bash");
       if (cancelled) return;
-      // Trailing space keeps the last blank line's caret position accurate.
-      const out = highlighter.codeToHtml(command.length ? command : " ", {
-        lang: "bash",
-        themes: {
-          light: "min-light",
-          dark: "vesper"
-        },
-        defaultColor: "light-dark()"
-      });
-      setHtml(out);
-    });
+
+      const commands = convertNpmCommand(command);
+
+      const highlighted = Object.fromEntries(
+        Object.entries(commands).map(([key, value]) => [
+          key,
+          highlighter.codeToHtml(value || " ", {
+            lang: "bash",
+            themes: {
+              light: "min-light",
+              dark: "vesper"
+            },
+            defaultColor: "light-dark()"
+          })
+        ])
+      ) as Record<PackageManager, string>;
+
+      setHtml(highlighted);
+    }
+
+    highlight();
+
     return () => {
       cancelled = true;
     };
   }, [command]);
+
+  function onChangePackageManager(pkgManager: PackageManager) {
+    setPkgManager(pkgManager);
+  }
 
   const Icon = getPackageManagerIcon(pkgManager, "size-5.5");
 
@@ -157,7 +175,9 @@ export default function PackageManagerTabs({
             <CodeWrapper code={cmd}>
               <pre className="not-typeset overflow-x-auto overscroll-x-contain px-4 pt-2 pb-4">
                 <div
-                  dangerouslySetInnerHTML={{ __html: html }}
+                  dangerouslySetInnerHTML={{
+                    __html: html[key as PackageManager]
+                  }}
                   className="font-code text-base leading-none"
                 />
               </pre>

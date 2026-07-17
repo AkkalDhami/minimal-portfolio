@@ -148,9 +148,9 @@ export function SettingsDropdown({
                             damping: 20
                           }}>
                           {sound ? (
-                            <IconVolume className="text-muted-foreground size-4" />
+                            <IconVolume className="text-muted-foreground size-4.5" />
                           ) : (
-                            <IconVolumeOff className="text-muted-foreground size-4" />
+                            <IconVolumeOff className="text-muted-foreground size-4.5" />
                           )}
                         </motion.span>
                         Sound
