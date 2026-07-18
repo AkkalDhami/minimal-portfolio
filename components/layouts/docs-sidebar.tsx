@@ -11,7 +11,7 @@ import { Route } from "next";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { SQL_DATA } from "@/data/sql";
-import { buttonVariants } from "../ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { sliceContent } from "@/utils/slice-content";
 
 const title = {
@@ -74,7 +74,7 @@ export function DocsSidebar() {
         }
       </h2>
 
-      <ScrollArea className={"scroll-fade relative h-full max-h-120"}>
+      <ScrollArea className={"scroll-fade relative h-full max-h-126 pb-12"}>
         {moduleSlug?.trim() ? (
           <>
             {filteredModules?.map((m, i) => (
@@ -114,7 +114,7 @@ export function DocsSidebar() {
                 variant: "outline",
                 size: "sm"
               }),
-              "absolute bottom-2 w-full font-normal"
+              "absolute bottom-2 z-30 w-full font-normal"
             )}>
             MySQL Playground
           </Link>

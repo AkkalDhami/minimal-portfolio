@@ -19,6 +19,10 @@ const footerLinks = [
     href: "/networking"
   },
   {
+    label: "SQL - MySQL",
+    href: "/sql"
+  },
+  {
     label: "SQL Playground",
     href: "/playground/sql"
   },

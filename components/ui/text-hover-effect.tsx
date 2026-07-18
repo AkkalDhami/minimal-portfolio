@@ -15,7 +15,7 @@ export function TextHoverEffect({ text }: TextHoverEffectProps) {
 
   // Motion values for the spotlight position
   const cx = useMotionValue("50%");
-  const cy = useMotionValue("50%");
+  const cy = useMotionValue("20%");
 
   // Store the automatic animation so we can stop/start it
   const autoAnimation = useRef<ReturnType<typeof animate> | null>(null);
@@ -37,7 +37,7 @@ export function TextHoverEffect({ text }: TextHoverEffectProps) {
       repeat: Infinity,
       onUpdate: t => {
         // Organic floating movement
-        const x = 20 + Math.sin(t) * 32;
+        const x = 50 + Math.sin(t) * 32;
         const y = 20 + Math.cos(t * 1.5) * 22;
 
         cx.set(`${x}%`);

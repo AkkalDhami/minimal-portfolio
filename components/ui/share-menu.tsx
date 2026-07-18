@@ -11,6 +11,7 @@ import { PrimaryButton } from "./primary-button";
 import { toast } from "./toast";
 import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export type ShareMenuProps = {
   /** Title passed to the native share sheet. */
@@ -29,10 +30,13 @@ export function ShareMenu({ title, url }: ShareMenuProps) {
       });
     }
   });
+
+  const pathname = usePathname();
+
   const absoluteUrl = url.startsWith("http")
     ? url
     : typeof window !== "undefined"
-      ? new URL(url, window.location.origin).toString()
+      ? new URL(window.location.origin + pathname).toString()
       : url;
 
   const urlEncoded = encodeURIComponent(absoluteUrl);
