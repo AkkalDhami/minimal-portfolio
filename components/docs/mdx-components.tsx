@@ -106,10 +106,7 @@ export const mdxComponents: MDXComponents = {
   },
 
   strong: props => (
-    <strong
-      className="text-primary animate-fade-in-blur font-semibold"
-      {...props}
-    />
+    <strong className="animate-fade-in-blur font-semibold" {...props} />
   ),
 
   // blockquote: ({ className, ...props }: React.ComponentProps<"blockquote">) => (

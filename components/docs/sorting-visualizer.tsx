@@ -434,7 +434,7 @@ function ArrayInputPanel({
   }
 
   return (
-    <div className="border-edge mb-4 rounded-2xl border p-5">
+    <div data-not-typeset className="border-edge mb-4 rounded-2xl border p-5">
       <p className="text-muted-foreground mb-3 text-xs tracking-widest uppercase">
         Array Input
       </p>
@@ -643,7 +643,7 @@ function ResultPanel({
           <div className="mt-3 grid gap-4 sm:grid-cols-2">
             <div className="space-y-1.5">
               <h3 className="text-lg font-medium">Time complexity</h3>
-              <ul className="list-inside">
+              <ul data-not-typeset className="list-inside">
                 <li className="flex list-disc items-center gap-2">
                   <p className="font-bormal text-muted-foreground text-base">
                     Best Case:
@@ -672,7 +672,7 @@ function ResultPanel({
             </div>
             <div className="space-y-1.5">
               <h3 className="text-lg font-medium">Space complexity</h3>
-              <ul className="list-inside">
+              <ul data-not-typeset className="list-inside">
                 <li className="flex list-disc items-center gap-2">
                   <p className="font-bormal text-muted-foreground text-base">
                     Auxiliary Space:

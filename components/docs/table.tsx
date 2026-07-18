@@ -26,7 +26,11 @@ export function TH({ children }: { children: ReactNode }) {
   return <th className="px-4 py-3 text-left font-semibold">{children}</th>;
 }
 export function TD({ children }: { children: ReactNode }) {
-  return <td className="text-muted-foreground px-4 py-3">{children}</td>;
+  return (
+    <td className="text-muted-foreground [&_strong]:text-foreground px-4 py-3">
+      {children}
+    </td>
+  );
 }
 
 export function Highlight({ children }: { children: ReactNode }) {

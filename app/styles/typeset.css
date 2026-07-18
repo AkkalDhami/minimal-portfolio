@@ -131,7 +131,7 @@
     /* Inline semantics. */
     &:where(strong, b) {
       font-weight: 600;
-      color: var(--color-primary);
+      color: var(--color-foreground);
     }
     &:where(:is(h1, h2, h3, h4) :is(strong, b)) {
       font-weight: 600;
@@ -204,7 +204,7 @@
       padding-inline-start: 1.5em;
     }
     &:where(li) {
-      color: var(--typeset-muted);
+      color: var(--color-muted-primary);
       margin-block-start: 0.5em;
       padding-inline-start: 0.4em;
     }
