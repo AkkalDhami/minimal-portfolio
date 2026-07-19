@@ -83,13 +83,13 @@ export function SqlCodeEditor({
   }
 
   return (
-    <div className={cn("no-typeset relative", className)}>
+    <div className={cn("not-typeset relative", className)}>
       <div
         ref={overlayRef}
         aria-hidden
         className={cn(
           SHARED_CLASSES,
-          "no-typeset pointer-none overflow-auto",
+          "not-typeset pointer-none overflow-auto",
           "absolute inset-0",
           "[&_pre]:m-0! [&_pre]:bg-transparent! [&_pre]:p-0!",
           "[&_code]:bg-transparent!"

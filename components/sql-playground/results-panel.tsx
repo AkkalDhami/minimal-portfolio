@@ -12,7 +12,7 @@ interface ResultsPanelProps {
 
 export function ResultsPanel({ result, error }: ResultsPanelProps) {
   return (
-    <div className="border-border no-typeset space-y-4 border-t pt-4">
+    <div className="border-border not-typeset space-y-4 border-t pt-4">
       <AnimatePresence mode="sync">
         <h3 className="from-semibold text-xl">Output</h3>
         {error ? (

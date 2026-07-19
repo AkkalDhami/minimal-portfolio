@@ -32,7 +32,7 @@ export function SqlEditor({
   );
 
   return (
-    <div className="border-edge no-typeset w-full rounded-lg border">
+    <div className="border-edge not-typeset w-full rounded-lg border">
       <div className="relative flex w-full items-center justify-between border-b px-3 py-3">
         <p className="text-muted-foreground mt-0 text-base">
           Run SQL queries locally in your browser.
