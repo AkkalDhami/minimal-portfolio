@@ -27,7 +27,7 @@ export function NetworkingModule({ module }: { module: IModule }) {
     }
   }, [open]);
   return (
-    <div className={cn("no-typeset w-full", "screen-line-after")}>
+    <div className={cn("not-typeset w-full", "screen-line-after")}>
       <div
         data-open={open}
         onClick={() => setOpen(open => !open)}

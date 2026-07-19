@@ -23,7 +23,7 @@ export function NetworkingCard({
       href={`${docs}/${data?.slug}` as Route}
       onClick={() => play()}
       className={cn(
-        "group hover:bg-card-hover no-typeset p-4",
+        "group hover:bg-card-hover not-typeset p-4",
         "animate-fade-in-blur",
         className
       )}>

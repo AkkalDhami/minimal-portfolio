@@ -11,7 +11,7 @@ export function NetworkingSection({ home = false }: { home?: boolean }) {
   return (
     <Section
       id="networking"
-      className={cn("no-typeset px-0", home && "screen-line-before")}>
+      className={cn("not-typeset px-0", home && "screen-line-before")}>
       <div className="mb-6 px-4">
         <Heading>Computer Networking</Heading>
 
