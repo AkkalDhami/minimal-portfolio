@@ -17,7 +17,7 @@ Almost every application you use today—from Google and YouTube to WhatsApp and
 
 ---
 
-## What is Network Architecture?
+## 1. What is Network Architecture?
 
 A **Network Architecture** defines **how devices (computers, servers, phones, printers, etc.) are organized and how they communicate with each other over a network**.
 
@@ -34,7 +34,7 @@ Simply put,
 
 ---
 
-## Why Do We Need Different Network Architectures?
+## 2. Why Do We Need Different Network Architectures?
 
 Not every network has the same requirements.
 
@@ -62,9 +62,7 @@ This is why different network architectures exist.
 
 ---
 
-# Client-Server Architecture
-
-## Definition
+## 3. Client-Server Architecture
 
 A **Client-Server Architecture** is a network model where one or more **clients** request services or resources from a **central server**, and the server processes the requests and sends back responses.
 
@@ -82,7 +80,7 @@ Similarly,
 
 ---
 
-## Real-World Analogy
+### Real-World Analogy
 
 Imagine visiting a restaurant.
 
@@ -108,7 +106,7 @@ Likewise, the client doesn't usually store or process all the data. The server d
 
 ---
 
-## How It Works
+### How It Works
 
 ```text
             Request
@@ -141,12 +139,9 @@ The browser (client) requests the webpage.
 
 Google's server processes the request and sends the webpage back.
 
----
-
-## ASCII Diagram
 
 ```text
-              Internet
+            Internet
 
         ┌──────────────┐
         │    Server    │
@@ -161,7 +156,7 @@ Many clients communicate with a single server.
 
 ---
 
-## Characteristics
+### Characteristics
 
 - Centralized architecture
 - Dedicated server
@@ -173,7 +168,7 @@ Many clients communicate with a single server.
 
 ---
 
-## Common Technologies
+### Common Technologies
 
 - HTTP / HTTPS
 - TCP/IP
@@ -185,7 +180,7 @@ Many clients communicate with a single server.
 
 ---
 
-## Examples
+### Examples
 
 - Google
 - YouTube
@@ -198,7 +193,7 @@ Many clients communicate with a single server.
 
 ---
 
-## Use Cases
+### Use Cases
 
 - Websites
 - Banking systems
@@ -210,54 +205,272 @@ Many clients communicate with a single server.
 
 ---
 
-## Advantages
+### Advantages
 
-### 1. Centralized Management
+- **Centralized Management**: Everything is controlled from one place.
 
-Everything is controlled from one place.
+- **Better Security**: Data remains on the server.
 
----
+- **Easy Maintenance**: Software updates happen on the server.
 
-### 2. Better Security
+- **Highly Scalable**: Thousands or even millions of clients can connect.
 
-Data remains on the server.
-
----
-
-### 3. Easy Maintenance
-
-Software updates happen on the server.
+- **Reliable**: Professional servers usually have backups and redundancy.
 
 ---
 
-### 4. Highly Scalable
+### Disadvantages
 
-Thousands or even millions of clients can connect.
+- **Single Point of Failure**: If the server goes down, clients cannot access the service.
 
----
+- **Higher Cost**: Servers and infrastructure can be expensive.
 
-### 5. Reliable
+- **Requires Administration**: Dedicated administrators are needed to maintain servers.
 
-Professional servers usually have backups and redundancy.
-
----
-
-## Disadvantages
-
-### 1. Single Point of Failure
-
-If the server goes down, clients cannot access the service.
 
 ---
 
-### 2. Higher Cost
+## 4. Peer-to-Peer (P2P) Architecture
 
-Servers and infrastructure can be expensive.
+A **Peer-to-Peer (P2P) Architecture** is a network model where every device (called a **peer**) can act as both a **client** and a **server**.
+
+There is **no central server**.
+
+Peers communicate directly with each other.
+
+---
+
+### Real-World Analogy
+
+Imagine exchanging notes with your classmates.
+
+You don't need a teacher to deliver every note.
+
+You hand it directly to your friend.
+
+```text
+Student A  ⮜────⮞  Student B
+     ↑               ↑
+     │               │
+     └────⮞  Student C
+```
+
+Everyone communicates directly.
 
 ---
 
-### 3. Requires Administration
+### How It Works
 
-Dedicated administrators are needed to maintain servers.
+```text
+Peer A ⮜────⮞  Peer B
+   ↑            ↑
+   │            │
+   └────⮞  Peer C
+```
+
+Every computer can both request data and provide data.
+
+```text
+          Peer A
+         /     \
+        /       \
+   Peer B ----- Peer C
+        \       /
+         \     /
+          Peer D
+```
+
+There is no central server.
 
 ---
+
+### Characteristics
+
+- No central server
+- Every device is equal
+- Direct communication
+- Low setup cost
+- Easy to build
+- Less centralized management
+
+---
+
+### Common Technologies
+
+- BitTorrent
+- Blockchain
+- WebRTC
+- SMB File Sharing
+- LAN File Sharing
+
+---
+
+### Examples
+
+- BitTorrent
+- Bitcoin
+- Ethereum
+- Local file sharing
+- Multiplayer LAN games
+
+---
+
+### Use Cases
+
+- File sharing
+- Cryptocurrency
+- Local multiplayer gaming
+- Distributed computing
+- Backup sharing
+
+---
+
+### Advantages
+
+- **Low Cost**: No dedicated server is required.
+
+- **Easy Setup**: Devices connect directly.
+
+- **No Central Dependency**: The network can continue working even if one peer disconnects.
+
+- **Resource Sharing**: Every computer contributes storage or processing power.
+
+---
+
+### Disadvantages
+
+- **Lower Security**: Every peer can potentially expose data if not secured properly.
+
+- **Difficult Management**: There is no central authority to manage users or resources.
+
+- **Limited Scalability**: Performance can decrease as more peers join or leave.
+
+- **Data Availability**: If a peer storing a file goes offline, that file may become unavailable unless other peers also have a copy.
+
+
+---
+
+## 5. Client-Server vs Peer-to-Peer
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Feature</TH>
+      <TH>Client-Server Architecture</TH>
+      <TH>Peer-to-Peer (P2P) Architecture</TH>
+    </TR>
+  </THead>
+
+  <TBody>
+    <TR>
+      <TD>**Definition**</TD>
+      <TD>Clients request services or resources from a centralized server, which processes the requests and returns responses.</TD>
+      <TD>All devices (peers) communicate directly with one another without relying on a central server.</TD>
+    </TR>
+
+    <TR>
+      <TD>**Architecture**</TD>
+      <TD>Centralized</TD>
+      <TD>Decentralized (Distributed)</TD>
+    </TR>
+
+    <TR>
+      <TD>**Central Server**</TD>
+      <TD>Required</TD>
+      <TD>Not Required</TD>
+    </TR>
+
+    <TR>
+      <TD>**Communication**</TD>
+      <TD>Clients communicate through the server.</TD>
+      <TD>Peers communicate directly with each other.</TD>
+    </TR>
+
+    <TR>
+      <TD>**Role of Devices**</TD>
+      <TD>Devices are either clients or servers.</TD>
+      <TD>Every device can act as both a client and a server.</TD>
+    </TR>
+
+    <TR>
+      <TD>**Management**</TD>
+      <TD>Centralized and easier to manage.</TD>
+      <TD>Distributed and more difficult to manage.</TD>
+    </TR>
+
+    <TR>
+      <TD>**Security**</TD>
+      <TD>More secure because data is managed centrally.</TD>
+      <TD>Generally less secure since each peer manages its own resources.</TD>
+    </TR>
+
+    <TR>
+      <TD>**Scalability**</TD>
+      <TD>Highly scalable with proper server infrastructure.</TD>
+      <TD>Limited scalability as the number of peers increases.</TD>
+    </TR>
+
+    <TR>
+      <TD>**Performance**</TD>
+      <TD>Consistent and reliable.</TD>
+      <TD>Depends on the availability and performance of peers.</TD>
+    </TR>
+
+    <TR>
+      <TD>**Cost**</TD>
+      <TD>Higher due to dedicated servers and maintenance.</TD>
+      <TD>Lower because no dedicated server is required.</TD>
+    </TR>
+
+    <TR>
+      <TD>**Maintenance**</TD>
+      <TD>Centralized updates and maintenance.</TD>
+      <TD>Each peer must be maintained individually.</TD>
+    </TR>
+
+    <TR>
+      <TD>**Reliability**</TD>
+      <TD>If the server fails, the service may become unavailable.</TD>
+      <TD>The network can continue operating as long as peers remain connected.</TD>
+    </TR>
+
+    <TR>
+      <TD>**Best For**</TD>
+      <TD>Websites, cloud services, banking systems, email, social media, enterprise applications.</TD>
+      <TD>File sharing, blockchain, distributed computing, LAN gaming, direct device communication.</TD>
+    </TR>
+
+    <TR>
+      <TD>**Examples**</TD>
+      <TD>Google, YouTube, Facebook, ChatGPT, Gmail, Netflix, Amazon.</TD>
+      <TD>BitTorrent, Bitcoin, Ethereum, LAN file sharing, WebRTC applications.</TD>
+    </TR>
+  </TBody>
+</Table>
+
+---
+
+## 6. Which One Should You Use?
+
+Use **Client-Server** when:
+
+- Security is important.
+- Many users need the service.
+- Centralized management is required.
+
+Use **Peer-to-Peer** when:
+
+- Direct communication is sufficient.
+- Low cost is important.
+- There is no need for a central server.
+
+---
+
+## 7. Key Takeaways
+
+- **Network architecture** defines how devices communicate and share resources.
+- **Client-Server Architecture** uses a central server to provide services to clients.
+- **Peer-to-Peer Architecture** allows devices to communicate directly without a central server.
+- **Client-Server** is widely used for websites, cloud platforms, banking systems, and social media.
+- **Peer-to-Peer** is commonly used for file sharing, blockchain, and distributed applications.
+- Choosing the right architecture depends on factors such as scalability, security, cost, and management requirements.

@@ -176,17 +176,17 @@ Both prevent duplicate values, but a table can have only **one** Primary Key (an
 
 ### 15. What is the difference between a clustered and non-clustered index?
 
-### Clustered Index
+#### Clustered Index
 - Stores the actual table rows in sorted order.
 - A table can have **only one** clustered index.
 - Best for range queries, sorting, and retrieving ordered data.
 
-### Non-Clustered Index
+#### Non-Clustered Index
 - Stores a separate index that points to the actual table rows.
 - A table can have **multiple** non-clustered indexes.
 - Best for quickly searching specific columns without changing the table's physical order.
 
-> **Simple analogy:** A clustered index is like arranging books on a shelf alphabetically, while a non-clustered index is like using the index at the back of a book to find a topic.
+> A **clustered index** is like arranging books on a shelf alphabetically, while a **non-clustered index** is like using the index at the back of a book to find a topic.
 
 ---
 
