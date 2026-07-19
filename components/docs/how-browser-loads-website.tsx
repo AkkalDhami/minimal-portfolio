@@ -40,7 +40,7 @@ function Step({ icon, title, subtitle }: StepProps) {
 
 export function HowBrowserLoadsWebsite() {
   return (
-    <div className="no-typeset hidden w-auto flex-col py-8 md:flex">
+    <div className="not-typeset hidden w-auto flex-col py-8 md:flex">
       <Step
         icon={<IconDeviceDesktop size={24} />}
         title='Type "google.com"'

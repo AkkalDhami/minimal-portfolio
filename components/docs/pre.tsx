@@ -29,13 +29,13 @@ export function Pre({
         ref={ref}
         {...props}
         className={cn(
-          "thin-scrollbar not-typeset bg-code animate-fade-in-blur relative rounded-lg font-mono text-neutral-300",
+          "thin-scrollbar not-typeset bg-background animate-fade-in-blur text-muted-foreground relative rounded-lg font-mono",
           className
         )}>
         <CopyButton
           text={code}
-          docs={true}
-          className="group bg-code absolute right-4 bottom-3.5 z-10 cursor-pointer py-[6.65px] text-xs hover:bg-neutral-800 hover:text-white"
+          docs={false}
+          className="group bg-code absolute right-4 bottom-3.5 z-10 cursor-pointer text-xs"
         />
         {children}
       </pre>

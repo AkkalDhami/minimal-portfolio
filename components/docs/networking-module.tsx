@@ -13,7 +13,7 @@ export function NetworkingModule({ slug }: { slug: string }) {
   if (!mod) return null;
 
   return (
-    <div className="no-typeset mt-4 space-y-4">
+    <div className="not-typeset mt-4 space-y-4">
       <Link
         href={mod.docs as Route}
         className="animate-fade-in-blur text-2xl font-medium underline-offset-2 hover:underline">

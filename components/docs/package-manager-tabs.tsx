@@ -108,7 +108,7 @@ export default function PackageManagerTabs({
           highlighter.codeToHtml(value || " ", {
             lang: "bash",
             themes: {
-              light: "min-light",
+              light: "github-light-high-contrast",
               dark: "vesper"
             },
             defaultColor: "light-dark()"

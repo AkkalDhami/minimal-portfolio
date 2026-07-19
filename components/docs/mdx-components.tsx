@@ -73,7 +73,7 @@ export const mdxComponents: MDXComponents = {
     return (
       <code
         className={cn(
-          "thin-scrollbar animate-fade-in-blur scroll-fade-y max-h-120 overflow-x-auto rounded-none py-2.5 font-mono leading-relaxed",
+          "thin-scrollbar animate-fade-in-blur scroll-fade-y max-h-120 overflow-x-auto rounded-none py-2.5 font-mono text-base leading-relaxed sm:text-base",
           className
         )}
         {...props}
@@ -96,7 +96,7 @@ export const mdxComponents: MDXComponents = {
     return (
       <figcaption
         className={cn(
-          "font-code animate-fade-in-blur no-typeset flex items-center gap-2 rounded-t-lg border-b border-neutral-800 px-4 py-2 text-base text-neutral-400"
+          "font-code animate-fade-in-blur not-typeset text-muted-foreground flex items-center gap-2 rounded-t-lg border-b px-4 py-2 text-base"
         )}
         {...props}>
         {iconExtension}
