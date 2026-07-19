@@ -183,7 +183,10 @@ export default async function DocsPage(props: PageProps<"/docs/[[...slug]]">) {
                   [
                     rehypePrettyCode,
                     {
-                      theme: DEFAULT_CODE_THEME || "vesper",
+                      theme: {
+                        dark: DEFAULT_CODE_THEME,
+                        light: "github-light"
+                      },
                       keepBackground: false,
                       defaultLang: {
                         block: "plaintext",

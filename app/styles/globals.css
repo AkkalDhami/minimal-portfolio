@@ -5,7 +5,7 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --color-code: #000000;
+  --color-code: var(--color-code);
   /* --color-code: var(--color-neutral-950); */
   --color-card-hover: var(--color-card-hover);
   --color-drizzle: var(--color-drizzle);
@@ -83,6 +83,7 @@
   --color-card-hover: color-mix(in oklab, var(--accent) 50%, transparent);
   --color-drizzle: #89bb14;
   --color-motion: #dfd508;
+  /* --background: #ffffff; */
   --background: #f4f4f0;
   --foreground: #080707;
   --card: #ffffff;
@@ -438,3 +439,18 @@ h3 {
   display: inline;
   counter-reset: line;
 }
+
+[data-rehype-pretty-code-figure] code span {
+  color: var(--shiki-light);
+}
+
+.dark [data-rehype-pretty-code-figure] code span {
+  color: var(--shiki-dark);
+}
+
+
+[data-highlighted-line],
+[data-highlighted-chars] {
+  @apply dark:bg-highlight relative border-l-2 border-neutral-400 bg-neutral-200;
+}
+
