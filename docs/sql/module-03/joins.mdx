@@ -1,0 +1,184 @@
+---
+title: "Joins"
+description: "Combine rows from multiple tables with INNER, LEFT, and RIGHT joins."
+slug: "joins"
+---
+
+# Joins
+
+**Simple explanation:** a <Code>JOIN</Code> combines rows from two (or more) tables based on a related column — usually a foreign key pointing to a primary key. Instead of storing everything in one giant table, related data lives in separate tables, and joins stitch it back together when you need it.
+
+We'll use these two tables:
+
+```sql title="example.sql"
+CREATE TABLE authors (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    country VARCHAR(100)
+);
+
+INSERT INTO authors (name, country) VALUES
+('J.R.R. Tolkien', 'UK'),
+('Frank Herbert', 'USA'),
+('George Orwell', 'UK');
+
+-- books.author_id references authors.id
+```
+
+---
+
+## INNER JOIN
+
+Returns only rows that have a match in **both** tables. If a book has no matching author, or an author has no books, that row is left out.
+
+```
+   books                    authors
+┌────┬───────┬───────────┐ ┌────┬────────────────┐
+│ id │ title │ author_id │ │ id │ name           │
+├────┼───────┼───────────┤ ├────┼────────────────┤
+│ 1  │ Dune  │ 2         │►│ 2  │ Frank Herbert  │  ✔ matched
+│ 2  │ 1984  │ 3         │►│ 3  │ George Orwell  │  ✔ matched
+└────┴───────┴───────────┘ └────┴────────────────┘
+                              1  │ Tolkien        │  ✘ no books, excluded
+```
+
+```sql title="example.sql"
+SELECT books.title, authors.name AS author_name
+FROM books
+INNER JOIN authors ON books.author_id = authors.id;
+```
+
+**Read it like a sentence:** "Get the title from <Code>books</Code> and the name from <Code>authors</Code>, where each book's <Code>author_id</Code> matches an author's <Code>id</Code>."
+
+<Code>INNER JOIN</Code> is the most commonly used join — when you just say <Code>JOIN</Code> with no other keyword, MySQL treats it as <Code>INNER JOIN</Code>.
+
+---
+
+## LEFT JOIN
+
+Returns **all** rows from the left table (the one listed first, after <Code>FROM</Code>), plus matching rows from the right table. If there's no match, the right table's columns come back as <Code>NULL</Code>.
+
+```sql title="example.sql"
+SELECT books.title, authors.name AS author_name
+FROM books
+LEFT JOIN authors ON books.author_id = authors.id;
+```
+
+**Use case:** you want every book listed, even ones that don't have an author assigned yet (<Code>author_id IS NULL</Code>).
+
+---
+
+## RIGHT JOIN
+
+The mirror image of <Code>LEFT JOIN</Code> — returns all rows from the right table, plus matching rows from the left. Non-matches on the left come back as <Code>NULL</Code>.
+
+```sql title="example.sql"
+SELECT books.title, authors.name AS author_name
+FROM books
+RIGHT JOIN authors ON books.author_id = authors.id;
+```
+
+**Use case:** you want every author listed, even ones who don't have any books in the table yet.
+
+In practice, most people just rewrite a <Code>RIGHT JOIN</Code> as a <Code>LEFT JOIN</Code> with the tables swapped — it's easier to read consistently.
+
+---
+
+## Finding non-matches
+
+A common pattern: find rows in one table that have **no** match in the other. Combine <Code>LEFT JOIN</Code> with a <Code>WHERE ... IS NULL</Code> check:
+
+```sql title="example.sql"
+-- Authors who have no books yet
+SELECT authors.name
+FROM authors
+LEFT JOIN books ON books.author_id = authors.id
+WHERE books.id IS NULL;
+```
+
+---
+
+## Joining more than two tables
+
+You can chain multiple joins together:
+
+```sql title="example.sql"
+SELECT books.title, authors.name, authors.country
+FROM books
+JOIN authors ON books.author_id = authors.id
+WHERE authors.country = 'UK';
+```
+
+---
+
+## Table aliases keep joins readable
+
+Once queries involve multiple tables, aliasing (from the <Code>SELECT</Code> lesson) makes things much shorter:
+
+```sql title="example.sql"
+SELECT b.title, a.name AS author_name
+FROM books b
+JOIN authors a ON b.author_id = a.id;
+```
+
+---
+
+## Visual summary
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Join Type</TH>
+      <TH>Returns</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>INNER JOIN</TD>
+      <TD>Only rows that match in both tables</TD>
+    </TR>
+    <TR>
+      <TD>LEFT JOIN</TD>
+      <TD>All rows from the left table, matched rows from the right (NULL if none)</TD>
+    </TR>
+    <TR>
+      <TD>RIGHT JOIN</TD>
+      <TD>All rows from the right table, matched rows from the left (NULL if none)</TD>
+    </TR>
+  </TBody>
+</Table>
+
+---
+
+## Quick Reference
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Goal</TH>
+      <TH>Example</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>Only matching rows</TD>
+      <TD><Code>FROM books INNER JOIN authors ON books.author_id = authors.id</Code></TD>
+    </TR>
+    <TR>
+      <TD>All from left, matched from right</TD>
+      <TD><Code>FROM books LEFT JOIN authors ON books.author_id = authors.id</Code></TD>
+    </TR>
+    <TR>
+      <TD>All from right, matched from left</TD>
+      <TD><Code>FROM books RIGHT JOIN authors ON books.author_id = authors.id</Code></TD>
+    </TR>
+    <TR>
+      <TD>Find non-matching rows</TD>
+      <TD>LEFT JOIN + <Code>WHERE right_table.id IS NULL</Code></TD>
+    </TR>
+  </TBody>
+</Table>
+
+---
+
+**Try it yourself:** link a few books to authors using <Code>author_id</Code>, then write a query that lists each book's title alongside its author's name and country. Let me know how it goes, and we'll move to **Filtering & Sorting** next.
