@@ -26,6 +26,21 @@ export const SQL_DATA: IModule[] = createModules([
           "Relational vs non-relational, keys, normalization, ACID, and schema design basics."
       },
       {
+        slug: "types-of-keys",
+        title: "Types of Keys",
+        docs: "/types-of-keys",
+        description:
+          "Primary, foreign, candidate, unique, composite, super, alternate, and surrogate keys explained."
+      },
+
+      {
+        slug: "db-relationships",
+        title: "Database Relationships",
+        docs: "/db-relationships",
+        description:
+          "One-to-one, one-to-many, many-to-many relationships and how keys model them."
+      },
+      {
         slug: "dbms-interview-questions",
         title: "DBMS Interview Questions",
         docs: "/dbms-interview-questions",
@@ -84,22 +99,6 @@ export const SQL_DATA: IModule[] = createModules([
     docs: "/docs/sql/module-03",
     icon: IconDatabaseEdit,
     topics: [
-      {
-        slug: "types-of-keys",
-        title: "Types of Keys",
-        docs: "/types-of-keys",
-        description:
-          "Primary, foreign, candidate, unique, composite, super, alternate, and surrogate keys explained."
-      },
-
-      {
-        slug: "table-relationships",
-        title: "Table Relationships",
-        docs: "/table-relationships",
-        description:
-          "One-to-one, one-to-many, many-to-many relationships and how keys model them."
-      },
-
       {
         slug: "joins",
         title: "Joins",

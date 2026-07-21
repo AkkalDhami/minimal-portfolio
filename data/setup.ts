@@ -1,7 +1,12 @@
-import { Code2, Terminal, Palette, Plug } from "lucide-react";
+import { IconFontFamily } from "@/components/icons";
+import {
+  IconCode,
+  IconPalette,
+  IconPlug,
+  IconTerminal
+} from "@tabler/icons-react";
 
 import { ElementType } from "react";
-import { RxFontFamily } from "react-icons/rx";
 
 export interface SetupItem {
   title: string;
@@ -18,7 +23,7 @@ export interface SetupCategory {
 export const SETUP_DATA: SetupCategory[] = [
   {
     title: "Editor & AI",
-    icon: Code2,
+    icon: IconCode,
     items: [
       {
         title: "VS Code",
@@ -42,7 +47,7 @@ export const SETUP_DATA: SetupCategory[] = [
   },
   {
     title: "Themes",
-    icon: Palette,
+    icon: IconPalette,
     items: [
       {
         title: "Just Black",
@@ -74,8 +79,18 @@ export const SETUP_DATA: SetupCategory[] = [
   },
   {
     title: "Fonts",
-    icon: RxFontFamily,
+    icon: IconFontFamily,
     items: [
+      {
+        title: "Geist",
+        link: "https://fonts.google.com/specimen/Geist",
+        current: true
+      },
+      {
+        title: "Inter",
+        link: "https://fonts.google.com/specimen/Inter",
+        current: true
+      },
       {
         title: "Geist Mono",
         link: "https://vercel.com/font",
@@ -94,7 +109,7 @@ export const SETUP_DATA: SetupCategory[] = [
   },
   {
     title: "Terminal, Tools & Browsers",
-    icon: Terminal,
+    icon: IconTerminal,
     items: [
       {
         title: "Warp",
@@ -118,8 +133,8 @@ export const SETUP_DATA: SetupCategory[] = [
     ]
   },
   {
-    title: "Extensions",
-    icon: Plug,
+    title: "VS Code Extensions",
+    icon: IconPlug,
     items: [
       {
         title: "Prettier",
