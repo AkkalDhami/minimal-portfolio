@@ -1,0 +1,478 @@
+---
+title: Types of Keys
+description: Primary, foreign, candidate, super, alternate, composite, unique, and surrogate keys explained in detail.
+---
+
+A **key** is one or more columns used to identify rows uniquely or to link tables together. There isn't just one kind — different keys solve different problems. Let's go through each one properly.
+
+We'll use this table throughout:
+
+```sql title="example.sql"
+CREATE TABLE employees (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    employee_code VARCHAR(20) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    ssn VARCHAR(11) NOT NULL UNIQUE,
+    first_name VARCHAR(100),
+    last_name VARCHAR(100),
+    department_id INT
+);
+```
+
+<Output>
+mysql> SHOW COLUMNS FROM employees;
++---------------+--------------+------+-----+---------+----------------+
+| Field         | Type         | Null | Key | Default | Extra          |
++---------------+--------------+------+-----+---------+----------------+
+| id            | int          | NO   | PRI | NULL    | auto_increment |
+| employee_code | varchar(20)  | NO   | UNI | NULL    |                |
+| email         | varchar(255) | NO   | UNI | NULL    |                |
+| ssn           | varchar(11)  | NO   | UNI | NULL    |                |
+| first_name    | varchar(100) | YES  |     | NULL    |                |
+| last_name     | varchar(100) | YES  |     | NULL    |                |
+| department_id | int          | YES  |     | NULL    |                |
++---------------+--------------+------+-----+---------+----------------+
+</Output>
+
+---
+
+## 1. Primary Key
+
+A **Primary Key** uniquely identifies every row.
+
+#### Rules:
+- Cannot be duplicated.
+- Cannot be NULL.
+- Only one Primary Key per table.
+
+```sql title="example.sql" {2}
+CREATE TABLE employees (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    employee_code VARCHAR(20) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    ssn VARCHAR(11) NOT NULL UNIQUE,
+    first_name VARCHAR(100),
+    last_name VARCHAR(100),
+    department_id INT
+);
+```
+
+Here, <Code>id</Code> was picked as the Primary Key.
+
+```sql title="example.sql"
+INSERT INTO employees 
+(employee_code, email, ssn, first_name, last_name, department_id)
+VALUES
+('EMP001', 'john@gmail.com', '123-45-6789', 'John', 'Doe', 1),
+('EMP002', 'alice@gmail.com', '987-65-4321', 'Alice', 'Smith', 2),
+('EMP003', 'bob@gmail.com', '555-66-7777', 'Bob', 'Wilson', 1);
+```
+
+<Output>
+mysql> SELECT * FROM employees;
++----+---------------+-----------------+-------------+------------+-----------+---------------+
+| id | employee_code | email           | ssn         | first_name | last_name | department_id |
++----+---------------+-----------------+-------------+------------+-----------+---------------+
+|  1 | EMP001        | john@gmail.com  | 123-45-6789 | John       | Doe       |             1 |
+|  2 | EMP002        | alice@gmail.com | 987-65-4321 | Alice      | Smith     |             2 |
+|  3 | EMP003        | bob@gmail.com   | 555-66-7777 | Bob        | Wilson    |             1 |
++----+---------------+-----------------+-------------+------------+-----------+---------------+
+</Output>
+
+---
+
+#### Why is <Code>id</Code> be the Primary Key?
+
+Because every employee gets a unique ID. <Code>1, 2, 3</Code>
+
+There can never be two employees with <Code>id = 1</Code> and the value can never be <Code>NULL</Code>.
+
+MySQL automatically creates an **index**
+
+When you declare <Code>PRIMARY KEY(id)</Code>
+
+MySQL automatically creates an **index** on <Code>id</Code>.
+
+---
+
+#### What happens if you try this?
+
+```sql
+INSERT INTO employees
+VALUES (
+    1,
+    'EMP010',
+    'new@gmail.com',
+    '222-33-4444',
+    'New',
+    'User',
+    1
+);
+```
+MySQL says: <Code>ERROR 1062 (23000): Duplicate entry '1' for key 'employees.PRIMARY'</Code> because <Code>1</Code> already exists.
+
+<Output>
+mysql> INSERT INTO employees
+    -> VALUES (
+    ->     1,
+    ->     'EMP010',
+    ->     'new@gmail.com',
+    ->     '222-33-4444',
+    ->     'New',
+    ->     'User',
+    ->     1
+    -> );
+ERROR 1062 (23000): Duplicate entry '1' for key 'employees.PRIMARY'
+</Output>
+
+
+---
+
+## 2. Candidate Key
+
+Any column (or combination of columns) that **could** legally serve as the primary key — meaning it's unique and never empty for every row. A table can have several candidate keys, but only one gets chosen as the actual primary key.
+
+In the <Code>employees</Code> table, 
+
+<Code>id</Code>, <Code>employee_code</Code>, <Code>email</Code> and <Code>ssn</Code> (assuming each is guaranteed unique and always filled in). All four are **candidate keys**.
+
+**A Candidate Key is any column that could become the Primary Key.**
+
+
+---
+
+## 3. Alternate Key
+
+Any candidate key that **wasn't** chosen as the primary key. It's still unique and still usable — just not the official identifier.
+
+Since <Code>id</Code> became the primary key, <Code>employee_code</Code>, <Code>email</Code> and <Code>ssn</Code> are now **alternate keys** — they could have been the primary key, but weren't picked.
+
+```sql title="example.sql"
+-- employee_code and ssn are alternate keys:
+-- still unique, but not the chosen primary key
+ALTER TABLE employees
+ADD CONSTRAINT unique_employee_code UNIQUE (employee_code);
+```
+
+**Think of it like this:**
+
+<Output>
+  ✔ id          ← chosen
+  &nbsp;
+  employee_code
+  email
+  ssn
+</Output>
+
+The remaining **Candidate Keys** are called **Alternate Keys**.
+
+---
+
+## 4. Super Key
+
+Any set of columns that can **uniquely** identify a row — including columns that aren't strictly necessary. 
+
+Every **candidate key** is a **super key**, but a super key can also include extra, redundant columns.
+
+#### All of these uniquely identify a row, so all are super keys:
+
+- <Code>id</Code>
+- <Code>id</Code> + <Code>email</Code>    
+- <Code>employee_code</Code> + <Code>ssn</Code>
+- <Code>id</Code> + <Code>employee_code</Code> + <Code>ssn</Code>
+- <Code>email</Code>
+- <Code>email</Code> + <Code>department_id</Code>
+- <Code>email</Code> + <Code>first_name</Code>
+
+**A Super Key is any combination of columns that uniquely identifies a row.**
+
+---
+
+## 5. Composite Key
+
+A primary key made of **two or more columns combined**.
+
+A Composite Key uses multiple columns together.
+
+**Example:**
+
+Suppose **employees** can work in multiple **departments**.
+
+
+<Output>
+  | employee_id | department_id |
+  |-------------|---------------|
+  | 1           |             1 |
+  | 1           |             2 |
+  | 2           |             1 |
+</Output>
+
+Neither column is unique.
+
+Employee **1** appears twice.
+
+Department **1** appears twice.
+
+But together <Code>employee_id + department_id</Code> is unique.
+
+```sql title="example.sql"
+CREATE TABLE employee_departments (
+    employee_id INT,
+    department_id INT,
+    PRIMARY KEY(employee_id, department_id)
+);
+```
+
+---
+
+## 6. Foreign Key
+
+A column in one table that references the **Primary Key** of another table, **creating a relationship between them**.
+
+Table **employees** has <Code>department_id INT</Code> but it is not yet a **Foreign Key**.
+
+Suppose we have another table.
+
+```sql title="example.sql"
+CREATE TABLE departments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL
+);
+```
+<Output>
+mysql> DESC departments;
++-------+--------------+------+-----+---------+----------------+
+| Field | Type         | Null | Key | Default | Extra          |
++-------+--------------+------+-----+---------+----------------+
+| id    | int          | NO   | PRI | NULL    | auto_increment |
+| name  | varchar(100) | NO   |     | NULL    |                |
++-------+--------------+------+-----+---------+----------------+
+</Output>
+
+---
+
+```sql title="example.sql"
+INSERT INTO departments (id, name)
+VALUES
+(1, 'Engineering'),
+(2, 'Finance');
+```
+<Output>
+mysql> SELECT * FROM departments;
++----+-------------+
+| id | name        |
++----+-------------+
+|  1 | Engineering |
+|  2 | Finance     |
++----+-------------+
+</Output>
+
+
+```sql title="example.sql"
+ALTER TABLE employees
+ADD CONSTRAINT fk_employee_department
+FOREIGN KEY (department_id)
+REFERENCES departments(id);
+```
+
+<Code>employees.department_id</Code> is a Foreign Key pointing to <Code>departments.id</Code>. MySQL will reject any <Code>department_id</Code> value that doesn't already exist in <Code>departments</Code> — that's called **referential integrity**.
+
+---
+
+## 7. Unique Key
+
+Enforces that no two rows share the same value in a column — but unlike a Primary Key, a table can have **multiple** Unique Keys, and (depending on the database) a Unique column can allow one <Code>NULL</Code>.
+
+```sql title="example.sql" {3, 4, 5}
+CREATE TABLE employees (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    employee_code VARCHAR(20) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    ssn VARCHAR(11) NOT NULL UNIQUE,
+    first_name VARCHAR(100),
+    last_name VARCHAR(100),
+    department_id INT
+);
+```
+ 
+##### Add <Code>UNIQUE</Code> Constraint for <Code>email</Code> (if not already exists)
+
+```sql title="example.sql"
+ALTER TABLE employees
+ADD CONSTRAINT unique_email UNIQUE (email);
+```
+
+---
+
+## 8. Surrogate Key
+
+An artificial, system-generated identifier that has **no real-world meaning** — it exists purely to identify the row. <Code>id INT AUTO_INCREMENT</Code> is a classic **surrogate key**.
+
+```sql title="example.sql"
+CREATE TABLE employees (
+    id INT AUTO_INCREMENT PRIMARY KEY, -- surrogate key: just a number, means nothing outside the database
+    employee_code VARCHAR(20) NOT NULL
+);
+```
+
+The <Code>id</Code> value (1, 2, 3...) doesn't represent anything about the employee — it's just a stable, guaranteed-unique label.
+
+---
+
+## 9. Natural Key
+
+The opposite of a **surrogate key** — a key made from data that has **real-world meaning**, like a **Social Security Number(ssn)**, **email**.
+
+```sql title="example.sql"
+-- ssn and email are natural keys: they identify something meaningfully,
+-- not just internally to the database
+```
+
+**Why surrogate keys are usually preferred:** **natural keys** can change (a person's email changes, a company merges and reissues employee codes), which breaks anything referencing them as a **foreign key**. **Surrogate keys** never need to change, since they carry no real-world meaning to begin with.
+
+---
+
+## 10. Candidate Key vs Super Key
+
+**Candidate Key**: <Code>email</Code>
+
+**Super Key**: <Code>email</Code> + <Code>department_id</Code>
+
+Because <Code>department_id</Code> is unnecessary.
+
+Email alone already identifies the employee.
+
+> **Candidate Keys are simply the smallest possible Super Keys.**
+
+---
+
+## 11.  Primary Key vs Unique Key
+
+<Output>
+| Column        | Key Type    |
+|---------------|-------------|
+| id            | Primary Key |
+| employee_code | Unique Key  |
+| email         | Unique Key  |
+| ssn           | Unique Key  |
+
+</Output>
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Aspect</TH>
+      <TH>Primary Key</TH>
+      <TH>Unique Key</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>How many per table</TD>
+      <TD>Only one</TD>
+      <TD>Multiple allowed</TD>
+    </TR>
+    <TR>
+      <TD>Allows NULL</TD>
+      <TD>Never</TD>
+      <TD>Usually one NULL allowed</TD>
+    </TR>
+    <TR>
+      <TD>Purpose</TD>
+      <TD>The official row identifier</TD>
+      <TD>Prevents duplicates in a specific column</TD>
+    </TR>
+  </TBody>
+</Table>
+
+---
+
+## 12. Side-by-side comparison
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Key Type</TH>
+      <TH>Definition</TH>
+      <TH>Example</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>Candidate Key</TD>
+      <TD>Any column(s) that could be the primary key</TD>
+      <TD><Code>id</Code>, <Code>employee_code</Code>, <Code>ssn</Code></TD>
+    </TR>
+    <TR>
+      <TD>Primary Key</TD>
+      <TD>The candidate key actually chosen</TD>
+      <TD><Code>id</Code></TD>
+    </TR>
+    <TR>
+      <TD>Alternate Key</TD>
+      <TD>Candidate keys not chosen as primary</TD>
+      <TD><Code>employee_code</Code>, <Code>ssn</Code></TD>
+    </TR>
+    <TR>
+      <TD>Super Key</TD>
+      <TD>Any set of columns that uniquely identifies a row, minimal or not</TD>
+      <TD><Code>(id, email)</Code></TD>
+    </TR>
+    <TR>
+      <TD>Composite Key</TD>
+      <TD>A primary key made of multiple columns combined</TD>
+      <TD><Code>(book_id, genre_id)</Code></TD>
+    </TR>
+    <TR>
+      <TD>Foreign Key</TD>
+      <TD>References a primary key in another table</TD>
+      <TD><Code>department_id → departments.id</Code></TD>
+    </TR>
+    <TR>
+      <TD>Unique Key</TD>
+      <TD>Enforces no duplicates; multiple allowed per table</TD>
+      <TD><Code>email</Code></TD>
+    </TR>
+    <TR>
+      <TD>Surrogate Key</TD>
+      <TD>System-generated, no real-world meaning</TD>
+      <TD><Code>id INT AUTO_INCREMENT</Code></TD>
+    </TR>
+    <TR>
+      <TD>Natural Key</TD>
+      <TD>Made from real-world, meaningful data</TD>
+      <TD><Code>ssn</Code>, <Code>email</Code></TD>
+    </TR>
+  </TBody>
+</Table>
+
+---
+
+## 13. Visual Summary
+
+<Output>
+&nbsp;&nbsp;&nbsp;&nbsp; EMPLOYEES TABLE 
+&nbsp;
++---------------------------------------------------------------+
+| id               → Primary Key                               |
+|                  → Candidate Key                             |
+|                  → Super Key                                 |
+|                                                               |
+| employee_code    → Unique Key                                |
+|                  → Candidate Key                             |
+|                  → Alternate Key                             |
+|                  → Super Key                                 |
+|                                                               |
+| email            → Unique Key                                |
+|                  → Candidate Key                             |
+|                  → Alternate Key                             |
+|                  → Super Key                                 |
+|                                                               |
+| ssn              → Unique Key                                |
+|                  → Candidate Key                             |
+|                  → Alternate Key                             |
+|                  → Super Key                                 |
+|                                                               |
+| department_id    → Foreign Key (after REFERENCES is added)   |
++---------------------------------------------------------------+
+</Output>
