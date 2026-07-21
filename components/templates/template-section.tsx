@@ -132,19 +132,19 @@ export const TEMPLATE_DATA: ITemplate[] = [
     ]
   },
   {
-    title: "MERN Stack Portfolio",
+    title: "Personal Developer Portfolio",
     description:
-      "A portfolio template built with the MERN stack, designed to showcase scalable projects.",
+      "A modern portfolio website built to showcase projects, experience, skills, and technical expertise with a clean and minimal design.",
     thumbnail: "/assets/templates/temp-3.png",
-    githubUrl: `${GITHUB_URL}/MERN-Portfolio`,
-    liveUrl: "",
+    githubUrl: `${GITHUB_URL}/designer-minimal-portfolio`,
+    liveUrl: "https://designer-minimal-portfolio.vercel.app",
     technologies: [
+      { name: "Nextjs" },
       { name: "React" },
       { name: "TypeScript" },
       { name: "Tailwind CSS" },
-      { name: "MongoDB" },
-      { name: "Nodejs" },
-      { name: "Expressjs" }
+      { name: "Shadcn" },
+      { name: "Motion" }
     ]
   }
 ];

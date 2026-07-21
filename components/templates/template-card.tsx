@@ -5,7 +5,6 @@ import type { Route } from "next";
 import Image from "next/image";
 
 import Link from "next/link";
-import { SiGithub } from "react-icons/si";
 import {
   Tooltip,
   TooltipContent,
@@ -16,6 +15,7 @@ import { ITemplate } from "@/components/templates/template-section";
 import { cardSlide5Sound } from "@/sounds/card-slide-5";
 import { useSound } from "@/hooks/use-sound";
 import { getIconForLanguageExtension } from "@/components/docs/icon";
+import { IconGitHub } from "@/components/icons";
 
 export function TemplateCard({ template }: { template: ITemplate }) {
   return (
@@ -112,7 +112,7 @@ export function Links({ template }: { template: ITemplate }) {
                   target="_blank"
                   onClick={() => play()}
                   className={linkClassName}>
-                  <SiGithub className="size-3.5" />
+                  <IconGitHub className="size-3.5" />
                 </Link>
               }
             />

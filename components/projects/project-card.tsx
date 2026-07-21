@@ -14,7 +14,6 @@ import Image from "next/image";
 
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { SiGithub } from "react-icons/si";
 import {
   Tooltip,
   TooltipContent,
@@ -25,6 +24,7 @@ import { cn } from "@/lib/utils";
 import { useSound } from "@/hooks/use-sound";
 import { cardSlide5Sound } from "@/sounds/card-slide-5";
 import { getIconForLanguageExtension } from "@/components/docs/icon";
+import { IconGitHub } from "@/components/icons";
 
 export function ProjectCard({
   project,
@@ -82,9 +82,6 @@ export function ProjectCard({
                     name: tech.name,
                     className: "size-5"
                   });
-                  // const Icon =
-                  //   TECH_ICONS[tech.name.toUpperCase() as TechStack] ||
-                  //   TECH_ICONS["DEFAULT"];
                   return (
                     <TooltipProvider key={idx}>
                       <Tooltip>
@@ -312,7 +309,7 @@ export function ProjectLinks({
                     target="_blank"
                     onClick={() => play()}
                     className={linkClassName}>
-                    <SiGithub className="size-3.5" />
+                    <IconGitHub className="size-3.5" />
                     <div className="corner-squircle rounded-primary supports-corner-shape:rounded-primary ring-muted pointer-events-none absolute inset-0 ring-1 ring-inset dark:ring-white/15"></div>
                   </Link>
                 }

@@ -1,9 +1,7 @@
 "use client";
 
-import { User, Mail, Phone, MapPin } from "lucide-react";
 import type { Route } from "next";
 import Link from "next/link";
-import { FaGithub } from "react-icons/fa6";
 import {
   EMAIL,
   GITHUB_URL,
@@ -15,35 +13,37 @@ import {
 import { CopyButton } from "@/components/docs/copy-button";
 import { cn } from "@/lib/utils";
 import { withUTM } from "@/utils/link";
+import { IconGitHub } from "@/components/icons";
+import { IconMail, IconMapPin, IconPhone, IconUser } from "@tabler/icons-react";
 
 export const CONTACT_INFO = [
   {
     label: "Name",
     value: NAME,
-    icon: User
+    icon: IconUser
   },
   {
     label: "Github",
     value: `github.com/${GITHUB_USERNAME}`,
-    icon: FaGithub,
+    icon: IconGitHub,
     href: GITHUB_URL
   },
   {
     label: "Email",
     value: EMAIL,
-    icon: Mail,
+    icon: IconMail,
     href: `mailto:${EMAIL}`
   },
   {
     label: "Phone",
     value: PHONE,
-    icon: Phone,
+    icon: IconPhone,
     href: `tel:${PHONE}`
   },
   {
     label: "Location",
     value: LOCATION,
-    icon: MapPin
+    icon: IconMapPin
   }
 ];
 

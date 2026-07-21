@@ -6,8 +6,6 @@ import {
   X_URL
 } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-import { LuArrowUpRight } from "react-icons/lu";
-import { SiDailydotdev } from "react-icons/si";
 import { PrimaryButton } from "@/components/ui/primary-button";
 import { Route } from "next";
 import {
@@ -17,53 +15,54 @@ import {
   TooltipTrigger
 } from "@/components/ui/tooltip";
 
-import {
-  RiLinkedinFill,
-  RiGithubFill,
-  RiTwitterXFill,
-  RiDiscordFill
-} from "react-icons/ri";
-import { IconType } from "react-icons";
 import { uChatScrollButtonSound } from "@/sounds/chat-scroll";
 import { useSound } from "@/hooks/use-sound";
 import Link from "next/link";
+import { IconArrowUpRight, IconBrandX } from "@tabler/icons-react";
+import {
+  IconDailyDev,
+  IconDiscord,
+  IconGitHub,
+  IconLinkedIn,
+  IconProps
+} from "@/components/icons";
 
 export type SocialLink = {
   name: string;
   key?: string;
   href: string;
-  icon: IconType;
+  icon: React.FC<IconProps>;
 };
 
 export const socialLinks: SocialLink[] = [
   {
     name: "GitHub",
     href: GITHUB_URL,
-    icon: RiGithubFill,
+    icon: IconGitHub,
     key: "g"
   },
   {
     name: "X (Twitter)",
     href: X_URL,
-    icon: RiTwitterXFill,
+    icon: IconBrandX,
     key: "x"
   },
   {
     name: "Discord",
     href: DISCORD_URL,
-    icon: RiDiscordFill,
+    icon: IconDiscord,
     key: "i"
   },
   {
     name: "LinkedIn",
     href: LINKEDIN_URL,
-    icon: RiLinkedinFill,
+    icon: IconLinkedIn,
     key: "l"
   },
   {
     name: "daily.dev",
     href: DAILY_DEV_URL,
-    icon: SiDailydotdev,
+    icon: IconDailyDev,
     key: "z"
   }
 ];
@@ -124,7 +123,7 @@ export function SocialLinks({
               <h3 className="text-muted-primary group-hover:text-accent-foreground text-sm font-medium underline-offset-3 group-hover:underline sm:text-base">
                 {social.name}
               </h3>
-              <LuArrowUpRight className="text-muted-primary group-hover:text-accent-foreground size-4" />
+              <IconArrowUpRight className="text-muted-primary group-hover:text-accent-foreground size-4" />
             </div>
           </div>
         </Link>

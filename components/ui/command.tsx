@@ -15,6 +15,7 @@ import {
   AutocompleteSeparator
 } from "@/components/ui/autocomplete";
 import { IconSearch } from "@tabler/icons-react";
+import { Kbd } from "./kbd";
 
 const CommandDialog = CommandDialogPrimitive.Root;
 
@@ -110,10 +111,13 @@ function CommandInput({
   return (
     <div className="text-muted-foreground relative flex items-center gap-2 px-2.5 py-1.75">
       <IconSearch className="absolute top-1/2 left-5 size-4 -translate-y-1/2" />
+      <Kbd className="absolute top-1/2 right-5 -translate-y-1/2 uppercase">
+        Esc
+      </Kbd>
       <AutocompleteInput
         autoFocus
         className={cn(
-          "border-transparent bg-transparent! pl-9 shadow-none before:hidden hover:border-transparent focus-visible:border-transparent focus-visible:ring-transparent",
+          "border-transparent bg-transparent! pr-12 pl-9 shadow-none before:hidden hover:border-transparent focus-visible:border-transparent focus-visible:ring-transparent",
           className
         )}
         placeholder={placeholder}

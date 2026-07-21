@@ -12,7 +12,6 @@ import type { Route } from "next";
 import { isActiveLink } from "@/utils/link";
 import { PrimaryButton } from "@/components/ui/primary-button";
 import { GITHUB_URL, NAME } from "@/lib/constants";
-import { SiGithub } from "react-icons/si";
 import { SearchCommand } from "@/components/home/search-command";
 import { ThemeToggle } from "@/components/layouts/theme-toggle";
 import { cardSlide5Sound } from "@/sounds/card-slide-5";
@@ -20,6 +19,7 @@ import { useSound } from "@/hooks/use-sound";
 import { uChatScrollButtonSound } from "@/sounds/chat-scroll";
 import { usePreferencesStore } from "@/hooks/use-preferences";
 import { SettingsDropdown } from "@/components/shared/setting-dropdown";
+import { IconGitHub } from "@/components/icons";
 
 interface MenuItem {
   label: string;
@@ -94,7 +94,7 @@ export function Navbar() {
                       "relative cursor-pointer px-3 py-1.5 text-xs font-medium tracking-widest uppercase transition-all duration-300",
                       isMoving
                         ? "text-accent"
-                        : "text-muted-primary hover:text-primary"
+                        : "text-muted-foreground hover:text-primary"
                     )}>
                     <span className="relative z-10">{item.label}</span>
                     {isMoving && (
@@ -120,7 +120,7 @@ export function Navbar() {
               href={`${GITHUB_URL}/minimal-portfolio` as Route}
               target="_blank"
               className="relative hidden rounded-lg border-0 px-2 py-2 ring-0 sm:block">
-              <SiGithub onClick={() => play()} className="size-5" />
+              <IconGitHub onClick={() => play()} className="size-5" />
             </PrimaryButton>
             <ThemeToggle className="py-1.5" />
             <button

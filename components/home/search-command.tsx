@@ -1,16 +1,5 @@
 "use client";
 
-import {
-  RiBookOpenLine,
-  RiHome4Line,
-  RiPhoneLine,
-  RiGithubFill,
-  RiCodeSSlashLine
-} from "react-icons/ri";
-import { HiOutlineCube } from "react-icons/hi";
-import { LiaLaptopCodeSolid } from "react-icons/lia";
-import { HiOutlineSquare3Stack3D } from "react-icons/hi2";
-import { LuLayoutTemplate } from "react-icons/lu";
 import { Fragment, useEffect, useState } from "react";
 import {
   Command,
@@ -28,16 +17,12 @@ import {
   CommandSeparator
 } from "@/components/ui/command";
 import { Kbd, KbdGroup } from "@/components/ui/kbd";
-import { IconType } from "react-icons";
 import { useRouter } from "next/navigation";
 import { Route } from "next";
 import { PROJECTS } from "@/data/projects";
 import { PLAYBOOK_DATA } from "@/data/playbook";
 import { CONTACT_INFO } from "@/components/contact/contact-info";
-import Image from "next/image";
-import { cn } from "@/lib/utils";
 import { GITHUB_URL } from "@/lib/constants";
-import { LuMoonStar } from "react-icons/lu";
 import { useTheme } from "next-themes";
 import { TEMPLATE_DATA } from "@/components/templates/template-section";
 import { socialLinks } from "./social-link";
@@ -46,15 +31,29 @@ import { click005Sound } from "@/sounds/click-005";
 import { click002Sound } from "@/sounds/click-002";
 import { uChatScrollButtonSound } from "@/sounds/chat-scroll";
 import { DSA_DATA } from "@/data/dsa";
-import { IconDatabase, IconWorld } from "@tabler/icons-react";
+import {
+  IconBook,
+  IconBrandGithub,
+  IconCode,
+  IconCube,
+  IconDatabase,
+  IconDeviceDesktopCode,
+  IconHome,
+  IconMoonStars,
+  IconPhone,
+  IconStack2,
+  IconTemplate,
+  IconWorld
+} from "@tabler/icons-react";
 import { NETWORKING_DATA } from "@/data/networking";
 import { padString } from "@/utils/pad-string";
 import { SQL_DATA } from "@/data/sql";
+import { IconProps } from "@/components/icons";
 
 export interface Item {
   value: string;
   label: string;
-  icon: IconType | string;
+  icon: React.FC<IconProps>;
   link?: boolean;
   newTab?: boolean;
   key?: string;
@@ -69,35 +68,35 @@ export interface Group {
 
 export const navigations: Item[] = [
   {
-    icon: RiHome4Line,
+    icon: IconHome,
     label: "Home",
     value: "/",
     link: true,
     key: "h"
   },
   {
-    icon: HiOutlineCube,
+    icon: IconCube,
     label: "Projects",
     value: "/projects",
     link: true,
     key: "p"
   },
   {
-    icon: HiOutlineSquare3Stack3D,
+    icon: IconStack2,
     label: "Tech Skills",
     value: "/#skills",
     link: true,
     key: "e"
   },
   {
-    icon: LiaLaptopCodeSolid,
+    icon: IconDeviceDesktopCode,
     label: "Development Setup",
     value: "/dev-setup",
     link: true,
     key: "s"
   },
   {
-    icon: RiBookOpenLine,
+    icon: IconBook,
     label: "PlayBook",
     value: "/playbook",
     link: true,
@@ -118,21 +117,21 @@ export const navigations: Item[] = [
     key: "o"
   },
   {
-    icon: LuLayoutTemplate,
+    icon: IconTemplate,
     label: "Templates",
     value: "/templates",
     link: true,
     key: "t"
   },
   {
-    icon: RiPhoneLine,
+    icon: IconPhone,
     label: "Contacts",
     value: "/contacts",
     link: true,
     key: "c"
   },
   {
-    icon: RiCodeSSlashLine,
+    icon: IconCode,
     label: "DSA",
     value: "/dsa",
     link: true,
@@ -144,7 +143,7 @@ export const projects: Item[] = PROJECTS.map(proj => {
   return {
     value: `/projects/${proj.slug}`,
     label: proj.title,
-    icon: HiOutlineCube,
+    icon: IconCube,
     link: true,
     newTab: false
   };
@@ -154,7 +153,7 @@ export const playbooks: Item[] = PLAYBOOK_DATA.map(play => {
   return {
     value: `${play.docs}`,
     label: play.title,
-    icon: RiBookOpenLine,
+    icon: IconBook,
     link: true,
     newTab: true
   };
@@ -182,7 +181,7 @@ export const dsa: Item[] = DSA_DATA.map(play => {
   return {
     value: `${play.docs}`,
     label: play.title,
-    icon: RiBookOpenLine,
+    icon: IconCode,
     link: true,
     newTab: true
   };
@@ -192,7 +191,7 @@ export const templates: Item[] = TEMPLATE_DATA.map(t => {
   return {
     value: `${t.liveUrl}`,
     label: t.title,
-    icon: LuLayoutTemplate,
+    icon: IconTemplate,
     link: true,
     newTab: true
   };
@@ -222,7 +221,7 @@ export const socials: Item[] = socialLinks.map(s => {
 
 export const others: Item[] = [
   {
-    icon: RiGithubFill,
+    icon: IconBrandGithub,
     label: "Source Code",
     value: `${GITHUB_URL}/minimal-portfolio`,
     link: true,
@@ -230,7 +229,7 @@ export const others: Item[] = [
     key: "y"
   },
   {
-    icon: LuMoonStar,
+    icon: IconMoonStars,
     label: "Toggle Theme",
     value: `Toggle Theme`,
     link: false,
@@ -328,7 +327,6 @@ export function SearchCommand() {
                     <CommandGroupLabel>{group.value}</CommandGroupLabel>
                     <CommandCollection>
                       {(item: Item) => {
-                        const image = typeof item.icon === "string";
                         return (
                           <CommandItem
                             key={item.value}
@@ -339,21 +337,7 @@ export function SearchCommand() {
                             }>
                             <div className="flex w-full items-center justify-between">
                               <div className="flex items-center gap-2">
-                                {image ? (
-                                  <Image
-                                    src={item.icon as string}
-                                    alt={item.label}
-                                    width={16}
-                                    height={16}
-                                    className={cn(
-                                      "text-muted-primary group-hover:text-accent-foreground size-6",
-                                      item.label.toLocaleLowerCase() ===
-                                        "email" && "dark:invert"
-                                    )}
-                                  />
-                                ) : (
-                                  <item.icon className="primary-ring border-edge size-6 rounded-md border p-1" />
-                                )}
+                                <item.icon className="primary-ring border-edge size-6 rounded-md border p-1" />
 
                                 <span className="line-clamp-1 flex-1">
                                   {item.label}
