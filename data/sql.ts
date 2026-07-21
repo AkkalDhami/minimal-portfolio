@@ -90,36 +90,36 @@ export const SQL_DATA: IModule[] = createModules([
           "Change a table's structure: add, modify, rename, or drop columns."
       }
     ]
-  },
-
-  {
-    slug: "module-03",
-    title: "Module 03 - Querying",
-    description: "Combine and filter data across tables.",
-    docs: "/docs/sql/module-03",
-    icon: IconDatabaseEdit,
-    topics: [
-      {
-        slug: "joins",
-        title: "Joins",
-        docs: "/joins",
-        description:
-          "Combine rows from multiple tables with INNER, LEFT, and RIGHT joins."
-      },
-      {
-        slug: "filtering",
-        title: "Filtering and sorting",
-        docs: "/filtering",
-        description: "WHERE, ORDER BY, LIMIT, and combining conditions."
-      },
-      {
-        slug: "aggregates",
-        title: "Aggregate functions",
-        docs: "/aggregates",
-        description: "COUNT, SUM, AVG, GROUP BY, and HAVING."
-      }
-    ]
   }
+
+  // {
+  //   slug: "module-03",
+  //   title: "Module 03 - Querying",
+  //   description: "Combine and filter data across tables.",
+  //   docs: "/docs/sql/module-03",
+  //   icon: IconDatabaseEdit,
+  //   topics: [
+  //     {
+  //       slug: "joins",
+  //       title: "Joins",
+  //       docs: "/joins",
+  //       description:
+  //         "Combine rows from multiple tables with INNER, LEFT, and RIGHT joins."
+  //     },
+  //     {
+  //       slug: "filtering",
+  //       title: "Filtering and sorting",
+  //       docs: "/filtering",
+  //       description: "WHERE, ORDER BY, LIMIT, and combining conditions."
+  //     },
+  //     {
+  //       slug: "aggregates",
+  //       title: "Aggregate functions",
+  //       docs: "/aggregates",
+  //       description: "COUNT, SUM, AVG, GROUP BY, and HAVING."
+  //     }
+  //   ]
+  // }
   // {
   //   slug: "module-03",
   //   title: "Module 03 - Data Integrity",

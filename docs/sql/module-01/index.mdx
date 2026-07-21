@@ -28,6 +28,72 @@ In this section, we'll cover the key concepts and theory behind DBMS, including 
 - **Indexes**
 - **Constraints**
 
-## <HLink href="/docs/sql/module-01/dbms-interview-questions">3. DBMS Interview Questions</HLink>
+---
+
+
+## <HLink href="/docs/sql/module-01/types-of-keys">3. Types of Keys</HLink>
+
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Key Type</TH>
+      <TH>Definition</TH>
+      <TH>Example</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>Candidate Key</TD>
+      <TD>Any column(s) that could be the primary key</TD>
+      <TD><Code>id</Code>, <Code>employee_code</Code>, <Code>ssn</Code></TD>
+    </TR>
+    <TR>
+      <TD>Primary Key</TD>
+      <TD>The candidate key actually chosen</TD>
+      <TD><Code>id</Code></TD>
+    </TR>
+    <TR>
+      <TD>Alternate Key</TD>
+      <TD>Candidate keys not chosen as primary</TD>
+      <TD><Code>employee_code</Code>, <Code>ssn</Code></TD>
+    </TR>
+    <TR>
+      <TD>Super Key</TD>
+      <TD>Any set of columns that uniquely identifies a row, minimal or not</TD>
+      <TD><Code>(id, email)</Code></TD>
+    </TR>
+    <TR>
+      <TD>Composite Key</TD>
+      <TD>A primary key made of multiple columns combined</TD>
+      <TD><Code>(book_id, genre_id)</Code></TD>
+    </TR>
+    <TR>
+      <TD>Foreign Key</TD>
+      <TD>References a primary key in another table</TD>
+      <TD><Code>department_id → departments.id</Code></TD>
+    </TR>
+    <TR>
+      <TD>Unique Key</TD>
+      <TD>Enforces no duplicates; multiple allowed per table</TD>
+      <TD><Code>email</Code></TD>
+    </TR>
+    <TR>
+      <TD>Surrogate Key</TD>
+      <TD>System-generated, no real-world meaning</TD>
+      <TD><Code>id INT AUTO_INCREMENT</Code></TD>
+    </TR>
+    <TR>
+      <TD>Natural Key</TD>
+      <TD>Made from real-world, meaningful data</TD>
+      <TD><Code>ssn</Code>, <Code>email</Code></TD>
+    </TR>
+  </TBody>
+</Table>
+
+
+---
+
+## <HLink href="/docs/sql/module-01/dbms-interview-questions">5. DBMS Interview Questions</HLink>
 
 In this section, we'll cover common interview questions and best practices for DBMS.
