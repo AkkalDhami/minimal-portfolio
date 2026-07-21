@@ -1,0 +1,281 @@
+---
+title: Database Relationships
+description: One-to-one, one-to-many, many-to-many relationships and how keys model them.
+---
+
+Relational databases store data in separate tables instead of one big table. **Keys** are used to connect these tables.
+
+Understanding the relationship between tables helps you design your tables and keys correctly. Whether it is **one-to-one**, **one-to-many**, or **many-to-many**, the relationship type determines how your data should be structured.
+
+---
+
+## Quick recap: Primary Key vs Foreign Key
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Key</TH>
+      <TH>Lives in</TH>
+      <TH>Purpose</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>Primary Key (**PK**)</TD>
+      <TD>The table it identifies</TD>
+      <TD>Uniquely identifies each row</TD>
+    </TR>
+    <TR>  
+      <TD>Foreign Key (**FK**)</TD>
+      <TD>The "many" or "child" table</TD>
+      <TD>Points to a Primary Key in another table, creating the link</TD>
+    </TR>
+  </TBody>
+</Table>
+
+Example: <Code>authors.id</Code> is a **Primary Key**. <Code>books.author_id</Code> is a **Foreign Key** pointing back to it.
+
+---
+
+## The three relationship types
+
+### 1. One-to-One
+
+Each row in Table A matches **exactly one** row in Table B, and vice versa. Less common — usually used to split a table for organization, security, or performance reasons.
+
+**Example:** a <Code>users</Code> table and a <Code>user_profiles</Code> table, where each user has exactly one profile.
+
+```
+      users                              user_profiles
+┌────────┬──────────────┐          ┌────────┬──────────────┬────────────┐
+│ id(PK) │ email        │          │ id(PK) │ user_id(FK)  │ bio        │
+├────────┼──────────────┤          ├────────┼──────────────┼────────────┤
+│ 1      │ a@mail.com   │<────────>│ 1      │ 1            │ Hi there   │
+│ 2      │ b@mail.com   │<────────>│ 2      │ 2            │ Hello      │
+└────────┴──────────────┘          └────────┴──────────────┴────────────┘
+        1                                  1
+        └──────────────────────────────────┘
+                 One-to-One Relationship
+```
+
+```sql title="example.sql" {2, 10}
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE
+);
+
+CREATE TABLE user_profiles (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT UNIQUE,
+    bio TEXT,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+```
+
+The <Code>UNIQUE</Code> constraint on <Code>user_id</Code> is what enforces "one-to-one" — without it, one user could have multiple profile rows, making it one-to-many instead.
+
+---
+
+##### Inserting sample data into the <Code>users</Code> table
+```sql title="example.sql"
+INSERT INTO users (email) 
+VALUES ('a@mail.com'), ('b@mail.com');
+```
+
+##### Inserting sample data into the <Code>user_profiles</Code> table
+```sql title="example.sql"
+INSERT INTO user_profiles (user_id, bio)
+VALUES (1, 'Hi there'), (2, 'Hello');
+```
+
+##### Querying the data
+<Output>
+mysql> SELECT * FROM users;
++----+------------+
+| id | email      |
++----+------------+
+|  1 | a@mail.com |
+|  2 | b@mail.com |
++----+------------+
+
+mysql> SELECT * FROM user_profiles;
++----+---------+----------+
+| id | user_id | bio      |
++----+---------+----------+
+|  1 |       1 | Hi there |
+|  2 |       2 | Hello    |
++----+---------+----------+
+</Output>
+
+##### Querying the relationship
+
+```sql title="example.sql" 
+SELECT 
+    TABLE_NAME,
+    COLUMN_NAME,
+    REFERENCED_TABLE_NAME,
+    REFERENCED_COLUMN_NAME
+FROM information_schema.KEY_COLUMN_USAGE
+WHERE CONSTRAINT_SCHEMA = 'your_database_name'
+AND REFERENCED_TABLE_NAME IS NOT NULL;
+```
+
+<Output>
+  +---------------+---------------+-----------------------+------------------------+
+  | TABLE_NAME    | COLUMN_NAME   | REFERENCED_TABLE_NAME | REFERENCED_COLUMN_NAME |
+  +---------------+---------------+-----------------------+------------------------+
+  | user_profiles | user_id       | users                 | id                     |
+  +---------------+---------------+-----------------------+------------------------+
+</Output>
+
+---
+
+### 2. One-to-Many
+
+Each row in Table A can relate to **many** rows in Table B, but each row in Table B relates back to only **one** row in Table A. This is the most common relationship type.
+
+**Example:** one author can write many books, but each book has one author.
+
+```
+ authors                       books
+┌────┬────────────────┐       ┌────┬──────────────────┬───────────┐
+│ id │ name            │       │ id │ title            │ author_id │
+├────┼────────────────┤       ├────┼──────────────────┼───────────┤
+│ 1  │ Frank Herbert   │◄──┬───┤ 1  │ Dune              │ 1         │
+│ 2  │ George Orwell   │◄─┐└───┤ 2  │ Dune Messiah      │ 1         │
+└────┴────────────────┘  │     ├────┼──────────────────┼───────────┤
+                          └─────┤ 3  │ 1984              │ 2         │
+                                └────┴──────────────────┴───────────┘
+
+        one author  ─────────►  many books
+```
+
+```sql title="example.sql"
+CREATE TABLE authors (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE books (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    author_id INT,
+    FOREIGN KEY (author_id) REFERENCES authors(id)
+);
+```
+
+Notice the Foreign Key (<Code>author_id</Code>) lives on the "many" side (<Code>books</Code>), not the "one" side (<Code>authors</Code>). This is the pattern to remember: **the foreign key always sits on the many side.**
+
+---
+
+### 3. Many-to-Many
+
+Rows in Table A can relate to **many** rows in Table B, and rows in Table B can relate to **many** rows in Table A. This can't be modeled with a single foreign key — it needs a third table in between, called a **junction table** (or pivot table).
+
+**Example:** a book can have multiple genres, and a genre can apply to multiple books.
+
+```
+   books              book_genres              genres
+┌────┬───────┐    ┌─────────┬──────────┐    ┌────┬──────────┐
+│ id │ title │    │ book_id │ genre_id │    │ id │ name     │
+├────┼───────┤    ├─────────┼──────────┤    ├────┼──────────┤
+│ 1  │ Dune  │◄───┤ 1       │ 1        │───►│ 1  │ Sci-Fi   │
+│    │       │◄───┤ 1       │ 2        │───►│ 2  │ Adventure│
+│ 2  │ 1984  │◄───┤ 2       │ 1        │───►│ 1  │ Sci-Fi   │
+└────┴───────┘    └─────────┴──────────┘    └────┴──────────┘
+
+     books  ◄──── many-to-many ────►  genres
+```
+
+```sql title="example.sql"
+CREATE TABLE genres (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL
+);
+
+-- Junction table: connects books and genres
+CREATE TABLE book_genres (
+    book_id INT,
+    genre_id INT,
+    PRIMARY KEY (book_id, genre_id),
+    FOREIGN KEY (book_id) REFERENCES books(id),
+    FOREIGN KEY (genre_id) REFERENCES genres(id)
+);
+```
+
+<Code>book_genres</Code> has no meaningful data of its own — it just holds pairs of IDs, recording which book belongs to which genre. Its Primary Key is a **composite key** made of both foreign keys together, which also prevents the same pairing from being inserted twice.
+
+---
+
+## Choosing the right relationship
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Question</TH>
+      <TH>Relationship</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>Does each record on both sides only ever match one on the other side?</TD>
+      <TD>One-to-One</TD>
+    </TR>
+    <TR>
+      <TD>Does one record on Side A relate to many on Side B, but not the reverse?</TD>
+      <TD>One-to-Many</TD>
+    </TR>
+    <TR>
+      <TD>Can records on both sides relate to multiple records on the other side?</TD>
+      <TD>Many-to-Many (needs a junction table)</TD>
+    </TR>
+  </TBody>
+</Table>
+
+---
+
+## Why this matters before joins
+
+Once your tables and keys are set up correctly, joins are just "follow the foreign key":
+
+- **One-to-Many** → join <Code>books</Code> to <Code>authors</Code> directly on <Code>author_id = id</Code>
+- **Many-to-Many** → join through the junction table: <Code>books</Code> → <Code>book_genres</Code> → <Code>genres</Code>
+
+Getting the relationship type right at design time is what makes the join queries later straightforward instead of confusing.
+
+---
+
+## Rule of thumb
+
+```
+1 ──────< many        →  foreign key on the "many" side
+many >──< many          →  junction table with two foreign keys
+1 ────── 1              →  foreign key + UNIQUE constraint
+```
+
+---
+
+## Quick Reference
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Relationship</TH>
+      <TH>How it's modeled</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>One-to-One</TD>
+      <TD>Foreign key with a <Code>UNIQUE</Code> constraint</TD>
+    </TR>
+    <TR>
+      <TD>One-to-Many</TD>
+      <TD>Foreign key on the "many" side, no <Code>UNIQUE</Code></TD>
+    </TR>
+    <TR>
+      <TD>Many-to-Many</TD>
+      <TD>A junction table with two foreign keys, often combined as a composite primary key</TD>
+    </TR>
+  </TBody>
+</Table>
