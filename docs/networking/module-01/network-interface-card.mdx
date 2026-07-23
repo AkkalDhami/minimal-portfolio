@@ -1,0 +1,421 @@
+---
+title: Network Interface Card (NIC)
+description: Discover how a Network Interface Card enables devices to connect and communicate over a network.
+---
+
+
+Imagine you want to call your friend.
+
+##### Can you make a phone call without a **SIM card**?
+
+**No.** The SIM card allows your phone to connect to the mobile network.
+
+Similarly, a computer needs a way to connect to a computer network. This is where the **Network Interface Card (NIC)** comes in.
+
+Without a NIC, your computer cannot communicate with other devices or access the Internet.
+
+---
+
+## 1. What is a Network Interface Card (NIC)?
+
+A **Network Interface Card (NIC)** is a hardware component that allows a device to connect to a computer network.
+
+It acts as a translator between your computer's internal data and the signals that travel over a network cable or through the air (Wi-Fi).
+
+Whether you're using:
+
+- Ethernet
+- Wi-Fi
+- Fiber
+
+your device communicates through a NIC.
+
+Simply put,
+
+> **A NIC is the gateway that allows your device to join a network.**
+
+```text
+          Computer
+
+   +------------------+
+   |     Browser      |
+   +------------------+
+            │
+   +------------------+
+   | Operating System |
+   +------------------+
+            │
+   +------------------+
+   |       NIC        |
+   +------------------+
+            │
+        Ethernet
+        or Wi-Fi
+            │
+         Router
+            │
+        Internet
+```
+
+<ZoomableImage width="800" height="400" src="/images/nic.jpg" wrapperClassName="my-6" alt="NIC" className='h-100 w-auto'/>
+
+---
+
+## 2. Why Do We Need a NIC?
+
+Imagine two laptops sitting next to each other.
+
+
+<Output>
+    Laptop A          Laptop B
+</Output>
+
+Can they exchange data?
+
+**No.** They need a way to connect to the network first.
+
+Once each laptop has a NIC:
+
+<Output>
+    Laptop A ───── Switch ───── Laptop B
+</Output>
+
+Now they can communicate.
+
+Without a NIC:
+
+- No Internet
+- No file sharing
+- No online gaming
+- No video calls
+
+
+---
+
+## 3. How Does a NIC Work?
+
+Suppose you open **google.com**.
+
+```text
+      You
+       ⭣
+    Browser
+       ⭣
+Operating System
+       ⭣
+      NIC
+       ⭣
+     Router
+       ⭣
+     Internet
+```
+
+The browser creates a request.
+
+The operating system passes that request to the NIC.
+
+The NIC converts the data into electrical signals (Ethernet) or radio waves (Wi-Fi) and sends it over the network.
+
+When the response comes back, the NIC receives it and passes it to the operating system.
+
+Finally, your browser displays the webpage.
+
+---
+
+## 4. What it actually does
+
+- **Converts data formats** — your computer processes data in parallel (many bits at once internally); the network cable sends data serially (one bit after another). The NIC converts between these.
+
+- **Frames the data** — it wraps your data into "frames" following networking rules (usually Ethernet), adding source/destination info.
+
+- **Physical transmission** — turns those frames into electrical signals (copper cable), light pulses (fiber), or radio waves (Wi-Fi).
+
+- **Has a unique MAC address** — a hardwired identifier like <Code>00:1A:2B:3C:4D:5E</Code> burned into the card at manufacture, so devices on a network can be told apart.
+
+
+A NIC performs several important tasks:
+
+- Connects the device to a network.
+- Sends data.
+- Receives data.
+- Converts digital data into network signals.
+- Converts incoming signals back into digital data.
+- Stores a unique MAC Address.
+
+---
+
+## 5. Types of NIC
+
+### 1. Wired NIC
+
+Uses an Ethernet cable.
+
+```text
+Computer
+     │
+ Ethernet Cable
+     │
+   Router
+```
+
+Advantages:
+
+- Faster
+- Stable
+- Lower latency
+
+Common Technology:
+
+- Ethernet (RJ-45)
+
+---
+
+### 2. Wireless NIC
+
+Uses radio waves instead of cables.
+
+```text
+Laptop ))))))
+      Wi-Fi
+        │
+     Router
+```
+
+Advantages:
+
+- Portable
+- No cables
+- Easy to connect
+
+Common Technology:
+
+- Wi-Fi (IEEE 802.11)
+
+---
+
+## 6. Components of a NIC
+
+A typical NIC contains:
+
+- MAC Address
+- Network Port (RJ-45 for wired NICs)
+- Antenna (for wireless NICs)
+- Processor (NIC Controller)
+- Memory Buffer
+
+---
+
+## 7. Characteristics
+
+- Hardware component
+- Provides network connectivity
+- Has a unique MAC address
+- Can be wired or wireless
+- Sends and receives data
+- Installed internally or externally
+
+---
+
+## 8. Common Technologies
+
+- Ethernet
+- Wi-Fi
+- PCI Express (PCIe)
+- USB Network Adapter
+- RJ-45
+- IEEE 802.3
+- IEEE 802.11
+
+---
+
+## 9. Coverage
+
+The coverage depends on the network technology being used:
+
+### Wired NIC
+
+- Limited by the length of the Ethernet cable (typically up to **100 meters** per cable segment).
+
+### Wireless NIC
+
+- Depends on the Wi-Fi signal, usually **20-50 meters indoors** and up to **100 meters or more outdoors**.
+
+---
+
+## 10. Example
+
+### Wired Desktop Computer
+
+```text
+Desktop
+    │
+ Ethernet Cable
+    │
+Switch
+```
+
+The desktop uses a wired NIC.
+
+---
+
+### Laptop
+
+```text
+Laptop )))))
+      Wi-Fi
+        │
+     Router
+```
+
+The laptop uses a wireless NIC.
+
+---
+
+### Smartphone
+
+```text
+Phone )))))
+      Wi-Fi
+```
+
+Every smartphone contains a wireless NIC.
+
+---
+
+## 11. Use Cases
+
+NICs are used in almost every network-enabled device:
+
+- Desktop computers
+- Laptops
+- Smartphones
+- Tablets
+- Servers
+- Smart TVs
+- Gaming consoles
+- Printers
+- IP Cameras
+
+---
+
+## 12. Advantages
+
+- **Enables Network Connectivity**: Without a NIC, a device cannot join a network.
+
+- **Fast Communication**: Modern NICs support speeds ranging from **100 Mbps** to **100 Gbps**, depending on the hardware and network.
+
+- **Unique Identification**: Every NIC has a unique **MAC Address**, helping identify the device on the local network.
+
+- **Supports Multiple Network Types**: NICs can connect using Ethernet, Wi-Fi, or Fiber (with specialized adapters).
+    - Ethernet
+    - Wi-Fi
+    - Fiber (with specialized adapters)
+
+- **Reliable Data Transmission**: NICs help ensure data is transmitted and received correctly between devices.
+
+
+---
+
+## 13. Disadvantages
+
+- **Hardware Failure**: If the NIC fails, the device cannot communicate over the network until it is repaired or replaced.
+
+- **Speed Limitations**: Older NICs may only support lower speeds, limiting overall network performance.
+
+- **Additional Cost**: High-performance NICs, such as 10 Gbps or fiber-optic adapters, can be expensive.
+
+- **Driver Dependency**: A NIC requires the correct driver to function properly with the operating system.
+
+
+---
+
+## 14. Wired NIC vs Wireless NIC
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Feature</TH>
+      <TH>Wired NIC</TH>
+      <TH>Wireless NIC</TH>
+    </TR>
+  </THead>
+
+  <TBody>
+    <TR>
+      <TD><strong>Connection</strong></TD>
+      <TD>Ethernet Cable</TD>
+      <TD>Wi-Fi</TD>
+    </TR>
+
+    <TR>
+      <TD><strong>Medium</strong></TD>
+      <TD>Physical cable</TD>
+      <TD>Radio waves</TD>
+    </TR>
+
+    <TR>
+      <TD><strong>Speed</strong></TD>
+      <TD>Usually faster and more consistent.</TD>
+      <TD>Depends on Wi-Fi signal quality.</TD>
+    </TR>
+
+    <TR>
+      <TD><strong>Mobility</strong></TD>
+      <TD>Limited by cable length.</TD>
+      <TD>High mobility within Wi-Fi coverage.</TD>
+    </TR>
+
+    <TR>
+      <TD><strong>Reliability</strong></TD>
+      <TD>More stable with less interference.</TD>
+      <TD>Can be affected by walls, distance, and interference.</TD>
+    </TR>
+
+    <TR>
+      <TD><strong>Common Devices</strong></TD>
+      <TD>Desktop PCs, Servers</TD>
+      <TD>Laptops, Smartphones, Tablets</TD>
+    </TR>
+  </TBody>
+</Table>
+
+---
+
+## 15. Common Misconceptions
+
+### 1. NIC and Wi-Fi are the same.
+
+<Code>No.</Code> A **NIC** is the hardware that enables network communication.
+
+**Wi-Fi** is a wireless networking technology that a wireless NIC can use.
+
+---
+
+### 2. Only computers have NICs.
+
+<Code>No.</Code> Almost every network-enabled device has a NIC, including:
+
+- Smartphones
+- Smart TVs
+- Gaming consoles
+- Printers
+- IP cameras
+- Servers
+
+---
+
+### 3. A NIC always uses a cable.
+
+<Code>No.</Code> NICs can be **wired** or **wireless**.
+
+
+---
+
+## 16. Key Takeaways
+
+- A **Network Interface Card (NIC)** is the hardware that connects a device to a network.
+- Every network-enabled device has at least one NIC.
+- A NIC sends and receives data between the device and the network.
+- Each NIC has a unique **MAC address**, which identifies it on the local network.
+- NICs can be **wired (Ethernet)** or **wireless (Wi-Fi)**.
+- Without a NIC, a device cannot communicate with other devices or access the Internet.

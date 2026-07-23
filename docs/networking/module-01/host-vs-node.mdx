@@ -1,0 +1,385 @@
+---
+title: Host vs Node
+description: Understand the difference between hosts and nodes and their roles within a computer network.
+---
+
+
+In computer networking, the terms **Host** and **Node** are often used interchangeably. Although they are closely related, they do **not** mean the same thing.
+
+Understanding the difference is important because every **host is a node**, but **not every node is a host**.
+
+---
+
+## 1. Why Do We Need to Learn This?
+
+Imagine you're building a city.
+
+The city contains:
+
+- Houses
+- Roads
+- Traffic lights
+- Bridges
+- Bus stations
+
+All of these are part of the transportation system.
+
+However, **only houses are places where people live**.
+
+Similarly, in networking:
+
+- Every connected device is called a **node**.
+- Only the devices that can send, receive, or store data for users are called **hosts**.
+
+---
+
+## 2. What is a Node?
+
+A **Node** is **any device connected to a computer network**.
+
+If a device can participate in the network in any way, it is considered a node.
+
+A node may:
+
+- Send data
+- Receive data
+- Forward data
+- Control network traffic
+
+---
+
+
+Imagine a road network.
+
+<Output>
+Home ---- Traffic Light ---- Bridge ---- School
+</Output>
+
+Every object connected by the road is part of the transportation system.
+
+Similarly,
+
+<Output>
+PC ---- Switch ---- Router ---- Printer
+</Output>
+
+Every device connected to the network is a **node**.
+
+---
+
+```text
+                  Internet
+                     │
+                  Router
+                     │
+            ┌────────┴────────┐
+            │                 │
+         Switch            Printer
+            │
+        ┌───┴────┐
+     Laptop   Desktop
+```
+
+All of these devices are **nodes**.
+
+---
+
+### Characteristics
+
+- Connected to a network
+- Has a unique network identity (such as a MAC address)
+- Can send, receive, or forward data
+- Can be an end device or a networking device
+
+---
+
+### Examples
+
+- Laptop
+- Desktop Computer
+- Smartphone
+- Printer
+- Router
+- Switch
+- Firewall
+- Server
+- Smart TV
+
+---
+
+### Use Cases
+
+Nodes work together to build a computer network.
+
+Examples:
+
+- Routers forward packets.
+- Switches connect devices.
+- Printers receive print jobs.
+- Computers exchange files.
+
+---
+
+## 3. What is a Host?
+
+A **Host** is a **node that has an IP address and can directly communicate with other devices on the network**.
+
+Hosts are usually **end devices** used by people or applications.
+
+Simply put,
+
+> **Every host is a node, but not every node is a host.**
+
+---
+
+Imagine a city.
+
+```text
+City
+│
+├── Houses
+├── Roads
+├── Traffic Lights
+├── Bridges
+```
+
+Everything belongs to the city.
+
+But **only houses are where people live**.
+
+Similarly,
+
+```text
+Network
+│
+├── Router
+├── Switch
+├── Printer
+├── Laptop
+├── Server
+```
+
+Everything is a node.
+
+Only devices that actively communicate as endpoints are considered hosts.
+
+---
+
+```text
+               Router
+                  │
+      ┌───────────┴───────────┐
+      │                       │
+   Laptop                  Desktop
+      │
+   Printer
+```
+
+Hosts:
+
+- Laptop
+- Desktop
+- Printer
+
+Router is a **node**, but in this context it is **not considered a host** because its primary role is forwarding packets rather than acting as an endpoint for user applications.
+
+---
+
+### Characteristics
+
+- Connected to a network
+- Has an IP address
+- Can send and receive data
+- Usually an end device
+- Runs applications and services
+
+---
+
+### Examples
+
+- Laptop
+- Smartphone
+- Desktop Computer
+- Server
+- NAS
+- Printer
+- Smart TV
+- Raspberry Pi
+
+---
+
+### Use Cases
+
+Hosts are responsible for:
+
+- Browsing websites
+- Sending emails
+- Streaming videos
+- Running applications
+- Hosting websites
+- Storing files
+
+---
+
+## 4. Relationship Between Host and Node
+
+```text
+                 Node
+        ┌──────────────────┐
+        │                  │
+        │  Router          │
+        │  Switch          │
+        │                  │
+        │   ┌──────────┐   │
+        │   │  Hosts   │   │
+        │   │ Laptop   │   │
+        │   │ Server   │   │
+        │   │ Phone    │   │
+        │   └──────────┘   │
+        └──────────────────┘
+```
+
+Hosts are a **subset** of nodes.
+
+---
+
+## 5. Characteristics Comparison
+
+#### Node
+
+- Any device connected to the network
+- May forward data
+- May not have an IP address
+- Includes networking devices
+
+#### Host
+
+- Connected to the network
+- Has an IP address
+- Sends and receives user data
+- Usually an endpoint
+
+---
+
+## 6. Common Technologies
+
+#### Nodes
+
+- Routers
+- Switches
+- Firewalls
+- Access Points
+
+#### Hosts
+
+- Windows
+- Linux
+- macOS
+- Android
+- iOS
+- Web Servers
+- Database Servers
+
+---
+
+## 7. Examples
+
+#### Nodes
+
+- Router
+- Switch
+- Firewall
+- Laptop
+- Printer
+- Server
+
+#### Hosts
+
+- Laptop
+- Smartphone
+- Server
+- Printer
+- Smart TV
+
+---
+
+## 8. Difference Between Host and Node
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Feature</TH>
+      <TH>Node</TH>
+      <TH>Host</TH>
+    </TR>
+  </THead>
+
+  <TBody>
+    <TR>
+      <TD><strong>Definition</strong></TD>
+      <TD>Any device connected to a network.</TD>
+      <TD>A node that has an IP address and can communicate as an endpoint.</TD>
+    </TR>
+
+    <TR>
+      <TD><strong>Scope</strong></TD>
+      <TD>Broader term.</TD>
+      <TD>Subset of nodes.</TD>
+    </TR>
+
+    <TR>
+      <TD><strong>IP Address</strong></TD>
+      <TD>May or may not have one.</TD>
+      <TD>Always has an IP address.</TD>
+    </TR>
+
+    <TR>
+      <TD><strong>Purpose</strong></TD>
+      <TD>Can send, receive, or forward network traffic.</TD>
+      <TD>Primarily sends and receives data for users or applications.</TD>
+    </TR>
+
+    <TR>
+      <TD><strong>Acts as Endpoint</strong></TD>
+      <TD>Not always.</TD>
+      <TD>Yes.</TD>
+    </TR>
+
+    <TR>
+      <TD><strong>Examples</strong></TD>
+      <TD>Router, Switch, Firewall, Laptop.</TD>
+      <TD>Laptop, Smartphone, Server, Printer.</TD>
+    </TR>
+  </TBody>
+</Table>
+
+---
+
+## 9. Common Misconceptions
+
+### 1. Every node is a host.
+
+<Code>No.</Code> Routers, switches, and many networking devices are nodes, but they are not usually considered hosts because their primary job is forwarding or managing network traffic.
+
+---
+
+### 2. Every host is not a node.
+
+<Code>Incorrect.</Code> Every host is connected to a network, so every host is also a node.
+
+---
+
+### 3. A server is not a host.
+
+<Code>Incorrect.</Code> A server is one of the most common types of hosts because it has an IP address and provides services to other hosts.
+
+---
+
+
+## 10. Key Takeaways
+
+- A **node** is **any device connected to a network**, including end devices and networking equipment.
+- A **host** is a **node that acts as an endpoint**, typically with an IP address, and can send or receive data for users or applications.
+- **Every host is a node, but not every node is a host.**
+- Devices such as laptops, servers, smartphones, and printers are common hosts.
+- Devices such as routers, switches, and firewalls are nodes that primarily forward or manage network traffic.
