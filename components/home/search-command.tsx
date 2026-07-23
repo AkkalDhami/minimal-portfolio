@@ -323,7 +323,7 @@ export function SearchCommand() {
             <CommandList>
               {(group: Group) => (
                 <Fragment key={group.value}>
-                  <CommandGroup items={group.items}>
+                  <CommandGroup items={group.items} className={"pr-4"}>
                     <CommandGroupLabel>{group.value}</CommandGroupLabel>
                     <CommandCollection>
                       {(item: Item) => {

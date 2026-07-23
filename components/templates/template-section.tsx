@@ -52,7 +52,22 @@ export const TEMPLATE_DATA: ITemplate[] = [
       { name: "Shadcn" }
     ]
   },
-
+  {
+    title: "Personal Developer Portfolio",
+    description:
+      "A modern portfolio website built to showcase projects, experience, skills, and technical expertise with a clean and minimal design.",
+    thumbnail: "/assets/templates/temp-3.png",
+    githubUrl: `${GITHUB_URL}/designer-minimal-portfolio`,
+    liveUrl: "https://designer-minimal-portfolio.vercel.app",
+    technologies: [
+      { name: "Nextjs" },
+      { name: "React" },
+      { name: "TypeScript" },
+      { name: "Tailwind CSS" },
+      { name: "Shadcn" },
+      { name: "Motion" }
+    ]
+  },
   {
     title: "Minimal Developer Portfolio",
     description:
@@ -129,22 +144,6 @@ export const TEMPLATE_DATA: ITemplate[] = [
       { name: "CSS" },
       { name: "JavaScript" },
       { name: "Tailwind CSS" }
-    ]
-  },
-  {
-    title: "Personal Developer Portfolio",
-    description:
-      "A modern portfolio website built to showcase projects, experience, skills, and technical expertise with a clean and minimal design.",
-    thumbnail: "/assets/templates/temp-3.png",
-    githubUrl: `${GITHUB_URL}/designer-minimal-portfolio`,
-    liveUrl: "https://designer-minimal-portfolio.vercel.app",
-    technologies: [
-      { name: "Nextjs" },
-      { name: "React" },
-      { name: "TypeScript" },
-      { name: "Tailwind CSS" },
-      { name: "Shadcn" },
-      { name: "Motion" }
     ]
   }
 ];
