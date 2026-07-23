@@ -76,7 +76,7 @@ export function ContactInfo() {
                       text={item.value}
                       docs={false}
                       className={cn(
-                        "hover:bg-muted text-muted-foreground py-1.5 opacity-0",
+                        "hover:bg-muted text-muted-foreground py-1.75 opacity-0",
                         "duration-200 ease-in-out group-hover:opacity-100"
                       )}
                     />

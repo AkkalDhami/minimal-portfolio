@@ -28,7 +28,7 @@ export function HeadingWithCopy({
       <CopyButton
         text={headingText}
         docs={false}
-        className="hover:bg-muted text-muted-foreground pointer-events-auto absolute top-1/2 right-0 -translate-y-1/2 py-1.5 opacity-0 transition-opacity duration-200 ease-in-out group-hover:opacity-100"
+        className="hover:bg-muted text-muted-foreground pointer-events-auto absolute top-1/2 right-0 -translate-y-1/2 py-1.75 opacity-0 transition-opacity duration-200 ease-in-out group-hover:opacity-100"
       />
     </div>
   );

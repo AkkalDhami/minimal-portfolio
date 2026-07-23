@@ -16,6 +16,7 @@ import { HowBrowserLoadsWebsite } from "./how-browser-loads-website";
 import { NetworkingCard } from "@/components/networking/networking-card";
 import { SqlPlayground } from "@/components/sql-playground/sql-playground";
 import Link from "next/link";
+import { ZoomableImage } from "./zoomable-image";
 
 export const mdxComponents: MDXComponents = {
   Table,
@@ -24,6 +25,7 @@ export const mdxComponents: MDXComponents = {
   TR,
   TH,
   TD,
+  ZoomableImage,
 
   SortingVisualizer: props => <SortingVisualizerComponent {...props} />,
   Output,
