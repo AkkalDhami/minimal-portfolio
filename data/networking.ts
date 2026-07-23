@@ -44,21 +44,21 @@ export const NETWORKING_DATA: IModule[] = createModules([
         docs: "/network-architectures",
         description:
           "Learn the two primary network architectures—Client-Server and Peer-to-Peer—how they work, their advantages, disadvantages, and real-world use cases."
+      },
+      {
+        slug: "host-vs-node",
+        title: "Host vs Node",
+        docs: "/host-vs-node",
+        description:
+          "Understand the difference between hosts and nodes and their roles within a computer network."
+      },
+      {
+        slug: "network-interface-card",
+        title: "Network Interface Card (NIC)",
+        docs: "/network-interface-card",
+        description:
+          "Discover how a Network Interface Card enables devices to connect and communicate over a network."
       }
-      // {
-      //   slug: "host-and-node",
-      //   title: "Host vs Node",
-      //   docs: "/host-and-node",
-      //   description:
-      //     "Understand the difference between hosts and nodes and their roles within a computer network."
-      // },
-      // {
-      //   slug: "network-interface-card",
-      //   title: "Network Interface Card (NIC)",
-      //   docs: "/network-interface-card",
-      //   description:
-      //     "Discover how a Network Interface Card enables devices to connect and communicate over a network."
-      // },
       // {
       //   slug: "mac-address",
       //   title: "MAC Address",
