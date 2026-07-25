@@ -50,31 +50,36 @@ export const SETUP_DATA: SetupCategory[] = [
     icon: IconPalette,
     items: [
       {
-        title: "Just Black",
-        link: "https://marketplace.visualstudio.com/items?itemName=nur.just-black",
+        title: "Akkal Dark Theme",
+        link: "https://marketplace.visualstudio.com/items?itemName=akkal.akkal-dark-theme",
         current: true
-      },
-      {
-        title: "Oscura Theme",
-        link: "https://marketplace.visualstudio.com/items?itemName=Fey.oscura"
       },
       {
         title: "Ayu",
         link: "https://marketplace.visualstudio.com/items?itemName=teabyii.ayu",
-        current: true
-      },
-      {
-        title: "Vesper",
-        link: "https://marketplace.visualstudio.com/items?itemName=raunofreiberg.vesper"
-      },
-      {
-        title: "Chai Theme",
-        link: "https://marketplace.visualstudio.com/items?itemName=hiteshchoudharycode.chai-theme"
-      },
-      {
-        title: "One Dark Pro",
-        link: "https://marketplace.visualstudio.com/items?itemName=zhuangtongfa.Material-theme"
+        current: false
       }
+      // {
+      //   title: "Oscura Theme",
+      //   link: "https://marketplace.visualstudio.com/items?itemName=Fey.oscura"
+      // },
+      // {
+      //   title: "Just Black",
+      //   link: "https://marketplace.visualstudio.com/items?itemName=nur.just-black",
+      //   current: true
+      // }
+      // {
+      //   title: "Vesper",
+      //   link: "https://marketplace.visualstudio.com/items?itemName=raunofreiberg.vesper"
+      // },
+      // {
+      //   title: "Chai Theme",
+      //   link: "https://marketplace.visualstudio.com/items?itemName=hiteshchoudharycode.chai-theme"
+      // },
+      // {
+      //   title: "One Dark Pro",
+      //   link: "https://marketplace.visualstudio.com/items?itemName=zhuangtongfa.Material-theme"
+      // }
     ]
   },
   {
