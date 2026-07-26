@@ -16,6 +16,28 @@ WHERE condition;
 
 ---
 
+## Deleting a table
+<Code>DROP TABLE table_name</Code> removes the entire table, including its structure and all its data. It cannot be filtered or limited, and there is no "where" clause. It is a permanent action that cannot be undone.
+
+```sql title="example.sql"
+DROP TABLE books;
+```
+
+---
+
+## Truncating a table
+
+<Code>TRUNCATE TABLE table_name</Code> removes all rows from a table, but keeps the table structure. 
+
+It is faster than <Code>DROP TABLE</Code> and <Code>DELETE</Code>, but it cannot be filtered or limited. It is a permanent action that cannot be undone.
+
+```sql title="example.sql"
+TRUNCATE TABLE books;
+```
+
+
+---
+
 ## Deleting one row
 
 ```sql title="example.sql"
@@ -138,6 +160,12 @@ Just like <Code>UPDATE</Code>, MySQL's "safe update mode" can block a <Code>DELE
 </Table>
 
 ```sql title="delete-reference.sql"
+-- Deleting a table
+DROP TABLE books;
+
+-- Truncating a table
+TRUNCATE TABLE books;
+
 -- Deleting one row
 DELETE FROM books
 WHERE title = 'Brave New World';

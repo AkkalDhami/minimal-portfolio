@@ -125,6 +125,12 @@ WHERE price > 15;
 
 
 ```sql title="delete-reference.sql"
+-- Deleting a table
+DROP TABLE books;
+
+-- Truncating a table
+TRUNCATE TABLE books;
+
 -- Deleting one row
 DELETE FROM books
 WHERE title = 'Brave New World';
