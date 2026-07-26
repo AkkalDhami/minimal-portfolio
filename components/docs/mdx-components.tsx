@@ -15,6 +15,12 @@ import { ClientServerDiagram } from "./client-server-diagram";
 import { HowBrowserLoadsWebsite } from "./how-browser-loads-website";
 import { NetworkingCard } from "@/components/networking/networking-card";
 import { SqlPlayground } from "@/components/sql-playground/sql-playground";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger
+} from "@/components/ui/accordion";
 import Link from "next/link";
 import { ZoomableImage } from "./zoomable-image";
 import { JoinVisualizer } from "./join-visualizer";
@@ -28,6 +34,12 @@ export const mdxComponents: MDXComponents = {
   TD,
   ZoomableImage,
   JoinVisualizer,
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger: props => (
+    <AccordionTrigger {...props} className={"text-xl"} />
+  ),
 
   SortingVisualizer: props => <SortingVisualizerComponent {...props} />,
   Output,

@@ -243,7 +243,7 @@ export function OnThisPage({ docsRef }: Props) {
                             x: 0
                           }
                         }}
-                        className="list-none"
+                        className="line-clamp-2 list-none"
                         style={{
                           paddingLeft: `${(h.level - 2) * 16}px`
                         }}>

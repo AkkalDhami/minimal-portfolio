@@ -9,7 +9,7 @@ function Accordion({ className, ...props }: AccordionPrimitive.Root.Props) {
   return (
     <AccordionPrimitive.Root
       data-slot="accordion"
-      className={cn("flex w-full flex-col", className)}
+      className={cn("not-typeset flex w-full flex-col", className)}
       {...props}
     />
   );
@@ -61,7 +61,7 @@ function AccordionContent({
   return (
     <AccordionPrimitive.Panel
       data-slot="accordion-content"
-      className="data-open:animate-accordion-down data-closed:animate-accordion-up overflow-hidden text-sm"
+      className="data-open:animate-accordion-down not-typeset data-closed:animate-accordion-up overflow-hidden text-sm"
       {...props}>
       <div
         className={cn(

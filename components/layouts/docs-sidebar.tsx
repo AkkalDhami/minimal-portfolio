@@ -21,7 +21,7 @@ const title = {
   sql: "SQL - MySQL"
 };
 
-export function DocsSidebar() {
+export function DocsSidebar({ className }: { className?: string }) {
   const pathname = usePathname();
 
   const [play] = useSound(cardSlide5Sound);
@@ -59,7 +59,11 @@ export function DocsSidebar() {
   );
 
   return (
-    <aside className="primary-ring not-typeset bg-background fixed top-26 left-1.5 z-40 hidden h-full w-74 space-y-2 rounded-lg border p-2 xl:block">
+    <aside
+      className={cn(
+        "primary-ring not-typeset bg-background fixed top-26 left-1.5 z-40 h-full w-74 space-y-2 rounded-lg border p-2",
+        className
+      )}>
       <h2 className="font-inter text-lg font-medium">
         {
           title[
@@ -74,7 +78,8 @@ export function DocsSidebar() {
         }
       </h2>
 
-      <ScrollArea className={"scroll-fade relative h-full max-h-126 pb-12"}>
+      <ScrollArea
+        className={"scroll-fade relative h-full max-h-140 pb-12 xl:max-h-126"}>
         {moduleSlug?.trim() ? (
           <>
             {filteredModules?.map((m, i) => (
