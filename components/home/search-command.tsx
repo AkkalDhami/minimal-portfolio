@@ -43,12 +43,14 @@ import {
   IconPhone,
   IconStack2,
   IconTemplate,
+  IconVolume,
   IconWorld
 } from "@tabler/icons-react";
 import { NETWORKING_DATA } from "@/data/networking";
 import { padString } from "@/utils/pad-string";
 import { SQL_DATA } from "@/data/sql";
 import { IconProps } from "@/components/icons";
+import { usePreferencesStore } from "@/hooks/use-preferences";
 
 export interface Item {
   value: string;
@@ -163,7 +165,7 @@ export const networking = NETWORKING_DATA.flatMap(net =>
   net.topics.map(topic => ({
     icon: IconWorld,
     value: `${net.docs}${topic.docs}`,
-    label: `Module - ${padString(topic.module.toString(), 2, "0")}. ${topic.title}`,
+    label: `Module - ${padString(topic.module.toString(), 2, "0")}) ${padString(topic.order.toString(), 2, "0")}. ${topic.title}`,
     link: true
   }))
 );
@@ -172,7 +174,7 @@ export const sql = SQL_DATA.flatMap(net =>
   net.topics.map(topic => ({
     icon: IconWorld,
     value: `${net.docs}${topic.docs}`,
-    label: `Module - ${padString(topic.module.toString(), 2, "0")}. ${topic.title}`,
+    label: `Module - ${padString(topic.module.toString(), 2, "0")}) ${padString(topic.order.toString(), 2, "0")}. ${topic.title}`,
     link: true
   }))
 );
@@ -234,6 +236,13 @@ export const others: Item[] = [
     value: `Toggle Theme`,
     link: false,
     key: "d"
+  },
+  {
+    icon: IconVolume,
+    label: "Toggle Volume",
+    value: `Toggle Volume`,
+    link: false,
+    key: "ctrl + s"
   }
 ];
 
@@ -253,7 +262,7 @@ export const groupedItems: Group[] = [
 export function SearchCommand() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
-
+  const { toggleSound } = usePreferencesStore();
   const [play] = useSound(click005Sound);
   const [themePlay] = useSound(click002Sound);
   const [chatScrollPlay] = useSound(uChatScrollButtonSound);
@@ -274,12 +283,17 @@ export function SearchCommand() {
       themePlay();
       return;
     }
+    if (_item.value.toLowerCase() === "toggle volume") {
+      toggleSound();
+      return;
+    }
 
     if (_item?.link) {
       chatScrollPlay();
       router.push(_item.value as Route);
       setOpen(false);
     }
+    themePlay();
   }
 
   useEffect(() => {

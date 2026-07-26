@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function NotFound() {
   return (
-    <Container className="flex h-screen max-w-6xl items-center justify-center overflow-hidden">
+    <Container className="flex h-screen max-w-4xl items-center justify-center overflow-hidden border-x">
       <div className="bg-background relative flex flex-col items-center space-y-6 overflow-hidden p-6 text-center">
         <h2 className="pointer-events-none absolute top-8 z-10 mask-b-from-50% font-mono text-8xl font-bold text-neutral-300 uppercase lg:text-[7rem] dark:text-neutral-800">
           404 Not Found

@@ -17,8 +17,8 @@ import { ThemeToggle } from "@/components/layouts/theme-toggle";
 import { cardSlide5Sound } from "@/sounds/card-slide-5";
 import { useSound } from "@/hooks/use-sound";
 import { uChatScrollButtonSound } from "@/sounds/chat-scroll";
-import { usePreferencesStore } from "@/hooks/use-preferences";
-import { SettingsDropdown } from "@/components/shared/setting-dropdown";
+// import { usePreferencesStore } from "@/hooks/use-preferences";
+// import { SettingsDropdown } from "@/components/shared/setting-dropdown";
 import { IconGitHub } from "@/components/icons";
 
 interface MenuItem {
@@ -52,8 +52,8 @@ export function Navbar() {
 
   const [play] = useSound(cardSlide5Sound);
   const [chatScrollPlay] = useSound(uChatScrollButtonSound);
-  const { soundEnabled, toggleSound, codeTheme, setCodeTheme } =
-    usePreferencesStore();
+  // const { soundEnabled, toggleSound, codeTheme, setCodeTheme } =
+  //   usePreferencesStore();
   const pathname = usePathname();
 
   useEffect(() => {
@@ -132,12 +132,12 @@ export function Navbar() {
               className="relative px-2 py-1.5 transition-colors md:hidden">
               {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
-            <SettingsDropdown
+            {/* <SettingsDropdown
               theme={codeTheme}
               onThemeChange={setCodeTheme}
               soundEnabled={soundEnabled}
               onSoundToggle={toggleSound}
-            />
+            /> */}
             {/* <Button variant="ghost" size="icon" onClick={toggleSound}>
               {soundEnabled ? (
                 <IconVolume className="size-5" />
