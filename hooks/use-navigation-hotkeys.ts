@@ -15,6 +15,7 @@ import {
   X_URL
 } from "@/lib/constants";
 import { usePreferencesStore } from "./use-preferences";
+import { click002Sound } from "@/sounds/click-002";
 
 type HotkeyMap = Record<string, string>;
 
@@ -33,6 +34,7 @@ const EXTERNAL_LINKS = [
 
 export function useNavigationHotkeys(options: Options = {}) {
   const [play] = useSound(cardSlide5Sound);
+  const [themePlay] = useSound(click002Sound);
   const toggleSound = usePreferencesStore(s => s.toggleSound);
 
   const router = useRouter();
@@ -74,8 +76,7 @@ export function useNavigationHotkeys(options: Options = {}) {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") {
         e.preventDefault();
         toggleSound();
-        play();
-
+        themePlay();
         return;
       }
 
