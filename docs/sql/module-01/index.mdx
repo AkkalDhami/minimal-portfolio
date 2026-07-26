@@ -91,6 +91,73 @@ In this section, we'll cover the key concepts and theory behind DBMS, including 
   </TBody>
 </Table>
 
+---
+
+## <HLink href="/docs/sql/module-01/db-relationships">4. Database Relationships</HLink>
+
+### 1. One-to-One Relationship
+
+Each row in Table A matches **exactly one** row in Table B, and vice versa. Less common — usually used to split a table for organization, security, or performance reasons.
+
+**Example:** a <Code>users</Code> table and a <Code>user_profiles</Code> table, where each user has exactly one profile.
+
+```
+      users                              user_profiles
+┌────────┬──────────────┐          ┌────────┬──────────────┬────────────┐
+│ id(PK) │ email        │          │ id(PK) │ user_id(FK)  │ bio        │
+├────────┼──────────────┤          ├────────┼──────────────┼────────────┤
+│ 1      │ a@mail.com   │<────────>│ 1      │ 1            │ Hi there   │
+│ 2      │ b@mail.com   │<────────>│ 2      │ 2            │ Hello      │
+└────────┴──────────────┘          └────────┴──────────────┴────────────┘
+        1                                  1
+        └──────────────────────────────────┘
+                 One-to-One Relationship
+```
+
+
+---
+
+### 2. One-to-Many Relationship
+
+Each row in Table A can relate to **many** rows in Table B, but each row in Table B relates back to only **one** row in Table A. This is the most common relationship type.
+
+**Example:** one author can write many books, but each book has one author.
+
+```
+ authors                       books
+┌────┬────────────────┐       ┌────┬──────────────────┬───────────┐
+│ id │ name           │       │ id │ title            │ author_id │
+├────┼────────────────┤       ├────┼──────────────────┼───────────┤
+│ 1  │ Frank Herbert  │<──┬───┤ 1  │ Dune             │ 1         │
+│ 2  │ George Orwell  │<─┐└───┤ 2  │ Dune Messiah     │ 1         │
+└────┴────────────────┘  │    ├────┼──────────────────┼───────────┤
+                         └────┤ 3  │ 1984             │ 2         │
+                              └────┴──────────────────┴───────────┘
+
+        one author  ─────────>  many books
+```
+
+---
+
+
+### 3. Many-to-Many Relationship
+
+Rows in Table A can relate to **many** rows in Table B, and rows in Table B can relate to **many** rows in Table A. This can't be modeled with a single foreign key — it needs a third table in between, called a **junction table** (or pivot table).
+
+**Example:** a book can have multiple genres, and a genre can apply to multiple books.
+
+```
+   books              book_genres              genres
+┌────┬───────┐    ┌─────────┬──────────┐    ┌────┬──────────┐
+│ id │ title │    │ book_id │ genre_id │    │ id │ name     │
+├────┼───────┤    ├─────────┼──────────┤    ├────┼──────────┤
+│ 1  │ Dune  │<─┬─┤ 1       │ 1        │───>│ 1  │ Sci-Fi   │
+│    │       │  └─┤ 1       │ 2        │───>│ 2  │ Adventure│
+│ 2  │ 1984  │<───┤ 2       │ 1        │───>│ 1  │ Sci-Fi   │
+└────┴───────┘    └─────────┴──────────┘    └────┴──────────┘
+
+     books  <──── many-to-many ────>  genres
+```
 
 ---
 

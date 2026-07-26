@@ -139,18 +139,18 @@ Each row in Table A can relate to **many** rows in Table B, but each row in Tabl
 ```
  authors                       books
 ┌────┬────────────────┐       ┌────┬──────────────────┬───────────┐
-│ id │ name            │       │ id │ title            │ author_id │
+│ id │ name           │       │ id │ title            │ author_id │
 ├────┼────────────────┤       ├────┼──────────────────┼───────────┤
-│ 1  │ Frank Herbert   │◄──┬───┤ 1  │ Dune              │ 1         │
-│ 2  │ George Orwell   │◄─┐└───┤ 2  │ Dune Messiah      │ 1         │
-└────┴────────────────┘  │     ├────┼──────────────────┼───────────┤
-                          └─────┤ 3  │ 1984              │ 2         │
-                                └────┴──────────────────┴───────────┘
+│ 1  │ Frank Herbert  │<──┬───┤ 1  │ Dune             │ 1         │
+│ 2  │ George Orwell  │<─┐└───┤ 2  │ Dune Messiah     │ 1         │
+└────┴────────────────┘  │    ├────┼──────────────────┼───────────┤
+                         └────┤ 3  │ 1984             │ 2         │
+                              └────┴──────────────────┴───────────┘
 
-        one author  ─────────►  many books
+        one author  ─────────>  many books
 ```
 
-```sql title="example.sql"
+```sql title="example.sql" {2, 10}
 CREATE TABLE authors (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL
@@ -179,12 +179,12 @@ Rows in Table A can relate to **many** rows in Table B, and rows in Table B can 
 ┌────┬───────┐    ┌─────────┬──────────┐    ┌────┬──────────┐
 │ id │ title │    │ book_id │ genre_id │    │ id │ name     │
 ├────┼───────┤    ├─────────┼──────────┤    ├────┼──────────┤
-│ 1  │ Dune  │◄───┤ 1       │ 1        │───►│ 1  │ Sci-Fi   │
-│    │       │◄───┤ 1       │ 2        │───►│ 2  │ Adventure│
-│ 2  │ 1984  │◄───┤ 2       │ 1        │───►│ 1  │ Sci-Fi   │
+│ 1  │ Dune  │<─┬─┤ 1       │ 1        │───>│ 1  │ Sci-Fi   │
+│    │       │  └─┤ 1       │ 2        │───>│ 2  │ Adventure│
+│ 2  │ 1984  │<───┤ 2       │ 1        │───>│ 1  │ Sci-Fi   │
 └────┴───────┘    └─────────┴──────────┘    └────┴──────────┘
 
-     books  ◄──── many-to-many ────►  genres
+     books  <──── many-to-many ────>  genres
 ```
 
 ```sql title="example.sql"
@@ -231,27 +231,6 @@ CREATE TABLE book_genres (
     </TR>
   </TBody>
 </Table>
-
----
-
-## Why this matters before joins
-
-Once your tables and keys are set up correctly, joins are just "follow the foreign key":
-
-- **One-to-Many** → join <Code>books</Code> to <Code>authors</Code> directly on <Code>author_id = id</Code>
-- **Many-to-Many** → join through the junction table: <Code>books</Code> → <Code>book_genres</Code> → <Code>genres</Code>
-
-Getting the relationship type right at design time is what makes the join queries later straightforward instead of confusing.
-
----
-
-## Rule of thumb
-
-```
-1 ──────< many        →  foreign key on the "many" side
-many >──< many          →  junction table with two foreign keys
-1 ────── 1              →  foreign key + UNIQUE constraint
-```
 
 ---
 

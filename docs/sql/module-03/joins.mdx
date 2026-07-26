@@ -1,52 +1,155 @@
 ---
-title: "Joins"
-description: "Combine rows from multiple tables with INNER, LEFT, and RIGHT joins."
-slug: "joins"
+title: Joins
+description: Combine rows from multiple tables with INNER, LEFT, and RIGHT joins.
 ---
 
-# Joins
 
-**Simple explanation:** a <Code>JOIN</Code> combines rows from two (or more) tables based on a related column — usually a foreign key pointing to a primary key. Instead of storing everything in one giant table, related data lives in separate tables, and joins stitch it back together when you need it.
+A <Code>JOIN</Code> combines rows from two (or more) tables based on a related column — usually a **foreign key** pointing to a **primary key**. 
+
+Instead of storing everything in one giant table, related data lives in separate tables, and joins stitch it back together when you need it.
+
+- **INNER JOIN**: Return only rows where **both** tables have matching data.
+- **LEFT JOIN**: Return all rows from the left table, plus matching rows from the right table. If no match, the right table's columns come back as NULL.
+- **RIGHT JOIN**: Return all rows from the right table, plus matching rows from the left table. If no match, the left table's columns come back as NULL.
+- **CROSS JOIN**: Return the Cartesian product of the two tables. Not supported in all SQL databases.
+- **SELF JOIN**: Return rows from a table that match rows from the same table.
 
 We'll use these two tables:
 
-```sql title="example.sql"
-CREATE TABLE authors (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    country VARCHAR(100)
+```sql title="customers.sql"
+-- customers table
+CREATE TABLE customers (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100),
+    email VARCHAR(100)
 );
 
-INSERT INTO authors (name, country) VALUES
-('J.R.R. Tolkien', 'UK'),
-('Frank Herbert', 'USA'),
-('George Orwell', 'UK');
-
--- books.author_id references authors.id
+-- insert data into customers table
+INSERT INTO customers (name, email)
+VALUES
+('Ram', 'ram@gmail.com'),
+('Sita', 'sita@gmail.com'),
+('Hari', 'hari@gmail.com'),
+('Gita', 'gita@gmail.com');
 ```
+
+<Output>
+mysql> SELECT * FROM customers;
++----+------+----------------+
+| id | name | email          |
++----+------+----------------+
+|  1 | Ram  | ram@gmail.com  |
+|  2 | Sita | sita@gmail.com |
+|  3 | Hari | hari@gmail.com |
+|  4 | Gita | gita@gmail.com |
++----+------+----------------+
+</Output>
+
+
+<ZoomableImage width="800" height="400" src="/images/joins.png" wrapperClassName="my-6" alt="NIC" className='h-100 w-auto'/>
 
 ---
 
-## INNER JOIN
+```sql title="orders.sql"
+-- orders table
+CREATE TABLE orders (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    customer_id INT,
+    product VARCHAR(100),
+    price DECIMAL(10,2),
 
-Returns only rows that have a match in **both** tables. If a book has no matching author, or an author has no books, that row is left out.
+    FOREIGN KEY (customer_id)
+    REFERENCES customers(id)
+);
 
+-- insert data into orders table
+INSERT INTO orders (customer_id, product, price)
+VALUES
+(1, 'Laptop', 90000),
+(1, 'Mouse', 1500),
+(2, 'Keyboard', 3000),
+(2, 'Monitor', 25000),
+(4, 'Phone', 50000);
 ```
-   books                    authors
-┌────┬───────┬───────────┐ ┌────┬────────────────┐
-│ id │ title │ author_id │ │ id │ name           │
-├────┼───────┼───────────┤ ├────┼────────────────┤
-│ 1  │ Dune  │ 2         │►│ 2  │ Frank Herbert  │  ✔ matched
-│ 2  │ 1984  │ 3         │►│ 3  │ George Orwell  │  ✔ matched
-└────┴───────┴───────────┘ └────┴────────────────┘
-                              1  │ Tolkien        │  ✘ no books, excluded
+
+<Output>
+mysql> SELECT * FROM orders;
++----+-------------+----------+----------+
+| id | customer_id | product  | price    |
++----+-------------+----------+----------+
+|  6 |           1 | Laptop   | 90000.00 |
+|  7 |           1 | Mouse    |  1500.00 |
+|  8 |           2 | Keyboard |  3000.00 |
+|  9 |           2 | Monitor  | 25000.00 |
+| 10 |           4 | Phone    | 50000.00 |
++----+-------------+----------+----------+
+</Output>
+
+---
+
+## 1. INNER JOIN
+
+Return only rows where **both** tables have matching data.
+
+#### Syntax:
+
+```sql title="syntax.sql"
+SELECT columns
+FROM table1
+INNER JOIN table2
+ON table1.column = table2.column;
 ```
+
+<Output>
+mysql> SELECT * FROM customers;
++----+------+----------------+
+| id | name | email          |
++----+------+----------------+
+|  1 | Ram  | ram@gmail.com  |
+|  2 | Sita | sita@gmail.com |
+|  3 | Hari | hari@gmail.com |
+|  4 | Gita | gita@gmail.com |
++----+------+----------------+
+
+mysql> SELECT * FROM orders;
++----+-------------+----------+----------+
+| id | customer_id | product  | price    |
++----+-------------+----------+----------+
+|  6 |           1 | Laptop   | 90000.00 |
+|  7 |           1 | Mouse    |  1500.00 |
+|  8 |           2 | Keyboard |  3000.00 |
+|  9 |           2 | Monitor  | 25000.00 |
+| 10 |           4 | Phone    | 50000.00 |
++----+-------------+----------+----------+
+</Output>
+
+#### Example:
 
 ```sql title="example.sql"
-SELECT books.title, authors.name AS author_name
-FROM books
-INNER JOIN authors ON books.author_id = authors.id;
+SELECT customers.name, orders.product
+FROM customers
+INNER JOIN orders
+ON customers.id = orders.customer_id;
 ```
+
+#### Output:
+
+<Output>
+mysql> SELECT customers.name, orders.product
+    -> FROM customers
+    -> INNER JOIN orders
+    -> ON customers.id = orders.customer_id;
++------+----------+
+| name | product  |
++------+----------+
+| Ram  | Laptop   |
+| Ram  | Mouse    |
+| Sita | Keyboard |
+| Sita | Monitor  |
+| Gita | Phone    |
++------+----------+
+</Output>
+
 
 **Read it like a sentence:** "Get the title from <Code>books</Code> and the name from <Code>authors</Code>, where each book's <Code>author_id</Code> matches an author's <Code>id</Code>."
 
@@ -54,76 +157,301 @@ INNER JOIN authors ON books.author_id = authors.id;
 
 ---
 
-## LEFT JOIN
+## 2. LEFT JOIN
 
-Returns **all** rows from the left table (the one listed first, after <Code>FROM</Code>), plus matching rows from the right table. If there's no match, the right table's columns come back as <Code>NULL</Code>.
+Returns **all** rows from the **left table** (the one listed first, after <Code>FROM</Code>), plus matching rows from the right table. 
+If there's no match, the right table's columns come back as <Code>NULL</Code>.
 
-```sql title="example.sql"
-SELECT books.title, authors.name AS author_name
-FROM books
-LEFT JOIN authors ON books.author_id = authors.id;
+**Return:**
+- All rows from the LEFT table
+- Matching rows from the RIGHT table
+- If no match → NULL
+
+#### Syntax:
+```sql title="syntax.sql"
+SELECT columns
+FROM table1
+LEFT JOIN table2
+ON condition;
 ```
 
-**Use case:** you want every book listed, even ones that don't have an author assigned yet (<Code>author_id IS NULL</Code>).
+<Output>
+mysql> SELECT * FROM customers;
++----+------+----------------+
+| id | name | email          |
++----+------+----------------+
+|  1 | Ram  | ram@gmail.com  |
+|  2 | Sita | sita@gmail.com |
+|  3 | Hari | hari@gmail.com |
+|  4 | Gita | gita@gmail.com |
++----+------+----------------+
+
+mysql> SELECT * FROM orders;
++----+-------------+----------+----------+
+| id | customer_id | product  | price    |
++----+-------------+----------+----------+
+|  6 |           1 | Laptop   | 90000.00 |
+|  7 |           1 | Mouse    |  1500.00 |
+|  8 |           2 | Keyboard |  3000.00 |
+|  9 |           2 | Monitor  | 25000.00 |
+| 10 |           4 | Phone    | 50000.00 |
++----+-------------+----------+----------+
+</Output>
+
+#### Example:
+```sql title="example.sql"
+SELECT customers.name, orders.product, orders.price
+FROM customers
+LEFT JOIN orders
+ON customers.id = orders.customer_id;
+```
+
+#### Output:
+<Output>
+mysql> SELECT customers.name, orders.product, orders.price
+    -> FROM customers
+    -> LEFT JOIN orders
+    -> ON customers.id = orders.customer_id;
++------+----------+----------+
+| name | product  | price    |
++------+----------+----------+
+| Ram  | Laptop   | 90000.00 |
+| Ram  | Mouse    |  1500.00 |
+| Sita | Keyboard |  3000.00 |
+| Sita | Monitor  | 25000.00 |
+| Hari | NULL     |     NULL |
+| Gita | Phone    | 50000.00 |
++------+----------+----------+
+</Output>
+
 
 ---
 
-## RIGHT JOIN
+## 3. RIGHT JOIN
 
-The mirror image of <Code>LEFT JOIN</Code> — returns all rows from the right table, plus matching rows from the left. Non-matches on the left come back as <Code>NULL</Code>.
+The opposite of <Code>LEFT JOIN</Code> — returns all rows from the right table, plus matching rows from the left. Non-matches on the left come back as <Code>NULL</Code>.
 
-```sql title="example.sql"
-SELECT books.title, authors.name AS author_name
-FROM books
-RIGHT JOIN authors ON books.author_id = authors.id;
+#### Syntax:
+```sql title="syntax.sql"
+SELECT columns
+FROM table1
+RIGHT JOIN table2
+ON condition;
 ```
 
-**Use case:** you want every author listed, even ones who don't have any books in the table yet.
+<Output>
+mysql> SELECT * FROM customers;
++----+------+----------------+
+| id | name | email          |
++----+------+----------------+
+|  1 | Ram  | ram@gmail.com  |
+|  2 | Sita | sita@gmail.com |
+|  3 | Hari | hari@gmail.com |
+|  4 | Gita | gita@gmail.com |
++----+------+----------------+
+
+mysql> SELECT * FROM orders;
++----+-------------+----------+----------+
+| id | customer_id | product  | price    |
++----+-------------+----------+----------+
+|  6 |           1 | Laptop   | 90000.00 |
+|  7 |           1 | Mouse    |  1500.00 |
+|  8 |           2 | Keyboard |  3000.00 |
+|  9 |           2 | Monitor  | 25000.00 |
+| 10 |           4 | Phone    | 50000.00 |
++----+-------------+----------+----------+
+</Output>
+
+#### Example:
+```sql title="example.sql"
+SELECT customers.name, orders.product, orders.price
+FROM customers
+RIGHT JOIN orders
+ON customers.id = orders.customer_id;
+```
+
+<Output>
+mysql> SELECT customers.name, orders.product, orders.price
+    -> FROM customers
+    -> RIGHT JOIN orders
+    -> ON customers.id = orders.customer_id;
++------+----------+----------+
+| name | product  | price    |
++------+----------+----------+
+| Ram  | Laptop   | 90000.00 |
+| Ram  | Mouse    |  1500.00 |
+| Sita | Keyboard |  3000.00 |
+| Sita | Monitor  | 25000.00 |
+| Gita | Phone    | 50000.00 |
++------+----------+----------+
+</Output>
 
 In practice, most people just rewrite a <Code>RIGHT JOIN</Code> as a <Code>LEFT JOIN</Code> with the tables swapped — it's easier to read consistently.
 
 ---
 
-## Finding non-matches
+## 4. CROSS JOIN
 
-A common pattern: find rows in one table that have **no** match in the other. Combine <Code>LEFT JOIN</Code> with a <Code>WHERE ... IS NULL</Code> check:
+A **CROSS JOIN** in SQL returns the **Cartesian product** of two tables. This means every row from the first table is combined with every row from the second table.
+
+#### Number of Rows:
+
+**If:**
+- Table A has m rows
+- Table B has n rows
+
+Then the result of a **CROSS JOIN** has **m x n** rows.
+
+#### Syntax:
+```sql title="syntax.sql"
+SELECT columns
+FROM table1
+CROSS JOIN table2;
+```
+
+#### Example:
 
 ```sql title="example.sql"
--- Authors who have no books yet
-SELECT authors.name
-FROM authors
-LEFT JOIN books ON books.author_id = authors.id
-WHERE books.id IS NULL;
+SELECT customers.name, orders.product, orders.price
+FROM customers
+CROSS JOIN orders;
 ```
+
+#### Output:
+<Output>
+mysql> SELECT customers.name, orders.product, orders.price
+    -> FROM customers
+    -> CROSS JOIN orders;
++------+----------+----------+
+| name | product  | price    |
++------+----------+----------+
+| Gita | Laptop   | 90000.00 |
+| Hari | Laptop   | 90000.00 |
+| Sita | Laptop   | 90000.00 |
+| Ram  | Laptop   | 90000.00 |
+| Gita | Mouse    |  1500.00 |
+| Hari | Mouse    |  1500.00 |
+| Sita | Mouse    |  1500.00 |
+| Ram  | Mouse    |  1500.00 |
+| Gita | Keyboard |  3000.00 |
+| Hari | Keyboard |  3000.00 |
+| Sita | Keyboard |  3000.00 |
+| Ram  | Keyboard |  3000.00 |
+| Gita | Monitor  | 25000.00 |
+| Hari | Monitor  | 25000.00 |
+| Sita | Monitor  | 25000.00 |
+| Ram  | Monitor  | 25000.00 |
+| Gita | Phone    | 50000.00 |
+| Hari | Phone    | 50000.00 |
+| Sita | Phone    | 50000.00 |
+| Ram  | Phone    | 50000.00 |
++------+----------+----------+
+</Output>
+
+#### When to Use:
+
+- Generate all possible combinations of two sets of data.
+- Create test data.
+- Produce combinations such as all products with all sizes or all students with all subjects.
 
 ---
 
-## Joining more than two tables
+## 5. SELF JOIN
 
-You can chain multiple joins together:
+A **SELF JOIN** is a join where a table is joined with itself. 
 
-```sql title="example.sql"
-SELECT books.title, authors.name, authors.country
-FROM books
-JOIN authors ON books.author_id = authors.id
-WHERE authors.country = 'UK';
+It is commonly used to compare rows within the same table or to represent hierarchical relationships (e.g., employees and their managers).
+
+#### Syntax:
+```sql title="syntax.sql"
+SELECT a.column_name, b.column_name
+FROM TableName a
+JOIN TableName b
+ON a.common_column = b.common_column;
 ```
+
+
+<Output>
+  Employees: 
+  | EmpID | Name    | ManagerID |
+  | ----- | ------- | --------- |
+  |     1 | Alice   |      NULL |
+  |     2 | Bob     |         1 |
+  |     3 | Charlie |         1 |
+  |     4 | David   |         2 |
+</Output>
+
+#### Example:
+```sql title="example.sql"
+SELECT e.Name AS Employee, m.Name AS Manager
+FROM Employees e
+INNER JOIN Employees m
+ON e.ManagerID = m.EmpID;
+```
+
+#### Output:
+<Output>
+| Employee | Manager |
+| -------- | ------- |
+| Bob      | Alice   |
+| Charlie  | Alice   |
+| David    | Bob     |
+</Output>
+
+#### Common Uses:
+
+- Employee → Manager relationships
+- Parent → Child relationships
+- Comparing rows within the same table
+
+<Note text="A SELF JOIN uses the same table twice, so table aliases (like e and m) are required to distinguish between them." />
 
 ---
 
-## Table aliases keep joins readable
+## 6. JOIN with WHERE
 
-Once queries involve multiple tables, aliasing (from the <Code>SELECT</Code> lesson) makes things much shorter:
+#### Example:
+##### Find Ram's orders:
 
 ```sql title="example.sql"
-SELECT b.title, a.name AS author_name
-FROM books b
-JOIN authors a ON b.author_id = a.id;
+SELECT customers.name, orders.product
+FROM customers
+JOIN orders
+ON customers.id = orders.customer_id
+WHERE customers.name = 'Ram';
 ```
+
+#### Output:
+<Output>
+| name  | product |
+| ----- | ------- |
+| Ram   | Laptop  |
+| Ram   | Mouse   |
+</Output>
+
+<Note text="The WHERE clause is used to filter the results of the JOIN operation, rather than the tables themselves." />
 
 ---
 
-## Visual summary
+## 7. JOIN with Alias
+
+Using aliases can make your SQL queries more concise and easier to read, especially when working with complex queries involving multiple tables.
+
+**Instead of**:
+
+<Code>customers.name</Code> and <Code>orders.product</Code>
+
+**Use aliases:**
+
+```sql title="example.sql"
+SELECT c.name, o.product
+FROM customers c
+JOIN orders o
+ON c.id = o.customer_id;
+```
+---
+
+## 8. Visual summary
 
 <Table>
   <THead>
@@ -145,12 +473,22 @@ JOIN authors a ON b.author_id = a.id;
       <TD>RIGHT JOIN</TD>
       <TD>All rows from the right table, matched rows from the left (NULL if none)</TD>
     </TR>
+    <TR>
+      <TD>CROSS JOIN</TD>
+      <TD>All rows from the left table combined with all rows from the right table</TD>
+    </TR>
+    <TR>
+      <TD>SELF JOIN</TD>
+      <TD>Table joined with itself</TD>
+    </TR>
   </TBody>
 </Table>
 
 ---
 
-## Quick Reference
+<ZoomableImage width="800" height="700" src="/images/joins.png" wrapperClassName="" alt="NIC" className='h-100 w-auto'/>
+
+## 9. Quick Reference
 
 <Table>
   <THead>
@@ -179,6 +517,37 @@ JOIN authors a ON b.author_id = a.id;
   </TBody>
 </Table>
 
+```sql title="example.sql"
+-- Inner Join
+SELECT customers.name, orders.product
+FROM customers
+INNER JOIN orders
+ON customers.id = orders.customer_id;
+
+-- Left Join
+SELECT customers.name, orders.product, orders.price
+FROM customers
+LEFT JOIN orders
+ON customers.id = orders.customer_id;
+
+-- Right Join
+SELECT customers.name, orders.product, orders.price
+FROM customers
+RIGHT JOIN orders
+ON customers.id = orders.customer_id;
+
+-- Cross Join
+SELECT customers.name, orders.product, orders.price
+FROM customers
+CROSS JOIN orders;
+
+-- Self Join
+SELECT e.Name AS Employee, m.Name AS Manager
+FROM Employees e
+INNER JOIN Employees m
+ON e.ManagerID = m.EmpID;
+```
+
 ---
 
-**Try it yourself:** link a few books to authors using <Code>author_id</Code>, then write a query that lists each book's title alongside its author's name and country. Let me know how it goes, and we'll move to **Filtering & Sorting** next.
+<JoinVisualizer title="10. MySQL Joins Visualizer" />
