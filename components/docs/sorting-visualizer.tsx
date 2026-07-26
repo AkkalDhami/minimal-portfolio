@@ -434,7 +434,7 @@ function ArrayInputPanel({
   }
 
   return (
-    <div data-not-typeset className="border-edge mb-4 rounded-2xl border p-5">
+    <div data-not-typeset className="border-edge mb-4 rounded-lg border p-5">
       <p className="text-muted-foreground mb-3 text-xs tracking-widest uppercase">
         Array Input
       </p>
@@ -852,7 +852,7 @@ export function SortingVisualizer({
         )}
       </div>
 
-      <div className="border-border bg-card mb-4 rounded-2xl border p-5">
+      <div className="border-border bg-card mb-4 rounded-lg border p-5">
         <div className="mb-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="text-muted-foreground text-base tracking-widest uppercase">

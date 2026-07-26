@@ -17,6 +17,7 @@ import { NetworkingCard } from "@/components/networking/networking-card";
 import { SqlPlayground } from "@/components/sql-playground/sql-playground";
 import Link from "next/link";
 import { ZoomableImage } from "./zoomable-image";
+import { JoinVisualizer } from "./join-visualizer";
 
 export const mdxComponents: MDXComponents = {
   Table,
@@ -26,6 +27,7 @@ export const mdxComponents: MDXComponents = {
   TH,
   TD,
   ZoomableImage,
+  JoinVisualizer,
 
   SortingVisualizer: props => <SortingVisualizerComponent {...props} />,
   Output,

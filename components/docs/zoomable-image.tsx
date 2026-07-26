@@ -51,7 +51,7 @@ export function ZoomableImage({
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
           onClick={() => setOpen(false)}
-          className="fixed inset-0 z-999 flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm">
+          className="fixed inset-0 z-999 flex min-h-[75vh] items-center justify-center overflow-y-auto bg-black/90 p-4 backdrop-blur-sm">
           <button
             type="button"
             onClick={() => setOpen(false)}
@@ -67,7 +67,7 @@ export function ZoomableImage({
             exit={{ opacity: 0, scale: 0.9 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
             onClick={e => e.stopPropagation()}
-            className="relative flex h-[95vh] w-[95vw] items-center justify-center">
+            className="relative flex w-[95vw] items-center justify-center">
             <Image
               {...props}
               alt={alt}
