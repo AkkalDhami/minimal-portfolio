@@ -1,0 +1,376 @@
+---
+title: Filtering and Sorting
+description: WHERE, ORDER BY, LIMIT and combining conditions.
+---
+
+You've already used basic <Code>WHERE</Code> in the Read/SELECT lesson. This goes deeper — combining multiple conditions correctly, understanding operator precedence, and sorting with more control.
+
+We'll use an expanded <Code>books</Code> table:
+
+```sql title="create-table.sql"
+CREATE TABLE books (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    author VARCHAR(255),
+    genre VARCHAR(100),
+    price DECIMAL(6,2),
+    published_year INT,
+    in_stock BOOLEAN DEFAULT TRUE
+);
+```
+
+```sql title="insert-value.sql"
+INSERT INTO books (title, author, genre, price, published_year, in_stock) VALUES
+('Dune', 'Frank Herbert', 'Sci-Fi', 15.50, 1965, TRUE),
+('1984', 'George Orwell', 'Dystopian', 9.99, 1949, TRUE),
+('Animal Farm', 'George Orwell', 'Satire', 7.50, 1945, FALSE),
+('Brave New World', 'Aldous Huxley', 'Dystopian', 10.25, 1932, TRUE),
+('Foundation', 'Isaac Asimov', 'Sci-Fi', 12.00, 1951, FALSE);
+```
+
+<Output>
+mysql> SELECT * FROM books;
++----+-----------------+---------------+-----------+-------+----------------+----------+
+| id | title           | author        | genre     | price | published_year | in_stock |
++----+-----------------+---------------+-----------+-------+----------------+----------+
+|  1 | Dune            | Frank Herbert | Sci-Fi    | 15.50 |           1965 |        1 |
+|  2 | 1984            | George Orwell | Dystopian |  9.99 |           1949 |        1 |
+|  3 | Animal Farm     | George Orwell | Satire    |  7.50 |           1945 |        0 |
+|  4 | Brave New World | Aldous Huxley | Dystopian | 10.25 |           1932 |        1 |
+|  5 | Foundation      | Isaac Asimov  | Sci-Fi    | 12.00 |           1951 |        0 |
++----+-----------------+---------------+-----------+-------+----------------+----------+
+</Output>
+
+---
+
+## 1. Combining conditions with AND / OR
+
+<Code>AND</Code> requires both conditions to be true. <Code>OR</Code> requires at least one.
+
+```sql title="and-example.sql"
+-- Both conditions must be true
+SELECT * FROM books
+WHERE genre = 'Sci-Fi' AND in_stock = TRUE;
+```
+
+<Output>
++----+-------+---------------+--------+-------+----------------+----------+
+| id | title | author        | genre  | price | published_year | in_stock |
++----+-------+---------------+--------+-------+----------------+----------+
+|  1 | Dune  | Frank Herbert | Sci-Fi | 15.50 |           1965 |        1 |
++----+-------+---------------+--------+-------+----------------+----------+
+</Output>
+
+---
+
+```sql title="or-example.sql"
+-- Either condition can be true
+SELECT * FROM books
+WHERE genre = 'Dystopian' OR genre = 'Satire';
+```
+<Output>
++----+-----------------+---------------+-----------+-------+----------------+----------+
+| id | title           | author        | genre     | price | published_year | in_stock |
++----+-----------------+---------------+-----------+-------+----------------+----------+
+|  2 | 1984            | George Orwell | Dystopian |  9.99 |           1949 |        1 |
+|  3 | Animal Farm     | George Orwell | Satire    |  7.50 |           1945 |        0 |
+|  4 | Brave New World | Aldous Huxley | Dystopian | 10.25 |           1932 |        1 |
++----+-----------------+---------------+-----------+-------+----------------+----------+
+</Output>
+
+---
+
+## 2. Operator precedence — the mistake almost everyone makes
+
+<Code>AND</Code> is evaluated **before** <Code>OR</Code>, the same way multiplication happens before addition in math. This can produce surprising results if you're not careful.
+
+```sql title="example.sql"
+-- Looks like: "Orwell books, OR anything published after 1950 that's Sci-Fi"
+-- But this actually runs as: (author = 'George Orwell') OR (genre = 'Sci-Fi' AND published_year > 1950)
+SELECT * FROM books
+WHERE author = 'George Orwell' OR genre = 'Sci-Fi' AND published_year > 1950;
+```
+
+**Fix: use parentheses to make your intent explicit.**
+
+```sql title="example.sql"
+-- Now it's unambiguous: Orwell books published after 1950, in Sci-Fi genre
+SELECT * FROM books
+WHERE (author = 'George Orwell' OR genre = 'Sci-Fi') AND published_year > 1950;
+```
+
+**Rule of thumb:** any time you mix <Code>AND</Code> and <Code>OR</Code> in the same <Code>WHERE</Code>, add parentheses — even if you're confident about precedence. It makes the query readable for anyone else (including future you).
+
+---
+
+## 3. NOT
+
+Inverts a condition:
+
+```sql title="example.sql"
+SELECT * FROM books
+WHERE NOT genre = 'Sci-Fi';
+
+-- Equivalent, and more common in practice
+SELECT * FROM books
+WHERE genre != 'Sci-Fi';
+```
+
+<Output>
++----+-----------------+---------------+-----------+-------+----------------+----------+
+| id | title           | author        | genre     | price | published_year | in_stock |
++----+-----------------+---------------+-----------+-------+----------------+----------+
+|  2 | 1984            | George Orwell | Dystopian |  9.99 |           1949 |        1 |
+|  3 | Animal Farm     | George Orwell | Satire    |  7.50 |           1945 |        0 |
+|  4 | Brave New World | Aldous Huxley | Dystopian | 10.25 |           1932 |        1 |
++----+-----------------+---------------+-----------+-------+----------------+----------+
+</Output>
+
+<Code>NOT</Code> is more useful combined with other operators:
+
+##### Books NOT published in the Sci-Fi or Dystopian genres:
+
+```sql title="example.sql"
+SELECT * FROM books
+WHERE genre NOT IN ('Sci-Fi', 'Dystopian');
+```
+
+<Output>
++----+-------------+---------------+--------+-------+----------------+----------+
+| id | title       | author        | genre  | price | published_year | in_stock |
++----+-------------+---------------+--------+-------+----------------+----------+
+|  3 | Animal Farm | George Orwell | Satire |  7.50 |           1945 |        0 |
++----+-------------+---------------+--------+-------+----------------+----------+
+</Output>
+
+---
+
+## 4. Filtering with BETWEEN
+
+Inclusive range check — includes both endpoints:
+
+```sql title="example.sql"
+SELECT * FROM books
+WHERE published_year BETWEEN 1940 AND 1960;
+```
+
+Equivalent to:
+```sql title="example.sql"
+SELECT * FROM books
+WHERE published_year >= 1940 AND published_year <= 1960;
+```
+
+<Output>
++----+-------------+---------------+-----------+-------+----------------+----------+
+| id | title       | author        | genre     | price | published_year | in_stock |
++----+-------------+---------------+-----------+-------+----------------+----------+
+|  2 | 1984        | George Orwell | Dystopian |  9.99 |           1949 |        1 |
+|  3 | Animal Farm | George Orwell | Satire    |  7.50 |           1945 |        0 |
+|  5 | Foundation  | Isaac Asimov  | Sci-Fi    | 12.00 |           1951 |        0 |
++----+-------------+---------------+-----------+-------+----------------+----------+
+</Output>
+
+---
+
+## 5. Filtering with IN
+
+Matches against a list — much cleaner than chaining several <Code>OR</Code> conditions:
+
+**Instead of this:**
+```sql
+SELECT * FROM books
+WHERE author = 'George Orwell' OR author = 'Isaac Asimov';
+```
+
+**Write this:**
+```sql
+SELECT * FROM books
+WHERE author IN ('George Orwell', 'Isaac Asimov');
+```
+
+<Output>
++----+-------------+---------------+-----------+-------+----------------+----------+
+| id | title       | author        | genre     | price | published_year | in_stock |
++----+-------------+---------------+-----------+-------+----------------+----------+
+|  2 | 1984        | George Orwell | Dystopian |  9.99 |           1949 |        1 |
+|  3 | Animal Farm | George Orwell | Satire    |  7.50 |           1945 |        0 |
+|  5 | Foundation  | Isaac Asimov  | Sci-Fi    | 12.00 |           1951 |        0 |
++----+-------------+---------------+-----------+-------+----------------+----------+
+</Output>
+
+---
+
+## 6. Handling NULL correctly
+
+<Code>NULL</Code> means "unknown" or "missing" — it can't be compared with <Code>=</Code>. This trips up almost everyone at some point.
+
+**WRONG — this never matches, even if genre is actually NULL:**
+```sql
+SELECT * FROM books WHERE genre = NULL;
+```
+
+**CORRECT:**
+```sql
+SELECT * FROM books WHERE genre IS NULL;
+SELECT * FROM books WHERE genre IS NOT NULL;
+```
+
+---
+
+## 7. Sorting with multiple columns
+
+The second column only matters when the first has ties:
+
+#### Sort by genre alphabetically, then cheapest first within each genre:
+
+```sql title="example.sql"
+SELECT * FROM books
+ORDER BY genre ASC, price ASC;
+```
+
+<Output>
++----+-----------------+---------------+-----------+-------+----------------+----------+
+| id | title           | author        | genre     | price | published_year | in_stock |
++----+-----------------+---------------+-----------+-------+----------------+----------+
+|  2 | 1984            | George Orwell | Dystopian |  9.99 |           1949 |        1 |
+|  4 | Brave New World | Aldous Huxley | Dystopian | 10.25 |           1932 |        1 |
+|  3 | Animal Farm     | George Orwell | Satire    |  7.50 |           1945 |        0 |
+|  5 | Foundation      | Isaac Asimov  | Sci-Fi    | 12.00 |           1951 |        0 |
+|  1 | Dune            | Frank Herbert | Sci-Fi    | 15.50 |           1965 |        1 |
++----+-----------------+---------------+-----------+-------+----------------+----------+
+</Output>
+
+---
+
+## 8. Sorting by a calculated expression
+
+You can sort by something that isn't even a plain column:
+
+#### Sort by how many years since publication (oldest first):
+
+```sql title="example.sql"
+SELECT title, published_year
+FROM books
+ORDER BY (2026 - published_year) DESC;
+```
+<Output>
++-----------------+----------------+
+| title           | published_year |
++-----------------+----------------+
+| Brave New World |           1932 |
+| Animal Farm     |           1945 |
+| 1984            |           1949 |
+| Foundation      |           1951 |
+| Dune            |           1965 |
++-----------------+----------------+
+</Output>
+
+---
+
+## 9. LIMIT and OFFSET
+Limits the number of rows returned, and can be used with <Code>OFFSET</Code> to paginate results.
+
+#### Return the first 3 rows:
+
+```sql title="example.sql"
+SELECT *
+FROM books
+LIMIT 3;
+```
+<Output>
++----+-------------+---------------+-----------+-------+----------------+----------+
+| id | title       | author        | genre     | price | published_year | in_stock |
++----+-------------+---------------+-----------+-------+----------------+----------+
+|  1 | Dune        | Frank Herbert | Sci-Fi    | 15.50 |           1965 |        1 |
+|  2 | 1984        | George Orwell | Dystopian |  9.99 |           1949 |        1 |
+|  3 | Animal Farm | George Orwell | Satire    |  7.50 |           1945 |        0 |
++----+-------------+---------------+-----------+-------+----------------+----------+
+</Output>
+
+#### Return the next 2 rows:
+
+```sql title="example.sql"
+SELECT *
+FROM books
+LIMIT 2 OFFSET 3;
+```
+<Output>
++----+-----------------+---------------+-----------+-------+----------------+----------+
+| id | title           | author        | genre     | price | published_year | in_stock |
++----+-----------------+---------------+-----------+-------+----------------+----------+
+|  4 | Brave New World | Aldous Huxley | Dystopian | 10.25 |           1932 |        1 |
+|  5 | Foundation      | Isaac Asimov  | Sci-Fi    | 12.00 |           1951 |        0 |
++----+-----------------+---------------+-----------+-------+----------------+----------+
+</Output>
+
+---
+
+## 10. Putting it together
+
+```sql title="example.sql"
+SELECT title, author, genre, price
+FROM books
+WHERE (genre = 'Sci-Fi' OR genre = 'Dystopian') AND in_stock = TRUE
+ORDER BY price ASC
+LIMIT 3;
+```
+
+**Read it like a sentence:** "Give me title, author, genre, price from books where the genre is Sci-Fi or Dystopian, and it's in stock, sorted cheapest first, top 3 only."
+
+<Output>
++-----------------+---------------+-----------+-------+
+| title           | author        | genre     | price |
++-----------------+---------------+-----------+-------+
+| 1984            | George Orwell | Dystopian |  9.99 |
+| Brave New World | Aldous Huxley | Dystopian | 10.25 |
+| Dune            | Frank Herbert | Sci-Fi    | 15.50 |
++-----------------+---------------+-----------+-------+
+</Output>
+
+
+---
+
+## 11. Quick Reference
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Goal</TH>
+      <TH>Example</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>Both conditions must be true</TD>
+      <TD><Code>WHERE a AND b</Code></TD>
+    </TR>
+    <TR>
+      <TD>Either condition can be true</TD>
+      <TD><Code>WHERE a OR b</Code></TD>
+    </TR>
+    <TR>
+      <TD>Mixing AND / OR safely</TD>
+      <TD><Code>WHERE (a OR b) AND c</Code></TD>
+    </TR>
+    <TR>
+      <TD>Invert a condition</TD>
+      <TD><Code>WHERE NOT condition</Code></TD>
+    </TR>
+    <TR>
+      <TD>Range check (inclusive)</TD>
+      <TD><Code>WHERE price BETWEEN 10 AND 15</Code></TD>
+    </TR>
+    <TR>
+      <TD>Match against a list</TD>
+      <TD><Code>WHERE author IN ('A', 'B')</Code></TD>
+    </TR>
+    <TR>
+      <TD>Check for missing values</TD>
+      <TD><Code>WHERE column IS NULL</Code></TD>
+    </TR>
+    <TR>
+      <TD>Sort by multiple columns</TD>
+      <TD><Code>ORDER BY genre ASC, price ASC</Code></TD>
+    </TR>
+  </TBody>
+</Table>

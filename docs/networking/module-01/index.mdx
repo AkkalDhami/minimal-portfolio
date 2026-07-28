@@ -20,7 +20,7 @@ Laptop  ───┐
 Phone   ───┼── WiFi Router ─── Internet
 TV      ───┘
 ```
-
+<ZoomableImage width="1000" height="400" src="/images/cn.png" alt="Computer Networking" className='h-100 w-auto'/>
 ---
 
 ## <HLink href="/docs/networking/module-01/types-of-networks">2. Types of Computer Networks</HLink>
@@ -176,8 +176,10 @@ Finally, your browser receives the data, puts all the pieces together, and displ
 
 Behind the scenes, technologies such as **DNS**, **TCP/IP**, **HTTP/HTTPS**, routers, and servers work together to ensure that your data reaches the correct destination quickly, reliably, and securely.
 
-
 [Learn More](/docs/networking/module-01/how-the-internet-works)
+
+
+<ZoomableImage width="1000" height="400" src="/images/hiw2.png" wrapperClassName="my-6" alt="Internet Working" className='h-100 w-auto'/>
 
 ---
 
@@ -194,6 +196,8 @@ A **Client-Server Architecture** is a network model where one or more **clients*
 - Server processes it.
 - Server sends a response.
 
+<ZoomableImage width="1000" height="400" src="/images/csa2.png" alt="Client-Server Architecture" className='h-100 w-auto'/>
+
 ---
 
 #### Peer-to-Peer (P2P) Architecture
@@ -203,6 +207,8 @@ A **Peer-to-Peer (P2P) Architecture** is a network model where every device (cal
 There is **no central server**.
 
 Peers communicate directly with each other.
+
+<ZoomableImage width="1000" height="400" src="/images/p2p.png" alt="Peer to Peer Architecture" className='h-100 w-auto'/>
 
 ---
 
@@ -214,6 +220,11 @@ Peers communicate directly with each other.
 - Choosing the right architecture depends on factors such as scalability, security, cost, and management requirements.
 
 [Learn More](/docs/networking/module-01/network-architectures)
+
+
+<ZoomableImage width="1000" height="400" src="/images/p2p.png" alt="Peer to Peer Architecture" className='h-100 w-auto'/>
+
+<ZoomableImage width="1000" height="400" src="/images/csa.png" alt="Client-Server Architecture" className='h-100 w-auto'/>
 
 ---
 
@@ -287,3 +298,31 @@ Hosts are usually **end devices** used by people or applications.
 - Devices such as routers, switches, and firewalls are nodes that primarily forward or manage network traffic.
 
 ---
+
+## <HLink href="/docs/networking/module-01/network-interface-card">7. Network Interface Card (NIC)?</HLink>
+
+A **Network Interface Card (NIC)** is a hardware component that allows a computer to send and receive data over a network.
+
+<ZoomableImage width="600" height="400" src="/images/nic.jpg" alt="Network Interface Card" className='h-100 w-auto'/>
+
+- A **Network Interface Card (NIC)** is the hardware that connects a device to a network.
+- Every network-enabled device has at least one NIC.
+- A NIC sends and receives data between the device and the network.
+- Each NIC has a unique **MAC address**, which identifies it on the local network.
+- NICs can be **wired (Ethernet)** or **wireless (Wi-Fi)**.
+- Without a NIC, a device cannot communicate with other devices or access the Internet.
+
+---
+
+## <HLink href="/docs/networking/module-01/mac-address">8. MAC Address</HLink>
+
+A **MAC address** is a unique identifier assigned to a network interface controller (NIC) for communications at the data link layer of a network segment.
+
+**Example:** <Code>00:1A:2B:3C:4D:5E</Code>
+
+- It splits into an **OUI** (manufacturer) and a **device-specific** portion.
+- The first byte's low-order bits tell you if it's **unicast/multicast** and **universal/local**.
+- MAC addresses operate at **Layer 2** and are essential for local delivery, ARP, and switching.
+- Modern devices **randomize** MAC addresses for privacy, and MACs can be **spoofed** in software.
+
+[Learn More](/docs/networking/module-01/mac-address)
