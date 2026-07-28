@@ -132,9 +132,9 @@ export function JoinVisualizer({ title }: { title?: string }) {
   );
 
   return (
-    <div className="border-border not-typeset bg-card text-card-foreground w-full rounded-lg border p-4">
+    <div className="border-border not-typeset dark:bg-card text-card-foreground w-full rounded-lg border bg-neutral-100 p-4">
       <div className="mb-1 flex items-center gap-2">
-        <h2 className="text-muted-foreground text-lg font-medium tracking-wide uppercase">
+        <h2 className="text-lg font-medium tracking-wide uppercase">
           {title ?? "SQL Join Visualizer"}
         </h2>
       </div>

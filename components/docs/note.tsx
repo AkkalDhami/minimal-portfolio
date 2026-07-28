@@ -20,13 +20,13 @@ import { CopyButton } from "./copy-button";
 
 export default function Note({ text }: { text: string }) {
   return (
-    <div className="animate-fade-in-blur group not-typeset max-w-code relative mx-1 my-4 overflow-hidden rounded-lg border border-blue-200/60 bg-blue-50/60 py-3 pr-10 pl-4 dark:border-blue-500/20 dark:bg-blue-500/[0.07]">
+    <div className="animate-fade-in-blur group not-typeset max-w-code relative mx-1 my-4 overflow-hidden rounded-lg border border-blue-500/20 py-3 pr-10 pl-4">
       <div className="flex gap-4">
-        <div className="size-4">
+        <div className="mt-0.5 size-4">
           <IconInfoCircle className="size-5 text-blue-500" />
         </div>
 
-        <p className="font-inter not-typeset flex-1 text-base leading-relaxed">
+        <p className="font-inter not-typeset flex-1 text-base leading-relaxed text-blue-500">
           {text}
         </p>
       </div>
@@ -35,7 +35,7 @@ export default function Note({ text }: { text: string }) {
         text={text}
         docs={false}
         className={
-          "absolute right-1.5 bottom-1.5 py-1.5 text-blue-500/60 opacity-0 duration-200 group-hover:opacity-100 hover:bg-blue-100 hover:text-blue-600 dark:text-blue-400/60 dark:hover:bg-blue-500/10 dark:hover:text-blue-300"
+          "absolute right-1.5 bottom-1.5 py-1.5 opacity-0 duration-200 group-hover:opacity-100"
         }
       />
     </div>
