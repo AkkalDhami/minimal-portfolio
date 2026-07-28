@@ -1,0 +1,141 @@
+---
+title: Practice Questions - Filtering and Sorting
+description: Exercises to test WHERE, AND/OR, BETWEEN, IN, NULL handling, and ORDER BY.
+---
+
+Using the <Code>books</Code> table from the lesson:
+
+```sql title="create-table.sql"
+CREATE TABLE books (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    author VARCHAR(255),
+    genre VARCHAR(100),
+    price DECIMAL(6,2),
+    published_year INT,
+    in_stock BOOLEAN DEFAULT TRUE
+);
+```
+
+```sql title="insert-value.sql"
+INSERT INTO books (title, author, genre, price, published_year, in_stock) VALUES
+('Dune', 'Frank Herbert', 'Sci-Fi', 15.50, 1965, TRUE),
+('1984', 'George Orwell', 'Dystopian', 9.99, 1949, TRUE),
+('Animal Farm', 'George Orwell', 'Satire', 7.50, 1945, FALSE),
+('Brave New World', 'Aldous Huxley', 'Dystopian', 10.25, 1932, TRUE),
+('Foundation', 'Isaac Asimov', 'Sci-Fi', 12.00, 1951, FALSE);
+```
+
+---
+
+<Accordion defaultValue={["item-1"]}>
+  <AccordionItem value="item-1">
+    <AccordionTrigger>1. Find all books priced under $12.</AccordionTrigger>
+    <AccordionContent>
+      ```sql
+      SELECT * FROM books WHERE price < 12;
+      ```
+    </AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="item-2">
+    <AccordionTrigger>2. Find all books that are either Sci-Fi or Dystopian.</AccordionTrigger>
+    <AccordionContent>
+      ```sql
+      SELECT * FROM books 
+      WHERE genre IN ('Sci-Fi', 'Dystopian') AND in_stock = TRUE;
+      ```
+    </AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="item-3">
+    <AccordionTrigger>3. Find all books that are Sci-Fi and currently in stock.</AccordionTrigger>
+    <AccordionContent>
+      ```sql
+      SELECT * FROM books 
+      WHERE genre IN ('Sci-Fi') AND in_stock = TRUE;
+      ```
+    </AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="item-4">
+    <AccordionTrigger>4. Find all books published between 1940 and 1960 (inclusive).</AccordionTrigger>
+    <AccordionContent>
+      ```sql
+       SELECT * FROM books 
+       WHERE published_year BETWEEN 1940 AND 1960;
+      ```
+    </AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="item-5">
+    <AccordionTrigger>5. Find all books written by either 'George Orwell' or 'Isaac Asimov' — write it using IN.</AccordionTrigger>
+    <AccordionContent>
+      ```sql
+       SELECT * FROM books 
+       WHERE author IN ('George Orwell', 'Isaac Asimov');
+      ```
+    </AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="item-6">
+    <AccordionTrigger>6. Find all books that are not in the Sci-Fi genre.</AccordionTrigger>
+    <AccordionContent>
+      ```sql
+       SELECT * FROM books 
+       WHERE genre NOT IN ('Sci-Fi');
+      ```
+    </AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="item-7">
+    <AccordionTrigger>7. Write a query for: 'books by George Orwell, OR any Dystopian book published after 1940.'</AccordionTrigger>
+    <AccordionContent>
+      ```sql
+      SELECT * FROM books
+      WHERE author = 'George Orwell' 
+        OR (genre = 'Dystopian' AND published_year > 1940);
+      ```
+    </AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="item-8">
+    <AccordionTrigger>8. Sort all books by price, most expensive first.</AccordionTrigger>
+    <AccordionContent>
+      ```sql
+      SELECT * FROM books ORDER BY price DESC;
+      ```
+    </AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="item-9">
+    <AccordionTrigger>9. Sort all books by genre (A-Z), and within each genre, by price (cheapest first).</AccordionTrigger>
+    <AccordionContent>
+      ```sql
+      SELECT * FROM books ORDER BY genre ASC, price ASC;
+      ```
+    </AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="item-10">
+    <AccordionTrigger>10. Find the 2 cheapest books that are currently in stock.</AccordionTrigger>
+    <AccordionContent>
+      ```sql
+      SELECT * FROM books
+      WHERE in_stock = TRUE
+      ORDER BY price ASC
+      LIMIT 2;
+      ```
+    </AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="item-11">
+    <AccordionTrigger>11. Find all books where author is missing. This table has no NULL authors right now — write the query as if it did, and explain why WHERE author = NULL wouldn't work.</AccordionTrigger>
+    <AccordionContent>
+      ```sql
+      SELECT * FROM books WHERE author IS NULL;
+      ```
+    </AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="item-12">
+    <AccordionTrigger>12. Return the title and price of all out-of-stock books, sorted by how long ago they were published (oldest first), showing only the single oldest one.</AccordionTrigger>
+    <AccordionContent>
+      ```sql
+      SELECT title, price FROM books
+      WHERE in_stock = 0
+      ORDER BY published_year ASC
+      LIMIT 1;
+      ```
+    </AccordionContent>
+  </AccordionItem>
+</Accordion>

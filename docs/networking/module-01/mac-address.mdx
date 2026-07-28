@@ -1,0 +1,371 @@
+---
+title: MAC Address
+description: Learn what a MAC address is, how it uniquely identifies network interfaces, and how it differs from an IP address.
+---
+
+Imagine you live in an apartment building.
+
+Every apartment has a **flat number**.
+
+```text
+Apartment Building
+
+101
+102
+103
+104
+105
+```
+
+Even if two people have the same name, the flat number uniquely identifies where they live.
+
+A computer network works in a similar way.
+
+Every Network Interface Card (NIC) is assigned a unique identifier called a **MAC Address**.
+
+This allows devices on the same network to identify one another.
+
+---
+
+## 1. What Is a MAC Address?
+ 
+A **MAC address** (Media Access Control address) is a unique hardware identifier assigned to a **network interface controller (NIC)**. It operates at **Layer 2 (Data Link Layer)** of the OSI model and is used to identify devices on a local network segment.
+ 
+Every device that connects to a network — your laptop's Wi-Fi card, your phone's Bluetooth chip, a router's Ethernet port — has at least one MAC address baked into its hardware by the manufacturer.
+ 
+> **A MAC Address is the permanent identity of a network device on a local network.**
+
+---
+
+## 2. Why Do We Need a MAC Address?
+
+Imagine five laptops are connected to the same Wi-Fi.
+
+```text
+Laptop A
+Laptop B
+Laptop C
+Laptop D
+Laptop E
+```
+
+If the router wants to send data to **Laptop C**, how does it know which laptop is Laptop C?
+
+It uses the device's **MAC Address**.
+
+Every NIC has a different MAC Address, so the router can deliver data to the correct device.
+
+---
+
+## 3. How Does a MAC Address Work?
+
+Suppose your laptop wants to send a file to your printer.
+
+```text
+Laptop
+   │
+   │
+ Switch
+   │
+Printer
+```
+
+The switch looks at the **destination MAC Address**.
+
+If it matches the printer's MAC Address, the switch forwards the data only to the printer.
+
+---
+
+## 4. Anatomy of a MAC Address
+ 
+A MAC address is **48 bits (6 bytes)** long, usually written as **6 pairs of hexadecimal digits**, separated by colons or hyphens:
+ 
+```
+00:1A:2B:3C:4D:5E
+00-1A-2B-3C-4D-5E
+```
+
+ 
+## 5. Structure of a MAC Address
+
+**Example:**
+<Code>00:1A:2B:3C:4D:5E</Code>
+
+<Output>
+        00:1A:2B   :      3C:4D:5E
+      └─────────┘       └─────────┘
+       Manufacturer      Device-specific
+       (OUI)             serial number
+</Output>
+
+<Table>
+<THead>
+<TR>
+    <TD>Bytes</TD>
+    <TD>Name</TD>
+    <TD>Purpose</TD>
+</TR>
+</THead>
+<TBody>
+<TR>
+    <TD>First 3 bytes (24 bits)</TD>
+    <TD>**OUI** (Organizationally Unique Identifier)</TD>
+    <TD>Identifies the manufacturer, assigned by the IEEE</TD>
+</TR>
+<TR>
+    <TD>Last 3 bytes (24 bits)</TD>
+    <TD>**NIC-specific**</TD>
+    <TD>A unique serial number assigned by the manufacturer</TD>
+</TR>
+</TBody>
+</Table>
+
+
+ 
+For example, <Code>00:1A:2B</Code> might belong to Ayecom Technology, while <Code>F4:5C:89</Code> might belong to Apple. You can look up any OUI in the [IEEE registry](https://standards-oui.ieee.org/) to identify the manufacturer of a device.
+ 
+---
+ 
+## 6. The First Byte Tells You More
+ 
+The **first byte** of a MAC address encodes two special bits that describe how the address behaves.
+ 
+### 1. Individual/Group (I/G) Bit — least significant bit of the first byte
+
+<Table>
+<THead>
+<TR>
+    <TD>Bit value</TD>
+    <TD>Meaning</TD>
+</TR>
+</THead>
+<TBody>
+<TR>
+    <TD><Code>0</Code></TD>
+    <TD>**Unicast** — address belongs to a single device</TD>
+</TR>
+<TR>
+    <TD><Code>1</Code></TD>
+    <TD>**Multicast** — address represents a group of devices</TD>
+</TR>
+</TBody>
+</Table>
+
+---
+
+### 2. Universal/Local (U/L) Bit — second-least significant bit of the first byte
+
+<Table>
+<THead>
+<TR>
+    <TD>Bit value</TD>
+    <TD>Meaning</TD>
+</TR>
+</THead>
+<TBody>
+<TR>
+    <TD><Code>0</Code></TD>
+    <TD>**Universally administered** — assigned by the manufacturer (globally unique)</TD>
+</TR>
+<TR>
+    <TD><Code>1</Code></TD>
+    <TD>**Locally administered** — assigned manually or by software (e.g., for privacy or virtualization)</TD>
+</TR>
+</TBody>
+</Table>
+
+```
+First byte example: 02
+Binary: 0000 0010
+              ^^
+              ││
+              │└─ I/G bit = 0 → unicast
+              └── U/L bit = 1 → locally administered
+```
+ 
+This is why you'll often see MAC addresses starting with <Code>02</Code>, <Code>06</Code>, <Code>0A</Code>, or <Code>0E</Code> on virtual machines or privacy-randomized Wi-Fi connections — the <Code>02</Code> pattern signals "locally administered, unicast."
+ 
+---
+
+ 
+## 7. Types of MAC Addresses
+
+
+- **Unicast** : sent to one specific device (most traffic).
+
+- **Multicast** : sent to a group of interested devices (e.g., <Code>01:00:5E:...</Code> is used for IPv4 multicast).
+
+- **Broadcast** : sent to *all* devices on the local network. The address is always <Code>FF:FF:FF:FF:FF:FF</Code>.
+
+
+---
+
+
+## 8. How MAC Addresses Are Used
+ 
+1. **Local delivery** — Ethernet and Wi-Fi frames use MAC addresses (not IP addresses) to deliver data to the correct device on the same network segment.
+2. **ARP (Address Resolution Protocol)** — Devices use ARP to map an IP address to a MAC address so they know where to actually send a frame.
+3. **Switching** — Network switches build a table (the *MAC address table* or *CAM table*) mapping MAC addresses to physical ports, so they know where to forward traffic.
+4. **Access control** — Some networks use **MAC filtering** to allow or deny devices based on their MAC address (a weak security measure, since MACs can be spoofed).
+
+---
+
+## 9. Use Cases
+
+MAC Addresses are used for:
+
+- Delivering data within a LAN
+- Device identification
+- MAC filtering on Wi-Fi routers
+- Network troubleshooting
+- Switch forwarding decisions
+
+---
+
+## 10. Advantages
+
+- **Unique Identification**: Each NIC has a unique MAC Address.
+
+- **Reliable Local Communication**: Switches use MAC Addresses to deliver data to the correct device.
+
+- **Fast Data Forwarding**: Switches maintain a MAC Address table to improve network efficiency.
+
+- **Supports Network Security**: Some routers allow only approved MAC Addresses to connect.
+
+---
+
+## 11. Disadvantages
+
+- **Limited to Local Networks**: MAC Addresses are not used for communication over the Internet.
+
+- **Can Be Spoofed**: Software can temporarily change (spoof) a device's MAC Address, so it should not be relied upon as the only security mechanism.
+
+- **Hardware Specific**: Replacing a NIC usually changes the MAC Address because the new NIC has its own unique identifier.
+
+---
+
+## 12. Finding Your MAC Address
+ 
+**Windows:**
+```bash
+ipconfig /all
+```
+ 
+**macOS:**
+```bash
+ifconfig en0 | grep ether
+```
+ 
+**Linux:**
+```bash
+ip link show
+```
+ 
+**Android / iOS:** Found under *Settings → About Phone/Device → Status* (labeled "Wi-Fi MAC Address").
+
+
+---
+
+
+## 13. What is MAC Spoofing?
+
+This is simpler than it sounds: **spoofing = manually telling your device to lie about its MAC address.**
+
+Normally your device's MAC address comes from the manufacturer, like a serial number. But since it's just a piece of data sent over the network, software can override it and say "pretend my MAC address is this other one instead."
+
+Two ways people use this:
+
+**Good reason:** You want privacy, or a Wi-Fi network only allows certain "approved" MAC addresses and you're trying to get your own second device online.
+
+**Bad reason:** An attacker changes their laptop's MAC address to match an already-approved device's MAC, tricking the network into thinking it's that trusted device — sneaking past security rules that were only checking "is this MAC address on the allowed list?"
+
+<Note text="Because MAC addresses are so easy to fake, using them alone as a security check (like 'only allow these 5 MAC addresses to connect') is weak — anyone can copy an allowed MAC address and get in." />
+
+<Note text="MAC Randomization: Your phone's real MAC address is like your face. To stop stores/networks tracking you over time, your phone shows a random fake MAC address instead of its real one when connecting to Wi-Fi." />
+---
+
+## 14. MAC Address vs IP Address
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Feature</TH>
+      <TH>MAC Address</TH>
+      <TH>IP Address</TH>
+    </TR>
+  </THead>
+
+  <TBody>
+    <TR>
+      <TD><strong>Meaning</strong></TD>
+      <TD>Physical address of a Network Interface Card (NIC).</TD>
+      <TD>Logical address assigned to a device on a network.</TD>
+    </TR>
+
+    <TR>
+      <TD><strong>Assigned By</strong></TD>
+      <TD>NIC manufacturer.</TD>
+      <TD>Network administrator or DHCP server.</TD>
+    </TR>
+
+    <TR>
+      <TD><strong>Length</strong></TD>
+      <TD>48 bits (6 bytes).</TD>
+      <TD>32 bits (IPv4) or 128 bits (IPv6).</TD>
+    </TR>
+
+    <TR>
+      <TD><strong>Changes?</strong></TD>
+      <TD>Usually remains the same.</TD>
+      <TD>Can change depending on the network configuration.</TD>
+    </TR>
+
+    <TR>
+      <TD><strong>Works On</strong></TD>
+      <TD>Local Area Network (LAN).</TD>
+      <TD>Local networks and the Internet.</TD>
+    </TR>
+
+    <TR>
+      <TD><strong>OSI Layer</strong></TD>
+      <TD>Layer 2 (Data Link Layer).</TD>
+      <TD>Layer 3 (Network Layer).</TD>
+    </TR>
+
+    <TR>
+      <TD><strong>Example</strong></TD>
+      <TD>**00:1A:2B:3C:4D:5E**</TD>
+      <TD>**192.168.1.100**</TD>
+    </TR>
+  </TBody>
+</Table>
+
+---
+
+## 15. Common Misconceptions
+
+### 1. MAC Address and IP Address are the same.
+
+**No.** A MAC Address identifies a **network interface on the local network**, while an IP Address identifies a device so data can be routed across networks.
+
+---
+
+### 2. Every device has only one MAC Address.
+
+**Not always.** A device with both **Ethernet** and **Wi-Fi** has two network interfaces, and each interface has its own MAC Address.
+
+---
+
+### 3. MAC Addresses are used on the Internet.
+
+**No.** MAC Addresses are used only within the local network. Once traffic reaches a router, routing decisions are based on IP Addresses.
+
+---
+
+## 16. Key Takeaways
+
+- A **MAC Address** is a unique physical address assigned to a **Network Interface Card (NIC)**.
+- It is **48 bits (6 bytes)** long and is commonly written as six hexadecimal pairs.
+- MAC Addresses are used by switches to deliver data within a **Local Area Network (LAN)**.
+- They operate at the **Data Link Layer (Layer 2)** of the OSI Model.
+- Unlike IP Addresses, MAC Addresses identify **network interfaces**, not locations on the Internet.
