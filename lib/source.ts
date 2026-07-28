@@ -11,9 +11,13 @@ export const findNeighbour = (
 ): { prev: IPlaybook | undefined; next: IPlaybook | undefined } => {
   const options: Record<ModuleSection, IPlaybook[]> = {
     dsa: DSA_DATA,
-    networking: NETWORKING_DATA,
     playbook: PLAYBOOK_DATA,
-    sql: SQL_DATA
+    networking: NETWORKING_DATA.map(m =>
+      m.topics.map(t => ({ ...t, docs: `${m.docs}${t.docs}` }))
+    ).flat(),
+    sql: SQL_DATA.map(m =>
+      m.topics.map(t => ({ ...t, docs: `${m.docs}${t.docs}` }))
+    ).flat()
   };
 
   const DATA = options[type];
@@ -27,9 +31,7 @@ export const findNeighbour = (
     };
   }
 
-  const index = DATA.sort((a, b) => a.title.localeCompare(b.title)).findIndex(
-    item => item.slug === slug
-  );
+  const index = DATA.findIndex(item => item.slug === slug);
 
   return {
     prev: index > 0 ? DATA[index - 1] : undefined,
@@ -43,7 +45,13 @@ export const getDocsItems = (type: ModuleSection) => {
       ? PLAYBOOK_DATA
       : type === "dsa"
         ? DSA_DATA
-        : NETWORKING_DATA;
+        : type === "networking"
+          ? NETWORKING_DATA.map(m =>
+              m.topics.map(t => ({ ...t, docs: `${m.docs}${t.docs}` }))
+            ).flat()
+          : SQL_DATA.map(m =>
+              m.topics.map(t => ({ ...t, docs: `${m.docs}${t.docs}` }))
+            ).flat();
 
   return items.map(i => ({
     href: i.docs,
