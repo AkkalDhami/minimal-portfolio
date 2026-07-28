@@ -53,12 +53,12 @@ export const SETUP_DATA: SetupCategory[] = [
         title: "Akkal Dark Theme",
         link: "https://marketplace.visualstudio.com/items?itemName=akkal.akkal-dark-theme",
         current: true
-      },
-      {
-        title: "Ayu",
-        link: "https://marketplace.visualstudio.com/items?itemName=teabyii.ayu",
-        current: false
       }
+      // {
+      //   title: "Ayu",
+      //   link: "https://marketplace.visualstudio.com/items?itemName=teabyii.ayu",
+      //   current: false
+      // }
       // {
       //   title: "Oscura Theme",
       //   link: "https://marketplace.visualstudio.com/items?itemName=Fey.oscura"
