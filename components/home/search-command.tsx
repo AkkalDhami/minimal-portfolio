@@ -285,6 +285,7 @@ export function SearchCommand() {
     }
     if (_item.value.toLowerCase() === "toggle volume") {
       toggleSound();
+      play();
       return;
     }
 
