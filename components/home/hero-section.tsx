@@ -90,13 +90,22 @@ export function NewHeroSection() {
     <section className="screen-line relative z-10 px-4 pt-16 pb-4 font-sans font-normal">
       <div className="mt-4">
         <div className="flex flex-wrap items-center gap-4">
-          <Image
-            width={220}
-            height={220}
-            src="/images/profile2.png"
-            alt="Profile"
-            className="mx-auto hidden size-40 rounded-full object-cover object-left grayscale-100 duration-200 hover:grayscale-0 sm:mx-0 sm:block"
-          />
+          <div className="hidden sm:block">
+            <Image
+              width={220}
+              height={220}
+              src="/images/profile3.png"
+              alt="Profile"
+              className="mx-auto hidden size-40 rounded-full object-cover object-left grayscale-100 duration-200 hover:grayscale-0 sm:mx-0 dark:block"
+            />
+            <Image
+              width={220}
+              height={220}
+              src="/images/profile4.png"
+              alt="Profile"
+              className="mx-auto block size-40 rounded-full object-cover object-left grayscale-100 duration-200 hover:grayscale-0 sm:mx-0 dark:hidden"
+            />
+          </div>
           <div className="space-y-3">
             <h1 className="font-inter text-4xl font-semibold tracking-wide uppercase md:text-4xl">
               {NAME}
