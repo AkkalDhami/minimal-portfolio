@@ -11,11 +11,18 @@ export function Profile() {
       onClick={() => play()}
       className="group relative flex items-center justify-center">
       <Image
-        src="/images/profile2.png"
+        src="/images/profile3.png"
         alt="Profile"
         width={50}
         height={50}
-        className="primary-ring size-10 rounded-full object-cover object-left p-0.5"
+        className="primary-ring hidden size-10 rounded-full object-cover object-left p-0.5 dark:block"
+      />
+      <Image
+        src="/images/profile4.png"
+        alt="Profile"
+        width={50}
+        height={50}
+        className="primary-ring size-10 rounded-full object-cover object-left p-0.5 dark:hidden"
       />
     </Link>
   );

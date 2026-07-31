@@ -77,7 +77,29 @@ export const metadata: Metadata = {
     creator: `@${X_USERNAME}`
   },
   icons: {
-    icon: "/favicon.ico"
+    icon: [
+      {
+        url: "/images/profile2.png",
+        sizes: "32x32"
+      },
+      {
+        url: "/images/profile4.png",
+        sizes: "any",
+        type: "image/svg+xml",
+        media: "(prefers-color-scheme: light)"
+      },
+      {
+        url: "/images/profile3.png",
+        sizes: "any",
+        type: "image/svg+xml",
+        media: "(prefers-color-scheme: dark)"
+      }
+    ],
+    apple: {
+      url: "/images/profile2.png",
+      type: "image/png",
+      sizes: "180x180"
+    }
   },
   robots: {
     index: true,
