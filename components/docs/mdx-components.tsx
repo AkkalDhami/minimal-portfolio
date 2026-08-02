@@ -3,7 +3,7 @@ import { Pre } from "./pre";
 
 import PackageManagerTabs from "./package-manager-tabs";
 import Code from "./custom-code";
-import Note from "./note";
+import Note, { StickyNote } from "./note";
 import Output from "./output";
 import { cn } from "@/lib/utils";
 import { Table, THead, TBody, TR, TH, TD, Highlight } from "./table";
@@ -40,10 +40,12 @@ export const mdxComponents: MDXComponents = {
   AccordionTrigger: props => (
     <AccordionTrigger {...props} className={"text-xl"} />
   ),
+  StickyNote,
 
   SortingVisualizer: props => <SortingVisualizerComponent {...props} />,
   Output,
   Highlight,
+
   pre: Pre,
   PackageManagerTabs,
   Code,
