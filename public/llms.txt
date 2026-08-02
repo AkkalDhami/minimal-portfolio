@@ -1,0 +1,174 @@
+# Akkal Dhami - Portfolio
+
+> Full Stack Developer | React, Next.js, TypeScript, Node.js
+
+---
+
+## About
+
+I'm Akkal Dhami, a passionate full-stack developer based in Nepal with expertise in building modern web applications using React, Next.js, TypeScript, and Node.js.
+
+## Projects
+
+### Servercn
+
+Servercn is a component registry for building Node.js backends. Shadcn ecosystem for node.js backends. Open Source.
+
+### Discord Clone
+
+A real-time messaging application with:
+- Server and channel management
+- Real-time messaging with WebSocket
+- Voice and video calling
+- Role-based permissions
+
+### VS Code Theme - Akkal Dark
+
+A custom dark theme for Visual Studio Code optimized for long coding sessions with carefully selected color palettes.
+
+## Skills
+
+- **Frontend:** React, Next.js, TypeScript, Tailwind CSS, Motion
+- **Backend:** Node.js, Express.js, Prisma, PostgreSQL, MongoDB, Redis, Nest.js
+- **Tools:** Git, Docker, AWS, Vercel, Figma
+
+## Contact
+
+- GitHub: https://github.com/akkaldhami
+- LinkedIn: https://www.linkedin.com/in/akkal-dhami-854273378
+- Email: dhamiakkal21@gmail.com
+- Portfolio: https://www.akkal.com.np
+- Discord: https://discord.com/users/1364265336714563625
+- Daily.Dev : https://app.daily.dev/akkal
+- Location: Kathmandu, Nepal
+
+## Playbook
+
+Comprehensive development guidelines and best practices for writing clean, maintainable, and scalable code.
+
+- [01. REST API Design Principles](https://www.akkal.com.np/docs/playbook/rest-api-basic): REST API design principles are guidelines used to build scalable, maintainable, and predictable APIs.
+
+- [02. HTTP Methods and Status Codes](https://www.akkal.com.np/docs/playbook/http-status-codes): HTTP methods define what action the client wants to perform on a resource, while HTTP status codes indicate the result of that action.
+
+- [03. Backend Fundamentals: 01](https://www.akkal.com.np/docs/playbook/backend-fundamentals-01): Backend fundamentals encompass the core concepts and technologies that form the foundation of backend development, including server architecture, databases, APIs, and security.
+
+- [04. Backend Fundamentals: 02](https://www.akkal.com.np/docs/playbook/backend-fundamentals-02): Backend fundamentals encompass the core concepts and technologies that form the foundation of backend development, including server architecture, databases, APIs, and security.
+
+- [05. GitHub OAuth in Node.js Application](https://www.akkal.com.np/docs/playbook/github-oauth): Learn to implement a full GitHub OAuth flow in Node.js, covering request, callback, token exchange, and user data retrieval.
+
+- [06. Google OAuth in Node.js Application](https://www.akkal.com.np/docs/playbook/google-oauth): Learn to implement Google OAuth flow in Node.js, covering request, callback, token exchange, and user data retrieval.
+
+- [07. MongoDB Aggregation](https://www.akkal.com.np/docs/playbook/mongodb-aggregation): Master MongoDB aggregation using pipelines, $group, $lookup, $match, and complex data processing with real-world examples.
+
+- [08. Introduction to YAML](https://www.akkal.com.np/docs/playbook/yaml): Learn YAML fundamentals including syntax, objects, arrays, nesting, and real-world configuration examples.
+
+- [09. Basics Concepts of Normalization](https://www.akkal.com.np/docs/playbook/normalization): Learn database normalization concepts including 1NF, 2NF, 3NF, BCNF, and common use cases.
+
+- [10. Setting Up ESLint, Commitlint, Lint-Staged, Husky, and Prettier in a Node.js Application](https://www.akkal.com.np/docs/playbook/nodejs-tooling-setup): Learn to set up essential development tools in a Node.js application, including ESLint, Commitlint, Lint-Staged, Husky, and Prettier.
+
+- [11. Replication and Sharding](https://www.akkal.com.np/docs/playbook/replication-and-sharding): Learn about replication and sharding strategies for database scalability and high availability.
+
+- [12. Introduction to Redis](https://www.akkal.com.np/docs/playbook/redis): Learn about Redis, an in-memory data structure store used as a database, cache, and message broker.
+
+- [13. Introduction to Kafka](https://www.akkal.com.np/docs/playbook/kafka): Learn about Apache Kafka, a distributed event streaming platform capable of handling high-volume real-time data feeds.
+
+
+## System Design
+
+Architecture patterns, scalability principles, distributed systems design, and load balancing strategies.
+
+## Computer Networking
+
+HTTP/HTTPS protocols, TCP/IP stack, WebSocket communication, DNS, CDNs, and network security fundamentals.
+
+### Module 01 - Networking Basics
+
+Learn the foundational concepts of computer networking.
+
+- [What is Computer Networking?](https://www.akkal.com.np/docs/networking/module-01/what-is-computer-networking): Learn what computer networking is, why it exists, how devices communicate, and why networks are the foundation of the modern Internet.
+
+- [Types of Computer Networks](https://www.akkal.com.np/docs/networking/module-01/types-of-networks): Explore PAN, LAN, MAN, and WAN, understand where each type is used, and compare their advantages and limitations.
+
+- [Internet vs Computer Network](https://www.akkal.com.np/docs/networking/module-01/internet-vs-network): Understand the difference between a computer network and the Internet with practical real-world examples.
+
+- [How the Internet Works?](https://www.akkal.com.np/docs/networking/module-01/how-the-internet-works): Learn how the Internet works, what protocols are used, and how data is transmitted over the network.
+
+- [Network Architectures (Client-Server vs Peer-to-Peer)](https://www.akkal.com.np/docs/networking/module-01/network-architectures): Learn the two primary network architectures—Client-Server and Peer-to-Peer—how they work, their advantages, disadvantages, and real-world use cases.
+
+- [Host vs Node](https://www.akkal.com.np/docs/networking/module-01/host-vs-node): Understand the difference between hosts and nodes and their roles within a computer network.
+
+- [Network Interface Card (NIC)](https://www.akkal.com.np/docs/networking/module-01/network-interface-card): Discover how a Network Interface Card enables devices to connect and communicate over a network.
+
+- [MAC Address](https://www.akkal.com.np/docs/networking/module-01/mac-address): Learn what a MAC address is, how it uniquely identifies network interfaces, and how it is used in local communication.
+
+## SQL - MySQL
+
+Database design, normalization, complex queries, indexing strategies, transactions, and optimization techniques.
+
+### Module 01 - Database Theory
+
+Core database and DBMS concepts you should know before writing any SQL.
+
+- [Introduction to Databases](https://www.akkal.com.np/docs/sql/module-01/intro): Core theory before hands-on work: databases, DBMS, SQL, MySQL, and key concepts.
+
+- [DBMS Theory Concepts](https://www.akkal.com.np/docs/sql/module-01/dbms-concepts): Relational vs non-relational, keys, normalization, ACID, and schema design basics.
+
+- [Types of Keys](https://www.akkal.com.np/docs/sql/module-01/types-of-keys): Primary, foreign, candidate, unique, composite, super, alternate, and surrogate keys explained.
+
+- [Database Relationships](https://www.akkal.com.np/docs/sql/module-01/db-relationships): One-to-one, one-to-many, many-to-many relationships and how keys model them.
+
+- [DBMS Interview Questions](https://www.akkal.com.np/docs/sql/module-01/dbms-interview-questions): Commonly asked DBMS theory questions and simple, clear answers for interviews.
+
+### Module 02 - CRUD Operations
+
+Create, read, update, and delete data in a table.
+
+- [Create - INSERT](https://www.akkal.com.np/docs/sql/module-02/create): Add new rows to a MySQL table with INSERT, including bulk inserts.
+
+- [Read - SELECT](https://www.akkal.com.np/docs/sql/module-02/select): Query rows with SELECT, WHERE, ORDER BY, and LIMIT.
+
+- [Update - UPDATE](https://www.akkal.com.np/docs/sql/module-02/update): Modify existing rows safely with UPDATE and WHERE.
+
+- [Delete - DELETE](https://www.akkal.com.np/docs/sql/module-02/delete): Remove rows safely with DELETE and WHERE.
+
+- [Alter - ALTER TABLE](https://www.akkal.com.np/docs/sql/module-02/alter): Change a table's structure: add, modify, rename, or drop columns.
+
+### Module 03 - Querying
+
+Combine and filter data across tables.
+
+- [Joins](https://www.akkal.com.np/docs/sql/module-03/joins): Combine rows from multiple tables with INNER, LEFT, and RIGHT joins.
+
+- [Filtering and Sorting](https://www.akkal.com.np/docs/sql/module-03/filtering-and-sorting): WHERE, ORDER BY, LIMIT, and combining conditions.
+
+- [Practice Questions (Filtering and Sorting)](https://www.akkal.com.np/docs/sql/module-03/filtering-and-sorting-practice): Exercises to test WHERE, AND/OR, BETWEEN, IN, NULL handling, and ORDER BY.
+
+- [Aggregate Functions](https://www.akkal.com.np/docs/sql/module-03/aggregates): COUNT, SUM, AVG, GROUP BY, and HAVING.
+
+
+## DSA
+
+Data structures (arrays, trees, graphs, hash tables) and algorithms (sorting, searching, dynamic programming, graph traversal).
+
+- [01. Introduction to Data Structures & Algorithms](https://www.akkal.com.np/docs/dsa/intro): Learn the basics of data structures and algorithms with this introduction.
+
+- [02. Introduction to C++](https://www.akkal.com.np/docs/dsa/cpp-intro): Learn the basics of C++. Variables, Data types, Control flow, and operators, etc.
+
+- [03. Pattern Printing](https://www.akkal.com.np/docs/dsa/pattern-printing): Learn to print patterns in C++.
+
+- [04. Number System Conversion](https://www.akkal.com.np/docs/dsa/no-system-conversion): Learn about converting between different number systems.
+
+- [05. Basic Arrays Problems](https://www.akkal.com.np/docs/dsa/arrays): Solve basic arrays problems.
+
+- [06. Time Complexity & Space Complexity](https://www.akkal.com.np/docs/dsa/time-space-complexity): Learn about time and space complexity.
+
+- [07. Bubble Sort](https://www.akkal.com.np/docs/dsa/bubble-sort): Learn about bubble sort.
+
+- [08. Selection Sort](https://www.akkal.com.np/docs/dsa/selection-sort): Learn about selection sort.
+
+- [09. Insertion Sort](https://www.akkal.com.np/docs/dsa/insertion-sort): Learn about insertion sort.
+
+
+---
+
+*Built with Next.js, MDX, Shadcn and Tailwind CSS*
