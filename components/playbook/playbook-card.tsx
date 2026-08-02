@@ -3,12 +3,13 @@ import { cn } from "@/lib/utils";
 import { cardSlide5Sound } from "@/sounds/card-slide-5";
 import { useSound } from "@/hooks/use-sound";
 import Link from "next/link";
+import { Route } from "next";
 
 export function PlaybookCard({ data }: { data: IPlaybook }) {
   const [play] = useSound(cardSlide5Sound);
   return (
     <Link
-      href={`/docs/playbook/${data.slug}`}
+      href={`${data.docs}` as Route}
       onClick={() => play()}
       className={cn(
         "group hover:bg-card-hover screen-line-before relative p-4",

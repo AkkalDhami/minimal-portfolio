@@ -27,6 +27,10 @@ const footerLinks = [
     href: "/playground/sql"
   },
   {
+    label: "System Design",
+    href: "/system-design"
+  },
+  {
     label: "DSA",
     href: "/dsa"
   }

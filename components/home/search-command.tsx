@@ -51,6 +51,7 @@ import { padString } from "@/utils/pad-string";
 import { SQL_DATA } from "@/data/sql";
 import { IconProps } from "@/components/icons";
 import { usePreferencesStore } from "@/hooks/use-preferences";
+import { SYSTEM_DESIGN_DATA } from "@/data/system-design";
 
 export interface Item {
   value: string;
@@ -105,6 +106,13 @@ export const navigations: Item[] = [
     key: "p"
   },
   {
+    icon: IconDatabase,
+    label: "System Design",
+    value: "/system-design",
+    link: true,
+    key: "u"
+  },
+  {
     icon: IconWorld,
     label: "Computer Networking",
     value: "/networking",
@@ -117,6 +125,13 @@ export const navigations: Item[] = [
     value: "/sql",
     link: true,
     key: "o"
+  },
+  {
+    icon: IconDatabase,
+    label: "MySQL Playground",
+    value: "/playground/sql",
+    link: true,
+    key: "q"
   },
   {
     icon: IconTemplate,
@@ -156,6 +171,16 @@ export const playbooks: Item[] = PLAYBOOK_DATA.map(play => {
     value: `${play.docs}`,
     label: play.title,
     icon: IconBook,
+    link: true,
+    newTab: true
+  };
+});
+
+export const systemDesigns: Item[] = SYSTEM_DESIGN_DATA.map(play => {
+  return {
+    value: `${play.docs}`,
+    label: play.title,
+    icon: IconDatabase,
     link: true,
     newTab: true
   };
@@ -250,6 +275,7 @@ export const groupedItems: Group[] = [
   { items: navigations, value: "NAVIGATION" },
   { items: projects, value: "PROJECTS" },
   { items: playbooks, value: "BACKEND PLAYBOOK" },
+  { items: systemDesigns, value: "SYSTEM DESIGN" },
   { items: networking, value: "COMPUTER NETWORKING" },
   { items: sql, value: "Structured Query Language - MYSQL" },
   { items: dsa, value: "DATA STRUCTURES & ALGORITHMS" },

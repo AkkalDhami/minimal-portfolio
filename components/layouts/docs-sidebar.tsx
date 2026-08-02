@@ -18,7 +18,8 @@ const title = {
   dsa: "DSA",
   playbook: "Playbook",
   networking: "Computer Networking",
-  sql: "SQL - MySQL"
+  sql: "SQL - MySQL",
+  "system-design": "System Design"
 };
 
 export function DocsSidebar({ className }: { className?: string }) {
@@ -30,6 +31,7 @@ export function DocsSidebar({ className }: { className?: string }) {
   const isPlaybook = pathname.includes("/docs/playbook");
   const isNetworking = pathname.includes("/docs/networking");
   const isSql = pathname.includes("/docs/sql");
+  const isSystemDesign = pathname.includes("/docs/system-design");
 
   const items = getDocsItems(
     isDsa
@@ -38,7 +40,9 @@ export function DocsSidebar({ className }: { className?: string }) {
         ? "playbook"
         : isNetworking
           ? "networking"
-          : "sql"
+          : isSystemDesign
+            ? "system-design"
+            : "sql"
   );
 
   const slug = isNetworking
@@ -73,7 +77,9 @@ export function DocsSidebar({ className }: { className?: string }) {
                 ? "playbook"
                 : isNetworking
                   ? "networking"
-                  : "sql"
+                  : isSystemDesign
+                    ? "system-design"
+                    : "sql"
           ]
         }
       </h2>
