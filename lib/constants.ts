@@ -33,5 +33,6 @@ export const MODULE_SECTIONS = [
   "networking",
   "dsa",
   "playbook",
-  "sql"
+  "sql",
+  "system-design"
 ] as const;

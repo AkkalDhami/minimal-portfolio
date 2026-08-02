@@ -48,6 +48,7 @@ export function useNavigationHotkeys(options: Options = {}) {
       c: "/contacts",
       s: "/dev-setup",
       b: "/playbook",
+      u: "/system-design",
       t: "/templates",
       n: "/networking",
       o: "/sql",

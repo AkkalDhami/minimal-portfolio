@@ -1,9 +1,10 @@
 import { IPlaybook, ModuleSection } from "@/types/app.types";
+import { sliceContent } from "@/utils/slice-content";
 import { PLAYBOOK_DATA } from "@/data/playbook";
 import { DSA_DATA } from "@/data/dsa";
-import { sliceContent } from "@/utils/slice-content";
 import { NETWORKING_DATA } from "@/data/networking";
 import { SQL_DATA } from "@/data/sql";
+import { SYSTEM_DESIGN_DATA } from "@/data/system-design";
 
 export const findNeighbour = (
   type: ModuleSection,
@@ -12,6 +13,7 @@ export const findNeighbour = (
   const options: Record<ModuleSection, IPlaybook[]> = {
     dsa: DSA_DATA,
     playbook: PLAYBOOK_DATA,
+    "system-design": SYSTEM_DESIGN_DATA,
     networking: NETWORKING_DATA.map(m =>
       m.topics.map(t => ({ ...t, docs: `${m.docs}${t.docs}` }))
     ).flat(),
@@ -49,9 +51,11 @@ export const getDocsItems = (type: ModuleSection) => {
           ? NETWORKING_DATA.map(m =>
               m.topics.map(t => ({ ...t, docs: `${m.docs}${t.docs}` }))
             ).flat()
-          : SQL_DATA.map(m =>
-              m.topics.map(t => ({ ...t, docs: `${m.docs}${t.docs}` }))
-            ).flat();
+          : type === "system-design"
+            ? SYSTEM_DESIGN_DATA
+            : SQL_DATA.map(m =>
+                m.topics.map(t => ({ ...t, docs: `${m.docs}${t.docs}` }))
+              ).flat();
 
   return items.map(i => ({
     href: i.docs,

@@ -14,7 +14,7 @@ export interface QueryError {
 export interface SampleQuery {
   id: string;
   label: string;
-  description: string;
+  description?: string;
   sql: string;
 }
 

@@ -3,7 +3,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Database } from "sql.js";
 import type { EngineStatus, QueryResult } from "@/types/sql-playground.types";
-import { SCHEMA_SQL, SEED_SQL } from "@/data/sql-sample";
+import {
+  BOOKS_TABLE_SCHEMA_SQL,
+  BOOKS_TABLE_SEED_SQL,
+  SCHEMA_SQL,
+  SEED_SQL
+} from "@/data/sql-sample";
 import {
   translateMySqlToSqlite,
   resolveInsertDefaults
@@ -20,12 +25,18 @@ interface UseSqlDatabaseReturn {
   lastError: string | null;
 }
 
+interface UseSqlDatabaseOptions {
+  isAggregate?: boolean;
+}
+
 /**
  * Loads SQLite compiled to WebAssembly (sql.js), seeds an in-memory demo
  * schema, and exposes a synchronous `execute` function for running
  * arbitrary SQL entirely client-side. Nothing here touches a server.
  */
-export function useSqlDatabase(): UseSqlDatabaseReturn {
+export function useSqlDatabase(
+  options: UseSqlDatabaseOptions = {}
+): UseSqlDatabaseReturn {
   const dbRef = useRef<Database | null>(null);
   const [status, setStatus] = useState<EngineStatus>("loading");
   const [initError, setInitError] = useState<string | null>(null);
@@ -44,8 +55,13 @@ export function useSqlDatabase(): UseSqlDatabaseReturn {
         if (cancelled) return;
 
         const db = new SQL.Database();
-        db.run(translateMySqlToSqlite(SCHEMA_SQL).sql);
-        db.run(translateMySqlToSqlite(SEED_SQL).sql);
+        if (!options.isAggregate) {
+          db.run(translateMySqlToSqlite(SCHEMA_SQL).sql);
+          db.run(translateMySqlToSqlite(SEED_SQL).sql);
+        } else {
+          db.run(translateMySqlToSqlite(BOOKS_TABLE_SCHEMA_SQL).sql);
+          db.run(translateMySqlToSqlite(BOOKS_TABLE_SEED_SQL).sql);
+        }
 
         dbRef.current = db;
         setStatus("ready");
