@@ -29,10 +29,10 @@ const SqlPlayground = dynamic(
   }
 );
 
-export function SqlPlaygroundClient() {
+export function SqlPlaygroundClient({ query }: { query?: string }) {
   return (
     <Container className={cn("border-edge border-x pt-16")}>
-      <SqlPlayground />
+      <SqlPlayground query={query} />
     </Container>
   );
 }

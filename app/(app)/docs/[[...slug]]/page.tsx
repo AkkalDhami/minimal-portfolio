@@ -21,6 +21,7 @@ import { NETWORKING_DATA } from "@/data/networking";
 import { DSA_DATA } from "@/data/dsa";
 import { SQL_DATA } from "@/data/sql";
 import { DocsLayout } from "@/components/layouts/docs-layout";
+import { SYSTEM_DESIGN_DATA } from "@/data/system-design";
 
 export const dynamic = "force-static";
 export const dynamicParams = false;
@@ -30,6 +31,10 @@ const DOCS_PATH = path.join(process.cwd(), "docs");
 
 export async function generateStaticParams() {
   const playbookParams = PLAYBOOK_DATA.map(doc =>
+    doc.docs.replace("/docs/", "").split("/").filter(Boolean)
+  );
+
+  const systemDesignParams = SYSTEM_DESIGN_DATA.map(doc =>
     doc.docs.replace("/docs/", "").split("/").filter(Boolean)
   );
 
@@ -60,6 +65,7 @@ export async function generateStaticParams() {
   });
 
   return [
+    ...systemDesignParams,
     ...playbookParams,
     ...dsaParams,
     ...networkingParams,
@@ -146,7 +152,13 @@ export default async function DocsPage(props: PageProps<"/docs/[[...slug]]">) {
     lastComponentIndex >= 0 ? slug[lastComponentIndex] : undefined;
 
   const type =
-    slug[0] === "dsa" ? "dsa" : slug[0] === "sql" ? "sql" : "playbook";
+    slug[0] === "system-design"
+      ? "system-design"
+      : slug[0] === "dsa"
+        ? "dsa"
+        : slug[0] === "sql"
+          ? "sql"
+          : "playbook";
 
   const { next, prev } = lastSlug
     ? findNeighbour(type, lastSlug as string)

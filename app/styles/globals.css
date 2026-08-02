@@ -55,6 +55,9 @@
   --font-inter: var(--font-inter), sans-serif;
   --font-manrope: var(--font-manrope), sans-serif;
   --font-jetbrains-mono: var(--font-jetbrains-mono), monospace;
+  --font-handwriting: var(--font-handwriting), sans-serif;
+  --font-note: var(--font-note), sans-serif;
+  --font-tip: var(--font-tip), sans-serif;
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -448,9 +451,31 @@ h3 {
   color: var(--shiki-dark);
 }
 
-
 [data-highlighted-line],
 [data-highlighted-chars] {
   @apply dark:bg-highlight relative border-l-2 border-neutral-400 bg-neutral-200;
 }
 
+.notebook-page {
+  /* background-color: #fdfcf7; */
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent 27.25px,
+    #101010 28px
+  );
+  background-position: 0 14px;
+}
+
+.tilt-1 {
+  transform: rotate(-1.2deg);
+}
+.tilt-2 {
+  transform: rotate(0.8deg);
+}
+.sticky-note {
+  background: #fff9c4;
+  box-shadow: 2px 3px 6px rgba(0, 0, 0, 0.15);
+  padding: 1rem 1.25rem;
+  transform: rotate(-1.5deg);
+}

@@ -4,6 +4,7 @@ import { PROJECTS } from "@/data/projects";
 import siteConfig from "@/lib/site";
 import { PLAYBOOK_DATA } from "@/data/playbook";
 import { NETWORKING_DATA } from "@/data/networking";
+import { SYSTEM_DESIGN_DATA } from "@/data/system-design";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const routes = [
@@ -14,7 +15,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/playbook",
     "/templates",
     "/dsa",
-    "/networking"
+    "/networking",
+    "/system-design"
   ].map(route => ({
     url: `${siteConfig.url}${route}`,
     lastModified: new Date().toISOString(),
@@ -30,14 +32,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }));
 
   const playbookRoutes = PLAYBOOK_DATA.map(item => ({
-    url: `${siteConfig.url}/docs/playbook/${item.slug}`,
+    url: `${siteConfig.url}${item.docs}`,
     lastModified: new Date().toISOString(),
     changeFrequency: "monthly" as const,
     priority: 0.6
   }));
 
   const dsaRoutes = DSA_DATA.map(item => ({
-    url: `${siteConfig.url}/docs/dsa/${item.slug}`,
+    url: `${siteConfig.url}${item.docs}`,
+    lastModified: new Date().toISOString(),
+    changeFrequency: "monthly" as const,
+    priority: 0.6
+  }));
+
+  const systemDesignRoutes = SYSTEM_DESIGN_DATA.map(item => ({
+    url: `${siteConfig.url}${item.docs}`,
     lastModified: new Date().toISOString(),
     changeFrequency: "monthly" as const,
     priority: 0.6
@@ -47,7 +56,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     const topics = item.topics;
 
     return topics.map(topic => ({
-      url: `${siteConfig.url}/docs/networking/${item.slug}/${topic.slug}`,
+      url: `${siteConfig.url}${item.docs}${topic.docs}`,
       lastModified: new Date().toISOString(),
       changeFrequency: "monthly" as const,
       priority: 0.6
@@ -59,6 +68,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...projectRoutes,
     ...playbookRoutes,
     ...dsaRoutes,
+    ...systemDesignRoutes,
     ...networkingRoutes
   ];
 }
