@@ -1,0 +1,206 @@
+---
+title: Aggregate Functions
+description: COUNT, SUM, AVG, GROUP BY, and HAVING.
+---
+
+Aggregate functions take many rows and collapse them into a single summary value — total, average, count, min, max. Instead of looking at each row individually, you're asking a question about the *whole set*.
+
+We'll keep using the <Code>books</Code> table:
+```sql title="create-table.sql"
+CREATE TABLE books (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    author VARCHAR(255),
+    genre VARCHAR(100),
+    price DECIMAL(6,2),
+    published_year INT,
+    in_stock BOOLEAN DEFAULT TRUE
+);
+```
+
+```sql title="insert-value.sql"
+INSERT INTO books (title, author, genre, price, published_year, in_stock) VALUES
+('Dune', 'Frank Herbert', 'Sci-Fi', 15.50, 1965, TRUE),
+('1984', 'George Orwell', 'Dystopian', 9.99, 1949, TRUE),
+('Animal Farm', 'George Orwell', 'Satire', 7.50, 1945, FALSE),
+('Brave New World', 'Aldous Huxley', 'Dystopian', 10.25, 1932, TRUE),
+('Foundation', 'Isaac Asimov', 'Sci-Fi', 12.00, 1951, FALSE);
+```
+
+<Output>
+mysql> SELECT * FROM books;
++----+-----------------+---------------+-----------+-------+----------------+----------+
+| id | title           | author        | genre     | price | published_year | in_stock |
++----+-----------------+---------------+-----------+-------+----------------+----------+
+|  1 | Dune            | Frank Herbert | Sci-Fi    | 15.50 |           1965 |        1 |
+|  2 | 1984            | George Orwell | Dystopian |  9.99 |           1949 |        1 |
+|  3 | Animal Farm     | George Orwell | Satire    |  7.50 |           1945 |        0 |
+|  4 | Brave New World | Aldous Huxley | Dystopian | 10.25 |           1932 |        1 |
+|  5 | Foundation      | Isaac Asimov  | Sci-Fi    | 12.00 |           1951 |        0 |
++----+-----------------+---------------+-----------+-------+----------------+----------+
+</Output>
+
+---
+
+## 1. The core functions
+
+```sql title="example.sql"
+SELECT COUNT(*) FROM books;          -- how many rows: 5
+SELECT SUM(price) FROM books;        -- total of all prices
+SELECT AVG(price) FROM books;        -- average price
+SELECT MIN(price) FROM books;        -- cheapest price
+SELECT MAX(price) FROM books;        -- most expensive price
+```
+
+Each of these returns **one row**, not one per book — they summarize the whole table.
+
+---
+
+## 2. GROUP BY — the real power move
+
+<Code>GROUP BY</Code> splits rows into buckets first, *then* runs the aggregate on each bucket separately.
+
+#### Average price per genre:
+
+```sql title="example.sql"
+SELECT genre, AVG(price) AS avg_price
+FROM books
+GROUP BY genre;
+```
+
+Result: one row per genre, each with its own average — not one average for everything.
+
+<Output>
++-----------+-----------+
+| genre     | avg_price |
++-----------+-----------+
+| Sci-Fi    | 13.750000 |
+| Dystopian | 10.120000 |
+| Satire    |  7.500000 |
++-----------+-----------+
+</Output>
+
+#### How many books per author:
+
+```sql title="example.sql"
+SELECT author, COUNT(*) AS book_count
+FROM books
+GROUP BY author;
+```
+
+<Output>
++---------------+------------+
+| author        | book_count |
++---------------+------------+
+| Frank Herbert |          1 |
+| George Orwell |          2 |
+| Aldous Huxley |          1 |
+| Isaac Asimov  |          1 |
++---------------+------------+
+</Output>
+
+
+**Key rule:** every column in <Code>SELECT</Code> must either be inside an aggregate function, or listed in <Code>GROUP BY</Code>. This fails:
+
+```sql title="example.sql"
+SELECT genre, price, AVG(price) FROM books GROUP BY genre;
+-- ERROR — price isn't aggregated or grouped
+```
+
+---
+
+## 3. HAVING — filtering after grouping
+
+<Code>WHERE</Code> filters rows before grouping. <Code>HAVING</Code> filters the groups themselves, after aggregation.
+
+#### Genres with more than 1 book:
+
+```sql title="example.sql"
+SELECT genre, COUNT(*) AS book_count
+FROM books
+GROUP BY genre
+HAVING COUNT(*) > 1;
+```
+
+<Output>
++-----------+------------+
+| genre     | book_count |
++-----------+------------+
+| Sci-Fi    |          2 |
+| Dystopian |          2 |
++-----------+------------+
+</Output>
+
+You can't write **WHERE COUNT(*) &gt;= 1** — **COUNT(*)** doesn't exist yet at the point **WHERE** runs.
+
+---
+
+## 4. Combining WHERE and HAVING
+
+#### Among in-stock books, show genres averaging over $10:
+
+```sql title="example.sql"
+SELECT genre, AVG(price) AS avg_price
+FROM books
+WHERE in_stock = TRUE
+GROUP BY genre
+HAVING AVG(price) > 10;
+```
+
+<Output>
++-----------+-----------+
+| genre     | avg_price |
++-----------+-----------+
+| Sci-Fi    | 15.500000 |
+| Dystopian | 10.120000 |
++-----------+-----------+
+</Output>
+
+**Order matters:** <Code>WHERE</Code> filters rows first → then <Code>GROUP BY</Code> buckets them → then <Code>HAVING</Code> filters the buckets → then results are returned.
+
+---
+
+## 5. Quick Reference
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Clause</TH>
+      <TH>Runs when</TH>
+      <TH>Filters</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD><Code>WHERE</Code></TD>
+      <TD>Before grouping</TD>
+      <TD>Individual rows</TD>
+    </TR>
+    <TR>
+      <TD><Code>GROUP BY</Code></TD>
+      <TD>—</TD>
+      <TD>Buckets rows into groups</TD>
+    </TR>
+    <TR>
+      <TD><Code>HAVING</Code></TD>
+      <TD>After grouping</TD>
+      <TD>The groups themselves</TD>
+    </TR>
+  </TBody>
+</Table>
+
+---
+
+<Accordion defaultValue={["item-1"]}>
+  <AccordionItem value="item-1">
+    <AccordionTrigger>Write a query showing each author's average book price, but only for authors with more than 1 book in the table.</AccordionTrigger>
+    <AccordionContent>
+      ```sql
+      SELECT author, AVG(price) as avg_price, COUNT(*) as book_count 
+      FROM books
+      GROUP BY author
+      HAVING book_count > 1;
+      ```
+    </AccordionContent>
+  </AccordionItem>
+</Accordion>

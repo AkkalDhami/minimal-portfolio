@@ -51,7 +51,7 @@ ON e.ManagerID = m.EmpID;
 
 ## <HLink href="/docs/sql/module-03/filtering-and-sorting">2. Filtering and Sorting</HLink>
 
- 
+
 <Table>
   <THead>
     <TR>
@@ -114,11 +114,9 @@ ON e.ManagerID = m.EmpID;
  
 <Code>WHERE</Code> filters which rows come back, <Code>AND</Code>/<Code>OR</Code> combine conditions (parenthesize when mixed), <Code>IN</Code>/<Code>BETWEEN</Code> simplify common patterns, <Code>NULL</Code> needs <Code>IS NULL</Code> not <Code>=</Code>, and <Code>ORDER BY</Code> controls result order — by column, multiple columns, or an expression.
  
-
 ---
 
 ## <HLink href="/docs/sql/module-03/filtering-and-sorting-practice">3. Practice - Filtering & Sorting</HLink>
-
 
 #### 1. Find all books priced under $12.
  
@@ -143,3 +141,113 @@ ON e.ManagerID = m.EmpID;
 #### 11. Find all books where <Code>author</Code> is missing. This table has no <Code>NULL</Code> authors right now — write the query as if it did, and explain why <Code>WHERE author = NULL</Code> wouldn't work.
  
 #### 12. Return the title and price of all out-of-stock books, sorted by how long ago they were published (oldest first), showing only the single oldest one.
+
+---
+
+## <HLink href="/docs/sql/module-03/aggregate-functions">4. Aggregate Functions</HLink>
+
+#### 1. The core functions
+
+```sql title="example.sql"
+SELECT COUNT(*) FROM books;          -- how many rows: 5
+SELECT SUM(price) FROM books;        -- total of all prices
+SELECT AVG(price) FROM books;        -- average price
+SELECT MIN(price) FROM books;        -- cheapest price
+SELECT MAX(price) FROM books;        -- most expensive price
+```
+
+#### 2. GROUP BY
+```sql title="example.sql"
+SELECT genre, AVG(price) AS avg_price
+FROM books
+GROUP BY genre;
+```
+<Output>
++-----------+-----------+
+| genre     | avg_price |
++-----------+-----------+
+| Sci-Fi    | 13.750000 |
+| Dystopian | 10.120000 |
+| Satire    |  7.500000 |
++-----------+-----------+
+</Output>
+
+
+#### 3. HAVING — filtering after grouping
+
+```sql title="example.sql"
+SELECT genre, COUNT(*) AS book_count
+FROM books
+GROUP BY genre
+HAVING COUNT(*) > 1;
+```
+
+<Output>
++-----------+------------+
+| genre     | book_count |
++-----------+------------+
+| Sci-Fi    |          2 |
+| Dystopian |          2 |
++-----------+------------+
+</Output>
+
+
+#### 4. Combining WHERE and HAVING
+
+```sql title="example.sql"
+SELECT genre, AVG(price) AS avg_price
+FROM books
+WHERE in_stock = TRUE
+GROUP BY genre
+HAVING AVG(price) > 10;
+```
+
+<Output>
++-----------+-----------+
+| genre     | avg_price |
++-----------+-----------+
+| Sci-Fi    | 15.500000 |
+| Dystopian | 10.120000 |
++-----------+-----------+
+</Output>
+
+---
+
+## <HLink href="/docs/sql/module-03/aggregate-functions-practice">5. Practice - Aggregate Functions</HLink>
+
+
+#### 1. Count the total number of books in the table.
+ 
+#### 2. Find the total value of all books combined (sum of price).
+ 
+#### 3. Find the average price of all books.
+ 
+#### 4. Find the cheapest book's price.
+ 
+#### 5. Find the most expensive book's price.
+ 
+#### 6. Count how many books are currently in stock.
+ 
+#### 7. Find the number of books per genre.
+ 
+#### 8. Find the average price per author.
+ 
+#### 9. Find the total price of books per genre.
+ 
+#### 10. Find the earliest (MIN) and latest (MAX) published_year per author.
+ 
+#### 11. Find only the genres that have more than 2 books.
+ 
+#### 12. Find only the authors whose average book price is above $12.
+ 
+#### 13. Among books that are in stock, find the number of books per genre.
+ 
+#### 14. Find genres where the total combined price exceeds $20.
+ 
+#### 15. Explain why this query fails, and rewrite it correctly: SELECT genre, price, COUNT(*) FROM books GROUP BY genre;
+ 
+#### 16. Explain why this query fails, and rewrite it correctly: SELECT author, COUNT(*) FROM books WHERE COUNT(*) > 1 GROUP BY author;
+ 
+#### 17. Find each genre's average price, but only include genres where the average is above $10 and the genre has at least 2 books.
+ 
+#### 18. Find the author with the highest total combined value of books, sorted highest first, top 1 only.

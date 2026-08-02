@@ -1,0 +1,321 @@
+---
+title: Practice - Aggregate Functions
+description: Exercises to test COUNT, SUM, AVG, MIN, MAX, GROUP BY, and HAVING.
+---
+
+Using the <Code>books</Code> table from the lesson:
+
+```sql title="create-table.sql"
+CREATE TABLE books (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    author VARCHAR(255),
+    genre VARCHAR(100),
+    price DECIMAL(6,2),
+    published_year INT,
+    in_stock BOOLEAN DEFAULT TRUE
+);
+```
+
+```sql title="insert-value.sql"
+INSERT INTO books (title, author, genre, price, published_year, in_stock) VALUES
+('Dune', 'Frank Herbert', 'Sci-Fi', 15.50, 1965, TRUE),
+('1984', 'George Orwell', 'Dystopian', 9.99, 1949, TRUE),
+('Animal Farm', 'George Orwell', 'Satire', 7.50, 1945, FALSE),
+('Brave New World', 'Aldous Huxley', 'Dystopian', 10.25, 1932, TRUE),
+('Foundation', 'Isaac Asimov', 'Sci-Fi', 12.00, 1951, FALSE);
+```
+
+## [Aggregate Functions Playground](/playground/sql?q=aggregate)
+
+---
+
+<Accordion>
+  <AccordionItem value="q1">
+    <AccordionTrigger className="text-xl">1. Count the total number of books in the table.</AccordionTrigger>
+    <AccordionContent>
+      ```sql title="example.sql"
+      SELECT COUNT(*) as total_books
+      FROM books;
+      ```
+    </AccordionContent>
+  </AccordionItem>
+
+  <AccordionItem value="q2">
+    <AccordionTrigger className="text-xl">2. Find the total value of all books combined (sum of price).</AccordionTrigger>
+    <AccordionContent>
+      ```sql title="example.sql"
+      SELECT SUM(price) as total_value
+      FROM books;
+      ```
+    </AccordionContent>
+  </AccordionItem>
+
+  <AccordionItem value="q3">
+    <AccordionTrigger className="text-xl">3. Find the average price of all books.</AccordionTrigger>
+    <AccordionContent>
+      ```sql title="example.sql"
+      SELECT AVG(price) as avg_price
+      FROM books;
+      ```
+    </AccordionContent>
+  </AccordionItem>
+
+  <AccordionItem value="q4">
+    <AccordionTrigger className="text-xl">4. Find the cheapest book's price.</AccordionTrigger>
+    <AccordionContent>
+      ```sql title="example.sql"
+      SELECT MIN(price) as cheapest_price
+      FROM books;
+      ```
+    </AccordionContent>
+  </AccordionItem>
+
+  <AccordionItem value="q5">
+    <AccordionTrigger className="text-xl">5. Find the most expensive book's price.</AccordionTrigger>
+    <AccordionContent>
+      ```sql title="example.sql"
+      SELECT MAX(price) as most_expensive_price
+      FROM books;
+      ```
+    </AccordionContent>
+  </AccordionItem>
+
+  <AccordionItem value="q6">
+    <AccordionTrigger className="text-xl">6. Count how many books are currently in stock.</AccordionTrigger>
+    <AccordionContent>
+      ```sql title="example.sql"
+      SELECT COUNT(*) as in_stock_books
+      FROM books
+      WHERE in_stock = TRUE;
+      ```
+    </AccordionContent>
+  </AccordionItem>
+
+  <AccordionItem value="q7">
+    <AccordionTrigger className="text-xl">7. Find the number of books per genre.</AccordionTrigger>
+    <AccordionContent>
+      ```sql title="example.sql"
+      SELECT genre, COUNT(*) as no_books
+      FROM books
+      GROUP BY genre;
+      ```
+    </AccordionContent>
+  </AccordionItem>
+
+  <AccordionItem value="q8">
+    <AccordionTrigger className="text-xl">8. Find the average price per author.</AccordionTrigger>
+    <AccordionContent>
+      ```sql title="example.sql"
+      SELECT author, AVG(price) as avg_price
+      FROM books
+      GROUP BY author;
+      ```
+    </AccordionContent>
+  </AccordionItem>
+
+  <AccordionItem value="q9">
+    <AccordionTrigger className="text-xl">9. Find the total price of books per genre.</AccordionTrigger>
+    <AccordionContent>
+      ```sql title="example.sql"
+      SELECT genre, SUM(price) as total_price
+      FROM books
+      GROUP BY genre;
+      ```
+    </AccordionContent>
+  </AccordionItem>
+
+  <AccordionItem value="q10">
+    <AccordionTrigger className="text-xl">10. Find the earliest (MIN) and latest (MAX) published_year per author.</AccordionTrigger>
+    <AccordionContent>
+      ```sql title="example.sql"
+      SELECT author, MIN(published_year) AS earliest, MAX(published_year) AS latest
+      FROM books
+      GROUP BY author;
+      ```
+    </AccordionContent>
+  </AccordionItem>
+
+  <AccordionItem value="q11">
+    <AccordionTrigger className="text-xl">11. Find only the genres that have exactly 2 books.</AccordionTrigger>
+    <AccordionContent>
+      ```sql title="example.sql"
+      SELECT genre, COUNT(*) as no_of_books
+      FROM books
+      GROUP BY genre
+      HAVING no_of_books = 2;
+      ```
+    </AccordionContent>
+  </AccordionItem>
+
+  <AccordionItem value="q12">
+    <AccordionTrigger className="text-xl">12. Find only the authors whose average book price is above $12.</AccordionTrigger>
+    <AccordionContent>
+      ```sql title="example.sql"
+      SELECT author, AVG(price) as avg_price
+      FROM books
+      GROUP BY author
+      HAVING avg_price > 12;
+      ```
+    </AccordionContent>
+  </AccordionItem>
+
+  <AccordionItem value="q13">
+    <AccordionTrigger className="text-xl">13. Among books that are in stock, find the number of books per genre.</AccordionTrigger>
+    <AccordionContent>
+      ```sql title="example.sql"
+
+      ```
+    </AccordionContent>
+  </AccordionItem>
+
+  <AccordionItem value="q14">
+    <AccordionTrigger className="text-xl">14. Find genres where the total combined price exceeds $20.</AccordionTrigger>
+    <AccordionContent>
+      ```sql title="example.sql"
+
+      ```
+    </AccordionContent>
+  </AccordionItem>
+
+  <AccordionItem value="q15">
+    <AccordionTrigger className="text-xl">15. Explain why this query fails, and rewrite it correctly: SELECT genre, price, COUNT(*) FROM books GROUP BY genre;</AccordionTrigger>
+    <AccordionContent>
+      ```sql title="example.sql"
+
+      ```
+    </AccordionContent>
+  </AccordionItem>
+
+  <AccordionItem value="q16">
+    <AccordionTrigger className="text-xl">16. Explain why this query fails, and rewrite it correctly: SELECT author, COUNT() FROM books WHERE COUNT() > 1 GROUP BY author;</AccordionTrigger>
+    <AccordionContent>
+      ```sql title="example.sql"
+
+      ```
+    </AccordionContent>
+  </AccordionItem>
+
+  <AccordionItem value="q17">
+    <AccordionTrigger className="text-xl">17. Find each genre's average price, but only include genres where the average is above $10 and the genre has at least 2 books.</AccordionTrigger>
+    <AccordionContent>
+      ```sql title="example.sql"
+
+      ```
+    </AccordionContent>
+  </AccordionItem>
+
+  <AccordionItem value="q18">
+    <AccordionTrigger className="text-xl">18. Find the author with the highest total combined value of books, sorted highest first, top 1 only.</AccordionTrigger>
+    <AccordionContent>
+      ```sql title="example.sql"
+
+      ```
+    </AccordionContent>
+  </AccordionItem>
+</Accordion>
+
+---
+---
+
+## Answer Key
+
+<details>
+<summary>Reveal answers</summary>
+
+```sql title="answers.sql"
+-- 1. Total number of books
+SELECT COUNT(*) FROM books;
+
+-- 2. Total value of all books
+SELECT SUM(price) FROM books;
+
+-- 3. Average price of all books
+SELECT AVG(price) FROM books;
+
+-- 4. Cheapest book's price
+SELECT MIN(price) FROM books;
+
+-- 5. Most expensive book's price
+SELECT MAX(price) FROM books;
+
+-- 6. Count of in-stock books
+SELECT COUNT(*) FROM books WHERE in_stock = TRUE;
+
+-- 7. Number of books per genre
+SELECT genre, COUNT(*) AS book_count
+FROM books
+GROUP BY genre;
+
+-- 8. Average price per author
+SELECT author, AVG(price) AS avg_price
+FROM books
+GROUP BY author;
+
+-- 9. Total price per genre
+SELECT genre, SUM(price) AS total_price
+FROM books
+GROUP BY genre;
+
+-- 10. Earliest and latest published_year per author
+SELECT author, MIN(published_year) AS earliest, MAX(published_year) AS latest
+FROM books
+GROUP BY author;
+
+-- 11. Genres with more than 2 books
+SELECT genre, COUNT(*) AS book_count
+FROM books
+GROUP BY genre
+HAVING COUNT(*) > 2;
+
+-- 12. Authors with average price above $12
+SELECT author, AVG(price) AS avg_price
+FROM books
+GROUP BY author
+HAVING AVG(price) > 12;
+
+-- 13. In-stock books per genre (filter rows before grouping)
+SELECT genre, COUNT(*) AS book_count
+FROM books
+WHERE in_stock = TRUE
+GROUP BY genre;
+
+-- 14. Genres where total combined price exceeds $20
+SELECT genre, SUM(price) AS total_price
+FROM books
+GROUP BY genre
+HAVING SUM(price) > 20;
+
+-- 15. Fails because "price" is neither aggregated nor in GROUP BY —
+-- MySQL doesn't know which row's price to show per genre group.
+-- Fix: either aggregate it, or remove it from SELECT.
+SELECT genre, AVG(price), COUNT(*)
+FROM books
+GROUP BY genre;
+
+-- 16. Fails because WHERE runs before grouping happens, so COUNT(*)
+-- doesn't exist yet at that point. HAVING must be used instead.
+SELECT author, COUNT(*)
+FROM books
+GROUP BY author
+HAVING COUNT(*) > 1;
+
+-- 17. Genres averaging above $10 AND with at least 2 books
+SELECT genre, AVG(price) AS avg_price, COUNT(*) AS book_count
+FROM books
+GROUP BY genre
+HAVING AVG(price) > 10 AND COUNT(*) >= 2;
+
+-- 18. Author with the highest total combined book value
+SELECT author, SUM(price) AS total_value
+FROM books
+GROUP BY author
+ORDER BY total_value DESC
+LIMIT 1;
+```
+
+</details>
+
+---
+
+**Next up:** once you've checked your answers, we'll move into **Module 03 — Data Integrity**, covering constraints, keys revisited in practice, and transactions.
