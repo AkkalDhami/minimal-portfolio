@@ -114,16 +114,22 @@ export const SQL_DATA: IModule[] = createModules([
       },
       {
         slug: "filtering-and-sorting-practice",
-        title: "Practice Questions (Filtering and Sorting)",
+        title: "Practice - Filtering and Sorting",
         docs: "/filtering-and-sorting-practice",
         description:
           "Exercises to test WHERE, AND/OR, BETWEEN, IN, NULL handling, and ORDER BY."
       },
       {
-        slug: "aggregates",
+        slug: "aggregate-functions",
         title: "Aggregate functions",
-        docs: "/aggregates",
+        docs: "/aggregate-functions",
         description: "COUNT, SUM, AVG, GROUP BY, and HAVING."
+      },
+      {
+        slug: "aggregate-functions-practice",
+        title: "Practice - Aggregate Functions",
+        docs: "/aggregate-functions-practice",
+        description: "Exercises to test aggregate functions."
       }
     ]
   }

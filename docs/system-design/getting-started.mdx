@@ -1,0 +1,243 @@
+---
+title: Getting Started
+description: Get started with system design by learning the basics of system design.
+---
+
+Get started with system design by learning the basics of system design.
+
+## 1. What is System Design?
+ 
+System design is the process of defining the **architecture, components, and data flow** of a system to satisfy specific requirements.
+
+
+Every system has two types of requirements:
+ 
+- **Functional Requirements**
+  - What the system should do.
+  - Example: User can sign up, place an order, upload a file.
+
+- **Non-Functional Requirements**
+  - How well the system does it.
+  - Example: Scalability, availability, latency, consistency, security.
+
+<StickyNote>
+**System design:** deciding the structure, components, and data flow of a software system so it works correctly, scales well, and stays reliable.
+</StickyNote>
+
+---
+
+## 2. Functional and Non Functional Requirements
+
+### 2.1 Functional Requirements (FR)
+
+Functional requirements describe what the system should do — the specific features, behaviors, and capabilities users interact with. They define the core business logic.
+
+#### Characteristics:
+
+- Directly tied to user actions and business use-cases
+- Testable ("does clicking this button do X?")
+- Usually gathered from product/business requirements
+
+### 2.2 Non-Functional Requirements (NFR)
+
+Non-functional requirements describe how well the system performs — the quality attributes, constraints, and operational characteristics rather than specific features.
+
+#### Characteristics:
+
+- Not tied to a single feature — they apply system-wide
+- Harder to test with a simple pass/fail; usually measured (ms, %, req/sec)
+- This is where senior-level system design thinking lives — trade-offs happen here
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Aspect</TH>
+      <TH>Functional Requirements</TH>
+      <TH>Non-Functional Requirements</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>Definition</TD>
+      <TD>What the system should do</TD>
+      <TD>How well the system does it</TD>
+    </TR>
+    <TR>
+      <TD>Focus</TD>
+      <TD>Features & business logic</TD>
+      <TD>Quality, performance & constraints</TD>
+    </TR>
+    <TR>
+      <TD>Examples</TD>
+      <TD>User can log in, place an order, upload a file, search products</TD>
+      <TD>System handles 10k req/sec, 99.9% uptime, response under 200ms</TD>
+    </TR>
+    <TR>
+      <TD>Impact if missed</TD>
+      <TD>Feature is broken or missing</TD>
+      <TD>System is slow, crashes under load, or loses data</TD>
+    </TR>
+    <TR>
+      <TD>Common categories</TD>
+      <TD>Login, CRUD operations, search, notifications</TD>
+      <TD>Scalability, availability, latency, security, consistency, maintainability</TD>
+    </TR>
+  </TBody>
+</Table>
+
+---
+
+## Networking Basics
+ 
+### IP Address & Port
+- **IP Address**: Unique identifier for a device on a network (e.g. <Code>192.168.1.1</Code>)
+- **Port**: A number identifying a specific process/service on that device (e.g. <Code>:8080</Code>)
+- Combined: <Code>IP:PORT</Code> tells you exactly where to send a request
+
+### DNS (Domain Name System)
+- Translates human-readable domain names (<Code>google.com</Code>) into IP addresses
+- Think of it as the **"phonebook of the internet"**
+
+### TCP vs UDP
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Aspect</TH>
+      <TH>TCP</TH>
+      <TH>UDP</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>Full Form</TD>
+      <TD>Transmission Control Protocol</TD>
+      <TD>User Datagram Protocol</TD>
+    </TR>
+    <TR>
+      <TD>Connection</TD>
+      <TD>Connection-oriented (handshake required)</TD>
+      <TD>Connectionless (no handshake)</TD>
+    </TR>
+    <TR>
+      <TD>Reliability</TD>
+      <TD>Reliable — guarantees delivery</TD>
+      <TD>Unreliable — no delivery guarantee</TD>
+    </TR>
+    <TR>
+      <TD>Ordering</TD>
+      <TD>Maintains order of packets</TD>
+      <TD>No ordering guarantee</TD>
+    </TR>
+    <TR>
+      <TD>Speed</TD>
+      <TD>Slower (overhead from acks, retransmits)</TD>
+      <TD>Faster (minimal overhead)</TD>
+    </TR>
+    <TR>
+      <TD>Error Checking</TD>
+      <TD>Extensive (checksum + retransmission)</TD>
+      <TD>Basic (checksum only, no recovery)</TD>
+    </TR>
+    <TR>
+      <TD>Header Size</TD>
+      <TD>20–60 bytes</TD>
+      <TD>8 bytes</TD>
+    </TR>
+    <TR>
+      <TD>Use Cases</TD>
+      <TD>Web (HTTP/HTTPS), email, file transfer, APIs</TD>
+      <TD>Video streaming, gaming, VoIP, DNS</TD>
+    </TR>
+  </TBody>
+</Table>
+
+> One-liner to remember: **TCP = reliable but slower. UDP = fast but unreliable.**
+ 
+### HTTP / HTTPS
+- **HTTP**: Protocol for transferring data over the web (application layer, built on TCP)
+- **HTTPS**: HTTP + encryption (TLS/SSL)
+
+---
+## Core Vocabulary Cheat Sheet
+
+- **Latency**: Time delay for a single request to complete (ms)
+
+- **Throughput**: Number of requests a system can handle per unit time
+
+- **Vertical Scaling**: Making a single machine more powerful (more CPU/RAM)
+
+- **Horizontal Scaling**: Adding more machines to share the load
+
+- **Availability**: System is up and responding when requested
+
+- **Reliability**: System performs correctly and consistently over time
+
+- **Redundancy**: Keeping extra copies of components or data to avoid a single point of failure.
+
+- **Consistency**: All nodes/users see the same data at the same time
+
+- **Durability**: Once data is successfully written, it won't be lost even if the system crashes.
+
+- **Fault Tolerance**: The ability of a system to continue operating when components fail.
+ 
+<StickyNote color="yellow">
+**Latency**
+
+The time it takes for a request to travel from the client to the server and back.
+
+User ───── Request ─────> Server
+
+User &lt;──── Response ───── Server
+
+Time taken = Latency
+
+**Example:**
+
+Open Google → page loads in 80 ms
+Latency = 80 milliseconds
+
+**Lower latency is better.**
+</StickyNote>
+
+<StickyNote color="green">
+**Throughput**
+
+The amount of work a system can complete in a given period.
+
+1000 requests / second
+
+500 MB / second
+
+10,000 messages / minute
+
+**Example:**
+
+A server handles:
+
+5,000 requests every second
+
+Throughput = 5,000 RPS
+
+**Higher throughput means the system can serve more users.**
+</StickyNote>
+
+
+<StickyNote color="blue">
+**Bandwidth**
+
+The maximum amount of data that can be transferred per second.
+
+100 Mbps, 1 Gbps
+
+Think of it as the width of a highway.
+
+**Wider highway → more cars**
+
+**Higher bandwidth → more data**
+</StickyNote>
+ 
+<StickyNote color="cyan">
+Don't confuse **Latency** (speed of one request) with **Throughput** (volume of requests handled). A system can have low latency but low throughput, or vice versa.
+</StickyNote>
+ 
