@@ -55,8 +55,8 @@ export function OnThisPage({ docsRef }: Props) {
 
     const slugger = new GithubSlugger();
 
-    const elements = Array.from(
-      container.querySelectorAll("h2, h3")
+    const elements = Array.from(container.querySelectorAll("h2, h3")).filter(
+      el => !el.classList.contains("toc-ignore")
     ) as HTMLHeadingElement[];
 
     const list: Heading[] = elements
