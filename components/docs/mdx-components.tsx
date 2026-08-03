@@ -35,7 +35,12 @@ export const mdxComponents: MDXComponents = {
   ZoomableImage,
   JoinVisualizer,
   Accordion,
-  AccordionContent,
+  AccordionContent: props => (
+    <AccordionContent
+      {...props}
+      className={"[&_strong]:text-foreground text-base"}
+    />
+  ),
   AccordionItem,
   AccordionTrigger: props => (
     <AccordionTrigger {...props} className={"text-xl"} />

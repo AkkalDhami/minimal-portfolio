@@ -39,7 +39,14 @@ const NOTE_COLORS = {
   red: { bg: "var(--color-red-100)", pin: "var(--color-red-500)" },
   rose: { bg: "var(--color-rose-100)", pin: "var(--color-rose-500)" },
   cyan: { bg: "var(--color-cyan-100)", pin: "var(--color-cyan-500)" },
-  indigo: { bg: "var(--color-indigo-100)", pin: "var(--color-indigo-500)" }
+  indigo: { bg: "var(--color-indigo-100)", pin: "var(--color-indigo-500)" },
+  purple: { bg: "var(--color-purple-100)", pin: "var(--color-purple-500)" },
+  emerald: { bg: "var(--color-emerald-100)", pin: "var(--color-emerald-500)" },
+  amber: { bg: "var(--color-amber-100)", pin: "var(--color-amber-500)" },
+  orange: { bg: "var(--color-orange-100)", pin: "var(--color-orange-500)" },
+  teal: { bg: "var(--color-teal-100)", pin: "var(--color-teal-500)" },
+  sky: { bg: "var(--color-sky-100)", pin: "var(--color-sky-500)" },
+  gray: { bg: "var(--color-gray-100)", pin: "var(--color-gray-500)" }
 } as const;
 
 type NoteColor = keyof typeof NOTE_COLORS;
@@ -58,7 +65,6 @@ export function StickyNote({
 
   return (
     <motion.div
-      data-not-typeset
       initial={{
         opacity: 0,
         y: 6,
@@ -92,6 +98,37 @@ export function StickyNote({
         },
         {
           "bg-red-100 dark:bg-red-600/20": color === "red"
+        },
+        {
+          "bg-rose-100 dark:bg-rose-600/20": color === "rose"
+        },
+        {
+          "bg-cyan-100 dark:bg-cyan-600/20": color === "cyan"
+        },
+        {
+          "bg-indigo-100 dark:bg-indigo-600/20": color === "indigo"
+        },
+        {
+          "bg-emerald-100 dark:bg-emerald-600/20": color === "indigo"
+        },
+        {
+          "bg-amber-100 dark:bg-amber-600/20": color === "amber"
+        },
+        {
+          "bg-orange-100 dark:bg-orange-600/20": color === "orange"
+        },
+        {
+          "dark:bg-purple-600-100 dark:bg-purple-600-600/20 bg-purple-100":
+            color === "purple"
+        },
+        {
+          "bg-teal-100 dark:bg-teal-600/20": color === "teal"
+        },
+        {
+          "bg-sky-100 dark:bg-sky-600/20": color === "sky"
+        },
+        {
+          "bg-gray-100 dark:bg-gray-600/20": color === "gray"
         }
       )}
       style={{
@@ -107,8 +144,13 @@ export function StickyNote({
       </span>
 
       <div
-        data-not-typeset
-        className="not-typeset text-foregroundd [&_p]:text-foregroundd space-y-4 text-lg leading-snug tracking-wide text-black [&_p]:text-lg [&_p]:leading-snug [&_p]:text-black">
+        className={cn(
+          "not-typeset toc-ignore text-foregroundd [&_p]:text-foregroundd space-y-4 text-lg leading-snug tracking-wide text-black [&_p]:text-lg [&_p]:leading-snug [&_p]:text-black",
+          `[&_code]:font-tip [&_code]:border-transparent [&_code]:bg-transparent [&_code]:px-1 [&_code]:py-0 [&_code]:font-semibold [&_code]:tracking-wider [&_code]:text-black`,
+          `[&_ul]:list-inside [&_ul]:list-disc [&_ul]:pl-2.5`,
+          `[&_h4]:font-handwriting [&_h4]:toc-ignore [&_h4]:text-xl [&_h4]:font-semibold [&_h4]:text-black`,
+          `[&_h5]:font-handwriting [&_h5]:toc-ignore [&_h5]:text-lg [&_h5]:font-semibold [&_h5]:text-black`
+        )}>
         {children}
       </div>
     </motion.div>

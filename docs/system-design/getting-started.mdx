@@ -181,6 +181,8 @@ Non-functional requirements describe how well the system performs — the qualit
 - **Durability**: Once data is successfully written, it won't be lost even if the system crashes.
 
 - **Fault Tolerance**: The ability of a system to continue operating when components fail.
+
+- **Bandwidth**: The maximum amount of data that can be transferred per second.
  
 <StickyNote color="yellow">
 **Latency**
@@ -242,3 +244,111 @@ Think of it as the width of a highway.
 Don't confuse **Latency** (speed of one request) with **Throughput** (volume of requests handled). A system can have low latency but low throughput, or vice versa.
 </StickyNote>
  
+ <StickyNote color="teal">
+**Availability**
+
+The percentage of time a system is up and accessible to users.
+
+User ───── Request ─────> Server ✔
+
+Server ───── Response ─────> User
+
+Service is reachable = Available
+
+**Example:**
+
+A website with **99.99% uptime** is almost always accessible.
+
+**Higher availability is better.**
+</StickyNote>
+
+<StickyNote color="blue">
+**Reliability**
+
+The probability a system performs correctly, without failure, over a given period of time.
+
+User ───── Request ─────> Server
+
+Server ───── Correct Response ─────> User ✔
+
+Works correctly every time = Reliable
+
+**Example:**
+
+An ATM always dispenses the correct amount after payment.
+
+**Higher reliability is better.**
+
+**Reliability is about correctness — availability is about uptime. A system can be up (available) but still return wrong answers (unreliable).**
+</StickyNote>
+
+<StickyNote color="purple">
+**Consistency**
+
+The guarantee that all users see the same data after an update.
+
+User A ── Update Balance → Database
+
+User B ── Read Balance → Same Updated Value ✔
+
+Everyone sees the same data = Consistent
+
+**Example:**
+
+You update your profile picture. Consistency means every friend viewing your profile sees the new picture immediately, not the old one.
+
+**Stronger consistency provides more accurate data.**
+</StickyNote>
+
+<StickyNote color="orange">
+**Durability**
+
+The guarantee that once data is successfully saved, it will not be lost—even after crashes or power failures.
+
+Write data ──> Saved to disk ──> [Power loss] ──> Restart ──> Data still there ✔
+
+**Example:**
+
+You place an order online, the server crashes 1 second later. Durability means your order is still recorded when the server comes back.
+
+**Higher durability is better. Durability protects against loss. It says nothing about speed.**
+</StickyNote>
+
+<StickyNote color="red">
+**Fault Tolerance**
+
+A system's ability to keep working correctly even when part of it fails.
+
+Server A ✘ (down)
+
+Server B ✔ ── still serving requests
+
+Server C ✔ ── still serving requests
+
+System stays up despite Server A failing
+
+**Example:**
+
+If one web server crashes, another server automatically handles incoming requests.
+
+**Higher fault tolerance means fewer service interruptions. Fault tolerance = failures happen, but users don't feel them.**
+</StickyNote>
+
+<StickyNote color="sky">
+**Redundancy**
+
+Keeping extra copies of components or data so the system can survive failures.
+
+Primary DB ──> [copy] ──> Replica DB 1
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  └────> Replica DB 2
+
+Backup copy = Redundancy
+
+**Example:**
+
+Your database has 2 replicas. If the primary fails,
+a replica takes over — no data lost, no downtime.
+
+**More redundancy improves availability and fault tolerance.**
+</StickyNote>
