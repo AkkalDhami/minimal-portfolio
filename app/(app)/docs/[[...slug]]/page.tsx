@@ -6,22 +6,18 @@ import matter from "gray-matter";
 import { mdxComponents } from "@/components/docs/mdx-components";
 import rehypePrettyCode from "rehype-pretty-code";
 import { DEFAULT_CODE_THEME } from "@/lib/constants";
-import { Metadata, Route } from "next";
 import { findNeighbour } from "@/lib/source";
-import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
 
 import { PLAYBOOK_DATA } from "@/data/playbook";
-import { IPlaybook } from "@/types/app.types";
-import { PrimaryButton } from "@/components/ui/primary-button";
 import siteConfig from "@/lib/site";
-import { cn } from "@/lib/utils";
-import { sliceContent } from "@/utils/slice-content";
 import { ShareMenu } from "@/components/ui/share-menu";
 import { NETWORKING_DATA } from "@/data/networking";
 import { DSA_DATA } from "@/data/dsa";
 import { SQL_DATA } from "@/data/sql";
 import { DocsLayout } from "@/components/layouts/docs-layout";
 import { SYSTEM_DESIGN_DATA } from "@/data/system-design";
+import { NextSteps } from "@/components/docs/next-docs";
+import { Metadata } from "next";
 
 export const dynamic = "force-static";
 export const dynamicParams = false;
@@ -220,61 +216,3 @@ export default async function DocsPage(props: PageProps<"/docs/[[...slug]]">) {
     </div>
   );
 }
-
-const NextSteps = ({
-  next,
-  prev,
-  min,
-  className
-}: {
-  next?: IPlaybook | undefined;
-  prev?: IPlaybook | undefined;
-  min?: boolean;
-  className?: string;
-}) => {
-  return (
-    <div className={cn("flex items-center justify-between gap-4", className)}>
-      {prev && (
-        <PrimaryButton
-          variant="outline"
-          className={cn(
-            "group font-medium tracking-normal capitalize",
-            min ? "px-2 py-2" : "px-4 py-2"
-          )}
-          as="a"
-          href={prev.docs as Route}>
-          <div className="flex items-center gap-1">
-            <ArrowLeftIcon className="size-4" />
-            {!min && (
-              <span className="hidden sm:inline">
-                {sliceContent(prev.title, 38)}
-              </span>
-            )}
-          </div>
-        </PrimaryButton>
-      )}
-      {next && (
-        <div className="flex items-center justify-end">
-          <PrimaryButton
-            variant="outline"
-            className={cn(
-              "group font-medium tracking-normal capitalize",
-              min ? "px-2 py-2" : "px-4 py-2"
-            )}
-            as="a"
-            title={next.title}
-            href={next.docs as Route}>
-            <div className="flex items-center gap-1">
-              {!min && (
-                <span className="hidden sm:inline">
-                  {sliceContent(next.title, 38)}
-                </span>
-              )}
-              <ArrowRightIcon className="size-4" />
-            </div>
-          </PrimaryButton>
-        </div>
-      )}
-    </div>
-  );
-};

@@ -13,6 +13,10 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { SQL_DATA } from "@/data/sql";
 import { buttonVariants } from "@/components/ui/button";
 import { sliceContent } from "@/utils/slice-content";
+import { IconMenu } from "@tabler/icons-react";
+import { motion } from "motion/react";
+import { useState } from "react";
+import { uChatScrollButtonSound } from "@/sounds/chat-scroll";
 
 const title = {
   dsa: "DSA",
@@ -26,6 +30,8 @@ export function DocsSidebar({ className }: { className?: string }) {
   const pathname = usePathname();
 
   const [play] = useSound(cardSlide5Sound);
+  const [playChatScrollButton] = useSound(uChatScrollButtonSound);
+  const [isOpen, setIsOpen] = useState(true);
 
   const isDsa = pathname.includes("/docs/dsa");
   const isPlaybook = pathname.includes("/docs/playbook");
@@ -63,74 +69,102 @@ export function DocsSidebar({ className }: { className?: string }) {
   );
 
   return (
-    <aside
-      className={cn(
-        "primary-ring not-typeset bg-background fixed top-26 left-1.5 z-40 h-full w-74 space-y-2 rounded-lg border p-2",
-        className
-      )}>
-      <h2 className="font-inter text-lg font-medium">
-        {
-          title[
-            isDsa
-              ? "dsa"
-              : isPlaybook
-                ? "playbook"
-                : isNetworking
-                  ? "networking"
-                  : isSystemDesign
-                    ? "system-design"
-                    : "sql"
-          ]
-        }
-      </h2>
+    <>
+      <button
+        onClick={() => {
+          setIsOpen(!isOpen);
+          playChatScrollButton();
+        }}
+        className="text-muted-foreground hover:text-foreground hover:bg-muted fixed top-28 left-3 z-50 hidden size-8 cursor-pointer items-center justify-center rounded-md p-1.5 xl:flex">
+        <IconMenu />
+      </button>
+      <motion.aside
+        initial={{
+          x: -200,
+          opacity: 0
+        }}
+        animate={{
+          x: isOpen ? 0 : -200,
+          opacity: isOpen ? 1 : 0
+        }}
+        exit={{
+          x: -200,
+          opacity: 0
+        }}
+        transition={{
+          duration: 0.3,
+          ease: "easeInOut"
+        }}
+        className={cn(
+          "primary-ring not-typeset bg-background fixed top-26 left-1.5 z-40 h-full w-74 space-y-2 rounded-lg border p-2",
+          className
+        )}>
+        <h2 className="font-inter text-lg font-medium xl:pl-10">
+          {
+            title[
+              isDsa
+                ? "dsa"
+                : isPlaybook
+                  ? "playbook"
+                  : isNetworking
+                    ? "networking"
+                    : isSystemDesign
+                      ? "system-design"
+                      : "sql"
+            ]
+          }
+        </h2>
 
-      <ScrollArea
-        className={"scroll-fade relative h-full max-h-140 pb-12 xl:max-h-126"}>
-        {moduleSlug?.trim() ? (
-          <>
-            {filteredModules?.map((m, i) => (
-              <div key={i}>
-                <Link
-                  href={m.href as Route}
-                  onClick={() => play()}
-                  className={cn(
-                    "font-inter hover:text-primary font-medium underline-offset-2 hover:underline",
-                    pathname === m.href
-                      ? "text-primary underline"
-                      : "text-muted-foreground"
-                  )}>
-                  {m.title}
-                </Link>
-                <LineNav
-                  activeHref={pathname}
-                  items={m.topics}
-                  onItemClick={() => play()}
-                />
-              </div>
-            ))}
-          </>
-        ) : (
-          <LineNav
-            activeHref={pathname}
-            items={items}
-            onItemClick={() => play()}
-          />
-        )}
-        {isSql && (
-          <Link
-            target="_blank"
-            href={"/playground/sql"}
-            className={cn(
-              buttonVariants({
-                variant: "outline",
-                size: "sm"
-              }),
-              "absolute bottom-2 z-30 w-full font-normal"
-            )}>
-            MySQL Playground
-          </Link>
-        )}
-      </ScrollArea>
-    </aside>
+        <ScrollArea
+          className={
+            "scroll-fade relative h-full max-h-140 pb-12 xl:max-h-126"
+          }>
+          {moduleSlug?.trim() ? (
+            <>
+              {filteredModules?.map((m, i) => (
+                <div key={i}>
+                  <Link
+                    href={m.href as Route}
+                    onClick={() => play()}
+                    className={cn(
+                      "font-inter hover:text-primary font-medium underline-offset-2 hover:underline",
+                      pathname === m.href
+                        ? "text-primary underline"
+                        : "text-muted-foreground"
+                    )}>
+                    {m.title}
+                  </Link>
+                  <LineNav
+                    activeHref={pathname}
+                    items={m.topics}
+                    onItemClick={() => play()}
+                  />
+                </div>
+              ))}
+            </>
+          ) : (
+            <LineNav
+              activeHref={pathname}
+              items={items}
+              onItemClick={() => play()}
+            />
+          )}
+          {isSql && (
+            <Link
+              target="_blank"
+              href={"/playground/sql"}
+              className={cn(
+                buttonVariants({
+                  variant: "outline",
+                  size: "sm"
+                }),
+                "absolute bottom-2 z-30 w-full font-normal"
+              )}>
+              MySQL Playground
+            </Link>
+          )}
+        </ScrollArea>
+      </motion.aside>
+    </>
   );
 }
