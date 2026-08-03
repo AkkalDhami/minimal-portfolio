@@ -33,7 +33,7 @@ export const NETWORKING_DATA: IModule[] = createModules([
       },
       {
         slug: "how-the-internet-works",
-        title: "How the Internet Works?",
+        title: "How Does The Internet Work?",
         docs: "/how-the-internet-works",
         description:
           "Learn how the Internet works, what protocols are used, and how data is transmitted over the network."
