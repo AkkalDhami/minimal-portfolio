@@ -1,0 +1,567 @@
+---
+title: Load Balancing - Distributing Traffic the Right Way
+description: How load balancers sit between users and servers, the algorithms they use, L4 vs L7, health checks, sticky sessions, and the trade-offs that come up in real systems.
+---
+
+When you have one server, every request goes to it. When you have ten servers, **something** has to decide which server handles each request — that "something" is the **load balancer**.
+
+A load balancer is the **traffic cop** of a distributed system. It sits between clients and a pool of backend servers, and its job is to spread load evenly, hide failures, and keep things fast.
+
+<ZoomableImage width="900" height="400" src="/images/lb2.png" alt="Load Balancer in front of servers" className='h-100 w-auto'/>
+<ZoomableImage width="900" height="400" src="/images/lb1.png" alt="Load Balancer in front of servers" className='h-100 w-auto'/>
+
+> One-liner: **A load balancer is a reverse proxy that distributes incoming requests across multiple backend servers according to a chosen strategy.**
+
+---
+
+## 1. Why do we need a load balancer?
+
+A single server hits hard limits — CPU, RAM, network bandwidth, single point of failure. A load balancer lets us:
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Problem solved</TH>
+      <TH>How the load balancer helps</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>Single server bottleneck</TD>
+      <TD>Spreads requests across many servers, multiplying throughput</TD>
+    </TR>
+    <TR>
+      <TD>Single point of failure</TD>
+      <TD>If one server dies, traffic is routed to the healthy ones</TD>
+    </TR>
+    <TR>
+      <TD>Uneven load</TD>
+      <TD>Smart algorithms (least-connections, weighted) keep servers balanced</TD>
+    </TR>
+    <TR>
+      <TD>Rolling deployments</TD>
+      <TD>New versions can be rolled out server-by-server with controlled traffic</TD>
+    </TR>
+    <TR>
+      <TD>Geographic scaling</TD>
+      <TD>Global LBs route users to the nearest data center</TD>
+    </TR>
+  </TBody>
+</Table>
+
+<StickyNote color="cyan">
+If you only run **one** server, you don't need a load balancer. The day you run **two**, you do. Most real systems run tens to thousands behind one.
+</StickyNote>
+
+---
+
+## 2. Where can a load balancer live?
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Location</TH>
+      <TH>Role</TH>
+      <TH>Examples</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>Client-side</TD>
+      <TD>The browser or app picks a server itself (often via DNS returning multiple IPs)</TD>
+      <TD>DNS round-robin</TD>
+    </TR>
+    <TR>
+      <TD>Edge / Network</TD>
+      <TD>A dedicated appliance or cloud service sits in front of all servers</TD>
+      <TD>AWS ALB, Nginx, HAProxy, F5, Cloudflare</TD>
+    </TR>
+    <TR>
+      <TD>Server-side</TD>
+      <TD>Each server runs a sidecar that participates in a coordinated pool</TD>
+      <TD>Envoy sidecars in a service mesh (Istio, Linkerd)</TD>
+    </TR>
+  </TBody>
+</Table>
+
+In practice, **most setups combine all three** — DNS returns a regional LB IP, that LB hands off to an in-cluster LB, and the in-cluster LB talks to sidecar proxies on each pod.
+
+---
+
+## 3. L4 vs L7 load balancing
+
+This is the most important distinction and a very common interview question.
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Aspect</TH>
+      <TH>L4 (Transport Layer)</TH>
+      <TH>L7 (Application Layer)</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>OSI layer</TD>
+      <TD>Layer 4 — TCP/UDP</TD>
+      <TD>Layer 7 — HTTP/HTTPS/gRPC</TD>
+    </TR>
+    <TR>
+      <TD>What it inspects</TD>
+      <TD>IP addresses, ports, protocol</TD>
+      <TD>URL, headers, cookies, body, gRPC method</TD>
+    </TR>
+    <TR>
+      <TD>Routing decision based on</TD>
+      <TD>Connection-level info</TD>
+      <TD>Request content</TD>
+    </TR>
+    <TR>
+      <TD>Throughput</TD>
+      <TD>Higher — does not parse payload</TD>
+      <TD>Lower — must parse and possibly buffer the request</TD>
+    </TR>
+    <TR>
+      <TD>Smart routing</TD>
+      <TD>Limited (mostly IP/port based)</TD>
+      <TD>Rich (path-based, host-based, header-based)</TD>
+    </TR>
+    <TR>
+      <TD>Typical use</TD>
+      <TD>TLS termination offloading, raw TCP services, very high throughput</TD>
+      <TD>Microservices routing, canary releases, URL/host-based routing, A/B testing</TD>
+    </TR>
+  </TBody>
+</Table>
+
+<StickyNote>
+**Easy way to remember:**
+
+- **L4 LB** = "I'm routing packets, I don't care what's inside."
+- **L7 LB** = "I'm routing requests, I read the URL and headers."
+
+L7 gives you far more power but costs CPU and adds latency. L4 is dumb and fast.
+</StickyNote>
+
+<StickyNote color="yellow">
+**Real-world example:** an L7 LB can send <Code>/api/</Code> to your backend API servers but <Code>/images/*</Code> to your static asset servers — based entirely on the URL path. An L4 LB can't do that — to it, both look like the same TCP connection.
+</StickyNote>
+
+---
+
+## 4. Load balancing algorithms
+
+The algorithm decides *which* backend gets the next request.
+
+### 4.1 Static algorithms (don't look at server state)
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Algorithm</TH>
+      <TH>How it picks</TH>
+      <TH>Pros</TH>
+      <TH>Cons</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>Round Robin</TD>
+      <TD>Server 1, then 2, then 3, then back to 1</TD>
+      <TD>Simple, fair</TD>
+      <TD>Ignores server load — slow servers get the same number of requests as fast ones</TD>
+    </TR>
+    <TR>
+      <TD>Weighted Round Robin</TD>
+      <TD>Same as round robin but stronger servers get more turns</TD>
+      <TD>Handles heterogeneous servers</TD>
+      <TD>Weights must be tuned manually</TD>
+    </TR>
+    <TR>
+      <TD>Random</TD>
+      <TD>Pick one at random</TD>
+      <TD>Surprisingly effective at scale</TD>
+      <TD>Can be uneven for small pools</TD>
+    </TR>
+    <TR>
+      <TD>Hash-based (IP / URL)</TD>
+      <TD>Hash a key (e.g. client IP) → always routes to the same server</TD>
+      <TD>Sticky by default, good for caching</TD>
+      <TD>Uneven if hash isn't uniform</TD>
+    </TR>
+  </TBody>
+</Table>
+
+### 4.2 Dynamic algorithms (look at server state)
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Algorithm</TH>
+      <TH>How it picks</TH>
+      <TH>Pros</TH>
+      <TH>Cons</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>Least Connections</TD>
+      <TD>Pick the server with the fewest active connections</TD>
+      <TD>Great when requests have variable duration</TD>
+      <TD>Needs accurate connection tracking</TD>
+    </TR>
+    <TR>
+      <TD>Least Response Time</TD>
+      <TD>Pick the server with the lowest recent response time</TD>
+      <TD>Adapts to real performance</TD>
+      <TD>Can be noisy; needs tuning window</TD>
+    </TR>
+    <TR>
+      <TD>Weighted Least Connections</TD>
+      <TD>Like least connections, but stronger servers are preferred</TD>
+      <TD>Best of both worlds for heterogeneous clusters</TD>
+      <TD>More complex; weights must be set</TD>
+    </TR>
+  </TBody>
+</Table>
+
+### 4.3 Consistent hashing (special case)
+
+A smarter variant of hash-based routing. Used heavily in **caches, CDNs, and sharded databases**.
+
+<StickyNote color="teal">
+**The problem it solves:**
+
+Imagine 3 cache servers using simple <Code>hash(key) % 3</Code>. You add a 4th server — now it's <Code>hash(key) % 4</Code> — and **almost every key maps to a different server**. Every cached item is invalidated. Cache stampede. Disaster.
+
+**Consistent hashing** arranges servers and keys on a "ring", so adding/removing a server only remaps a small fraction of keys.
+</StickyNote>
+
+---
+
+## 5. Health checks
+
+A load balancer that routes to a dead server is worse than no load balancer. This is why every LB runs **health checks**.
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Type</TH>
+      <TH>What it does</TH>
+      <TH>Example</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>Active (probe)</TD>
+      <TD>LB periodically sends a request to each server and checks the response</TD>
+      <TD>GET <Code>/health</Code> expecting 200 OK within 200ms</TD>
+    </TR>
+    <TR>
+      <TD>Passive (in-band)</TD>
+      <TD>LB watches real traffic — if a server starts failing on real requests, it gets demoted</TD>
+      <TD>3 consecutive 5xx responses → mark unhealthy</TD>
+    </TR>
+    <TR>
+      <TD>Liveness vs Readiness</TD>
+      <TD>Liveness = "is the process alive?" (restart if not). Readiness = "can it serve traffic right now?" (route traffic if yes)</TD>
+      <TD>Common in Kubernetes with separate probes</TD>
+    </TR>
+  </TBody>
+</Table>
+
+<StickyNote color="orange">
+**Important:** health checks and the load-balancing algorithm are two halves of one job. The algorithm spreads load; health checks keep traffic away from servers that *can't* serve it.
+</StickyNote>
+
+---
+
+## 6. Sticky sessions (session affinity)
+
+Some apps store session state **in the server's memory** (not in a shared store). If a user's next request lands on a different server, their session is lost.
+
+**Sticky sessions** = the LB routes all requests from the same client to the same server (usually via cookie or IP hash).
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Aspect</TH>
+      <TH>Sticky sessions</TH>
+      <TH>Stateless (no stickiness)</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>Pros</TD>
+      <TD>Works with in-memory sessions, simple</TD>
+      <TD>Servers truly interchangeable; easy to scale</TD>
+    </TR>
+    <TR>
+      <TD>Cons</TD>
+      <TD>Uneven load (one user with heavy state hogs one server); loses server affinity during deploys</TD>
+      <TD>Requires external session store (Redis, DB)</TD>
+    </TR>
+  </TBody>
+</Table>
+
+<StickyNote color="red">
+**Interview wisdom:** if your design says "we use sticky sessions because that's easier" — push back. Modern systems overwhelmingly use **stateless servers + external session store (Redis)**. Stickiness should be the exception, not the default.
+</StickyNote>
+
+---
+
+## 7. TLS termination at the load balancer
+
+HTTPS requests are expensive to decrypt. Most production setups **terminate TLS at the load balancer** — the LB holds the certificate and decrypts the traffic, then passes plain HTTP to the backend servers.
+
+```
+Client ──HTTPS──>  Load Balancer (decrypts here)  ──HTTP──>  Server
+                          ▲
+                   holds the cert
+```
+
+<StickyNote>
+**Why do this?**
+
+1. Backends don't need certs → simpler ops
+2. LB can centrally enforce security policies
+3. CPUs on backends are freed up for actual work
+4. L7 features (header inspection, routing by URL) work — they couldn't see encrypted content otherwise
+
+The LB then usually re-encrypts traffic on the way to backends inside a private network (called **TLS re-encryption** or **end-to-end TLS**).
+</StickyNote>
+
+---
+
+## 8. Global vs Local load balancing
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Type</TH>
+      <TH>Scope</TH>
+      <TH>How it routes</TH>
+      <TH>Example</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>GSLB (Global Server Load Balancing)</TD>
+      <TD>Routes users to the right *region/data center*</TD>
+      <TD>DNS-based geo, Anycast, BGP routing</TD>
+      <TD>AWS Route 53 latency-based routing, Cloudflare</TD>
+    </TR>
+    <TR>
+      <TD>Local LB</TD>
+      <TD>Routes traffic within a *single data center*</TD>
+      <TD>L4/L7 algorithms, health checks</TD>
+      <TD>AWS ALB, Nginx, HAProxy</TD>
+    </TR>
+  </TBody>
+</Table>
+
+A real-world request often passes through both:
+
+```
+Tokyo user → GSLB (DNS) → Tokyo LB → healthy server in Tokyo data center
+Berlin user → GSLB (DNS) → Frankfurt LB → healthy server in EU data center
+```
+
+---
+
+## 9. Load balancing in microservices
+
+In a microservice system, a single user request often fans out to many services. A traditional perimeter LB isn't enough — you also need **east-west load balancing** between services.
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Approach</TH>
+      <TH>How it works</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>Client-side LB (smart client)</TD>
+      <TD>The calling service has a library (e.g. Eureka, gRPC client) that knows the list of healthy instances and picks one</TD>
+    </TR>
+    <TR>
+      <TD>Sidecar proxy</TD>
+      <TD>Each pod has a sidecar (Envoy) that handles load balancing, retries, circuit breaking — the app doesn't even know</TD>
+    </TR>
+    <TR>
+      <TD>Central LB per service</TD>
+      <TD>A dedicated LB sits in front of each service's replicas</TD>
+    </TR>
+  </TBody>
+</Table>
+
+<StickyNote color="blue">
+Service meshes (Istio, Linkerd) are basically **load balancing as infrastructure** — every request between services goes through a sidecar proxy that can do retries, timeouts, circuit breaking, encryption, and observability, all configured centrally.
+</StickyNote>
+
+---
+
+## 10. Common pitfalls and trade-offs
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Pitfall</TH>
+      <TH>What goes wrong</TH>
+      <TH>How to avoid it</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>LB becomes SPOF</TD>
+      <TD>One LB goes down → entire site down</TD>
+      <TD>Run LB in HA pair (active-active or active-passive); use floating IPs / anycast</TD>
+    </TR>
+    <TR>
+      <TD>Sticky sessions hiding state bugs</TD>
+      <TD>App loses session state the moment a server dies or is rebalanced</TD>
+      <TD>Push session state to an external store (Redis)</TD>
+    </TR>
+    <TR>
+      <TD>Aggressive health checks flapping</TD>
+      <TD>Server marked unhealthy → restored → unhealthy → ... causing chaos</TD>
+      <TD>Use sane thresholds (e.g. 3 failures in a row, then cooldown)</TD>
+    </TR>
+    <TR>
+      <TD>L7 CPU bottleneck</TD>
+      <TD>L7 LB becomes the new bottleneck under heavy load</TD>
+      <TD>Scale horizontally, terminate TLS upstream, use L4 for bulk traffic</TD>
+    </TR>
+    <TR>
+      <TD>Uneven distribution with simple hash</TD>
+      <TD>Naive <Code>hash % N</Code> remaps almost everything when N changes</TD>
+      <TD>Use consistent hashing</TD>
+    </TR>
+    <TR>
+      <TD>Connection draining on deploy</TD>
+      <TD>Rolling deploys kill in-flight requests</TD>
+      <TD>Use connection draining / preStop hooks / canary releases</TD>
+    </TR>
+  </TBody>
+</Table>
+
+---
+
+## 11. Interview Questions
+
+<InterviewQ>
+  <InterviewQItem>
+    <InterviewQuestion>
+    #### 1. What is a load balancer and why do we need one?
+    </InterviewQuestion>
+
+    <InterviewAnswer>
+        A load balancer sits between clients and a pool of backend servers and distributes incoming requests across them. 
+        
+        It's needed because a single server hits CPU, RAM, and bandwidth limits and is also a single point of failure. 
+        
+        A load balancer gives you horizontal scalability, fault tolerance, and the ability to roll out new versions safely.
+    </InterviewAnswer>
+
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+    #### 2. What's the difference between L4 and L7 load balancing?
+    </InterviewQuestion>
+
+    <InterviewAnswer>
+      L4 (Transport layer) load balancing works at the TCP/UDP level — it routes based on IP, port, and protocol, without inspecting the payload. 
+      
+      It's faster and cheaper but can't make routing decisions based on URLs or headers. L7 (Application layer) load balancing parses HTTP, can read URLs, headers, cookies, and body, and can route based on them (e.g. <Code>/api</Code> to one backend, <Code>/images</Code> to another). 
+      
+      It's more powerful but consumes more CPU and adds latency.
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+    #### 3. Compare round-robin, least-connections, and IP-hash load balancing.
+    </InterviewQuestion>
+
+    <InterviewAnswer>
+        **Round-robin** cycles through servers in order — simple and fair, but ignores server load and connection duration. 
+        
+        **Least-connections** sends new requests to the server with the fewest active connections — works well when requests have variable duration. 
+        
+        **IP-hash** hashes the client IP and always routes to the same server — gives sticky sessions for free but makes uneven distribution if client IPs aren't uniform.
+    </InterviewAnswer>
+  </InterviewQItem>
+</InterviewQ>
+
+<Accordion defaultValue={["q1"]}>
+  <AccordionItem value="q4">
+    <AccordionTrigger>4. What is consistent hashing and why is it useful?</AccordionTrigger>
+    <AccordionContent>
+      Consistent hashing is a technique where both servers and request keys are placed on a hash ring, and a request is routed to the next server clockwise on the ring. When a server is added or removed, only a small fraction of keys need to be remapped (about <Code>1/N</Code> of them) — unlike naive <Code>hash % N</Code> where almost everything remaps. This is essential for caches and sharded systems where remapping invalidates data and causes cache stampedes.
+    </AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="q5">
+    <AccordionTrigger>5. Why are health checks important for a load balancer?</AccordionTrigger>
+    <AccordionContent>
+      A load balancer that routes traffic to a dead server is worse than no load balancer — users see errors instead of the system "degrading gracefully". Health checks (active probes like <Code>/health</Code>, and passive checks that watch real traffic) let the LB detect failed servers and remove them from the pool until they recover.
+    </AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="q6">
+    <AccordionTrigger>6. What is TLS termination at the load balancer?</AccordionTrigger>
+    <AccordionContent>
+      The load balancer holds the SSL/TLS certificate and decrypts incoming HTTPS traffic, then forwards plain HTTP to backends. This centralizes certificate management, reduces CPU load on backend servers, and enables L7 features that need to read request contents (URL routing, header inspection). Inside the data center, traffic is often re-encrypted for compliance and end-to-end security.
+    </AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="q7">
+    <AccordionTrigger>7. How do sticky sessions work, and what's the downside?</AccordionTrigger>
+    <AccordionContent>
+      The LB identifies a user (usually by cookie or IP hash) and always routes their requests to the same backend server. This lets apps store session state in server memory. The downside: load can become uneven (one heavy user sticks to one server), and the moment a server dies, that user's session is gone. Most modern designs avoid this by making servers stateless and storing sessions in a shared store like Redis.
+    </AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="q8">
+    <AccordionTrigger>8. What's the difference between global load balancing and local load balancing?</AccordionTrigger>
+    <AccordionContent>
+      Global Server Load Balancing (GSLB) routes users to the right region or data center, typically using DNS-based geo-routing or Anycast. Local load balancing then routes requests to a specific server within that data center using L4/L7 algorithms and health checks. A request from Tokyo might go: GSLB (DNS) → Tokyo LB → one healthy Tokyo server.
+    </AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="q9">
+    <AccordionTrigger>9. Is the load balancer itself a single point of failure?</AccordionTrigger>
+    <AccordionContent>
+      It can be — if you only run one. In practice LBs are run as a high-availability pair (active-active or active-passive) using floating IPs, BGP, or Anycast, so the loss of one LB is transparent to users. This is why cloud providers expose regional LB endpoints (e.g. AWS ALB) rather than a single IP — they handle the HA internally.
+    </AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="q10">
+    <AccordionTrigger>10. How does load balancing work inside a microservices system?</AccordionTrigger>
+    <AccordionContent>
+      A single public-facing LB at the edge is not enough — service-to-service calls also need load balancing. Common approaches: (1) a smart client library that maintains a list of healthy instances (e.g. Eureka, gRPC client-side LB); (2) sidecar proxies like Envoy where every pod has its own proxy that handles LB, retries, and circuit breaking; (3) a central LB per service. Service meshes like Istio and Linkerd make option 2 the default.
+    </AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="q11">
+    <AccordionTrigger>11. How would you do a zero-downtime deployment using a load balancer?</AccordionTrigger>
+    <AccordionContent>
+      Use connection draining and rolling deploys. Add a new server (with the new version) to the LB's pool, send a small slice of traffic to it (canary), monitor for errors, then shift more traffic. When taking an old server out of the pool, mark it as "draining" so the LB stops sending it new requests but lets existing connections finish — only remove it from the pool once active connections reach zero. This prevents killing in-flight requests.
+    </AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="q12">
+    <AccordionTrigger>12. What is a "cache stampede" and how does consistent hashing help prevent it?</AccordionTrigger>
+    <AccordionContent>
+      A cache stampede happens when a large number of cached keys expire or are invalidated at the same time, and every miss causes a thundering-herd of requests to the database. Consistent hashing minimizes this by ensuring that when you add or remove a cache server, only about <Code>1/N</Code> of keys are remapped — the rest stay on their original servers, so only the moved keys trigger a stampede instead of the entire cache.
+    </AccordionContent>
+  </AccordionItem>
+</Accordion>
+
+---
+
+## Summary
+
+- A **load balancer** distributes traffic across multiple servers and hides failures.
+- **L4** routes on connection info (fast, dumb). **L7** parses requests (powerful, costly).
+- **Algorithms** range from simple round-robin to consistent hashing, each with different fairness and stability properties.
+- **Health checks** keep traffic away from broken servers.
+- **Sticky sessions** are easy but pushed-down on for being inherently anti-scale.
+- **Global + local LBs** together route requests across the planet and within each data center.
+- In **microservices**, sidecar proxies make load balancing a primitive every service gets for free.
+
+> Next up in a beginner's path: **Caching** — the second pillar of scale after load balancing.
