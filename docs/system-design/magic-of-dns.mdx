@@ -1,0 +1,465 @@
+---
+title: The Magic of DNS - How Does The Internet Work?
+description: DNS internals, resolution flow, and internet fundamentals from a system design perspective, with interview questions.
+---
+
+The internet is just millions of computers agreeing to speak the same set of rules (protocols) so they can find each other and exchange data — even though they're built by different companies, running different software, on different continents.
+
+---
+
+## 1. The journey of a single request
+
+When you type <Code>google.com</Code> into your browser and hit enter, a surprising number of steps happen in milliseconds:
+
+<ZoomableImage width="900" height="400" src="/images/dns2.png" alt="DNS Resolution Flow" className='h-100 w-auto'/>
+
+**Step-by-step:**
+
+<StickyNote>
+**Step 1 — DNS Lookup:**
+
+Browser ─────> DNS Resolver
+
+**"What's the IP address of google.com?"**
+
+Your browser doesn't know Google's actual server address — it only knows the name <Code>google.com.</Code> So it asks the DNS resolver to look it up.
+</StickyNote>
+
+<StickyNote color="teal">
+**Step 2 — DNS Response:**
+
+Browser &lt;──── DNS Resolver
+
+**142.250.66.14**
+
+The resolver (after possibly doing its own iterative lookups through root → TLD → authoritative servers) returns the actual IP address. Now your browser knows where to send the actual request.
+
+**DNS's job is now finished. It only translates names to IP addresses.**
+</StickyNote>
+
+<StickyNote color="green">
+**Step 3 — TCP Handshake**
+
+Browser ─────> Server
+
+Before any real data is exchanged, your browser and Google's server agree to open a reliable connection. This is a 3-step exchange:
+
+- **SYN(Synchronize)** — I'd like to establish a TCP(Transmission Control Protocol) connection.
+- **SYN-ACK(Synchronize Acknowledgment)** — I received your request, and I'm ready to connect.
+- **ACK(Acknowledgment)** — Great, let's start communicating
+
+Now the TCP connection is established.
+
+At this point:
+
+- The connection is reliable.
+- Packets can be retransmitted if lost.
+- Data arrives in order.
+
+However, the connection is **not encrypted** yet.
+
+</StickyNote>
+
+<StickyNote color="blue">
+**Step 4 — TLS handshake:**
+
+Browser ─────────────> Google
+
+Now the browser wants a secure connection because the URL starts with:<Code>https://</Code>
+
+**TLS (Transport Layer Security) negotiates encryption.**
+
+During this handshake:
+
+##### 1. Google sends its certificate
+
+The server provides a digital certificate containing:
+
+- Its public key
+- Its domain name (google.com)
+- The issuing Certificate Authority (CA)
+- Its validity period
+
+The browser verifies that the certificate is valid and trusted.
+
+##### 2. They agree on cryptographic algorithms
+
+The browser and server negotiate:
+
+- Which encryption algorithm to use (cipher suite)
+- Which key exchange method to use
+- Which protocol version (e.g., TLS 1.3)
+
+##### 3. They derive a shared session key
+
+Using the negotiated key exchange (such as ECDHE), both sides independently compute the same symmetric session key.
+
+This key is **never transmitted directly** over the network.
+
+Now all communication becomes encrypted:
+
+Browser 🔒=====================🔒 Google
+
+- ECDHE(Elliptic Curve Diffie-Hellman Ephemeral): A key exchange algorithm used in TLS to securely generate a shared session key.
+</StickyNote>
+
+<StickyNote color="orange">
+**Step 5 — HTTP Request:**
+
+Now your browser finally asks for the actual page: "GET me the homepage." This is the actual HTTP request — everything before this was just setup to make this exchange possible and secure.
+
+The request is encrypted because it travels inside the TLS connection.
+</StickyNote>
+
+<StickyNote color="cyan">
+**Step 6 — Server Response:**
+
+Google's server processes the request and sends back an HTTP response.
+
+The response often references additional resources, such as:
+
+- CSS files
+- JavaScript files
+- Images
+- Fonts
+
+The browser then downloads those as separate HTTP requests.
+</StickyNote>
+
+<StickyNote color="indigo">
+**Step 7 — Rendering:**
+
+The browser parses the HTML, CSS, and JavaScript files, and renders the page.
+</StickyNote>
+
+---
+
+**Summary:**
+
+1. **DNS(Domain Name System) lookup** — translate the human-readable domain (<Code>google.com</Code>) into a machine-usable IP address
+2. **TCP (Transmission Control Protocol) handshake** — establish a reliable connection (SYN → SYN-ACK → ACK)
+3. **TLS (Transport Layer Security) handshake** — negotiate encryption so the connection is secure (HTTPS)
+4. **HTTP request/response** — the browser asks for the page, the server sends it back
+5. **Rendering** — the browser parses HTML/CSS/JS and paints the page
+
+This whole flow usually takes under 200ms for a well-optimized site — DNS alone should ideally take single-digit to low double-digit milliseconds.
+
+---
+
+## 2. Interview Questions - I
+
+<Accordion defaultValue={["q1"]}>
+  <AccordionItem value="q1">
+    <AccordionTrigger>1. Why is DNS performed before the TCP handshake?</AccordionTrigger>
+    <AccordionContent>
+      TCP connects to an **IP address**, not a domain name. DNS resolves the domain (<Code>google.com</Code>) into an IP address so the browser knows where to establish the TCP connection.
+    </AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="q2">
+    <AccordionTrigger>2. Why is the TLS handshake performed after the TCP handshake?</AccordionTrigger>
+    <AccordionContent>
+      TLS runs **on top of TCP**. It requires a reliable transport connection to exchange certificates, negotiate cryptographic parameters, and establish shared encryption keys.
+    </AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="q3">
+    <AccordionTrigger>3. Can the browser send an HTTP request before the TLS handshake?</AccordionTrigger>
+    <AccordionContent>
+      For **HTTPS**, no. The browser must first complete the TLS handshake so the HTTP request is encrypted before it's transmitted. (For plain **HTTP**, there is no TLS handshake.)
+    </AccordionContent>
+  </AccordionItem>
+</Accordion>
+
+---
+
+## 3. The DNS hierarchy
+
+DNS isn't one giant database — it's a distributed, hierarchical tree of servers, each responsible for a piece of the namespace.
+
+<ZoomableImage width="1000" height="400" src="/images/dns3.png" alt="DNS Hierarchy"  className='h-100 w-auto'/>
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Level</TH>
+      <TH>Role</TH>
+      <TH>Example</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>Root servers</TD>
+      <TD>Know where to find TLD servers</TD>
+      <TD>13 logical root server clusters worldwide</TD>
+    </TR>
+    <TR>
+      <TD>TLD(Top Level Domain) servers</TD>
+      <TD>Know where to find authoritative servers for a domain</TD>
+      <TD>.com, .org, .net, .io servers</TD>
+    </TR>
+    <TR>
+      <TD>Authoritative servers</TD>
+      <TD>Hold the actual DNS records for a specific domain</TD>
+      <TD>Google's own nameservers for google.com</TD>
+    </TR>
+  </TBody>
+</Table>
+
+---
+
+## Recursive vs Iterative resolution
+
+This is one of the most commonly misunderstood parts of DNS, and a favorite interview topic.
+
+<ZoomableImage width="1000" height="400" src="/images/dns.png" alt="Recursive vs Iterative DNS Resolution"  className='h-100 w-auto'/>
+
+- **Iterative queries**: each server gives the resolver a *referral* ("I don't know, ask this other server") — the resolver does all the legwork, one hop at a time
+- **Recursive query**: what **you** send to your resolver — you ask once, and expect a final answer, not a referral
+
+**The client (your browser/OS) always makes a recursive query. The resolver then does iterative queries on your behalf.**
+
+---
+
+## Common DNS record types
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Record</TH>
+      <TH>Purpose</TH>
+      <TH>Example</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>A</TD>
+      <TD>Maps a domain to an IPv4 address</TD>
+      <TD><Code>example.com → 93.184.216.34</Code></TD>
+    </TR>
+    <TR>
+      <TD>AAAA</TD>
+      <TD>Maps a domain to an IPv6 address</TD>
+      <TD><Code>example.com → 2606:2800:220:1::</Code></TD>
+    </TR>
+    <TR>
+      <TD>CNAME</TD>
+      <TD>Aliases one domain to another domain name</TD>
+      <TD><Code>www.example.com → example.com</Code></TD>
+    </TR>
+    <TR>
+      <TD>MX</TD>
+      <TD>Specifies mail servers for the domain</TD>
+      <TD><Code>example.com → mail.example.com (priority 10)</Code></TD>
+    </TR>
+    <TR>
+      <TD>TXT</TD>
+      <TD>Arbitrary text — often used for verification (SPF, DKIM, domain ownership)</TD>
+      <TD><Code>"v=spf1 include:_spf.google.com ~all"</Code></TD>
+    </TR>
+    <TR>
+      <TD>NS</TD>
+      <TD>Specifies which servers are authoritative for the domain</TD>
+      <TD><Code>example.com → ns1.example.com</Code></TD>
+    </TR>
+    <TR>
+      <TD>SOA</TD>
+      <TD>Start of Authority — admin info, refresh timers, zone version</TD>
+      <TD>Primary NS, admin email, serial number</TD>
+    </TR>
+  </TBody>
+</Table>
+
+---
+
+## Caching and TTL
+
+DNS lookups would be painfully slow if every request went all the way to the root. Caching happens at multiple layers:
+
+```
+Browser cache ──► OS cache ──► Router cache ──► ISP resolver cache ──► Authoritative server
+   (fastest)                                                              (slowest, source of truth)
+```
+
+Each DNS record has a **TTL (Time To Live)** — how long it's allowed to be cached before it must be re-fetched.
+
+<Table>
+  <THead>
+    <TR>
+      <TH>TTL choice</TH>
+      <TH>Trade-off</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>Low TTL (e.g. 60s)</TD>
+      <TD>Faster failover/changes propagate quickly, but more DNS query load and slightly higher average latency</TD>
+    </TR>
+    <TR>
+      <TD>High TTL (e.g. 24h)</TD>
+      <TD>Fewer lookups, faster cached responses, but changes take much longer to propagate everywhere</TD>
+    </TR>
+  </TBody>
+</Table>
+
+<StickyNote color="pink">
+**Interview gold:** before a planned server migration, engineers often **lower the TTL** on a record days in advance — so when the actual IP change happens, caches expire quickly and traffic shifts fast, instead of some users being stuck on the old server for hours.
+</StickyNote>
+
+---
+
+## DNS at system-design scale
+
+This is where DNS moves from "trivia" to genuinely powerful infrastructure.
+
+### 1. DNS-based Load Balancing
+
+Instead of one IP, a domain can resolve to **multiple** IPs. The resolver (or client) picks one, often round-robin:
+
+```sql title="example.sql"
+-- Not literal SQL — illustrating the mental model
+api.example.com → [1.2.3.4, 1.2.3.5, 1.2.3.6]
+-- Each new lookup may return a different order/IP, spreading load
+```
+
+### 2. Geo-DNS / GSLB (Global Server Load Balancing)
+
+DNS can return **different IPs depending on where the request is coming from** — routing users to the nearest data center.
+
+```
+User in Tokyo ──► asia-dns-server ──► 13.x.x.x (Tokyo data center)
+User in Berlin ──► eu-dns-server ──► 34.x.x.x (Frankfurt data center)
+```
+
+### 3. Anycast
+
+Multiple physical servers in different locations all **announce the same IP address**. Internet routing (BGP) automatically sends each user's request to the *topologically nearest* server announcing that IP. This is how large CDNs and services like <Code>8.8.8.8</Code> (Google's DNS) achieve low latency worldwide — you're not really talking to one server, you're talking to whichever one is closest.
+
+### 4. DNS Failover / Health Checks
+
+Some DNS providers actively health-check backend servers and stop returning IPs for unhealthy ones — turning DNS into a crude but effective failover mechanism, especially combined with low TTLs.
+
+### 5. Split-horizon DNS
+
+The same domain name resolves differently depending on **who's asking** — internal company traffic gets routed to an internal IP, external traffic gets routed to the public-facing IP. Common in corporate networks and internal microservice setups.
+
+---
+
+## DNS security concerns
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Threat</TH>
+      <TH>What it is</TH>
+      <TH>Mitigation</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>DNS Spoofing / Cache Poisoning</TD>
+      <TD>An attacker tricks a resolver into caching a fake IP for a domain</TD>
+      <TD>DNSSEC (cryptographically signs DNS records)</TD>
+    </TR>
+    <TR>
+      <TD>DNS Hijacking</TD>
+      <TD>An attacker gains control of DNS settings and redirects traffic</TD>
+      <TD>Registrar account security, registry locks</TD>
+    </TR>
+    <TR>
+      <TD>DDoS on DNS infrastructure</TD>
+      <TD>Flooding DNS servers to make a domain unreachable</TD>
+      <TD>Anycast (spreads load across locations), rate limiting</TD>
+    </TR>
+    <TR>
+      <TD>DNS Tunneling</TD>
+      <TD>Smuggling data through DNS queries to bypass firewalls</TD>
+      <TD>Monitoring unusual query patterns/volumes</TD>
+    </TR>
+  </TBody>
+</Table>
+
+---
+
+## DNS vs Service Discovery (microservices context)
+
+A subtlety senior engineers are expected to know: internal service-to-service communication in microservices often **doesn't** rely purely on public DNS.
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Approach</TH>
+      <TH>How it works</TH>
+      <TH>Used for</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>Public DNS</TD>
+      <TD>Standard hierarchical resolution, cached with TTLs</TD>
+      <TD>External-facing traffic</TD>
+    </TR>
+    <TR>
+      <TD>Service Mesh (e.g. Consul, Istio)</TD>
+      <TD>A control plane tracks live service instances directly, often bypassing DNS caching delays entirely</TD>
+      <TD>Internal microservice-to-microservice calls</TD>
+    </TR>
+    <TR>
+      <TD>Kubernetes DNS (CoreDNS)</TD>
+      <TD>Internal DNS resolves service names to pod/cluster IPs, updated near-instantly</TD>
+      <TD>In-cluster service discovery</TD>
+    </TR>
+  </TBody>
+</Table>
+
+**Why it matters:** public DNS's caching-by-design nature (built for a mostly-static internet) works against the highly dynamic nature of containers scaling up/down constantly — hence specialized service discovery layers.
+
+---
+
+## Interview Questions - II
+
+### 1. Walk me through what happens when you type a URL into a browser and press Enter.
+
+DNS resolution → TCP handshake → TLS handshake (if HTTPS) → HTTP request sent → server processes and responds → browser parses and renders the response. Strong answers also mention caching at each layer and connection reuse (keep-alive).
+
+### 2. What's the difference between a recursive and an iterative DNS query?
+
+A recursive query expects a final answer from the server it's asked (used by clients talking to their resolver). An iterative query returns a referral to another server if the one asked doesn't have the answer (used between resolvers and the DNS hierarchy).
+
+### 3. Why does DNS use UDP instead of TCP?
+
+DNS queries and responses are typically small and need to be fast — UDP avoids the overhead of a TCP handshake for every lookup. DNS falls back to TCP for larger responses (like DNSSEC) or zone transfers, where reliability matters more than raw speed.
+
+### 4. What is TTL in DNS, and what trade-off does it involve?
+
+TTL is how long a DNS record can be cached before it must be re-queried. Lower TTL means faster propagation of changes but more query load; higher TTL means fewer lookups but slower propagation.
+
+### 5. How does a CDN use DNS to route users to the nearest server?
+
+Through Geo-DNS or Anycast — Geo-DNS returns different IPs based on the resolver's location; Anycast lets multiple physical servers announce the same IP, with internet routing (BGP) sending each user to the topologically closest one.
+
+### 6. What is DNS cache poisoning, and how is it prevented?
+
+An attacker injects a fake DNS response into a resolver's cache, redirecting users to a malicious server. DNSSEC prevents this by cryptographically signing DNS records so resolvers can verify authenticity.
+
+### 7. What's the difference between an A record and a CNAME record?
+
+An A record points a domain directly to an IPv4 address. A CNAME points a domain to *another domain name*, which then gets resolved separately — useful for pointing subdomains to services without hardcoding IPs (which may change).
+
+### 8. Why might a company lower their DNS TTL before a major infrastructure migration?
+
+To ensure that when the IP address changes, caches around the world expire quickly and traffic shifts to the new servers fast, minimizing the window where users might hit the old (soon-to-be-decommissioned) infrastructure.
+
+### 9. What is Anycast, and why is it useful for DNS infrastructure?
+
+Anycast lets multiple servers in different physical locations share the same IP address; network routing automatically delivers each request to the nearest one. This reduces latency globally and provides natural DDoS resilience, since an attack against one location doesn't affect servers elsewhere announcing the same IP.
+
+### 10. In a microservices architecture, why might teams avoid relying purely on public DNS for service-to-service communication?
+
+Public DNS is designed around caching and relatively static records (via TTLs), which conflicts with the highly dynamic nature of containers scaling up and down. Service meshes or platform-native discovery (like Kubernetes' CoreDNS) update much closer to real-time, avoiding stale-cache issues that would cause requests to fail or hit terminated instances.
+
+### 11. What is split-horizon DNS, and when would you use it?
+
+A setup where the same domain resolves to different IPs depending on who's asking — internal requests get an internal/private IP, external requests get the public IP. Common in corporate networks so internal traffic doesn't need to leave the network to reach an internal service.
+
+### 12. What's the difference between DNS-based load balancing and a traditional load balancer?
+
+DNS-based load balancing distributes traffic by returning different IPs to different clients/queries — it's coarse-grained and affected by caching (a client might stick to one IP for the TTL duration). A traditional load balancer sits inline, inspecting and routing every single request in real time, enabling much finer-grained, immediate rebalancing and health-check-based failover.
