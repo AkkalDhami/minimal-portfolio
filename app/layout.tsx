@@ -146,7 +146,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${firaCode.variable} ${handwriting.variable} ${bodyHand.variable} ${caveat.variable} ${caveat.variable} selection:bg-foreground bg-background selection:text-accent scroll-mt-20 font-sans antialiased`}>
         <ThemeProvider

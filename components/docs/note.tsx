@@ -49,41 +49,27 @@ const NOTE_COLORS = {
   gray: { bg: "var(--color-gray-100)", pin: "var(--color-gray-500)" }
 } as const;
 
-type NoteColor = keyof typeof NOTE_COLORS;
+export type NoteColor = keyof typeof NOTE_COLORS;
 
 export function StickyNote({
   children,
-  rotate = 0,
-  color = "blue"
+  color = "blue",
+  className,
+  icon = true
 }: {
   children: React.ReactNode;
   rotate?: number | string;
   color?: NoteColor;
+  className?: string;
+  icon?: boolean;
 }) {
   const { pin, bg } = NOTE_COLORS[color];
-  const deg = Number(rotate);
 
   return (
     <motion.div
-      initial={{
-        opacity: 0,
-        y: 6,
-        rotate: deg,
-        filter: "blur(10px)"
-      }}
-      whileInView={{
-        opacity: 1,
-        y: 0,
-        rotate: deg,
-        filter: "blur(0px)"
-      }}
-      viewport={{ once: true }}
-      transition={{
-        duration: 0.3,
-        ease: "easeOut"
-      }}
       className={cn(
         "not-typeset font-handwriting relative my-4 inline-block w-full rounded-lg px-5 py-4",
+
         {
           "bg-blue-100 dark:bg-blue-600/20": color === "blue"
         },
@@ -129,19 +115,22 @@ export function StickyNote({
         },
         {
           "bg-gray-100 dark:bg-gray-600/20": color === "gray"
-        }
+        },
+        className
       )}
       style={{
         backgroundColor: bg
       }}>
-      <span className="absolute -top-3 right-3 flex items-center justify-center">
-        <IconPin
-          size={26}
-          style={{ color: pin, transform: "rotate(-40deg)" }}
-          fill={pin}
-          strokeWidth={1.5}
-        />
-      </span>
+      {icon && (
+        <span className="absolute -top-3 right-3 flex items-center justify-center">
+          <IconPin
+            size={26}
+            style={{ color: pin, transform: "rotate(-40deg)" }}
+            fill={pin}
+            strokeWidth={1.5}
+          />
+        </span>
+      )}
 
       <div
         className={cn(
