@@ -65,14 +65,14 @@ export const NETWORKING_DATA: IModule[] = createModules([
         docs: "/mac-address",
         description:
           "Learn what a MAC address is, how it uniquely identifies network interfaces, and how it differs from an IP address."
+      },
+      {
+        slug: "ip-address",
+        title: "IP Address",
+        docs: "/ip-address",
+        description:
+          "Understand IP addresses, their purpose, types, and how devices are identified on a network."
       }
-      // {
-      //   slug: "ip-address",
-      //   title: "IP Address",
-      //   docs: "/ip-address",
-      //   description:
-      //     "Understand IP addresses, their purpose, types, and how devices are identified on a network."
-      // },
       // {
       //   slug: "hub",
       //   title: "Hub",
