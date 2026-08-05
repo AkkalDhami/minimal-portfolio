@@ -1,0 +1,583 @@
+---
+title: IP Address
+description: Understand IP addresses, their purpose, types, and how devices are identified on a network.
+---
+
+An **IP (Internet Protocol)** address is a unique **numerical identifier** assigned to a device on a network. 
+
+It operates at **Layer 3 (Network Layer)** of the OSI model and is used to identify *where* a device is on a network so data can be routed to it — even across the entire internet.
+
+It serves two main purposes:
+
+- **Identifies** a device on a network.
+- **Locates** the device so data can be delivered to it.
+
+Think of it like a postal address:
+
+- Your home address tells the postal service where to deliver mail.
+- An IP address tells the internet where to deliver data packets.
+
+---
+
+## 1. Why Do We Need IP Addresses?
+
+Suppose your laptop wants to open a website.
+
+- You type **www.example.com.**
+- The domain name is translated into an IP address using DNS.
+- Your computer sends packets to that IP address.
+- The web server sends the response back to your IP address.
+
+Without IP addresses, devices wouldn't know where to send or receive information.
+
+---
+
+## 3. Types of IP Addresses
+
+### 1. IPv4
+
+IPv4 is the older and most widely used version.
+
+- 32-bit address
+- Four **decimal numbers** separated by dots
+- Each number ranges from **0 to 255**
+
+#### Example:
+
+```
+192.168.1.10
+
+172.16.0.5
+```
+
+#### Structure:
+
+```
+192 . 168 . 1 . 10
+ ↑     ↑    ↑    ↑
+8bit  8bit 8bit 8bit  = 32 bits total
+```
+
+Each section is called an **octet**.
+
+ 
+Each address is split conceptually into two parts:
+ 
+```
+192.168.1.10
+└─────┘ └──┘
+Network   Host
+ part     part
+```
+ 
+- **Network part** — identifies which network the device belongs to.
+- **Host part** — identifies the specific device within that network.
+
+Where this split happens is determined by the **subnet mask**.
+
+**Example in binary:**
+
+<Output>
+192 = 11000000
+168 = 10101000
+1   = 00000001
+10  = 00001010
+</Output>
+
+[IP to Binary Converter](https://codebeautify.org/ip-to-binary-converter)
+
+---
+
+### 2. IPv6
+
+IPv6 was introduced because IPv4 addresses were running out.
+
+- 128-bit address
+- Written in hexadecimal
+- Eight groups separated by colons
+
+Rules that make them shorter to write:
+- Leading zeros in a group can be dropped: <Code>0db8</Code> → <Code>db8</Code>
+- One run of consecutive all-zero groups can be collapsed to <Code>::</Code> (only once per address):
+
+<StickyNote>
+IPv6 exists mainly because IPv4's ~4.3 billion addresses aren't enough for all the devices in the world today.
+</StickyNote>
+
+#### Example:
+
+```
+2001:0db8:85a3:0000:0000:8a2e:0370:7334
+```
+
+**Shortened form:**
+
+```
+2001:db8:85a3::8a2e:370:7334
+```
+
+---
+
+## 4. Difference Between IPv4 and IPv6
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Feature</TH>
+      <TH>IPv4</TH>
+      <TH>IPv6</TH>
+    </TR>
+  </THead>
+
+  <TBody>
+    <TR>
+      <TD>Full Form</TD>
+      <TD>Internet Protocol Version 4</TD>
+      <TD>Internet Protocol Version 6</TD>
+    </TR>
+
+    <TR>
+      <TD>Address Size</TD>
+      <TD>32-bit</TD>
+      <TD>128-bit</TD>
+    </TR>
+
+    <TR>
+      <TD>Format</TD>
+      <TD>Decimal (192.168.1.1)</TD>
+      <TD>Hexadecimal (2001:db8::1)</TD>
+    </TR>
+
+    <TR>
+      <TD>Number of Addresses</TD>
+      <TD>About 4.3 Billion</TD>
+      <TD>About 3.4 × 10³⁸</TD>
+    </TR>
+
+    <TR>
+      <TD>Security</TD>
+      <TD>IPSec Optional</TD>
+      <TD>IPSec Built-in</TD>
+    </TR>
+
+    <TR>
+      <TD>Broadcast</TD>
+      <TD>Supported</TD>
+      <TD>Not Supported</TD>
+    </TR>
+
+    <TR>
+      <TD>Configuration</TD>
+      <TD>Manual or DHCP</TD>
+      <TD>Auto Configuration or DHCPv6</TD>
+    </TR>
+
+    <TR>
+      <TD>Example</TD>
+      <TD>192.168.1.1</TD>
+      <TD>2001:db8::1</TD>
+    </TR>
+  </TBody>
+</Table>
+
+---
+
+## 5. Special IPv4 Addresses
+
+<Table>
+<THead>
+  <TR>
+    <TH>Address</TH>
+    <TH>Purpose</TH>
+  </TR>
+</THead>
+
+<TBody>
+  <TR>
+    <TD>127.0.0.1</TD>
+    <TD>Loopback</TD>
+  </TR>
+  <TR>
+    <TD>0.0.0.0</TD>
+    <TD>Unspecified/default route</TD>
+  </TR>
+  <TR>
+    <TD>255.255.255.255</TD>
+    <TD>Broadcast</TD>
+  </TR>
+  <TR>
+    <TD>169.254.x.x</TD>
+    <TD>Automatic Private IP (APIPA)</TD>
+  </TR>
+</TBody>
+</Table>
+
+---
+
+## 6. IP Address Classes (Classful Addressing)
+
+Older networking used five classes.
+
+<Table>
+<THead>
+  <TR>
+    <TH>Class</TH>
+    <TH>First Octet</TH>
+    <TH>Default Mask</TH>
+  </TR>
+</THead>
+
+<TBody>
+  <TR>
+    <TD>A</TD>
+    <TD>1-126</TD>
+    <TD>255.0.0.0</TD>
+  </TR>
+  <TR>
+    <TD>B</TD>
+    <TD>128-191</TD>
+    <TD>255.255.0.0</TD>
+  </TR>
+  <TR>
+    <TD>C</TD>
+    <TD>192-223</TD>
+    <TD>255.255.255.0</TD>
+  </TR>
+  <TR>
+    <TD>D</TD>
+    <TD>224-239</TD>
+    <TD>Multicast</TD>
+  </TR>
+  <TR>
+    <TD>E</TD>
+    <TD>240-255</TD>
+    <TD>Experimental</TD>
+  </TR>
+</TBody>
+</Table>
+
+---
+
+## 7. Subnet Mask
+
+A subnet mask tells you how many bits belong to the network part vs. the host part.
+
+It's often written in **CIDR(Classless Inter-Domain Routing) notation** (a slash followed by a number):
+ 
+```
+192.168.1.10/24
+```
+
+The <Code>/24</Code> means the **first 24 bits** (3 full octets) are the network part, leaving the **last 8 bits** for hosts.
+
+**Example:**
+
+<Output>
+  IP Address:
+  192.168.1.20
+  &nbsp;
+  Subnet Mask:
+  255.255.255.0
+</Output>
+
+**This means:**
+
+<Output>
+  Network:
+  192.168.1.0
+  &nbsp;
+  Host:
+  20
+</Output>
+
+---
+
+## 8. Default Gateway
+
+A default gateway is the router that forwards traffic to other networks.
+
+**Example:**
+
+<Output>
+  Computer:
+  192.168.1.20
+  &nbsp;
+  Gateway:
+  192.168.1.1
+</Output>
+
+When the computer wants to reach a website on the internet, it sends the data to the gateway first.
+
+---
+
+## 9. Loopback Address
+
+Used for testing the local machine.
+
+**IPv4:** <Code>127.0.0.1</Code>
+
+Also called: <Code>localhost</Code>
+
+It refers to your own computer.
+
+---
+
+## 10. Public IP vs Private IP Addresses
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Feature</TH>
+      <TH>Public IP</TH>
+      <TH>Private IP</TH>
+    </TR>
+  </THead>
+
+  <TBody>
+    <TR>
+      <TD>Definition</TD>
+      <TD>Used on the Internet</TD>
+      <TD>Used within a Local Network</TD>
+    </TR>
+
+    <TR>
+      <TD>Assigned By</TD>
+      <TD>Internet Service Provider (ISP)</TD>
+      <TD>Router or DHCP Server</TD>
+    </TR>
+
+    <TR>
+      <TD>Internet Access</TD>
+      <TD>Directly Accessible</TD>
+      <TD>Not Directly Accessible</TD>
+    </TR>
+
+    <TR>
+      <TD>Uniqueness</TD>
+      <TD>Globally Unique</TD>
+      <TD>Can Be Reused</TD>
+    </TR>
+
+    <TR>
+      <TD>Security</TD>
+      <TD>Less Secure</TD>
+      <TD>More Secure</TD>
+    </TR>
+
+    <TR>
+      <TD>Main Use</TD>
+      <TD>Websites, Servers</TD>
+      <TD>Home and Office Networks</TD>
+    </TR>
+
+    <TR>
+      <TD>Example</TD>
+      <TD>8.8.8.8</TD>
+      <TD>192.168.1.10</TD>
+    </TR>
+  </TBody>
+</Table>
+
+<StickyNote color="green">
+- **Public IP** — globally unique, routable across the internet. Assigned by your ISP.
+- **Private IP** — only unique within your local network (home, office). Not routable on the public internet.
+
+**Reserved Private Ranges (won't ever appear on the public internet)**
+
+- 10.0.0.0     - 10.255.255.255
+- 172.16.0.0   - 172.31.255.255
+- 192.168.0.0  - 192.168.255.255  
+
+Private IP addresses are not directly reachable from the public internet.
+ 
+Your home router uses **NAT (Network Address Translation)** to let many devices with private IPs share one public IP when talking to the internet.
+</StickyNote>
+
+---
+
+## 11. Static IP vs Dynamic IP
+<Table>
+  <THead>
+    <TR>
+      <TH>Feature</TH>
+      <TH>Static IP</TH>
+      <TH>Dynamic IP</TH>
+    </TR>
+  </THead>
+
+  <TBody>
+    <TR>
+      <TD>Definition</TD>
+      <TD>Fixed IP Address</TD>
+      <TD>Automatically Assigned IP Address</TD>
+    </TR>
+
+    <TR>
+      <TD>Assignment</TD>
+      <TD>Manual Configuration</TD>
+      <TD>DHCP Server</TD>
+    </TR>
+
+    <TR>
+      <TD>Changes</TD>
+      <TD>Does Not Change</TD>
+      <TD>Changes Automatically</TD>
+    </TR>
+
+    <TR>
+      <TD>Cost</TD>
+      <TD>Usually Higher</TD>
+      <TD>Usually Lower</TD>
+    </TR>
+
+    <TR>
+      <TD>Best For</TD>
+      <TD>Servers, CCTV, Printers</TD>
+      <TD>Computers, Smartphones</TD>
+    </TR>
+
+    <TR>
+      <TD>Maintenance</TD>
+      <TD>Manual</TD>
+      <TD>Automatic</TD>
+    </TR>
+
+    <TR>
+      <TD>Example</TD>
+      <TD>203.0.113.25</TD>
+      <TD>192.168.1.25</TD>
+    </TR>
+  </TBody>
+</Table>
+
+<StickyNote color="cyan">
+- **Static IP** — fixed IP address that remains constant over time. Common for servers.
+- **Dynamic IP** — automatically assigned by a **DHCP server** (usually your router) and may change over time. Most home devices use this.
+</StickyNote>
+
+<StickyNote color="indigo">
+**Dynamic Host Configuration Protocol (DHCP)**
+
+It is a network management protocol used on Internet Protocol (IP) networks for automatically assigning IP addresses and other communication parameters to devices connected to the network using a client-server architecture.
+
+This process simplifies connecting devices without the need for manual configuration.
+</StickyNote>
+
+---
+
+## 12. How IP Addresses Work With MAC Addresses
+ 
+When your device sends data:
+ 
+1. It checks if the destination IP is on the **same network** or a **different network**.
+2. If same network → uses **ARP (Address Address Resolution Protocol)** to find the destination's MAC address and sends directly.
+3. If different network → sends the data to the **default gateway** (your router), which forwards it onward.
+```
+You (192.168.1.10) → Router (192.168.1.1) → Internet → Destination server
+```
+ 
+The IP address gets the data to the right network; the MAC address gets it to the right device once it arrives.
+
+---
+
+## 13. MAC Address vs IP Address
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Feature</TH>
+      <TH>MAC Address</TH>
+      <TH>IP Address</TH>
+    </TR>
+  </THead>
+
+  <TBody>
+    <TR>
+      <TD>Full Form</TD>
+      <TD>Media Access Control Address</TD>
+      <TD>Internet Protocol Address</TD>
+    </TR>
+
+    <TR>
+      <TD>Definition</TD>
+      <TD>A unique physical address assigned to a network interface card (NIC).</TD>
+      <TD>A logical address assigned to identify a device on a network.</TD>
+    </TR>
+
+    <TR>
+      <TD>Address Type</TD>
+      <TD>Physical (Hardware) Address</TD>
+      <TD>Logical Address</TD>
+    </TR>
+
+    <TR>
+      <TD>Assigned By</TD>
+      <TD>Device Manufacturer</TD>
+      <TD>ISP, Network Administrator, or DHCP Server</TD>
+    </TR>
+
+    <TR>
+      <TD>Address Length</TD>
+      <TD>48-bit (6 Bytes)</TD>
+      <TD>32-bit (IPv4) or 128-bit (IPv6)</TD>
+    </TR>
+
+    <TR>
+      <TD>Format</TD>
+      <TD>Hexadecimal (00:1A:2B:3C:4D:5E)</TD>
+      <TD>IPv4: 192.168.1.1 <br /> IPv6: 2001:db8::1</TD>
+    </TR>
+
+    <TR>
+      <TD>OSI Layer</TD>
+      <TD>Data Link Layer (Layer 2)</TD>
+      <TD>Network Layer (Layer 3)</TD>
+    </TR>
+
+    <TR>
+      <TD>Purpose</TD>
+      <TD>Identifies a device within a local network.</TD>
+      <TD>Identifies and locates a device across networks.</TD>
+    </TR>
+
+    <TR>
+      <TD>Can It Change?</TD>
+      <TD>Usually No (can be spoofed)</TD>
+      <TD>Yes, depending on network configuration.</TD>
+    </TR>
+
+    <TR>
+      <TD>Uniqueness</TD>
+      <TD>Globally unique for each network interface.</TD>
+      <TD>Unique within the network or Internet while assigned.</TD>
+    </TR>
+
+    <TR>
+      <TD>Main Use</TD>
+      <TD>Local communication between devices.</TD>
+      <TD>Communication over local and external networks.</TD>
+    </TR>
+
+    <TR>
+      <TD>Example</TD>
+      <TD>00:1A:2B:3C:4D:5E</TD>
+      <TD>192.168.1.10</TD>
+    </TR>
+  </TBody>
+</Table>
+
+---
+
+## 14. Key Takeaways
+
+- **IP address**: Identifies and locates a device on a network.
+- **IPv4**: 32-bit, e.g., 192.168.1.1.
+- **IPv6**: 128-bit, e.g., 2001:db8::1.
+- **Public IP**: Reachable on the internet.
+- **Private IP**: Used within local networks.
+- **Static IP**: Fixed address.
+- **Dynamic IP**: Assigned automatically by DHCP.
+- **Subnet mask**: Separates network and host portions.
+- **Gateway**: Router used to reach other networks.
+- **Loopback**: 127.0.
+- **MAC address**: Physical device address; IP address Logical network address.
