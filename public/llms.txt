@@ -77,6 +77,11 @@ Comprehensive development guidelines and best practices for writing clean, maint
 
 Architecture patterns, scalability principles, distributed systems design, and load balancing strategies.
 
+- [Get started with system design](https://www.akkal.com.np/docs/system-design/getting-started): Get started with system design by learning the basics of system design.
+
+- [The Magic of DNS - How Does The Internet Work?](https://www.akkal.com.np/docs/system-design/magic-of-dns): DNS internals, resolution flow, and internet fundamentals from a system design perspective, with interview questions.
+
+
 ## Computer Networking
 
 HTTP/HTTPS protocols, TCP/IP stack, WebSocket communication, DNS, CDNs, and network security fundamentals.
@@ -100,6 +105,8 @@ Learn the foundational concepts of computer networking.
 - [Network Interface Card (NIC)](https://www.akkal.com.np/docs/networking/module-01/network-interface-card): Discover how a Network Interface Card enables devices to connect and communicate over a network.
 
 - [MAC Address](https://www.akkal.com.np/docs/networking/module-01/mac-address): Learn what a MAC address is, how it uniquely identifies network interfaces, and how it is used in local communication.
+
+- [IP Address](https://www.akkal.com.np/docs/networking/module-01/ip-address): Learn what a IP address is.
 
 ## SQL - MySQL
 
@@ -143,7 +150,9 @@ Combine and filter data across tables.
 
 - [Practice Questions (Filtering and Sorting)](https://www.akkal.com.np/docs/sql/module-03/filtering-and-sorting-practice): Exercises to test WHERE, AND/OR, BETWEEN, IN, NULL handling, and ORDER BY.
 
-- [Aggregate Functions](https://www.akkal.com.np/docs/sql/module-03/aggregates): COUNT, SUM, AVG, GROUP BY, and HAVING.
+- [Aggregate Functions](https://www.akkal.com.np/docs/sql/module-03/aggregate-functions): COUNT, SUM, AVG, GROUP BY, and HAVING.
+
+- [Practice - Aggregate Functions](https://www.akkal.com.np/docs/sql/module-03/aggregate-functions-practice): Exercises to test aggregate functions.
 
 
 ## DSA
