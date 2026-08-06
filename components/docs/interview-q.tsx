@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 
 import { cn } from "@/lib/utils";
 import { NoteColor, StickyNote } from "./note";
+import Image from "next/image";
 
 interface InterviewQProps {
   children: ReactNode;
@@ -49,12 +50,23 @@ export function InterviewQuestion({
   color
 }: InterviewQuestionProps) {
   return (
-    <div className={cn("not-typeset", className)}>
-      <div className="max-w-[95%] min-w-0">
-        <StickyNote color={color ?? "emerald"} icon={false} className="my-0">
-          {children}
-        </StickyNote>
-      </div>
+    <div
+      className={cn("not-typeset flex max-w-[85%] min-w-0 gap-2", className)}>
+      <Image
+        src="/images/profile2.png"
+        alt="Interview Question"
+        width={24}
+        height={24}
+        className="hidden size-12 rounded-full sm:block"
+      />
+      {/* <div className=""> */}
+      <StickyNote
+        color={color ?? "emerald"}
+        icon={false}
+        className="my-0 rounded-xl">
+        {children}
+      </StickyNote>
+      {/* </div> */}
     </div>
   );
 }
@@ -71,10 +83,20 @@ export function InterviewAnswer({
   className
 }: InterviewAnswerProps) {
   return (
-    <div className={cn("pl-6 sm:pl-12", className)}>
-      <StickyNote color={color ?? "yellow"} icon={false} className="my-0">
+    <div className={cn("flex items-end gap-2 pl-8 sm:pl-20", className)}>
+      <StickyNote
+        color={color ?? "yellow"}
+        icon={false}
+        className="my-0 rounded-xl">
         {children}
       </StickyNote>
+      <Image
+        src="/images/profile3.png"
+        alt="Interview Answer"
+        width={24}
+        height={24}
+        className="hidden size-12 -scale-x-100 rounded-full sm:block"
+      />
     </div>
   );
 }

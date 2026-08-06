@@ -135,8 +135,9 @@ export function StickyNote({
       <div
         className={cn(
           "not-typeset toc-ignore text-foregroundd [&_p]:text-foregroundd space-y-4 text-lg leading-snug tracking-wide text-black [&_p]:text-lg [&_p]:leading-snug [&_p]:text-black",
-          `[&_code]:font-tip [&_code]:border-transparent [&_code]:bg-transparent [&_code]:px-1 [&_code]:py-0 [&_code]:font-semibold [&_code]:tracking-wider [&_code]:text-black`,
+          `[&_code]:font-tip [&_code]:border-neutral-300 [&_code]:bg-transparent [&_code]:px-1 [&_code]:py-0 [&_code]:font-medium [&_code]:tracking-wider [&_code]:text-black [&_code]:italic`,
           `[&_ul]:list-inside [&_ul]:list-disc [&_ul]:pl-2.5`,
+          `[&_h3]:font-handwriting [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:text-black`,
           `[&_h4]:font-handwriting [&_h4]:toc-ignore [&_h4]:text-xl [&_h4]:font-semibold [&_h4]:text-black`,
           `[&_h5]:font-handwriting [&_h5]:toc-ignore [&_h5]:text-lg [&_h5]:font-semibold [&_h5]:text-black`
         )}>
