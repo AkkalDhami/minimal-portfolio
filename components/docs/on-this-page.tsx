@@ -133,8 +133,8 @@ export function OnThisPage({ docsRef }: Props) {
           duration: 0.35,
           ease: "easeOut"
         }}
-        className="not-typeset fixed bottom-12 left-1/2 z-40 w-[320px] max-w-[calc(100vw-2rem)] -translate-x-1/2 overflow-hidden border border-neutral-200/50 bg-neutral-100/80 backdrop-blur-xl dark:border-neutral-800 dark:bg-neutral-900/80">
-        <div className="relative flex h-full w-full flex-col px-1.5 py-3">
+        className="not-typeset fixed bottom-8 left-1/2 z-40 w-[320px] max-w-[calc(100vw-2rem)] -translate-x-1/2 overflow-hidden border border-neutral-200/50 bg-neutral-100/80 backdrop-blur-xl sm:bottom-10 dark:border-neutral-800 dark:bg-neutral-900/80">
+        <div className="relative flex h-full w-full flex-col px-1.5 py-2 sm:py-3">
           <button
             onClick={() => setOpen(o => !o)}
             className="text-muted-primary hover:text-primary mb-1 flex w-full cursor-pointer items-center gap-4 px-2 transition-colors duration-300">

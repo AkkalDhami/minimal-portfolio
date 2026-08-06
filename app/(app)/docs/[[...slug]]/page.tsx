@@ -86,11 +86,11 @@ export async function generateMetadata(props: {
   const source = fs.readFileSync(filePath, "utf8");
   const { data } = matter(source);
   return {
-    title: `${data.title}  | Docs `,
+    title: `${data.title} `,
     description: data.description ?? "Docs",
     keywords: siteConfig.keywords,
     openGraph: {
-      title: `${data.title}  | Docs `,
+      title: `${data.title} `,
       description: data.description ?? "Docs",
       url: `/docs/${slug.length > 0 ? slug.join("/") : ""}`,
       siteName: siteConfig.name,

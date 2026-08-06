@@ -39,7 +39,7 @@ export function BackToTop() {
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.8 }}
           transition={{ type: "spring", stiffness: 400, damping: 25 }}
-          className="fixed right-6 bottom-12 z-40">
+          className="fixed right-6 bottom-22 z-40 sm:bottom-12">
           <Button
             variant="secondary"
             size="icon"
