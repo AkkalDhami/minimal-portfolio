@@ -9,7 +9,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <main className="relative max-w-svw overflow-hidden">{children}</main>
       <Footer />
       <BackToTop />
-      <div className="to-background pointer-events-none fixed inset-x-0 bottom-0 z-50 h-[calc(--spacing(24)+env(safe-area-inset-bottom,0))] bg-linear-to-b from-transparent from-[calc(env(safe-area-inset-bottom,0%))] mask-linear-[to_top,var(--background)_25%,transparent] backdrop-blur-[1px]"></div>
+      <div className="to-background pointer-events-none fixed inset-x-0 bottom-0 z-50 h-[calc(--spacing(24)+env(safe-area-inset-bottom,0))] bg-linear-to-b from-transparent from-[calc(env(safe-area-inset-bottom,0%))] mask-linear-[to_top,var(--background)_15%,transparent] backdrop-blur-[1px]"></div>
     </>
   );
 }

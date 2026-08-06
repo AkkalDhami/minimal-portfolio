@@ -14,7 +14,7 @@ export default function DocsLayout({
         <Sheet>
           <SheetTrigger
             className={
-              "bg-muted fixed bottom-12 left-6 z-40 rounded-lg border p-1.5"
+              "bg-muted fixed bottom-22 left-6 z-40 rounded-lg border p-1.5"
             }>
             <IconMenu4 />
           </SheetTrigger>
