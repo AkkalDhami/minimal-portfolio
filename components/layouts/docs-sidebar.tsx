@@ -17,6 +17,7 @@ import { IconMenu } from "@tabler/icons-react";
 import { motion } from "motion/react";
 import { useState } from "react";
 import { uChatScrollButtonSound } from "@/sounds/chat-scroll";
+import { SYSTEM_DESIGN_DATA } from "@/data/system-design";
 
 const title = {
   dsa: "DSA",
@@ -53,20 +54,33 @@ export function DocsSidebar({ className }: { className?: string }) {
 
   const slug = isNetworking
     ? pathname.split("/docs/networking/")[1]
-    : pathname.split("/docs/sql/")[1];
+    : isSystemDesign
+      ? pathname.split("/docs/system-design/")[1]
+      : pathname.split("/docs/sql/")[1];
 
   const moduleSlug = slug?.split("/")[0];
 
-  const filteredModules = (isNetworking ? NETWORKING_DATA : SQL_DATA || []).map(
-    m => ({
-      title: m.title,
-      href: `${m.docs}`,
-      topics: m.topics.map(t => ({
-        title: sliceContent(`${t.order}. ${t.title}`, 32),
-        href: `${m.docs}${t.docs}`
-      }))
-    })
-  );
+  const filteredModules = (
+    isNetworking
+      ? NETWORKING_DATA
+      : isSystemDesign
+        ? SYSTEM_DESIGN_DATA
+        : SQL_DATA || []
+  ).map(m => ({
+    title: m.title,
+    href: `${m.docs}`,
+    topics: m.topics.map(t => ({
+      title: sliceContent(`${t.order}. ${t.title}`, 32),
+      href: `${m.docs}${t.docs}`
+    }))
+  }));
+
+  const totalModulesAndTopics = () => ({
+    modules: filteredModules.length,
+    topics: filteredModules.reduce((acc, m) => acc + m.topics.length, 0)
+  });
+
+  console.log(totalModulesAndTopics());
 
   return (
     <>
@@ -75,7 +89,7 @@ export function DocsSidebar({ className }: { className?: string }) {
           setIsOpen(!isOpen);
           playChatScrollButton();
         }}
-        className="text-muted-foreground hover:text-foreground hover:bg-muted fixed top-28 left-3 z-50 hidden size-8 cursor-pointer items-center justify-center rounded-md p-1.5 xl:flex">
+        className="text-muted-foreground hover:text-foreground hover:bg-muted fixed top-24 left-3 z-50 hidden size-8 cursor-pointer items-center justify-center rounded-md p-1.5 xl:flex">
         <IconMenu />
       </button>
       <motion.aside
@@ -96,7 +110,7 @@ export function DocsSidebar({ className }: { className?: string }) {
           ease: "easeInOut"
         }}
         className={cn(
-          "primary-ring not-typeset bg-background fixed top-26 left-1.5 z-40 h-full w-74 space-y-2 rounded-lg border p-2",
+          "primary-ring not-typeset bg-background fixed top-22 left-1.5 z-40 h-full w-74 space-y-2 rounded-lg border p-2",
           className
         )}>
         <h2 className="font-inter text-lg font-medium xl:pl-10">
@@ -116,9 +130,11 @@ export function DocsSidebar({ className }: { className?: string }) {
         </h2>
 
         <ScrollArea
-          className={
-            "scroll-fade relative h-full max-h-140 pb-12 xl:max-h-126"
-          }>
+          className={cn(
+            "relative h-full max-h-140 xl:max-h-126",
+            isSql && "pb-10",
+            "scroll-fade-y"
+          )}>
           {moduleSlug?.trim() ? (
             <>
               {filteredModules?.map((m, i) => (

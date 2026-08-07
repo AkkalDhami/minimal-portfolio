@@ -30,15 +30,22 @@ export async function generateStaticParams() {
     doc.docs.replace("/docs/", "").split("/").filter(Boolean)
   );
 
-  const systemDesignParams = SYSTEM_DESIGN_DATA.map(doc =>
-    doc.docs.replace("/docs/", "").split("/").filter(Boolean)
-  );
-
   const dsaParams = DSA_DATA.map(doc =>
     doc.docs.replace("/docs/", "").split("/").filter(Boolean)
   );
 
   const networkingParams = NETWORKING_DATA.flatMap(module => {
+    const moduleSlug = module.docs
+      .replace("/docs/", "")
+      .split("/")
+      .filter(Boolean);
+
+    const topicSlugs = module.topics.map(topic => [...moduleSlug, topic.slug]);
+
+    return [moduleSlug, ...topicSlugs];
+  });
+
+  const systemDesignParams = SYSTEM_DESIGN_DATA.flatMap(module => {
     const moduleSlug = module.docs
       .replace("/docs/", "")
       .split("/")

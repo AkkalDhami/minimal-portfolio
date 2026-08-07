@@ -89,7 +89,7 @@ export function ThemeToggle({ className }: { className?: string }) {
         }></TooltipTrigger>
       <TooltipContent side="bottom">
         <p>Toggle Mode</p>
-        <Kbd className="bg-muted-tertiary/40 text-accent">D</Kbd>
+        <Kbd className="bg-muted-tertiary/20 text-accent">D</Kbd>
       </TooltipContent>
     </Tooltip>
   );
