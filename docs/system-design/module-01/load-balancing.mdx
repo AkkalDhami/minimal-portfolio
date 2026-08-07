@@ -493,64 +493,140 @@ Service meshes (Istio, Linkerd) are basically **load balancing as infrastructure
         **IP-hash** hashes the client IP and always routes to the same server — gives sticky sessions for free but makes uneven distribution if client IPs aren't uniform.
     </InterviewAnswer>
   </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+    #### 4. What is consistent hashing and why is it useful?
+    </InterviewQuestion>
+
+    <InterviewAnswer>
+        Consistent hashing places both servers and request keys on a hash ring, and a request is routed to the next server clockwise. 
+        
+        When a server is added or removed, only about <Code>1/N</Code> of keys need to be remapped, unlike naive <Code>hash % N</Code> where almost everything remaps. 
+        
+        This is essential for caches and sharded systems where remapping invalidates data and causes cache stampedes.
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+  <InterviewQuestion>
+    #### 5. Why are health checks important for a load balancer?
+  </InterviewQuestion>
+
+  <InterviewAnswer>
+    A load balancer that routes traffic to a dead server is worse than no load balancer — users see errors instead of the system "degrading gracefully".
+
+    Health checks, such as active probes like <Code>/health</Code> and passive checks that monitor real traffic, let the load balancer detect failed servers and remove them from the pool until they recover.
+  </InterviewAnswer>
+</InterviewQItem>
+
+<InterviewQItem>
+  <InterviewQuestion>
+    #### 6. What is TLS termination at the load balancer?
+  </InterviewQuestion>
+
+  <InterviewAnswer>
+    The load balancer holds the SSL/TLS certificate and decrypts incoming HTTPS traffic, then forwards plain HTTP to backend servers.
+
+    This centralizes certificate management, reduces CPU load on backend servers, and enables L7 features that need to inspect request contents, such as URL routing and header inspection.
+
+    Inside the data center, traffic is often re-encrypted for compliance and end-to-end security.
+  </InterviewAnswer>
+</InterviewQItem>
+
+<InterviewQItem>
+  <InterviewQuestion>
+    #### 7. How do sticky sessions work, and what's the downside?
+  </InterviewQuestion>
+
+  <InterviewAnswer>
+    The load balancer identifies a user, usually by cookie or IP hash, and routes their requests to the same backend server.
+
+    This allows applications to store session state in server memory.
+
+    The downside is that load can become uneven, and if a server dies, that user's session may be lost. Most modern designs avoid this by keeping servers stateless and storing sessions in a shared store like Redis.
+  </InterviewAnswer>
+</InterviewQItem>
+
+<InterviewQItem>
+  <InterviewQuestion>
+    #### 8. What's the difference between global load balancing and local load balancing?
+  </InterviewQuestion>
+
+  <InterviewAnswer>
+    Global Server Load Balancing (GSLB) routes users to the appropriate region or data center, typically using DNS-based geo-routing or Anycast.
+
+    Local load balancing then routes requests to a specific server within that data center using L4/L7 algorithms and health checks.
+
+    For example, a request from Tokyo might follow:
+
+    <Code>GSLB (DNS) → Tokyo LB → healthy Tokyo server</Code>
+  </InterviewAnswer>
+</InterviewQItem>
+
+<InterviewQItem>
+  <InterviewQuestion>
+    #### 9. Is the load balancer itself a single point of failure?
+  </InterviewQuestion>
+
+  <InterviewAnswer>
+    It can be — if you run only one load balancer.
+
+    In practice, load balancers are deployed as a high-availability pair, either active-active or active-passive, using mechanisms such as floating IPs, BGP, or Anycast.
+
+    Cloud providers expose regional load balancer endpoints, such as AWS ALB, and handle the underlying high availability internally.
+  </InterviewAnswer>
+</InterviewQItem>
+
+<InterviewQItem>
+  <InterviewQuestion>
+    #### 10. How does load balancing work inside a microservices system?
+  </InterviewQuestion>
+
+  <InterviewAnswer>
+    A single public-facing load balancer at the edge is not enough — service-to-service communication also needs load balancing.
+
+    Common approaches include:
+
+    1. A smart client library that maintains a list of healthy instances, such as Eureka or gRPC client-side load balancing.
+    2. Sidecar proxies like Envoy, where every pod has its own proxy that handles load balancing, retries, and circuit breaking.
+    3. A central load balancer for each service.
+
+    Service meshes such as Istio and Linkerd commonly use the sidecar-proxy approach.
+  </InterviewAnswer>
+</InterviewQItem>
+
+<InterviewQItem>
+  <InterviewQuestion>
+    #### 11. How would you do a zero-downtime deployment using a load balancer?
+  </InterviewQuestion>
+
+  <InterviewAnswer>
+    Use connection draining and rolling deployments.
+
+    Add a new server running the new version to the load balancer's pool and send a small slice of traffic to it as a canary. Monitor errors and performance, then gradually shift more traffic to the new version.
+
+    When removing an old server, mark it as "draining" so the load balancer stops sending new requests while allowing existing connections to finish.
+
+    This prevents in-flight requests from being terminated during deployment.
+  </InterviewAnswer>
+</InterviewQItem>
+
+<InterviewQItem>
+  <InterviewQuestion>
+    #### 12. What is a "cache stampede" and how does consistent hashing help prevent it?
+  </InterviewQuestion>
+
+  <InterviewAnswer>
+    A cache stampede occurs when many cached keys expire or are invalidated at the same time, causing a large number of cache misses and a sudden burst of requests to the database.
+
+    Consistent hashing reduces the impact of cache-server changes by ensuring that when a server is added or removed, only a small portion of keys are remapped.
+
+    This prevents the entire cache from being invalidated at once, reducing the risk of a thundering-herd effect against the database.
+  </InterviewAnswer>
+</InterviewQItem>
 </InterviewQ>
 
-<Accordion defaultValue={["q1"]}>
-  <AccordionItem value="q4">
-    <AccordionTrigger>4. What is consistent hashing and why is it useful?</AccordionTrigger>
-    <AccordionContent>
-      Consistent hashing is a technique where both servers and request keys are placed on a hash ring, and a request is routed to the next server clockwise on the ring. When a server is added or removed, only a small fraction of keys need to be remapped (about <Code>1/N</Code> of them) — unlike naive <Code>hash % N</Code> where almost everything remaps. This is essential for caches and sharded systems where remapping invalidates data and causes cache stampedes.
-    </AccordionContent>
-  </AccordionItem>
-  <AccordionItem value="q5">
-    <AccordionTrigger>5. Why are health checks important for a load balancer?</AccordionTrigger>
-    <AccordionContent>
-      A load balancer that routes traffic to a dead server is worse than no load balancer — users see errors instead of the system "degrading gracefully". Health checks (active probes like <Code>/health</Code>, and passive checks that watch real traffic) let the LB detect failed servers and remove them from the pool until they recover.
-    </AccordionContent>
-  </AccordionItem>
-  <AccordionItem value="q6">
-    <AccordionTrigger>6. What is TLS termination at the load balancer?</AccordionTrigger>
-    <AccordionContent>
-      The load balancer holds the SSL/TLS certificate and decrypts incoming HTTPS traffic, then forwards plain HTTP to backends. This centralizes certificate management, reduces CPU load on backend servers, and enables L7 features that need to read request contents (URL routing, header inspection). Inside the data center, traffic is often re-encrypted for compliance and end-to-end security.
-    </AccordionContent>
-  </AccordionItem>
-  <AccordionItem value="q7">
-    <AccordionTrigger>7. How do sticky sessions work, and what's the downside?</AccordionTrigger>
-    <AccordionContent>
-      The LB identifies a user (usually by cookie or IP hash) and always routes their requests to the same backend server. This lets apps store session state in server memory. The downside: load can become uneven (one heavy user sticks to one server), and the moment a server dies, that user's session is gone. Most modern designs avoid this by making servers stateless and storing sessions in a shared store like Redis.
-    </AccordionContent>
-  </AccordionItem>
-  <AccordionItem value="q8">
-    <AccordionTrigger>8. What's the difference between global load balancing and local load balancing?</AccordionTrigger>
-    <AccordionContent>
-      Global Server Load Balancing (GSLB) routes users to the right region or data center, typically using DNS-based geo-routing or Anycast. Local load balancing then routes requests to a specific server within that data center using L4/L7 algorithms and health checks. A request from Tokyo might go: GSLB (DNS) → Tokyo LB → one healthy Tokyo server.
-    </AccordionContent>
-  </AccordionItem>
-  <AccordionItem value="q9">
-    <AccordionTrigger>9. Is the load balancer itself a single point of failure?</AccordionTrigger>
-    <AccordionContent>
-      It can be — if you only run one. In practice LBs are run as a high-availability pair (active-active or active-passive) using floating IPs, BGP, or Anycast, so the loss of one LB is transparent to users. This is why cloud providers expose regional LB endpoints (e.g. AWS ALB) rather than a single IP — they handle the HA internally.
-    </AccordionContent>
-  </AccordionItem>
-  <AccordionItem value="q10">
-    <AccordionTrigger>10. How does load balancing work inside a microservices system?</AccordionTrigger>
-    <AccordionContent>
-      A single public-facing LB at the edge is not enough — service-to-service calls also need load balancing. Common approaches: (1) a smart client library that maintains a list of healthy instances (e.g. Eureka, gRPC client-side LB); (2) sidecar proxies like Envoy where every pod has its own proxy that handles LB, retries, and circuit breaking; (3) a central LB per service. Service meshes like Istio and Linkerd make option 2 the default.
-    </AccordionContent>
-  </AccordionItem>
-  <AccordionItem value="q11">
-    <AccordionTrigger>11. How would you do a zero-downtime deployment using a load balancer?</AccordionTrigger>
-    <AccordionContent>
-      Use connection draining and rolling deploys. Add a new server (with the new version) to the LB's pool, send a small slice of traffic to it (canary), monitor for errors, then shift more traffic. When taking an old server out of the pool, mark it as "draining" so the LB stops sending it new requests but lets existing connections finish — only remove it from the pool once active connections reach zero. This prevents killing in-flight requests.
-    </AccordionContent>
-  </AccordionItem>
-  <AccordionItem value="q12">
-    <AccordionTrigger>12. What is a "cache stampede" and how does consistent hashing help prevent it?</AccordionTrigger>
-    <AccordionContent>
-      A cache stampede happens when a large number of cached keys expire or are invalidated at the same time, and every miss causes a thundering-herd of requests to the database. Consistent hashing minimizes this by ensuring that when you add or remove a cache server, only about <Code>1/N</Code> of keys are remapped — the rest stay on their original servers, so only the moved keys trigger a stampede instead of the entire cache.
-    </AccordionContent>
-  </AccordionItem>
-</Accordion>
 
 ---
 

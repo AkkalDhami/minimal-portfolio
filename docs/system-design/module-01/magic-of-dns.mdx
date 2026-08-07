@@ -217,6 +217,37 @@ This is one of the most commonly misunderstood parts of DNS, and a favorite inte
 
 **The client (your browser/OS) always makes a recursive query. The resolver then does iterative queries on your behalf.**
 
+<StickyNote>
+#### Step 1 - Browser asks the Recursive Resolver
+
+Browser ─────> Recursive Resolver ("What's the IP address of google.com?")
+
+When you type: <Code>https://google.com</Code>, your browser doesn't know Google's IP address.
+
+Instead, it asks a **Recursive DNS Resolver**.
+
+##### Examples:
+
+- Your ISP's DNS server
+- Google DNS (8.8.8.8)
+- Cloudflare DNS (1.1.1.1)
+
+The resolver's job is:
+
+**To find the IP address for you.**
+
+</StickyNote>
+
+#### Summary:
+1. **You → Resolver:** "What's the IP for google.com?"
+2. **Resolver → Root:** "Who handles <Code>.com</Code>?"
+3. **Root → Resolver:** "Ask TLD server X" (points it to the <Code>.com</Code> TLD server)
+4. **Resolver → TLD:** "Who handles google.com?"
+5. **TLD → Resolver:** "Ask Google's nameservers" (points it to google.com's authoritative server)
+6. **Resolver → Authoritative:** "What's the IP for google.com?"
+7. **Authoritative → Resolver:** "142.250.x.x" (the actual IP)
+8. **Resolver → You:** "142.250.x.x" — your browser now connects directly to that IP
+
 ---
 
 ## Common DNS record types
