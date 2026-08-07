@@ -3,14 +3,14 @@
 import { useMemo, useState } from "react";
 import { Heading } from "@/components/ui/heading";
 import { SubHeading } from "@/components/ui/sub-heading";
-import { PlaybookCard } from "@/components/playbook/playbook-card";
-import { IPlaybook } from "@/types/app.types";
+import { IModule } from "@/types/app.types";
 import { cn } from "@/lib/utils";
 import { PrimaryButton } from "@/components/ui/primary-button";
 import { Section } from "@/components/ui/section";
 import { Input } from "@/components/ui/input";
 import { IconSearch, IconX } from "@tabler/icons-react";
 import { SYSTEM_DESIGN_DATA } from "@/data/system-design";
+import { NetworkingModule } from "@/components/networking/networking-module";
 
 export function SystemDesignSection({ home = false }: { home?: boolean }) {
   const [search, setSearch] = useState("");
@@ -26,12 +26,18 @@ export function SystemDesignSection({ home = false }: { home?: boolean }) {
 
     if (!query) return systemDesigns;
 
-    return systemDesigns.filter((playbook: IPlaybook) => {
+    return systemDesigns.filter((module: IModule) => {
       return (
-        playbook.title.toLowerCase().includes(query) ||
-        playbook.description.toLowerCase().includes(query) ||
-        playbook.slug.toLowerCase().includes(query) ||
-        playbook.docs.toLowerCase().includes(query)
+        module.title.toLowerCase().includes(query) ||
+        module.description.toLowerCase().includes(query) ||
+        module.slug.toLowerCase().includes(query) ||
+        module.docs.toLowerCase().includes(query) ||
+        module.topics.some(topic =>
+          topic.title.toLowerCase().includes(query)
+        ) ||
+        module.topics.some(topic =>
+          topic.description.toLowerCase().includes(query)
+        )
       );
     });
   }, [search, systemDesigns]);
@@ -71,6 +77,16 @@ export function SystemDesignSection({ home = false }: { home?: boolean }) {
 
       <div
         className={cn(
+          "screen-line-after screen-line-before",
+          "divide-edge divide-y"
+        )}>
+        {filteredSystemDesigns.map(module => (
+          <NetworkingModule key={module.slug} module={module} />
+        ))}
+      </div>
+
+      {/* <div
+        className={cn(
           "screen-line-after divide-edge grid"
           // "sm:grid-cols-2 sm:divide-x"
         )}>
@@ -83,7 +99,7 @@ export function SystemDesignSection({ home = false }: { home?: boolean }) {
             <p className="text-muted-foreground">No system designs found.</p>
           </div>
         )}
-      </div>
+      </div> */}
 
       {home && limit > 10 && (
         <div className="animate-fade-in-blur mt-2 flex items-center justify-center pb-2">
