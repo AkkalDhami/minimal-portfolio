@@ -11,7 +11,7 @@ export default function Note({ text }: { text: string }) {
           <IconInfoCircle className="size-5 text-emerald-500" />
         </div>
 
-        <p className="not-typeset font-tip text-foreground flex-1 text-xl leading-relaxed tracking-wide">
+        <p className="not-typeset font-tip text-foreground flex-1 text-xl leading-relaxed tracking-wider">
           {text}
         </p>
       </div>

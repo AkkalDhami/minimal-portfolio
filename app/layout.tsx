@@ -148,7 +148,7 @@ export default function RootLayout({
   return (
     <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${firaCode.variable} ${handwriting.variable} ${bodyHand.variable} ${caveat.variable} ${caveat.variable} selection:bg-foreground bg-background selection:text-accent scroll-mt-20 font-sans antialiased`}>
+        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${firaCode.variable} ${handwriting.variable} ${bodyHand.variable} ${caveat.variable} ${caveat.variable} selection:bg-muted bg-background selection:text-accent-foreground selection:blur-out-3xl selection:blur-in-2xl scroll-mt-20 font-sans antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
