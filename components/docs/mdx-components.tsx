@@ -30,6 +30,7 @@ import {
   InterviewQuestion,
   InterviewQItem
 } from "./interview-q";
+import { HLink } from "./link";
 
 export const mdxComponents: MDXComponents = {
   Table,
@@ -72,12 +73,7 @@ export const mdxComponents: MDXComponents = {
   SqlPlayground: props => <SqlPlayground docs={true} {...props} />,
 
   HR: props => <hr className="my-6" {...props} />,
-  HLink: props => (
-    <Link
-      className="not-typeset underline-offset-4 hover:underline"
-      {...props}
-    />
-  ),
+  HLink: props => <HLink {...props} />,
   h1: props => (
     <HeadingWithCopy
       tag="h1"

@@ -159,9 +159,11 @@ export default async function DocsPage(props: PageProps<"/docs/[[...slug]]">) {
       ? "system-design"
       : slug[0] === "dsa"
         ? "dsa"
-        : slug[0] === "sql"
-          ? "sql"
-          : "playbook";
+        : slug[0] === "networking"
+          ? "networking"
+          : slug[0] === "sql"
+            ? "sql"
+            : "playbook";
 
   const { next, prev } = lastSlug
     ? findNeighbour(type, lastSlug as string)
