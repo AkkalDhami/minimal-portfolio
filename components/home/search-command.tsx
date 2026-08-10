@@ -176,15 +176,14 @@ export const playbooks: Item[] = PLAYBOOK_DATA.map(play => {
   };
 });
 
-export const systemDesigns: Item[] = SYSTEM_DESIGN_DATA.map(play => {
-  return {
-    value: `${play.docs}`,
-    label: play.title,
-    icon: IconDatabase,
-    link: true,
-    newTab: true
-  };
-});
+export const systemDesigns: Item[] = SYSTEM_DESIGN_DATA.flatMap(net =>
+  net.topics.map(topic => ({
+    icon: IconWorld,
+    value: `${net.docs}${topic.docs}`,
+    label: `Module - ${padString(topic.module.toString(), 2, "0")}) ${padString(topic.order.toString(), 2, "0")}. ${topic.title}`,
+    link: true
+  }))
+);
 
 export const networking = NETWORKING_DATA.flatMap(net =>
   net.topics.map(topic => ({

@@ -8,12 +8,12 @@ export function DocsLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <div
+      <divp
         id="docs-content"
         className="w-full min-w-0 [font-variant-ligatures:none]"
         ref={docsRef}>
         {children}
-      </div>
+      </divp>
 
       <OnThisPage docsRef={docsRef} />
     </>

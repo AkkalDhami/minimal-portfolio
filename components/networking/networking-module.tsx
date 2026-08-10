@@ -11,9 +11,12 @@ import { AnimatePresence, motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { Route } from "next";
+import { cardSlide5Sound } from "@/sounds/card-slide-5";
+import { useSound } from "@/hooks/use-sound";
 
 export function NetworkingModule({ module }: { module: IModule }) {
   const [open, setOpen] = useState(false);
+  const [play] = useSound(cardSlide5Sound);
   const chevronsUpDownIconRef = useRef<ChevronsUpDownIconHandle>(null);
 
   useEffect(() => {
@@ -42,7 +45,8 @@ export function NetworkingModule({ module }: { module: IModule }) {
             </div>
             <Link
               href={module.docs as Route}
-              className="text-xl font-medium tracking-tight underline-offset-2 hover:underline">
+              className="text-xl font-medium tracking-tight underline-offset-2 hover:underline"
+              onClick={() => play()}>
               {module.title}
             </Link>
           </div>

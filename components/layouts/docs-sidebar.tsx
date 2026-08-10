@@ -131,7 +131,7 @@ export function DocsSidebar({ className }: { className?: string }) {
 
         <ScrollArea
           className={cn(
-            "relative h-full max-h-140 xl:max-h-126",
+            "relative h-full max-h-140 xl:max-h-128",
             isSql && "pb-10",
             "scroll-fade-y"
           )}>
@@ -169,12 +169,13 @@ export function DocsSidebar({ className }: { className?: string }) {
             <Link
               target="_blank"
               href={"/playground/sql"}
+              onClick={() => play()}
               className={cn(
                 buttonVariants({
                   variant: "outline",
                   size: "sm"
                 }),
-                "absolute bottom-2 z-30 w-full font-normal"
+                "absolute -bottom-2 z-30 w-full font-normal"
               )}>
               MySQL Playground
             </Link>

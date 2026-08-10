@@ -113,7 +113,7 @@ export function Footer() {
             </div>
           </div>
 
-          <div>
+          <div className="hidden md:block">
             {/* <p className="mask-b-from-0.5 text-center text-3xl font-bold tracking-widest text-neutral-300 uppercase sm:text-6xl xl:text-8xl dark:text-neutral-700">
               {NAME}
             </p> */}
