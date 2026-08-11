@@ -225,5 +225,21 @@ HAVING no_of_books = 2;`
 FROM books
 GROUP BY author
 HAVING avg_price > 12;`
+  },
+  {
+    id: "in_stock_filter",
+    label: "13. Genres with number of books in stock greater than 1.",
+    sql: `SELECT genre, COUNT(*) as no_of_books
+FROM books
+WHERE in_stock = TRUE
+GROUP BY genre;`
+  },
+  {
+    id: "total_price_filter",
+    label: "14. Genres with total price greater than 20.",
+    sql: `SELECT genre, SUM(price) AS total_price
+FROM books
+GROUP BY genre
+HAVING SUM(price) > 20;`
   }
 ];

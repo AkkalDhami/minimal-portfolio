@@ -1,6 +1,12 @@
 import { IModule } from "@/types/app.types";
 import { createModules } from "@/utils/networking";
-import { IconDatabase, IconDatabaseEdit } from "@tabler/icons-react";
+import {
+  IconDatabase,
+  IconDatabaseCog,
+  IconDatabaseEdit,
+  IconDatabaseExclamation,
+  IconDatabaseSearch
+} from "@tabler/icons-react";
 
 export const SQL_DATA: IModule[] = createModules([
   {
@@ -97,7 +103,7 @@ export const SQL_DATA: IModule[] = createModules([
     title: "Module 03 - Querying",
     description: "Combine and filter data across tables.",
     docs: "/docs/sql/module-03",
-    icon: IconDatabaseEdit,
+    icon: IconDatabaseSearch,
     topics: [
       {
         slug: "joins",
@@ -132,35 +138,37 @@ export const SQL_DATA: IModule[] = createModules([
         description: "Exercises to test aggregate functions."
       }
     ]
+  },
+  {
+    slug: "module-04",
+    title: "Module 04 - Data Integrity",
+    description: "Keep your data consistent and reliable.",
+    docs: "/docs/sql/module-04",
+    icon: IconDatabaseExclamation,
+    topics: [
+      {
+        slug: "constraints",
+        title: "Constraints in Depth",
+        docs: "/constraints",
+        description:
+          "CHECK, DEFAULT, and referential actions like ON DELETE CASCADE and SET NULL."
+      },
+
+      {
+        slug: "transactions",
+        title: "Transactions",
+        docs: "/transactions",
+        description:
+          "START TRANSACTION, COMMIT, ROLLBACK, and why atomicity matters."
+      }
+    ]
   }
-  // {
-  //   slug: "module-03",
-  //   title: "Module 03 - Data Integrity",
-  //   description: "Keep your data consistent and reliable.",
-  //   docs: "/docs/sql/module-03",
-  //   icon: IconSql,
-  //   topics: [
-  //     {
-  //       slug: "constraints-and-keys",
-  //       title: "Constraints and keys",
-  //       docs: "/docs/sql/module-03/constraints-and-keys",
-  //       description: "Primary keys, foreign keys, unique and check constraints."
-  //     },
-  //     {
-  //       slug: "transactions",
-  //       title: "Transactions",
-  //       docs: "/docs/sql/module-03/transactions",
-  //       description:
-  //         "START TRANSACTION, COMMIT, ROLLBACK, and why atomicity matters."
-  //     }
-  //   ]
-  // },
   // {
   //   slug: "module-04",
   //   title: "Module 04 - Performance",
   //   description: "Make queries fast as data grows.",
   //   docs: "/docs/sql/module-04",
-  //   icon: IconSql,
+  //   icon: IconGauge,
   //   topics: [
   //     {
   //       slug: "indexes",
@@ -181,7 +189,7 @@ export const SQL_DATA: IModule[] = createModules([
   //   title: "Module 05 - Advanced Features",
   //   description: "Go beyond basic tables and queries.",
   //   docs: "/docs/sql/module-05",
-  //   icon: IconSql,
+  //   icon: IconDatabaseCog,
   //   topics: [
   //     {
   //       slug: "json-columns",
