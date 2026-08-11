@@ -10,16 +10,17 @@ export const findNeighbour = (
   type: ModuleSection,
   slug: string
 ): { prev: IPlaybook | undefined; next: IPlaybook | undefined } => {
+  const moduleTopics = (modules: typeof NETWORKING_DATA) =>
+    modules
+      .map(m => m.topics.map(t => ({ ...t, docs: `${m.docs}${t.docs}` })))
+      .flat();
+
   const options: Record<ModuleSection, IPlaybook[]> = {
     dsa: DSA_DATA,
     playbook: PLAYBOOK_DATA,
-    "system-design": SYSTEM_DESIGN_DATA,
-    networking: NETWORKING_DATA.map(m =>
-      m.topics.map(t => ({ ...t, docs: `${m.docs}${t.docs}` }))
-    ).flat(),
-    sql: SQL_DATA.map(m =>
-      m.topics.map(t => ({ ...t, docs: `${m.docs}${t.docs}` }))
-    ).flat()
+    "system-design": moduleTopics(SYSTEM_DESIGN_DATA),
+    networking: moduleTopics(NETWORKING_DATA),
+    sql: moduleTopics(SQL_DATA)
   };
 
   const DATA = options[type];
@@ -42,20 +43,21 @@ export const findNeighbour = (
 };
 
 export const getDocsItems = (type: ModuleSection) => {
+  const moduleTopics = (modules: typeof NETWORKING_DATA) =>
+    modules
+      .map(m => m.topics.map(t => ({ ...t, docs: `${m.docs}${t.docs}` })))
+      .flat();
+
   const items =
     type === "playbook"
       ? PLAYBOOK_DATA
       : type === "dsa"
         ? DSA_DATA
         : type === "networking"
-          ? NETWORKING_DATA.map(m =>
-              m.topics.map(t => ({ ...t, docs: `${m.docs}${t.docs}` }))
-            ).flat()
+          ? moduleTopics(NETWORKING_DATA)
           : type === "system-design"
-            ? SYSTEM_DESIGN_DATA
-            : SQL_DATA.map(m =>
-                m.topics.map(t => ({ ...t, docs: `${m.docs}${t.docs}` }))
-              ).flat();
+            ? moduleTopics(SYSTEM_DESIGN_DATA)
+            : moduleTopics(SQL_DATA);
 
   return items.map(i => ({
     href: i.docs,

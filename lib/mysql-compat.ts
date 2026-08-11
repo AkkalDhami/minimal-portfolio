@@ -133,6 +133,8 @@ export function translateMySqlToSqlite(input: string): TranslateResult {
   sql = sql.replace(/\bNOW\s*\(\s*\)/gi, "CURRENT_TIMESTAMP");
   sql = sql.replace(/\bIFNULL\s*\(/gi, "IFNULL("); // same name in SQLite, no-op, kept for clarity
 
+  // --- MySQL Transactions
+  sql = sql.replace(/\bSTART\s+TRANSACTION\b/gi, "BEGIN");
   return { sql, wasRewritten: sql !== original };
 }
 
