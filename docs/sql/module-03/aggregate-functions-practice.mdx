@@ -164,7 +164,10 @@ INSERT INTO books (title, author, genre, price, published_year, in_stock) VALUES
     <AccordionTrigger className="text-xl">13. Among books that are in stock, find the number of books per genre.</AccordionTrigger>
     <AccordionContent>
       ```sql title="example.sql"
-
+      SELECT genre, COUNT(*) as no_of_books
+      FROM books
+      WHERE in_stock = TRUE
+      GROUP BY genre;
       ```
     </AccordionContent>
   </AccordionItem>
@@ -173,7 +176,10 @@ INSERT INTO books (title, author, genre, price, published_year, in_stock) VALUES
     <AccordionTrigger className="text-xl">14. Find genres where the total combined price exceeds $20.</AccordionTrigger>
     <AccordionContent>
       ```sql title="example.sql"
-
+      SELECT genre, SUM(price) AS total_price
+      FROM books
+      GROUP BY genre
+      HAVING SUM(price) > 20;
       ```
     </AccordionContent>
   </AccordionItem>
@@ -182,7 +188,12 @@ INSERT INTO books (title, author, genre, price, published_year, in_stock) VALUES
     <AccordionTrigger className="text-xl">15. Explain why this query fails, and rewrite it correctly: SELECT genre, price, COUNT(*) FROM books GROUP BY genre;</AccordionTrigger>
     <AccordionContent>
       ```sql title="example.sql"
-
+      -- Fails because "price" is neither aggregated nor in GROUP BY —
+      -- MySQL doesn't know which row's price to show per genre group.
+      -- Fix: either aggregate it, or remove it from SELECT.
+      SELECT genre, AVG(price), COUNT(*)
+      FROM books
+      GROUP BY genre;
       ```
     </AccordionContent>
   </AccordionItem>
@@ -191,7 +202,12 @@ INSERT INTO books (title, author, genre, price, published_year, in_stock) VALUES
     <AccordionTrigger className="text-xl">16. Explain why this query fails, and rewrite it correctly: SELECT author, COUNT() FROM books WHERE COUNT() > 1 GROUP BY author;</AccordionTrigger>
     <AccordionContent>
       ```sql title="example.sql"
-
+      -- Fails because WHERE runs before grouping happens, so COUNT(*)
+      -- doesn't exist yet at that point. HAVING must be used instead.
+      SELECT author, COUNT(*) as book_count
+      FROM books
+      GROUP BY author
+      HAVING COUNT(*) > 1;
       ```
     </AccordionContent>
   </AccordionItem>
@@ -200,7 +216,10 @@ INSERT INTO books (title, author, genre, price, published_year, in_stock) VALUES
     <AccordionTrigger className="text-xl">17. Find each genre's average price, but only include genres where the average is above $10 and the genre has at least 2 books.</AccordionTrigger>
     <AccordionContent>
       ```sql title="example.sql"
-
+      SELECT genre, AVG(price) AS avg_price, COUNT(*) AS book_count
+      FROM books
+      GROUP BY genre
+      HAVING AVG(price) > 10 AND COUNT(*) >= 2;
       ```
     </AccordionContent>
   </AccordionItem>
@@ -209,113 +228,15 @@ INSERT INTO books (title, author, genre, price, published_year, in_stock) VALUES
     <AccordionTrigger className="text-xl">18. Find the author with the highest total combined value of books, sorted highest first, top 1 only.</AccordionTrigger>
     <AccordionContent>
       ```sql title="example.sql"
-
+      SELECT author, SUM(price) AS total_value
+      FROM books
+      GROUP BY author
+      ORDER BY total_value DESC
+      LIMIT 1;
       ```
     </AccordionContent>
   </AccordionItem>
 </Accordion>
 
----
----
 
-## Answer Key
-
-<details>
-<summary>Reveal answers</summary>
-
-```sql title="answers.sql"
--- 1. Total number of books
-SELECT COUNT(*) FROM books;
-
--- 2. Total value of all books
-SELECT SUM(price) FROM books;
-
--- 3. Average price of all books
-SELECT AVG(price) FROM books;
-
--- 4. Cheapest book's price
-SELECT MIN(price) FROM books;
-
--- 5. Most expensive book's price
-SELECT MAX(price) FROM books;
-
--- 6. Count of in-stock books
-SELECT COUNT(*) FROM books WHERE in_stock = TRUE;
-
--- 7. Number of books per genre
-SELECT genre, COUNT(*) AS book_count
-FROM books
-GROUP BY genre;
-
--- 8. Average price per author
-SELECT author, AVG(price) AS avg_price
-FROM books
-GROUP BY author;
-
--- 9. Total price per genre
-SELECT genre, SUM(price) AS total_price
-FROM books
-GROUP BY genre;
-
--- 10. Earliest and latest published_year per author
-SELECT author, MIN(published_year) AS earliest, MAX(published_year) AS latest
-FROM books
-GROUP BY author;
-
--- 11. Genres with more than 2 books
-SELECT genre, COUNT(*) AS book_count
-FROM books
-GROUP BY genre
-HAVING COUNT(*) > 2;
-
--- 12. Authors with average price above $12
-SELECT author, AVG(price) AS avg_price
-FROM books
-GROUP BY author
-HAVING AVG(price) > 12;
-
--- 13. In-stock books per genre (filter rows before grouping)
-SELECT genre, COUNT(*) AS book_count
-FROM books
-WHERE in_stock = TRUE
-GROUP BY genre;
-
--- 14. Genres where total combined price exceeds $20
-SELECT genre, SUM(price) AS total_price
-FROM books
-GROUP BY genre
-HAVING SUM(price) > 20;
-
--- 15. Fails because "price" is neither aggregated nor in GROUP BY —
--- MySQL doesn't know which row's price to show per genre group.
--- Fix: either aggregate it, or remove it from SELECT.
-SELECT genre, AVG(price), COUNT(*)
-FROM books
-GROUP BY genre;
-
--- 16. Fails because WHERE runs before grouping happens, so COUNT(*)
--- doesn't exist yet at that point. HAVING must be used instead.
-SELECT author, COUNT(*)
-FROM books
-GROUP BY author
-HAVING COUNT(*) > 1;
-
--- 17. Genres averaging above $10 AND with at least 2 books
-SELECT genre, AVG(price) AS avg_price, COUNT(*) AS book_count
-FROM books
-GROUP BY genre
-HAVING AVG(price) > 10 AND COUNT(*) >= 2;
-
--- 18. Author with the highest total combined book value
-SELECT author, SUM(price) AS total_value
-FROM books
-GROUP BY author
-ORDER BY total_value DESC
-LIMIT 1;
-```
-
-</details>
-
----
-
-**Next up:** once you've checked your answers, we'll move into **Module 03 — Data Integrity**, covering constraints, keys revisited in practice, and transactions.
+## [Aggregate Functions Playground](/playground/sql?q=aggregate)
