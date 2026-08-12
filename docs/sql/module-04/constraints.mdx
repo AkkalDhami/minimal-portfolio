@@ -1,0 +1,208 @@
+---
+title: Constraints in Depth
+description: CHECK, DEFAULT, and referential actions like ON DELETE CASCADE and SET NULL.
+---
+
+
+Constraints are rules attached to columns that stop invalid data from ever being saved. We've already used <Code>NOT NULL</Code>, <Code>UNIQUE</Code>, <Code>PRIMARY KEY</Code>, and <Code>FOREIGN KEY</Code> throughout earlier modules.
+
+This lesson covers the ones we've only touched briefly: <Code>CHECK</Code>, <Code>DEFAULT</Code>, and what actually happens to related rows when a referenced row is deleted or updated.
+
+---
+
+## CHECK — validating values before they're saved
+
+A <Code>CHECK</Code> constraint enforces a condition that every row must satisfy.
+
+```sql title="example.sql" {6, 7}
+CREATE TABLE books (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    price DECIMAL(6,2),
+    published_year INT,
+    CHECK (price > 0),
+    CHECK (published_year >= 1450 AND published_year <= 2100)
+);
+```
+
+Now MySQL rejects invalid inserts before they ever reach the table:
+
+```sql title="example.sql"
+-- Rejected — violates the CHECK constraint
+INSERT INTO books (title, price, published_year)
+VALUES ('Free Book', -5.00, 2020);
+```
+
+You can also name a <Code>CHECK</Code> constraint, which makes error messages clearer and lets you drop it later by name:
+
+```sql title="example.sql"
+ALTER TABLE books
+ADD CONSTRAINT chk_positive_price CHECK (price > 0);
+```
+
+---
+
+## DEFAULT — fallback values
+
+Supplies a value automatically when one isn't provided in an <Code>INSERT</Code>.
+
+```sql title="example.sql"
+CREATE TABLE books (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    in_stock BOOLEAN DEFAULT TRUE,
+    added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+```sql title="example.sql"
+-- in_stock and added_at are filled in automatically
+INSERT INTO books (title) VALUES ('Dune');
+```
+
+<Code>DEFAULT</Code> only applies when a column is omitted entirely — explicitly inserting <Code>NULL</Code> still results in <Code>NULL</Code>, not the default.
+
+---
+
+## Referential actions — what happens when a referenced row is deleted
+
+This is the part most beginners miss. By default, deleting a row that other rows depend on (via <Code>FOREIGN KEY</Code>) simply **fails** — MySQL protects you from creating orphaned references. But you can define what *should* happen instead.
+
+```sql title="example.sql"
+CREATE TABLE authors (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE books (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    author_id INT,
+    FOREIGN KEY (author_id) REFERENCES authors(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+```
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Action</TH>
+      <TH>What happens on DELETE of the parent row</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>RESTRICT (default)</TD>
+      <TD>Blocks the delete entirely if any child rows reference it</TD>
+    </TR>
+    <TR>
+      <TD>CASCADE</TD>
+      <TD>Automatically deletes all matching child rows too</TD>
+    </TR>
+    <TR>
+      <TD>SET NULL</TD>
+      <TD>Sets the child's foreign key column to NULL instead of deleting the child row</TD>
+    </TR>
+    <TR>
+      <TD>NO ACTION</TD>
+      <TD>Functionally the same as RESTRICT in MySQL</TD>
+    </TR>
+  </TBody>
+</Table>
+
+**Example — CASCADE in action:**
+
+#### Deleting this author automatically deletes all of their books too
+```sql title="example.sql"
+DELETE FROM authors WHERE id = 1;
+```
+
+**Example — SET NULL instead:**
+
+```sql title="example.sql"
+CREATE TABLE books (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    author_id INT,
+    FOREIGN KEY (author_id) REFERENCES authors(id)
+        ON DELETE SET NULL
+);
+```
+
+#### Now deleting the author keeps the book, just clears its author_id
+```sql title="example.sql"
+DELETE FROM authors WHERE id = 1;
+```
+
+<StickyNote color="pink">
+**Choose carefully.** CASCADE is convenient but dangerous if misused — deleting one row can silently wipe out large amounts of related data. SET NULL is often safer for optional relationships (a book without a listed author is fine); CASCADE fits only when the child data has no meaning without the parent (e.g. deleting an order should delete its order line items).
+</StickyNote>
+
+---
+
+## ON UPDATE CASCADE
+
+The same idea applies to updates — if a parent's primary key value ever changes, <Code>ON UPDATE CASCADE</Code> automatically updates every child row's foreign key to match:
+
+```sql title="example.sql"
+-- If authors.id ever changed (rare, since it's usually AUTO_INCREMENT),
+-- every books.author_id referencing it would update automatically
+```
+
+In practice this matters more when using natural keys (like an email or code) as a reference, since those are more likely to change than a surrogate <Code>id</Code>.
+
+---
+
+## Combining constraints
+
+A single column can carry several constraints at once:
+
+```sql title="example.sql"
+CREATE TABLE books (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    isbn VARCHAR(13) NOT NULL UNIQUE,
+    price DECIMAL(6,2) NOT NULL CHECK (price > 0),
+    in_stock BOOLEAN DEFAULT TRUE
+);
+```
+
+---
+
+## Quick Reference
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Constraint</TH>
+      <TH>Enforces</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD><Code>CHECK (condition)</Code></TD>
+      <TD>Value must satisfy a condition before it's saved</TD>
+    </TR>
+    <TR>
+      <TD><Code>DEFAULT value</Code></TD>
+      <TD>Fallback value used when none is provided</TD>
+    </TR>
+    <TR>
+      <TD><Code>ON DELETE RESTRICT</Code></TD>
+      <TD>Blocks deleting a parent row with existing children</TD>
+    </TR>
+    <TR>
+      <TD><Code>ON DELETE CASCADE</Code></TD>
+      <TD>Deletes child rows automatically along with the parent</TD>
+    </TR>
+    <TR>
+      <TD><Code>ON DELETE SET NULL</Code></TD>
+      <TD>Clears the child's foreign key instead of deleting it</TD>
+    </TR>
+    <TR>
+      <TD><Code>ON UPDATE CASCADE</Code></TD>
+      <TD>Updates child foreign keys automatically if the parent key changes</TD>
+    </TR>
+  </TBody>
+</Table>
