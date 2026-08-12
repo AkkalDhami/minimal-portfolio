@@ -172,6 +172,102 @@ WHERE published_year >= 1940 AND published_year <= 1960;
 
 ---
 
+
+## 5. Pattern matching with LIKE
+ 
+<Code>%</Code> matches any number of characters, <Code>_</Code> matches exactly one character.
+ 
+#### Titles starting with "The"
+```sql title="example.sql"
+SELECT * FROM books WHERE title LIKE 'The%';
+```
+
+#### Titles containing "world" anywhere
+```sql title="example.sql"
+SELECT * FROM books WHERE title LIKE '%world%';
+```
+
+#### Titles ending in "ing"
+```sql title="example.sql"
+SELECT * FROM books WHERE title LIKE '%ing';
+```
+
+#### Exactly one character before "ave" — matches "Cave", "Save", not "Brave"
+```sql title="example.sql"
+SELECT * FROM books WHERE title LIKE '_ave';
+```
+ 
+**Matching a literal <Code>%</Code> or <Code>_</Code>:** if the text you're searching for actually contains a percent sign or underscore, escape it with <Code>ESCAPE</Code>:
+ 
+```sql title="example.sql"
+-- Find titles literally containing "50%" (not "any characters" + "50" + "any characters")
+SELECT * FROM books WHERE title LIKE '%50\%%' ESCAPE '\';
+```
+ 
+**Case sensitivity:** by default, MySQL's <Code>LIKE</Code> is usually **case-insensitive** for typical text columns (depends on the column's collation) — <Code>'dune'</Code> matches <Code>'Dune'</Code>. For strict case-sensitive matching, use <Code>LIKE BINARY</Code>:
+ 
+```sql title="example.sql"
+SELECT * FROM books WHERE title LIKE BINARY 'dune'; -- won't match "Dune"
+```
+ 
+**Performance note:** <Code>LIKE 'text%'</Code> (wildcard only at the end) can use an index and stays fast on large tables. <Code>LIKE '%text%'</Code> (wildcard at the start) **cannot** use a standard index — MySQL has to scan every row. More on this in Module 04 — Performance.
+
+---
+ 
+## 6. REGEXP — full pattern matching
+ 
+For patterns more complex than <Code>%</Code> and <Code>_</Code> can express, MySQL supports regular expressions via <Code>REGEXP</Code> (alias: <Code>RLIKE</Code>):
+ 
+```sql title="example.sql"
+-- Titles starting with "D" or "F"
+SELECT * FROM books WHERE title REGEXP '^[DF]';
+ 
+-- Titles containing a digit
+SELECT * FROM books WHERE title REGEXP '[0-9]';
+ 
+-- Titles that are exactly 4 letters, nothing more
+SELECT * FROM books WHERE title REGEXP '^[A-Za-z]{4}$';
+```
+ 
+<Table>
+  <THead>
+    <TR>
+      <TH>Tool</TH>
+      <TH>Best for</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD><Code>LIKE</Code></TD>
+      <TD>Simple prefix/suffix/contains checks — faster, can use indexes when the wildcard isn't at the start</TD>
+    </TR>
+    <TR>
+      <TD><Code>REGEXP</Code></TD>
+      <TD>Complex patterns (character sets, repetition, anchors) — more powerful, but never uses a standard index</TD>
+    </TR>
+  </TBody>
+</Table>
+
+---
+
+
+### 7. EXISTS — checking for related rows
+ 
+Grouped here alongside <Code>IN</Code> and <Code>BETWEEN</Code> as another commonly confused filtering operator: <Code>EXISTS</Code> checks whether a subquery returns **any** rows at all, without caring about the actual values.
+ 
+#### Authors who have at least one book
+```sql title="example.sql"
+SELECT * FROM authors a
+WHERE EXISTS (
+    SELECT 1 FROM books b WHERE b.author_id = a.id
+);
+```
+ 
+<Code>EXISTS</Code> often performs better than <Code>IN</Code> with a subquery on large datasets, since it can stop as soon as it finds one match instead of building a full list first.
+
+
+---
+
 ## 5. Filtering with IN
 
 Matches against a list — much cleaner than chaining several <Code>OR</Code> conditions:

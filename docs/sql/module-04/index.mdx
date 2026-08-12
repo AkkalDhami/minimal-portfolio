@@ -1,0 +1,57 @@
+---
+title: Module 04 - Data Integrity
+description: Keep your data consistent and reliable.
+---
+
+
+## <HLink href="/docs/sql/module-04/constraints">1. Constraints</HLink> 
+
+Constraints are rules attached to columns that stop invalid data from ever being saved. We've already used <Code>NOT NULL</Code>, <Code>UNIQUE</Code>, <Code>PRIMARY KEY</Code>, and <Code>FOREIGN KEY</Code> throughout earlier modules. 
+
+This lesson covers the ones we've only touched briefly: <Code>CHECK</Code>, <Code>DEFAULT</Code>, and what actually happens to related rows when a referenced row is deleted or updated.
+
+
+```sql title="example.sql"
+CREATE TABLE books (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    isbn VARCHAR(13) NOT NULL UNIQUE,
+    price DECIMAL(6,2) NOT NULL CHECK (price > 0),
+    in_stock BOOLEAN DEFAULT TRUE
+);
+```
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Constraint</TH>
+      <TH>Enforces</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD><Code>CHECK (condition)</Code></TD>
+      <TD>Value must satisfy a condition before it's saved</TD>
+    </TR>
+    <TR>
+      <TD><Code>DEFAULT value</Code></TD>
+      <TD>Fallback value used when none is provided</TD>
+    </TR>
+    <TR>
+      <TD><Code>ON DELETE RESTRICT</Code></TD>
+      <TD>Blocks deleting a parent row with existing children</TD>
+    </TR>
+    <TR>
+      <TD><Code>ON DELETE CASCADE</Code></TD>
+      <TD>Deletes child rows automatically along with the parent</TD>
+    </TR>
+    <TR>
+      <TD><Code>ON DELETE SET NULL</Code></TD>
+      <TD>Clears the child's foreign key instead of deleting it</TD>
+    </TR>
+    <TR>
+      <TD><Code>ON UPDATE CASCADE</Code></TD>
+      <TD>Updates child foreign keys automatically if the parent key changes</TD>
+    </TR>
+  </TBody>
+</Table>
