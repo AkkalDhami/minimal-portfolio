@@ -1,0 +1,699 @@
+---
+title: Transactions
+description: START TRANSACTION, COMMIT, ROLLBACK, and why atomicity matters.
+---
+
+A **transaction** is a group of SQL operations that execute as a single unit — either **all** of them succeed, or **none** of them do. If anything fails partway through, everything gets undone, leaving the database exactly as it was before.
+
+---
+
+## Why transactions exist
+
+Imagine transferring money between two bank accounts. It takes two steps:
+
+```sql title="example.sql"
+UPDATE accounts SET balance = balance - 100 WHERE id = 1; -- withdraw from A
+UPDATE accounts SET balance = balance + 100 WHERE id = 2; -- deposit to B
+```
+
+If the server crashes **between** these two statements, money vanishes — deducted from account 1, never added to account 2. A transaction guarantees this can't happen: either both updates apply, or neither does.
+
+
+<Output>
+Without a transaction:           With a transaction:
+Step 1 succeeds ✔                Step 1 succeeds ✔  ┐
+Step 2 fails ✘                   Step 2 fails ✘     ├─> entire group rolled back
+Result: money lost               Result: nothing changed at all
+</Output>
+
+---
+
+<ZoomableImage width="800" height="400" src="/images/tsx2.png" wrapperClassName="" alt="Transaction in MySQL" className='h-100 w-auto'/>
+
+## Basic syntax
+
+```sql title="example.sql"
+START TRANSACTION;
+
+UPDATE accounts SET balance = balance - 100 WHERE id = 1;
+UPDATE accounts SET balance = balance + 100 WHERE id = 2;
+
+COMMIT;
+```
+
+- <Code>START TRANSACTION</Code> — begin the group (<Code>BEGIN</Code> also works in MySQL, same thing)
+- <Code>COMMIT</Code> — save all changes permanently
+- <Code>ROLLBACK</Code> — undo everything since <Code>START TRANSACTION</Code>
+
+---
+
+## Rolling back on failure
+
+```sql title="example.sql"
+START TRANSACTION;
+
+UPDATE accounts SET balance = balance - 100 WHERE id = 1;
+
+-- Something went wrong (e.g. application detects insufficient funds,
+-- a constraint violation, or any other error condition)
+ROLLBACK;
+
+-- The UPDATE above never happened, as far as the database is concerned
+```
+
+After <Code>ROLLBACK</Code>, it's as if the transaction never ran at all — even though the <Code>UPDATE</Code> statement executed, nothing was actually saved.
+
+---
+
+## Autocommit — what happens without a transaction
+
+By default, MySQL runs in **autocommit mode**: every single statement is its own implicit transaction, committed immediately. That's why all your CRUD statements so far worked without ever typing <Code>COMMIT</Code>.
+
+```sql title="example.sql"
+-- With autocommit ON (the default), this commits instantly on its own
+UPDATE books SET price = 9.99 WHERE id = 1;
+```
+
+<Code>START TRANSACTION</Code> temporarily suspends autocommit until you <Code>COMMIT</Code> or <Code>ROLLBACK</Code> — that's what lets you group multiple statements together.
+
+---
+
+## SAVEPOINT — partial rollbacks
+
+You can mark a point inside a transaction and roll back to just that point, without undoing everything:
+
+```sql title="example.sql"
+START TRANSACTION;
+
+UPDATE accounts SET balance = balance - 100 WHERE id = 1;
+SAVEPOINT after_withdrawal;
+
+UPDATE accounts SET balance = balance + 100 WHERE id = 2;
+
+-- Only undo the second update, keep the withdrawal
+ROLLBACK TO after_withdrawal;
+
+COMMIT;
+```
+
+---
+
+## Example table for testing transactions
+
+#### Create a simple accounts table with some initial data:
+```sql title="example.sql"
+CREATE TABLE accounts (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    balance DECIMAL(10, 2) NOT NULL
+);
+```
+
+#### Insert some sample accounts:
+```sql title="example.sql"
+INSERT INTO accounts (name, balance)
+VALUES ('Alice', 5000), ('Bob', 2000);
+```
+
+#### Check the initial balances:
+```sql title="example.sql"
+SELECT * FROM accounts;
+```
+
+<Output>
++----+-------+---------+
+| id | name  | balance |
++----+-------+---------+
+|  1 | Alice | 5000.00 |
+|  2 | Bob   | 2000.00 |
++----+-------+---------+
+</Output>
+
+
+#### Start a transaction to transfer money from Alice to Bob:
+```sql title="example.sql"
+START TRANSACTION;
+
+-- OR 
+-- BEGIN;
+```
+
+> These are commonly used to begin a transaction.
+
+#### Perform the transfer:
+```sql title="example.sql"
+UPDATE accounts
+SET balance = balance - 1000
+WHERE id = 1;
+
+UPDATE accounts
+SET balance = balance + 1000
+WHERE id = 2;
+```
+
+> At this point, the changes are part of the transaction.
+
+#### Commit the transaction to save the changes:
+```sql title="example.sql"
+COMMIT;
+```
+
+> The transaction is successfully completed.
+
+> <Code>COMMIT</Code> means: Make the changes permanent.
+
+
+```sql title="example.sql"
+START TRANSACTION;
+
+UPDATE accounts
+SET balance = balance - 1000
+WHERE id = 1;
+
+UPDATE accounts
+SET balance = balance + 1000
+WHERE id = 2;
+
+COMMIT;
+```
+
+```sql title="example.sql"
+START TRANSACTION;
+
+UPDATE accounts
+SET balance = balance - 1000
+WHERE id = 1;
+
+UPDATE accounts
+SET balance = balance + 1000
+WHERE id = 2;
+
+ROLLBACK;
+```
+> <Code>ROLLBACK</Code> means: Undo the changes made during the current transaction.
+
+---
+
+## The basic transaction lifecycle
+
+<ZoomableImage width="600" height="300" src="/images/tsx.png" wrapperClassName="" alt="The basic transaction lifecycle" className='w-auto'/>
+
+---
+
+## ACID
+
+Once you understand the basic transaction, the next major concept is ACID.
+
+A transaction is generally discussed in terms of four properties:
+
+<Output>
+A → Atomicity
+C → Consistency
+I → Isolation
+D → Durability
+</Output>
+
+### 1. Atomicity
+
+**Atomicity** means all operations in a transaction succeed, or none of them do.
+
+**Transfer:**
+<Output>
+Alice -1000
+Bob   +1000
+</Output>
+
+#### **Either:** Both happen ✔ **or:** Neither happens ✔
+
+**Not:**
+<Output>
+Alice -1000
+Bob   unchanged ✘
+</Output>
+
+> **Atomicity = All operations succeed, or none of them are applied.**
+
+---
+
+### 2. Consistency
+
+**Consistency** means the transaction moves the database from one valid state to another valid state, preserving defined constraints and rules.
+
+Suppose your business rule is: <Code>balance >= 0</Code>
+
+**Before:**
+<Output>
+Alice = 5000
+Bob   = 2000
+</Output>
+
+**Transfer:**
+<Output>
+Alice -1000
+Bob   +1000
+</Output>
+
+**After:**
+<Output>
+Alice = 4000
+Bob   = 3000
+</Output>
+
+The database remains valid.
+
+But consistency is broader than "the query didn't error." It includes things such as:
+
+<Output>
+PRIMARY KEY constraints
+FOREIGN KEY constraints
+UNIQUE constraints
+CHECK constraints
+application/business invariants
+</Output>
+
+> **Consistency = A transaction must preserve the rules and constraints that define a valid database state.**
+
+<StickyNote>
+**Atomicity** is about whether the whole transaction happens. **Consistency** is about whether the resulting state obeys the rules.
+</StickyNote>
+
+---
+
+### 3. Isolation
+
+When multiple transactions run at the same time, one transaction should not improperly interfere with another transaction.
+
+**Imagine:**
+
+<Output>
+  User A --> UPDATE balance --> MySQL &lt;-- SELECT balance &lt;-- User B
+</Output>
+
+What happens if two transactions access the same data simultaneously?
+
+**For example:**
+
+<Output>
+  Transaction A
+  Transaction B
+</Output>
+
+Can one transaction see another transaction's uncommitted changes?
+
+Can two transactions update the same row?
+
+Can one transaction read different values during the same transaction?
+
+These are concurrency problems.
+
+Isolation controls how transactions interact with each other.
+
+> **Isolation = Concurrent transactions should not improperly interfere with each other's work.**
+---
+
+### 4. Durability
+
+**Durability** means once a transaction is successfully committed, its changes should survive subsequent failures such as a database/server crash, subject to the storage engine's durability configuration.
+
+**For example:**
+
+```sql title="example.sql"
+START TRANSACTION;
+
+UPDATE accounts
+SET balance = balance - 1000
+WHERE id = 1;
+
+COMMIT;
+```
+
+**After COMMIT, you expect:** <Code>Alice = 4000</Code>
+
+Even if the database server restarts afterward, the committed change should not simply disappear.
+
+MySQL's **InnoDB** storage engine provides transactional durability using mechanisms including its redo log.
+
+> **Durability = Once a transaction commits successfully, its changes are persisted and should survive failures.**
+
+---
+<Table>
+  <THead>
+    <TR>
+      <TH>ACID Property</TH>
+      <TH>How transactions provide it</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>Atomicity</TD>
+      <TD>COMMIT/ROLLBACK ensures all-or-nothing execution</TD>
+    </TR>
+    <TR>
+      <TD>Consistency</TD>
+      <TD>Constraints (NOT NULL, FOREIGN KEY, CHECK) are enforced even mid-transaction</TD>
+    </TR>
+    <TR>
+      <TD>Isolation</TD>
+      <TD>Other transactions don't see your changes until you COMMIT</TD>
+    </TR>
+    <TR>
+      <TD>Durability</TD>
+      <TD>Once COMMIT succeeds, the change survives even a crash</TD>
+    </TR>
+  </TBody>
+</Table>
+
+<StickyNote>
+**Atomicity**  → all or nothing
+
+**Consistency** → valid state → valid state
+
+**Isolation**   → concurrent transactions
+
+**Durability**  → committed means persistent
+
+</StickyNote>
+
+---
+
+## Isolation levels (brief intro)
+
+**Isolation** controls how much one transaction can "see" of another transaction's in-progress changes. MySQL's default is <Code>REPEATABLE READ</Code>.
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Isolation Level</TH>
+      <TH>What it prevents</TH>
+      <TH>Trade-off</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>READ UNCOMMITTED</TD>
+      <TD>Nothing — can see uncommitted changes from other transactions ("dirty reads")</TD>
+      <TD>Fastest, least safe</TD>
+    </TR>
+    <TR>
+      <TD>READ COMMITTED</TD>
+      <TD>Dirty reads</TD>
+      <TD>Still allows some inconsistency between repeated reads</TD>
+    </TR>
+    <TR>
+      <TD>REPEATABLE READ (MySQL default)</TD>
+      <TD>Dirty reads + non-repeatable reads</TD>
+      <TD>Good balance of safety and performance</TD>
+    </TR>
+    <TR>
+      <TD>SERIALIZABLE</TD>
+      <TD>All concurrency anomalies</TD>
+      <TD>Safest, but slowest — transactions effectively run one at a time</TD>
+    </TR>
+  </TBody>
+</Table>
+
+You'll rarely need to change this as a beginner — just know it exists and that it's a real lever for handling high-concurrency systems correctly.
+
+<StickyNote color="yellow">
+**Rule of thumb:** wrap multiple related writes in a transaction whenever a partial failure would leave your data in a broken or inconsistent state — money transfers, order + inventory updates, or any "these things must happen together" scenario.
+</StickyNote>
+
+---
+
+## Quick Reference
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Command</TH>
+      <TH>Purpose</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD><Code>START TRANSACTION</Code></TD>
+      <TD>Begin a transaction, suspending autocommit</TD>
+    </TR>
+    <TR>
+      <TD><Code>COMMIT</Code></TD>
+      <TD>Save all changes permanently</TD>
+    </TR>
+    <TR>
+      <TD><Code>ROLLBACK</Code></TD>
+      <TD>Undo all changes since the transaction began</TD>
+    </TR>
+    <TR>
+      <TD><Code>SAVEPOINT name</Code></TD>
+      <TD>Mark a point to roll back to, without undoing everything</TD>
+    </TR>
+    <TR>
+      <TD><Code>ROLLBACK TO name</Code></TD>
+      <TD>Undo back to a specific savepoint only</TD>
+    </TR>
+  </TBody>
+</Table>
+
+<ZoomableImage width="800" height="400" src="/images/tsx2.png" wrapperClassName="" alt="Transaction in MySQL" className='h-100 w-auto'/>
+
+---
+
+## Interview Questions
+
+<InterviewQ>
+  <InterviewQItem>
+    <InterviewQuestion>
+      #### 1. What is a database transaction?
+    </InterviewQuestion>
+    <InterviewAnswer>
+      A transaction is a group of database operations treated as a single unit of work.
+
+      For example, transferring money from Alice to Bob requires two operations: deducting money from Alice and adding it to Bob.
+
+      If both operations succeed, we <Code>COMMIT</Code> the transaction. If something fails, we <Code>ROLLBACK</Code> so the database does not keep a partial update.
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+      #### 2. Why do we need transactions?
+    </InterviewQuestion>
+    <InterviewAnswer>
+      Transactions prevent a database from being left in an incorrect state when multiple related operations are involved.
+
+      For example, during a money transfer, if money is deducted from Alice but the application crashes before adding it to Bob, the database becomes inconsistent.
+
+      A transaction ensures that either all related operations succeed or all of them are undone.
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+      #### 3. What are ACID properties?
+    </InterviewQuestion>
+    <InterviewAnswer>
+      ACID describes four important properties of reliable database transactions:
+
+      <ul>
+        <li><strong>Atomicity</strong> — All operations succeed or none are applied.</li>
+        <li><strong>Consistency</strong> — The transaction keeps the database in a valid state.</li>
+        <li><strong>Isolation</strong> — Concurrent transactions should not improperly interfere with each other.</li>
+        <li><strong>Durability</strong> — Once a transaction is committed, its changes should survive failures.</li>
+      </ul>
+
+      An easy way to remember it is: <strong>All or nothing, valid state, safe concurrency, and committed data persists.</strong>
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+      #### 4. What is Atomicity?
+    </InterviewQuestion>
+    <InterviewAnswer>
+      Atomicity means a transaction is treated as one unit: either all of its operations succeed, or none of them are applied.
+
+      For example, a bank transfer has two operations: deduct money from Alice and add money to Bob.
+
+      If the second operation fails, the first operation is rolled back as well.
+
+      In simple terms: <strong>Atomicity means "all or nothing."</strong>
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+      #### 5. What is Consistency in ACID?
+    </InterviewQuestion>
+    <InterviewAnswer>
+      Consistency means a successful transaction moves the database from one valid state to another valid state while respecting its constraints and rules.
+
+      For example, if a database has a rule that an account balance cannot be negative, a transaction should not leave the database with an invalid negative balance.
+
+      In simple terms: <strong>valid state → transaction → valid state.</strong>
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+      #### 6. What is Isolation in a transaction?
+    </InterviewQuestion>
+    <InterviewAnswer>
+      Isolation controls how concurrent transactions interact with each other.
+
+      For example, if two users are modifying the same account at the same time, one transaction should not improperly see or interfere with another transaction's intermediate changes.
+
+      Isolation is important because real applications have many transactions running concurrently.
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+      #### 7. What is Durability in ACID?
+    </InterviewQuestion>
+    <InterviewAnswer>
+      Durability means that once a transaction is successfully committed, its changes should be persisted and survive failures such as a database or server crash, subject to the database's durability configuration.
+
+      In simple terms: <strong>COMMIT means the successful changes should not simply disappear after a failure.</strong>
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+      #### 8. What is the difference between COMMIT and ROLLBACK?
+    </InterviewQuestion>
+    <InterviewAnswer>
+      <Code>COMMIT</Code> permanently applies the successful changes made by the transaction.
+
+      <Code>ROLLBACK</Code> undoes the changes made during the current transaction.
+
+      For example:
+
+      <Code>COMMIT</Code> means "save these changes."
+
+      <Code>ROLLBACK</Code> means "undo these transaction changes."
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+      #### 9. What is the difference between Atomicity and Consistency?
+    </InterviewQuestion>
+    <InterviewAnswer>
+      Atomicity is about whether the transaction is applied completely or not at all.
+
+      Consistency is about whether the resulting database state follows the defined constraints and rules.
+
+      For example, Atomicity asks: <strong>"Did both sides of the money transfer happen?"</strong>
+
+      Consistency asks: <strong>"Is the resulting database state still valid?"</strong>
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+      #### 10. What is a Dirty Read?
+    </InterviewQuestion>
+    <InterviewAnswer>
+      A dirty read happens when one transaction reads data changed by another transaction before that change has been committed.
+
+      For example, Transaction A changes a balance from <Code>5000</Code> to <Code>4000</Code> but has not committed yet.
+
+      If Transaction B reads <Code>4000</Code> and Transaction A later performs a <Code>ROLLBACK</Code>, Transaction B has read data that was never committed.
+
+      That is called a <strong>dirty read</strong>.
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+      #### 11. What is a Non-Repeatable Read?
+    </InterviewQuestion>
+    <InterviewAnswer>
+      A non-repeatable read happens when a transaction reads the same row twice but gets different values because another transaction changed and committed that row between the two reads.
+
+      For example:
+
+      First read: <Code>balance = 5000</Code>
+
+      Another transaction changes and commits it.
+
+      Second read: <Code>balance = 4000</Code>
+
+      The same transaction read the same row twice but received different values.
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+      #### 12. What is a Phantom Read?
+    </InterviewQuestion>
+    <InterviewAnswer>
+      A phantom read happens when the same query is executed twice in a transaction and the set of matching rows changes because another transaction inserted, deleted, or otherwise changed rows that affect the query.
+
+      For example, the first query finds 2 accounts with a balance above 3000.
+
+      Another transaction inserts a new account with a balance of 4000 and commits.
+
+      The same query now finds 3 accounts.
+
+      The new matching row is called a <strong>phantom row</strong>.
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+      #### 13. What are the isolation levels in MySQL?
+    </InterviewQuestion>
+    <InterviewAnswer>
+      MySQL provides four standard transaction isolation levels:
+
+      <ul>
+        <li><Code>READ UNCOMMITTED</Code></li>
+        <li><Code>READ COMMITTED</Code></li>
+        <li><Code>REPEATABLE READ</Code></li>
+        <li><Code>SERIALIZABLE</Code></li>
+      </ul>
+
+      They control how much one transaction can observe the effects of other concurrent transactions.
+
+      InnoDB's default isolation level in MySQL is <Code>REPEATABLE READ</Code>.
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+      #### 14. What is the difference between Dirty Read, Non-Repeatable Read, and Phantom Read?
+    </InterviewQuestion>
+    <InterviewAnswer>
+      The difference is what changes between reads:
+
+      <ul>
+        <li><strong>Dirty Read</strong> — You see another transaction's uncommitted data.</li>
+        <li><strong>Non-Repeatable Read</strong> — The value of an existing row changes between reads.</li>
+        <li><strong>Phantom Read</strong> — The set of rows returned by a query changes between reads.</li>
+      </ul>
+
+      A simple way to remember them:
+
+      <strong>Dirty = uncommitted data.</strong>
+
+      <strong>Non-repeatable = same row, different value.</strong>
+
+      <strong>Phantom = same query, different rows.</strong>
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+      #### 15. What is the default isolation level in MySQL?
+    </InterviewQuestion>
+    <InterviewAnswer>
+      The default isolation level for the InnoDB storage engine in MySQL is <Code>REPEATABLE READ</Code>.
+
+      You can check the current isolation level with:
+
+      <Code>SELECT @@transaction_isolation;</Code>
+
+      The important point is that MySQL does not simply run every transaction completely separately. InnoDB uses mechanisms such as MVCC and locking to provide its isolation behavior.
+    </InterviewAnswer>
+  </InterviewQItem>
+</InterviewQ>
