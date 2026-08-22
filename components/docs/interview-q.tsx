@@ -63,7 +63,7 @@ export function InterviewQuestion({
       <StickyNote
         color={color ?? "emerald"}
         icon={false}
-        className="my-0 rounded-xl">
+        className="my-0 rounded-xl rounded-bl-none">
         {children}
       </StickyNote>
       {/* </div> */}
@@ -87,7 +87,7 @@ export function InterviewAnswer({
       <StickyNote
         color={color ?? "yellow"}
         icon={false}
-        className="my-0 rounded-xl">
+        className="my-0 rounded-xl rounded-br-none">
         {children}
       </StickyNote>
       <Image
