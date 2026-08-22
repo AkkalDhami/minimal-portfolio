@@ -1,0 +1,272 @@
+---
+title: Functional vs Non-Functional Requirements
+description: Learn how to separate what a system must do from how well it must do it, and why both shape the final architecture.
+---
+
+## 1. What is a Requirement?
+
+A requirement describes something the system must satisfy.
+
+Imagine you're building a project
+
+Before writing code, you need to answer:
+
+**What should the system do?** and **How well should the system do it?**
+
+These lead to two major categories:
+
+- **Functional Requirements**
+- **Non-Functional Requirements**
+
+<StickyNote>
+  **Functional**: WHAT the system does
+
+  **Non-Functional**: HOW WELL the system does it
+</StickyNote>
+
+---
+
+## 2. Functional Requirements
+
+**A Functional Requirement (FR)** describes a specific behavior, feature, or operation that the system must provide.
+
+In simple words:
+
+> **Functional requirements describe what the system should do.**
+
+**Example: Notes Sharing Platform**
+
+Suppose you're designing a platform where students can upload notes.
+
+Functional requirements could be:
+
+- Users can create an account.
+- Users can log in.
+- Users can upload PDFs.
+- Users can search for notes.
+- Users can download notes.
+- Users can view PDFs.
+- Users can share notes using a link.
+- Admins can approve submitted notes.
+- Users can delete their own notes.
+- Users can update their profile.
+
+All of these describe actions the system performs.
+
+<StickyNote color="yellow">
+Notice the pattern: every action corresponds to one completed by the system. If the action is not performed, the app loses a certain capability.
+</StickyNote>
+
+---
+
+## 3. Non-Functional Requirements
+
+Now suppose we say:
+
+Users can upload PDFs.
+
+That's not enough.
+
+We also need to decide:
+
+- How quickly should the upload start?
+- How many users can upload simultaneously?
+- How large can a PDF be?
+- What happens if the server crashes?
+- How secure should the upload be?
+- How much traffic should the system support?
+
+These are Non-Functional Requirements (NFRs).
+
+**They describe quality attributes, constraints, and operational characteristics of the system.**
+
+In simple terms:
+
+> **Non-functional requirements describe HOW WELL the system should work.**
+
+---
+
+## 4. A Worked Example: "Design a URL Shortener" (like bit.ly)
+
+#### Functional Requirements:
+
+- User submits a long URL and gets a short URL back
+
+- User visiting the short URL is redirected to the original long URL
+
+- User can optionally set an expiration date for the link
+
+
+#### Non-Functional Requirements:
+
+- Redirection should happen in &lt;50ms (low latency)
+
+- System should support 100M new URLs per month (scalability)
+
+- Short URLs should be unique — no collisions (correctness/reliability)
+
+- System should be available 99.99% of the time
+
+- Should be resistant to malicious/spam URL creation (security)
+
+---
+
+## 5. Functional vs Non-Functional
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Functional</TH>
+      <TH>Non-Functional</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>What the system does</TD>
+      <TD>How well it does it</TD>
+    </TR>
+    <TR>
+      <TD>Features</TD>
+      <TD>Quality attributes / constraints</TD>
+    </TR>
+    <TR>
+      <TD>Behavior</TD>
+      <TD>Performance, security, reliability, etc.</TD>
+    </TR>
+    <TR>
+      <TD>Usually expressed as actions</TD>
+      <TD>Usually expressed as measurable targets</TD>
+    </TR>
+    <TR>
+      <TD>Upload a PDF</TD>
+      <TD>Upload should complete within X seconds</TD>
+    </TR>
+    <TR>
+      <TD>Search notes</TD>
+      <TD>Search response &lt; 500 ms</TD>
+    </TR>
+    <TR>
+      <TD>Login</TD>
+      <TD>Authentication should be secure</TD>
+    </TR>
+    <TR>
+      <TD>Download notes</TD>
+      <TD>System should support 10,000 downloads/minute</TD>
+    </TR>
+  </TBody>
+</Table>
+
+<ZoomableImage width="900" height="400" src="/images/func-non-func-req.png" alt="Functional vs Non-Functional Requirement" className='h-100 w-auto'/>
+
+---
+
+## 5. Interview Questions
+
+<InterviewQ>
+  <InterviewQItem>
+    <InterviewQuestion>
+    #### 1. What is Performance as a non-functional requirement?
+    </InterviewQuestion>
+    <InterviewAnswer>
+        Performance describes how quickly the system responds to requests. It's usually expressed through concepts like latency, response time, throughput, and requests per second (RPS).
+
+        Example: API response should be under 200 ms for 95% of requests.
+        <Code>GET /notes</Code>
+                Response time < 200 ms
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+    #### 2. What is Scalability and why does it matter?
+    </InterviewQuestion>
+    <InterviewAnswer>
+        Scalability is how well a system handles increasing users and traffic. If a platform grows from 1,000 users to 1,000,000 users, scalability asks whether the architecture can handle that growth without falling over.
+
+        Example requirement: The system should support 100,000 concurrent users.
+
+        This is a non-functional requirement because it describes a quality of the system's capacity, not a specific feature.
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+    #### 3. What is Availability, and what does 99.9% actually mean?
+    </InterviewQuestion>
+    <InterviewAnswer>
+        Availability asks how often the system should be operational. It's commonly expressed as an SLA/SLO-style target, such as 99.9% availability.
+
+        A year has about 525,600 minutes. 99.9% availability allows for roughly:
+        <Code>525,600 × 0.1% ≈ 526 minutes</Code>
+
+        That's about 8.8 hours of downtime per year. Each additional "9" (99.9% → 99.99% → 99.999%) dramatically reduces the allowable downtime.
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+    #### 4. How is Reliability different from Availability?
+    </InterviewQuestion>
+    <InterviewAnswer>
+        Availability asks: is the system available right now? Reliability asks: does the system consistently perform correctly without failing?
+
+        Example: a user uploads a PDF and the system says "Upload successful," but the file is actually corrupted. The system is technically available, but it isn't reliable.
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+    #### 5. What does Security cover as a non-functional requirement?
+    </InterviewQuestion>
+    <InterviewAnswer>
+        Security describes how the system protects users, data, authentication credentials, APIs, files, and sessions.
+
+        Examples:
+        - Passwords must be securely hashed.
+        - Only authenticated users can upload notes.
+        - Users cannot access another user's private data.
+        - Admin APIs require authorization.
+
+        These are non-functional requirements because they describe security constraints/qualities rather than the primary feature itself.
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+    #### 6. What is Durability, and how does it relate to data storage?
+    </InterviewQuestion>
+    <InterviewAnswer>
+        Durability asks: will data remain safe after it has been successfully stored?
+
+        Example: a user uploads "Operating Systems Notes.pdf" and the system confirms "Upload successful." If the database or server crashes afterward, the file should not disappear — that's durability.
+
+        Database systems, object storage, backups, and replication are often involved in achieving it.
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+    #### 7. What is Maintainability?
+    </InterviewQuestion>
+    <InterviewAnswer>
+        Maintainability is how easy a system is to modify, debug, test, extend, and operate.
+
+        If a codebase grows to 1,000,000 lines and nobody can safely change anything, that's a maintainability problem.
+
+        Example requirement: The system should be modular so that individual services can be changed independently.
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+    #### 8. What is Usability in system design?
+    </InterviewQuestion>
+    <InterviewAnswer>
+        Usability is how easy the system is for users to understand and use.
+
+        Example: A new user should be able to upload a note without training.
+
+        This is especially important for consumer-facing applications.
+    </InterviewAnswer>
+  </InterviewQItem>
+</InterviewQ>

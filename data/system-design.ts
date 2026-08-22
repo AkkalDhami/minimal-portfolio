@@ -77,19 +77,19 @@ export const SYSTEM_DESIGN_DATA: IModule[] = createModules([
         docs: `/magic-of-dns`
       },
       {
+        slug: "functional-vs-nonfunctional-requirements",
+        title: "Functional vs Non-Functional Requirements",
+        docs: "/functional-vs-nonfunctional-requirements",
+        description:
+          "Learn how to separate what a system must do from how well it must do it, and why both shape the final architecture."
+      },
+      {
         slug: "load-balancing",
         title: "Load Balancing - Distributing Traffic the Right Way",
         description:
           "How load balancers sit between users and servers, the algorithms they use, L4 vs L7, health checks, sticky sessions, and the trade-offs that come up in real systems.",
         docs: `/load-balancing`
       }
-      // {
-      //   slug: "functional-vs-nonfunctional-requirements",
-      //   title: "Functional vs Non-Functional Requirements",
-      //   docs: "/functional-vs-nonfunctional-requirements",
-      //   description:
-      //     "Learn how to separate what a system must do from how well it must do it, and why both shape the final architecture."
-      // },
       // {
       //   slug: "capacity-estimation",
       //   title: "Capacity Estimation & Back-of-Envelope Math",
