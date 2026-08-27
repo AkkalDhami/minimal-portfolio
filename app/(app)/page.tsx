@@ -11,7 +11,7 @@ import { NetworkingSection } from "@/components/networking/networking-section";
 import { SQLSection } from "@/components/sql/sql-section";
 import { SystemDesignSection } from "@/components/system-design/system-design-section";
 
-export default async function Page() {
+export default function Page() {
   return (
     <Container className="border-edge space-y-2 border-x">
       <NewHeroSection />
