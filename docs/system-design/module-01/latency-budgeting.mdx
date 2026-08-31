@@ -1,0 +1,972 @@
+---
+title: Latency Budgeting
+description: Understand how to allocate a total latency budget across network hops, cache, and database calls, using p50/p95/p99 targets.
+---
+
+Your product manager says: *"The search page must feel instant."*
+
+You nod. Then you go and build it: the browser calls your API, the API checks a cache, misses, queries the database, calls a ranking service, and renders JSON. Every one of those steps takes time.
+
+The page ends up taking 1.4 seconds. Nobody planned for that. It just... **accumulated**.
+
+**Latency budgeting** is the fix. You start with a total time you're allowed to spend, then hand out slices of it to each step — like a financial budget, but the currency is milliseconds.
+
+```
+  TOTAL BUDGET: 300 ms  (p99 for GET /search)
+  |<------------------------------------------------------->|
+
+  Client                                              Client
+    |                                                     ^
+    v                                                     |
+  [ network  40ms ]                                       |
+    |                                          [ network  40ms ]
+    v                                                     ^
+  [ TLS + LB 10ms ]                                       |
+    |                                        [ serialize  20ms ]
+    v                                                     ^
+  [ auth      15ms ]                                      |
+    |                                                     |
+    v                                                     |
+  [ cache      5ms ]  -- HIT? -------> return early ------+
+    |                                                     |
+    | MISS                                                |
+    v                                                     |
+  +-------------------------------+                       |
+  |  parallel fan-out             |                       |
+  |    [ search   80ms ]          |  max(80, 50) = 80ms   |
+  |    [ ranking  50ms ]          |                       |
+  +-------------------------------+ ----------------------+
+
+  ALLOCATED   260 ms   ############################
+  HEADROOM     40 ms   ####
+                       --------------------------------
+  TOTAL       300 ms
+
+  Rule: the sum of the slices must stay UNDER the target,
+        and 20-30% must be left unspent as headroom.
+```
+
+> One-liner: **A latency budget is a total response-time target, divided up and assigned to every component in the request path, so that nothing gets to be slow by accident.**
+
+<StickyNote color="cyan">
+The key mental shift: latency is **not** something you measure at the end and hope is fine. It's something you **allocate up front** and then hold each component accountable to.
+
+Budget first, build second.
+</StickyNote>
+
+---
+
+## 1. Why latency deserves a budget
+
+### 1.1 Slow costs money
+
+These are among the most-cited numbers in web performance, and they're the reason latency work gets funded:
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Company</TH>
+      <TH>Finding</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>Amazon</TD>
+      <TD>+100 ms of latency cost about 1% of sales</TD>
+    </TR>
+    <TR>
+      <TD>Google</TD>
+      <TD>+500 ms in search cost about 20% of traffic</TD>
+    </TR>
+    <TR>
+      <TD>Akamai</TD>
+      <TD>A 100 ms delay dropped conversion rates by ~7%</TD>
+    </TR>
+  </TBody>
+</Table>
+
+### 1.2 How fast feels fast
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Response time</TH>
+      <TH>How the user perceives it</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>Under 100 ms</TD>
+      <TD>Instant — feels like direct manipulation</TD>
+    </TR>
+    <TR>
+      <TD>100 ms – 300 ms</TD>
+      <TD>Fast, barely noticeable</TD>
+    </TR>
+    <TR>
+      <TD>300 ms – 1 s</TD>
+      <TD>Noticeable delay, but flow is preserved</TD>
+    </TR>
+    <TR>
+      <TD>1 s – 3 s</TD>
+      <TD>Users start to feel it and get impatient</TD>
+    </TR>
+    <TR>
+      <TD>Over 3 s</TD>
+      <TD>Attention breaks; abandonment climbs sharply</TD>
+    </TR>
+    <TR>
+      <TD>Over 10 s</TD>
+      <TD>Users assume it's broken and leave</TD>
+    </TR>
+  </TBody>
+</Table>
+
+<StickyNote color="yellow">
+**100 ms is the magic threshold.** Below it, an interaction feels like it happened *because* you did something. Above it, it feels like you asked a computer to go do something and it went away for a while.
+
+Most latency budgets for interactive actions target **200–500 ms end to end**.
+</StickyNote>
+
+---
+
+## 2. Latency vs throughput vs response time
+
+Three words that get mixed up constantly. Getting them straight matters.
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Term</TH>
+      <TH>Meaning</TH>
+      <TH>Analogy (a highway)</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>Latency</TD>
+      <TD>Time for one request to travel and be handled</TD>
+      <TD>How long <strong>your car</strong> takes to reach the destination</TD>
+    </TR>
+    <TR>
+      <TD>Throughput</TD>
+      <TD>How many requests complete per unit time</TD>
+      <TD>How many <strong>cars per hour</strong> the highway carries</TD>
+    </TR>
+    <TR>
+      <TD>Response time</TD>
+      <TD>Latency + processing + queueing, as the client sees it</TD>
+      <TD>Total door-to-door time including traffic lights</TD>
+    </TR>
+    <TR>
+      <TD>Bandwidth</TD>
+      <TD>Maximum data rate of the pipe</TD>
+      <TD>Number of <strong>lanes</strong></TD>
+    </TR>
+  </TBody>
+</Table>
+
+<StickyNote color="indigo">
+**They're independent, and this trips people up.** Adding lanes to a highway (bandwidth) doesn't make your individual car faster (latency). Similarly, adding servers raises throughput but does **nothing** for the latency of a single request.
+
+Worse, they can fight each other: **batching** improves throughput but *increases* latency, because requests wait around to be grouped.
+</StickyNote>
+
+---
+
+## 3. Latency numbers every engineer should know
+
+These are the classic "Jeff Dean numbers". You don't need them exactly — you need the **relative scale**.
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Operation</TH>
+      <TH>Time</TH>
+      <TH>Relative feel</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>L1 cache reference</TD>
+      <TD>0.5 ns</TD>
+      <TD>1</TD>
+    </TR>
+    <TR>
+      <TD>L2 cache reference</TD>
+      <TD>7 ns</TD>
+      <TD>14x</TD>
+    </TR>
+    <TR>
+      <TD>Main memory (RAM) reference</TD>
+      <TD>100 ns</TD>
+      <TD>200x</TD>
+    </TR>
+    <TR>
+      <TD>Compress 1 KB</TD>
+      <TD>3 µs</TD>
+      <TD>6,000x</TD>
+    </TR>
+    <TR>
+      <TD>Send 1 KB over 1 Gbps network</TD>
+      <TD>10 µs</TD>
+      <TD>20,000x</TD>
+    </TR>
+    <TR>
+      <TD>Read 4 KB randomly from SSD</TD>
+      <TD>150 µs</TD>
+      <TD>300,000x</TD>
+    </TR>
+    <TR>
+      <TD>Read 1 MB sequentially from RAM</TD>
+      <TD>250 µs</TD>
+      <TD>500,000x</TD>
+    </TR>
+    <TR>
+      <TD>Round trip inside the same data center</TD>
+      <TD>0.5 ms</TD>
+      <TD>1,000,000x</TD>
+    </TR>
+    <TR>
+      <TD>Read 1 MB sequentially from SSD</TD>
+      <TD>1 ms</TD>
+      <TD>2,000,000x</TD>
+    </TR>
+    <TR>
+      <TD>Disk seek (spinning HDD)</TD>
+      <TD>10 ms</TD>
+      <TD>20,000,000x</TD>
+    </TR>
+    <TR>
+      <TD>Read 1 MB sequentially from HDD</TD>
+      <TD>20 ms</TD>
+      <TD>40,000,000x</TD>
+    </TR>
+    <TR>
+      <TD>Packet round trip California → Netherlands → California</TD>
+      <TD>150 ms</TD>
+      <TD>300,000,000x</TD>
+    </TR>
+  </TBody>
+</Table>
+
+<StickyNote color="green">
+**A human-scale version.** If an L1 cache read took 1 second, then:
+
+- RAM would take **3 minutes**
+- An SSD read would take **~2 days**
+- A same-datacenter round trip would take **~11 days**
+- A disk seek would take **~8 months**
+- A California-to-Netherlands round trip would take **~10 years**
+
+That's why "just add a cache" is such a powerful move. You're skipping the 10-year trip.
+</StickyNote>
+
+<StickyNote color="orange">
+**The three that matter most in budgeting:**
+
+1. **Memory/cache: sub-millisecond.** Effectively free.
+2. **Same-datacenter network hop: ~0.5–1 ms.** Cheap, but they *add up* across microservices.
+3. **Cross-continent round trip: ~100–150 ms.** This is bounded by the **speed of light** — no amount of engineering removes it. Only moving the data closer (CDN, edge, regional replicas) helps.
+</StickyNote>
+
+---
+
+## 4. Averages lie: percentiles
+
+Here's the most important idea in this entire document.
+
+Suppose 10 requests take: 10, 10, 10, 10, 10, 10, 10, 10, 10, and **2,000** ms.
+
+The **average** is 209 ms. That sounds acceptable. But nine users had a great experience and one waited **two full seconds**.
+
+Averages hide your worst experiences. **Percentiles expose them.**
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Metric</TH>
+      <TH>What it means</TH>
+      <TH>Who it represents</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>p50 (median)</TD>
+      <TD>Half of requests are faster than this</TD>
+      <TD>The typical user</TD>
+    </TR>
+    <TR>
+      <TD>p90</TD>
+      <TD>90% are faster</TD>
+      <TD>Mildly unlucky users</TD>
+    </TR>
+    <TR>
+      <TD>p95</TD>
+      <TD>95% are faster</TD>
+      <TD>1 in 20 requests</TD>
+    </TR>
+    <TR>
+      <TD>p99</TD>
+      <TD>99% are faster</TD>
+      <TD>1 in 100 — often your <strong>heaviest, most valuable</strong> users</TD>
+    </TR>
+    <TR>
+      <TD>p99.9</TD>
+      <TD>99.9% are faster</TD>
+      <TD>1 in 1,000 — the true tail</TD>
+    </TR>
+  </TBody>
+</Table>
+
+<StickyNote color="red">
+**Never set a latency target using an average.** Always use percentiles.
+
+"Average response time is 200 ms" is a nearly meaningless statement. "p50 is 80 ms, p99 is 400 ms" tells you exactly what's happening — and it's the difference between a vague hope and an actual SLO.
+</StickyNote>
+
+<StickyNote color="teal">
+**Why the tail hits your best users hardest.** The slowest requests usually belong to the accounts with the *most data* — the most followers, the biggest cart, the longest history. Those are your power users.
+
+So p99 latency isn't an edge case you can shrug off. It's the experience of the people who care about your product the most.
+</StickyNote>
+
+
+### 4.1 A typical target set
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Percentile</TH>
+      <TH>Target for an interactive API</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>p50</TD>
+      <TD>&lt; 100 ms</TD>
+    </TR>
+    <TR>
+      <TD>p95</TD>
+      <TD>&lt; 300 ms</TD>
+    </TR>
+    <TR>
+      <TD>p99</TD>
+      <TD>&lt; 500 ms</TD>
+    </TR>
+    <TR>
+      <TD>p99.9</TD>
+      <TD>&lt; 1 s</TD>
+    </TR>
+  </TBody>
+</Table>
+
+<StickyNote color="sky">
+Chasing **p99.99** is usually a bad investment. Each extra nine costs dramatically more engineering and infrastructure than the last. Most teams should stop at p99 or p99.9 and spend the effort elsewhere.
+</StickyNote>
+
+---
+
+## 5. Building a latency budget
+
+Now the actual technique.
+
+<Steps>
+
+<Step>Pick the user-facing target</Step>
+
+Start from the experience, not the components. "Search results in under 300 ms at p99." One number, stated as a percentile.
+
+<Step>List every hop in the request path</Step>
+
+Be exhaustive and honest. DNS, TLS, network to the server, load balancer, auth check, cache lookup, database query, downstream service calls, serialization, response network trip.
+
+<Step>Assign a slice to each hop</Step>
+
+Give every hop a millisecond allowance. They must sum to **less than** your target.
+
+<Step>Reserve headroom</Step>
+
+Keep **20–30% unallocated**. Reality is messier than your spreadsheet — GC pauses, retries, noisy neighbours.
+
+<Step>Measure, then enforce</Step>
+
+Instrument each hop. When one exceeds its slice, it's a bug with an owner — not a mystery.
+
+</Steps>
+
+### 5.1 Worked example: a search API at 300 ms p99
+
+```
+TOTAL BUDGET: 300 ms (p99)
+
+  Client → edge (network)              40 ms
+  TLS + load balancer                  10 ms
+  Auth / token validation              15 ms
+  Cache lookup (Redis)                  5 ms
+  Search service query                 80 ms
+  Ranking service call                 50 ms
+  Serialization + response building    20 ms
+  Edge → client (network)               40 ms
+                                     -------
+  ALLOCATED                           260 ms
+  HEADROOM (13%)                       40 ms
+                                     -------
+  TOTAL                               300 ms
+```
+
+Now everything is concrete. The search service owner knows their number is **80 ms**, not "be fast". If ranking creeps to 90 ms, the budget is blown and there's a visible, attributable reason.
+
+<StickyNote color="purple">
+**Notice the network is 80 ms of the 300** — over a quarter of the entire budget, and you can't write code to make it faster. Your only levers are physical: a CDN, edge compute, or a region closer to the user.
+
+This is why "where do we deploy?" is a latency decision, not just an ops decision.
+</StickyNote>
+
+### 5.2 Sequential vs parallel calls
+
+How you *arrange* calls matters enormously.
+
+```
+SEQUENTIAL (bad) — latencies add up
+auth (15) → cache (5) → search (80) → ranking (50) = 150 ms
+
+PARALLEL (good) — latency is the slowest one
+auth (15) ─┐
+search (80)├─→ max(15, 80, 50) = 80 ms
+ranking(50)┘
+```
+
+<StickyNote color="green">
+**The cheapest latency win available to you** is usually turning sequential calls into parallel ones. If two calls don't depend on each other's results, fire them at the same time.
+
+In the example above, that's 150 ms → 80 ms for essentially no infrastructure cost.
+</StickyNote>
+
+---
+
+## 6. Tail latency amplification
+
+This is the concept that separates people who've operated distributed systems from people who've only read about them.
+
+Say your service calls **100 downstream services** in parallel, and each has a p99 of 100 ms — meaning each is slow only 1% of the time. Sounds great.
+
+But you must wait for **all 100** to answer. The chance that *every* one is fast is:
+
+<Code>0.99¹⁰⁰ ≈ 0.366</Code>
+
+So only **37%** of your requests are fully fast. **63% of user requests hit at least one slow call.**
+
+<StickyNote color="red">
+**Read that again.** Every single dependency is fast 99% of the time, yet **almost two out of three** user requests are slow.
+
+This is **tail latency amplification**, and it's why large microservice systems feel sluggish even when every individual service dashboard looks healthy.
+</StickyNote>
+
+<Output>
+1 service    → 0.99¹   = 99.0% fast   →  1% slow
+10 services  → 0.99¹⁰  = 90.4% fast   →  10% slow
+50 services  → 0.99⁵⁰  = 60.5% fast   →  39% slow
+100 services → 0.99¹⁰⁰ = 36.6% fast   →  63% slow
+500 services → 0.99⁵⁰⁰ =  0.7% fast   →  99% slow
+</Output>
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Parallel calls (each p99 = 1% slow)</TH>
+      <TH>Chance all are fast</TH>
+      <TH>Chance at least one is slow</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>1</TD>
+      <TD>99%</TD>
+      <TD>1%</TD>
+    </TR>
+    <TR>
+      <TD>10</TD>
+      <TD>90%</TD>
+      <TD>10%</TD>
+    </TR>
+    <TR>
+      <TD>50</TD>
+      <TD>61%</TD>
+      <TD>39%</TD>
+    </TR>
+    <TR>
+      <TD>100</TD>
+      <TD>37%</TD>
+      <TD>63%</TD>
+    </TR>
+    <TR>
+      <TD>500</TD>
+      <TD>0.7%</TD>
+      <TD>99.3%</TD>
+    </TR>
+  </TBody>
+</Table>
+
+### 6.1 How to fight it
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Technique</TH>
+      <TH>How it works</TH>
+      <TH>Cost</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>Reduce fan-out</TD>
+      <TD>Call fewer services; batch or merge related calls</TD>
+      <TD>Coupling between services</TD>
+    </TR>
+    <TR>
+      <TD>Hedged requests</TD>
+      <TD>Send to two replicas, take the first answer, cancel the other</TD>
+      <TD>~2x load on that call</TD>
+    </TR>
+    <TR>
+      <TD>Tied requests</TD>
+      <TD>Send to two replicas; each tells the other once it starts</TD>
+      <TD>Slight complexity, much less waste than hedging</TD>
+    </TR>
+    <TR>
+      <TD>Timeouts + defaults</TD>
+      <TD>Give up on a slow call and return a fallback value</TD>
+      <TD>Degraded (but fast) response</TD>
+    </TR>
+    <TR>
+      <TD>Request prioritization</TD>
+      <TD>Serve interactive traffic ahead of batch work</TD>
+      <TD>Scheduling complexity</TD>
+    </TR>
+    <TR>
+      <TD>Fix the actual tail</TD>
+      <TD>Tune GC, remove lock contention, add indexes, warm caches</TD>
+      <TD>Engineering time — but it's the real fix</TD>
+    </TR>
+  </TBody>
+</Table>
+
+<StickyNote color="pink">
+**Graceful degradation is often the best answer.** If the "recommended for you" service hasn't replied in 50 ms, ship the page without it. A fast page missing one section beats a complete page that took two seconds.
+
+Decide this *at budget time*: mark each dependency as **required** or **optional**. Optional dependencies get a hard timeout and a fallback.
+</StickyNote>
+
+---
+
+## 7. Where latency actually goes
+
+When a budget is blown, the culprit is usually on this list.
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Source</TH>
+      <TH>Typical cost</TH>
+      <TH>How to reduce it</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>Geographic distance</TD>
+      <TD>50–200 ms</TD>
+      <TD>CDN, edge compute, regional deployments</TD>
+    </TR>
+    <TR>
+      <TD>TLS handshake</TD>
+      <TD>1–3 round trips</TD>
+      <TD>TLS 1.3, session resumption, connection reuse</TD>
+    </TR>
+    <TR>
+      <TD>DNS lookup</TD>
+      <TD>20–120 ms (uncached)</TD>
+      <TD>Longer TTLs, DNS prefetch</TD>
+    </TR>
+    <TR>
+      <TD>Cold cache / cache miss</TD>
+      <TD>10–100x a hit</TD>
+      <TD>Cache warming, longer TTLs, better keys</TD>
+    </TR>
+    <TR>
+      <TD>Unindexed database query</TD>
+      <TD>100 ms – 10 s</TD>
+      <TD>Add the index; check the query plan</TD>
+    </TR>
+    <TR>
+      <TD>N+1 query pattern</TD>
+      <TD>N × single-query cost</TD>
+      <TD>Batch, join, or use a dataloader</TD>
+    </TR>
+    <TR>
+      <TD>Sequential service calls</TD>
+      <TD>Sum of all hops</TD>
+      <TD>Parallelize independent calls</TD>
+    </TR>
+    <TR>
+      <TD>Queueing under load</TD>
+      <TD>Grows without bound near saturation</TD>
+      <TD>Add capacity, shed load, cap queue depth</TD>
+    </TR>
+    <TR>
+      <TD>Garbage collection pause</TD>
+      <TD>10–500 ms spikes</TD>
+      <TD>Tune GC, reduce allocation, smaller heaps</TD>
+    </TR>
+    <TR>
+      <TD>Lock contention</TD>
+      <TD>Unpredictable spikes</TD>
+      <TD>Finer-grained locks, lock-free structures</TD>
+    </TR>
+    <TR>
+      <TD>Retries</TD>
+      <TD>2–3x on failure paths</TD>
+      <TD>Budget for retries; use exponential backoff + jitter</TD>
+    </TR>
+  </TBody>
+</Table>
+
+<StickyNote color="orange">
+**Queueing deserves special attention.** As utilization approaches 100%, queueing delay grows toward infinity — not linearly. A server at 70% utilization is fine. The same server at 95% has *wildly* worse latency, even though it's only handling ~35% more traffic.
+
+This is why capacity planning and latency budgeting are the same conversation. **Run systems at 60–70% utilization** so there's slack to absorb bursts.
+</StickyNote>
+
+---
+
+## 8. Latency and availability: SLI, SLO, SLA
+
+Budgets become real when they're written down as objectives.
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Term</TH>
+      <TH>Meaning</TH>
+      <TH>Example</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>SLI (Indicator)</TD>
+      <TD>The thing you measure</TD>
+      <TD>p99 response time of <Code>GET /search</Code></TD>
+    </TR>
+    <TR>
+      <TD>SLO (Objective)</TD>
+      <TD>Your internal target for that measurement</TD>
+      <TD>p99 &lt; 300 ms for 99.9% of the month</TD>
+    </TR>
+    <TR>
+      <TD>SLA (Agreement)</TD>
+      <TD>A contractual promise, usually with penalties</TD>
+      <TD>p99 &lt; 500 ms or the customer gets credits</TD>
+    </TR>
+  </TBody>
+</Table>
+
+<StickyNote color="blue">
+**Always set your SLO stricter than your SLA.** The gap is your safety margin: you get alerted and can fix things *before* you owe anybody money.
+
+A common pattern is an SLO at roughly half the SLA threshold.
+</StickyNote>
+
+---
+
+## 9. Common mistakes
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Mistake</TH>
+      <TH>Why it hurts</TH>
+      <TH>Fix</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>Budgeting with averages</TD>
+      <TD>Hides the tail entirely; the worst experiences stay invisible</TD>
+      <TD>Use p95/p99</TD>
+    </TR>
+    <TR>
+      <TD>Forgetting network time</TD>
+      <TD>Cross-region round trips can be 100+ ms of the budget</TD>
+      <TD>Budget both directions explicitly</TD>
+    </TR>
+    <TR>
+      <TD>Allocating 100% of the budget</TD>
+      <TD>Zero room for GC pauses, retries, or bad days</TD>
+      <TD>Reserve 20–30% headroom</TD>
+    </TR>
+    <TR>
+      <TD>Ignoring fan-out amplification</TD>
+      <TD>Healthy services still produce a slow product</TD>
+      <TD>Compute the combined tail; reduce fan-out</TD>
+    </TR>
+    <TR>
+      <TD>Sequential calls that could be parallel</TD>
+      <TD>Wastes the budget for free</TD>
+      <TD>Parallelize anything independent</TD>
+    </TR>
+    <TR>
+      <TD>No per-hop instrumentation</TD>
+      <TD>You know it's slow but not where</TD>
+      <TD>Distributed tracing on every hop</TD>
+    </TR>
+    <TR>
+      <TD>Retries without a budget</TD>
+      <TD>3 retries × 500 ms timeout = 1.5 s worst case</TD>
+      <TD>Cap total time, not just attempts</TD>
+    </TR>
+    <TR>
+      <TD>Running at 95% utilization</TD>
+      <TD>Queueing delay explodes non-linearly</TD>
+      <TD>Target 60–70%</TD>
+    </TR>
+    <TR>
+      <TD>Treating all dependencies as required</TD>
+      <TD>One slow optional service blocks the whole page</TD>
+      <TD>Mark optional deps; timeout + fallback</TD>
+    </TR>
+  </TBody>
+</Table>
+
+<StickyNote color="red">
+**The retry trap is sneakier than it looks.** A 500 ms timeout with 3 retries isn't a 500 ms dependency — it's a **1.5 second** dependency on the failure path. And failure paths are exactly when your system is already under stress.
+
+Always budget **total elapsed time**, including retries, and use exponential backoff with jitter so retries don't synchronize into a stampede.
+</StickyNote>
+
+---
+
+## 10. A reusable checklist
+
+```
+1. TARGET
+   - State it as a percentile, not an average
+   - Example: "p99 under 300 ms for GET /search"
+
+2. MAP THE PATH
+   - DNS, TLS, client network, LB, auth,
+     cache, DB, each downstream service,
+     serialization, return network
+
+3. ALLOCATE
+   - Give each hop a millisecond slice
+   - Sum must stay under the target
+   - Keep 20-30% as headroom
+
+4. OPTIMIZE THE SHAPE
+   - Parallelize independent calls
+   - Mark each dependency required / optional
+   - Optional -> hard timeout + fallback value
+   - Cap total retry time, not just retry count
+
+5. CHECK THE TAIL
+   - Fan-out of N with p99 each
+     -> chance all fast = 0.99^N
+   - High fan-out? reduce it or hedge
+
+6. MEASURE
+   - Trace every hop (OpenTelemetry / Jaeger)
+   - Alert on p99 breaching its slice
+   - Keep utilization at 60-70%
+```
+
+<StickyNote color="amber">
+**Try this on something you've built.** Pick one endpoint, write down its hops, guess a number for each, then go measure. The gap between your guess and reality is the most useful thing you'll learn this week.
+</StickyNote>
+
+---
+
+## 11. Interview Questions
+
+<InterviewQ>
+  <InterviewQItem>
+    <InterviewQuestion>
+    #### 1. What is a latency budget and why would you create one?
+    </InterviewQuestion>
+    <InterviewAnswer>
+      A latency budget is a total response-time target that you divide up and assign to every component in the request path.
+
+      You create one because latency accumulates silently. Each team adds "just 50 ms" for something reasonable, and the page ends up taking two seconds with nobody responsible.
+
+      A budget flips this around. Instead of measuring at the end and hoping, you allocate up front — so if the ranking service exceeds its 50 ms slice, that's a specific bug with a specific owner rather than a vague complaint that the site feels slow.
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+    #### 2. What's the difference between latency and throughput?
+    </InterviewQuestion>
+    <InterviewAnswer>
+      Latency is how long a single request takes. Throughput is how many requests complete per unit of time.
+
+      Using a highway analogy: latency is how long your car takes to reach the destination, throughput is how many cars per hour the highway carries, and bandwidth is the number of lanes.
+
+      They're independent, which surprises people. Adding servers increases throughput but does nothing for the latency of one request. And they can conflict — batching improves throughput but increases latency, because requests wait to be grouped.
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+    #### 3. Why do we use p99 instead of the average?
+    </InterviewQuestion>
+    <InterviewAnswer>
+      Because averages hide the worst experiences. If nine requests take 10 ms and one takes 2,000 ms, the average is 209 ms — which sounds fine, but one user waited two full seconds.
+
+      p99 means 99% of requests are faster than that value, so it directly exposes the slow tail instead of smoothing it away.
+
+      There's a second reason that matters more than it seems: the slowest requests usually belong to users with the most data — the most followers, the biggest cart, the longest history. Those are your power users, so p99 isn't a rare edge case, it's the experience of the people who use your product most.
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+    #### 4. What is tail latency amplification?
+    </InterviewQuestion>
+    <InterviewAnswer>
+      It's what happens when one request fans out to many services and you have to wait for all of them.
+
+      If a request calls 100 services in parallel and each has a p99 of 100 ms — meaning each is slow just 1% of the time — the probability that all 100 are fast is <Code>0.99¹⁰⁰ ≈ 0.37</Code>.
+
+      So 63% of user requests hit at least one slow call, even though every individual service is fast 99% of the time.
+
+      This is why big microservice systems feel sluggish while every service dashboard looks healthy. The fixes are reducing fan-out, hedged or tied requests, and hard timeouts with fallback values.
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+    #### 5. Walk me through building a 300 ms budget for a search API.
+    </InterviewQuestion>
+    <InterviewAnswer>
+      First state the target as a percentile: p99 under 300 ms.
+
+      Then list every hop and assign a slice — roughly 40 ms for the client-to-edge network, 10 ms for TLS and the load balancer, 15 ms for auth, 5 ms for a Redis lookup, 80 ms for the search query, 50 ms for ranking, 20 ms for serialization, and 40 ms for the network back.
+
+      That totals 260 ms, leaving about 40 ms of headroom for GC pauses and retries.
+
+      Two things stand out. The network is 80 ms — over a quarter of the budget — and no code change fixes that; only a CDN or a closer region does. And auth, search, and ranking may be parallelizable, which would cut the server-side portion significantly.
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+    #### 6. Which latency numbers should an engineer have memorized?
+    </InterviewQuestion>
+    <InterviewAnswer>
+      The relative scale matters more than the exact figures. The key anchors are: RAM access around 100 nanoseconds, a random SSD read around 150 microseconds, a round trip within the same data center around 0.5 milliseconds, a spinning-disk seek around 10 milliseconds, and a cross-continent round trip around 150 milliseconds.
+
+      The useful way to hold this is a human-scale analogy. If an L1 cache read took one second, RAM would take three minutes, an SSD read about two days, a same-datacenter hop about eleven days, and a California-to-Netherlands round trip about ten years.
+
+      That's why caching is so effective — you're skipping the ten-year trip. And it's why cross-region latency can't be engineered away: it's bounded by the speed of light, so the only fix is moving data closer to users.
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+    #### 7. How do sequential versus parallel calls affect a budget?
+    </InterviewQuestion>
+    <InterviewAnswer>
+      Sequential calls add up; parallel calls cost only as much as the slowest one.
+
+      If auth takes 15 ms, search takes 80 ms, and ranking takes 50 ms, running them in sequence costs 145 ms. Running them in parallel costs 80 ms — the maximum rather than the sum.
+
+      This is usually the cheapest latency win available, because it needs no extra infrastructure, just restructured code. The constraint is data dependencies: if ranking needs the search results, it genuinely has to wait. But a surprising number of calls in real codebases are sequential purely out of habit.
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+    #### 8. What are hedged requests?
+    </InterviewQuestion>
+    <InterviewAnswer>
+      A hedged request means sending the same request to two replicas, taking whichever answer arrives first, and cancelling the other.
+
+      It works because slowness is usually caused by transient local conditions — a GC pause, a busy disk, a noisy neighbour — and it's unlikely two replicas hit that at the same moment. So hedging cuts the tail dramatically.
+
+      The cost is roughly double the load on that call. A common refinement is to hedge only after waiting for the p95 — so you only pay the extra cost on the 5% of requests that already look slow.
+
+      Tied requests go further: both replicas are told about each other, so whichever starts first cancels its twin, which gives most of the benefit with far less waste.
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+    #### 9. What's the difference between SLI, SLO, and SLA?
+    </InterviewQuestion>
+    <InterviewAnswer>
+      An SLI is the indicator — the thing you actually measure, such as the p99 response time of <Code>GET /search</Code>.
+
+      An SLO is the objective — your internal target for that measurement, such as p99 under 300 ms for 99.9% of the month.
+
+      An SLA is the agreement — a contractual promise to a customer, usually with financial penalties, such as p99 under 500 ms or they receive service credits.
+
+      The important practice is setting the SLO stricter than the SLA, often at about half the threshold. That gap is your safety margin: you get alerted and can fix the problem before you owe anyone money.
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+    #### 10. Why does latency get dramatically worse as a server approaches full utilization?
+    </InterviewQuestion>
+    <InterviewAnswer>
+      Because of queueing. As utilization approaches 100%, queueing delay grows toward infinity rather than linearly.
+
+      A server at 70% utilization has short queues and predictable latency. The same server at 95% has wildly worse latency even though it's only handling about 35% more traffic, because requests spend most of their time waiting rather than being processed.
+
+      This is why capacity planning and latency budgeting are really the same conversation. The practical rule is to run systems at 60–70% utilization so there's slack to absorb bursts, and to shed load or cap queue depth rather than letting queues grow unbounded.
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+    #### 11. How do retries interact with a latency budget?
+    </InterviewQuestion>
+    <InterviewAnswer>
+      They can quietly multiply it. A dependency with a 500 ms timeout and three retries isn't a 500 ms dependency — on the failure path it's a 1.5 second dependency.
+
+      That's especially dangerous because failure paths happen exactly when the system is already stressed, so retries add load at the worst possible moment.
+
+      The fixes are budgeting total elapsed time rather than just counting attempts, using exponential backoff with jitter so retries don't synchronize into a stampede, and adding circuit breakers so you stop retrying a dependency that's clearly down.
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+    #### 12. Your p99 is 2 seconds but p50 is 50 ms. How do you investigate?
+    </InterviewQuestion>
+    <InterviewAnswer>
+      That gap says the slow path is structurally different from the typical path, not that everything is uniformly slow.
+
+      I'd start with distributed tracing, filtering to only the slow requests, and compare their span breakdown against fast ones to find which hop expands.
+
+      The usual suspects are cache misses falling through to a slow query, users with much larger data sets triggering unindexed or unbounded queries, GC pauses, lock contention, queueing during traffic spikes, and retries on a flaky dependency.
+
+      A useful discriminator is whether slow requests cluster in time or by user. Clustered in time suggests GC, deploys, or load spikes. Clustered by user suggests data-size problems like a missing index or an N+1 query on large accounts.
+    </InterviewAnswer>
+  </InterviewQItem>
+</InterviewQ>
+
+---
+
+## Summary
+
+- A **latency budget** is a total response-time target divided across every hop, so nothing gets slow by accident.
+- **Latency and throughput are independent.** More servers raise throughput; they don't speed up one request.
+- Know the **relative scale**: RAM ~100 ns, SSD ~150 µs, same-datacenter hop ~0.5 ms, cross-continent ~150 ms.
+- **Never budget with averages.** Use **p50/p95/p99** — the tail is where your power users live.
+- Assign each hop a slice, keep **20–30% headroom**, and **parallelize** independent calls.
+- **Tail latency amplification**: fan-out of 100 with 1% slowness each means **63% of requests are slow**.
+- Mark dependencies **required or optional**; optional ones get a timeout and a fallback.
+- **Budget total time including retries**, and keep utilization at **60–70%** so queueing doesn't explode.
+- Write it down as an **SLO** stricter than your **SLA**, and trace every hop so breaches have an owner.
+
+> Next up: **Load Balancing** — how traffic gets spread across the servers you just finished sizing.
