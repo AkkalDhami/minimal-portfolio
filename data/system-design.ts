@@ -84,26 +84,26 @@ export const SYSTEM_DESIGN_DATA: IModule[] = createModules([
           "Learn how to separate what a system must do from how well it must do it, and why both shape the final architecture."
       },
       {
+        slug: "capacity-estimation",
+        title: "Capacity Estimation & Back-of-Envelope Math",
+        docs: "/capacity-estimation",
+        description:
+          "Learn to estimate QPS, storage growth, and bandwidth from user counts so you can decide between one server and a thousand."
+      },
+      {
+        slug: "latency-budgeting",
+        title: "Latency Budgeting",
+        docs: "/latency-budgeting",
+        description:
+          "Understand how to allocate a total latency budget across network hops, cache, and database calls, using p50/p95/p99 targets."
+      },
+      {
         slug: "load-balancing",
         title: "Load Balancing - Distributing Traffic the Right Way",
         description:
           "How load balancers sit between users and servers, the algorithms they use, L4 vs L7, health checks, sticky sessions, and the trade-offs that come up in real systems.",
         docs: `/load-balancing`
       }
-      // {
-      //   slug: "capacity-estimation",
-      //   title: "Capacity Estimation & Back-of-Envelope Math",
-      //   docs: "/capacity-estimation",
-      //   description:
-      //     "Learn to estimate QPS, storage growth, and bandwidth from user counts so you can decide between one server and a thousand."
-      // },
-      // {
-      //   slug: "latency-budgeting",
-      //   title: "Latency Budgeting",
-      //   docs: "/latency-budgeting",
-      //   description:
-      //     "Understand how to allocate a total latency budget across network hops, cache, and database calls, using p50/p95/p99 targets."
-      // },
       // {
       //   slug: "client-server-model",
       //   title: "Client-Server Model",
