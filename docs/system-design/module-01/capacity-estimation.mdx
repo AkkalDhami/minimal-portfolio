@@ -1,0 +1,877 @@
+---
+title: Capacity Estimation & Back-of-Envelope Math
+description: Learn to estimate QPS, storage growth, and bandwidth from user counts so you can decide between one server and a thousand.
+---
+
+Someone tells you: *"Design Instagram."*
+
+Your very next thought should not be "microservices" or "Kafka". It should be a much simpler question:
+
+**How big is this thing, actually?**
+
+Because the answer changes everything. A photo app for 1,000 users runs happily on one small server with one database. The same app for 500 million users needs sharding, CDNs, replicas, queues, and a monthly bill with a lot of zeros in it.
+
+**Capacity estimation** is the skill of going from *"500 million users"* to *"okay, that's roughly 6,000 writes per second and 3 petabytes of storage"* — in about two minutes, on a whiteboard, without a calculator.
+
+<StickyNote color="cyan">
+Capacity estimation converts user counts into the three numbers that drive every architecture decision — QPS, storage, and bandwidth.
+</StickyNote>
+
+---
+
+## 1. Why bother estimating at all?
+
+It feels like busywork. It isn't. Here's what these numbers actually buy you.
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Question you can now answer</TH>
+      <TH>Because you estimated...</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>Do I need one database or a sharded cluster?</TD>
+      <TD>Storage size and write QPS</TD>
+    </TR>
+    <TR>
+      <TD>Can I cache everything in memory?</TD>
+      <TD>Size of the "hot" working set</TD>
+    </TR>
+    <TR>
+      <TD>Do I need a CDN?</TD>
+      <TD>Outgoing bandwidth</TD>
+    </TR>
+    <TR>
+      <TD>How many app servers?</TD>
+      <TD>Peak QPS ÷ QPS one server handles</TD>
+    </TR>
+    <TR>
+      <TD>Is this design affordable?</TD>
+      <TD>Storage + bandwidth are the two biggest cloud bills</TD>
+    </TR>
+    <TR>
+      <TD>Should writes be async (queued)?</TD>
+      <TD>Write QPS vs what the database can absorb</TD>
+    </TR>
+  </TBody>
+</Table>
+
+<StickyNote color="yellow">
+**In an interview**, estimation is where you prove you think in *systems* and not just in *boxes and arrows*. A candidate who says "we'll need a cache" is guessing. A candidate who says "reads are 100x writes at ~60k QPS, so a cache is doing the heavy lifting here" is **engineering**.
+</StickyNote>
+
+---
+
+## 2. The three numbers you always estimate
+
+Almost every estimation boils down to these three, in this order:
+
+<Steps>
+
+<Step>QPS — Queries Per Second</Step>
+
+How many requests hit your system every second? Split into **read QPS** and **write QPS**, because they stress completely different parts of your architecture.
+
+<Step>Storage</Step>
+
+How many bytes do you accumulate? Usually expressed **per day** and **per 5 years**, because storage only ever grows.
+
+<Step>Bandwidth</Step>
+
+How many bytes per second move in and out? Also split: **ingress** (uploads coming in) and **egress** (downloads going out). Egress is the one that costs real money.
+
+</Steps>
+
+Everything else — number of servers, cache size, shard count — is derived from these three.
+
+---
+
+## 3. The numbers you must memorize
+
+You can't do fast math without a few anchors. These are the ones worth committing to memory.
+
+### 3.1 Time
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Period</TH>
+      <TH>Exact seconds</TH>
+      <TH>Use this instead</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>1 day</TD>
+      <TD>86,400</TD>
+      <TD><strong>100,000 (10⁵)</strong></TD>
+    </TR>
+    <TR>
+      <TD>1 month</TD>
+      <TD>2,592,000</TD>
+      <TD>2.5 million</TD>
+    </TR>
+    <TR>
+      <TD>1 year</TD>
+      <TD>31,536,000</TD>
+      <TD>30 million</TD>
+    </TR>
+  </TBody>
+</Table>
+
+<StickyNote color="green">
+**The single most useful trick in all of capacity estimation:**
+
+<Code>1 day ≈ 100,000 seconds</Code>
+
+So to go from *per day* to *per second*, just **divide by 100,000** — which means **chop off 5 zeros**. No calculator needed.
+
+1 million events/day → 10 per second.
+100 million events/day → 1,000 per second.
+1 billion events/day → 10,000 per second.
+
+The real number is 86,400, so you overestimate by about 16%. That is completely fine — and it errs on the safe side.
+</StickyNote>
+
+### 3.2 Data sizes (powers of 2)
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Unit</TH>
+      <TH>Power of 2</TH>
+      <TH>Short version</TH>
+      <TH>Real-world feel</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>KB (Kilobyte)</TD>
+      <TD>2¹⁰</TD>
+      <TD>1 thousand bytes</TD>
+      <TD>A short text post</TD>
+    </TR>
+    <TR>
+      <TD>MB (Megabyte)</TD>
+      <TD>2²⁰</TD>
+      <TD>1 million bytes</TD>
+      <TD>A photo, an MP3</TD>
+    </TR>
+    <TR>
+      <TD>GB (Gigabyte)</TD>
+      <TD>2³⁰</TD>
+      <TD>1 billion bytes</TD>
+      <TD>A movie; RAM in a laptop</TD>
+    </TR>
+    <TR>
+      <TD>TB (Terabyte)</TD>
+      <TD>2⁴⁰</TD>
+      <TD>1 trillion bytes</TD>
+      <TD>A big hard drive; a mid-size DB</TD>
+    </TR>
+    <TR>
+      <TD>PB (Petabyte)</TD>
+      <TD>2⁵⁰</TD>
+      <TD>1,000 TB</TD>
+      <TD>A large company's data lake</TD>
+    </TR>
+  </TBody>
+</Table>
+
+<StickyNote>
+For estimation, **pretend 1 KB = 1,000 bytes** (not 1,024). The 2.4% error is irrelevant, and the mental math becomes trivial: each step up is just "add three zeros."
+</StickyNote>
+
+### 3.3 Typical object sizes
+
+You'll need to assume a size for "one thing". These are reasonable defaults nobody will argue with:
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Object</TH>
+      <TH>Assume</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>A tweet / short text post</TD>
+      <TD>~300 bytes (with metadata: ~1 KB)</TD>
+    </TR>
+    <TR>
+      <TD>A user record (id, name, email, settings)</TD>
+      <TD>~1 KB</TD>
+    </TR>
+    <TR>
+      <TD>A chat message</TD>
+      <TD>~100 bytes - 1 KB</TD>
+    </TR>
+    <TR>
+      <TD>A URL in a URL shortener</TD>
+      <TD>~500 bytes per row</TD>
+    </TR>
+    <TR>
+      <TD>A compressed photo</TD>
+      <TD>~200 KB - 2 MB (use <strong>1 MB</strong>)</TD>
+    </TR>
+    <TR>
+      <TD>A profile thumbnail</TD>
+      <TD>~20 KB</TD>
+    </TR>
+    <TR>
+      <TD>1 minute of 1080p video</TD>
+      <TD>~50 MB</TD>
+    </TR>
+    <TR>
+      <TD>A log line</TD>
+      <TD>~200 bytes - 1 KB</TD>
+    </TR>
+  </TBody>
+</Table>
+
+### 3.4 What one machine can roughly do
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Resource</TH>
+      <TH>Rough capacity of one commodity server</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>Web/app server (simple requests)</TD>
+      <TD>1,000 - 10,000 QPS</TD>
+    </TR>
+    <TR>
+      <TD>SQL database (reads, indexed)</TD>
+      <TD>~5,000 - 10,000 QPS</TD>
+    </TR>
+    <TR>
+      <TD>SQL database (writes)</TD>
+      <TD>~1,000 - 5,000 QPS</TD>
+    </TR>
+    <TR>
+      <TD>Redis / in-memory cache</TD>
+      <TD>~100,000+ QPS</TD>
+    </TR>
+    <TR>
+      <TD>RAM on one big machine</TD>
+      <TD>64 GB - 512 GB</TD>
+    </TR>
+    <TR>
+      <TD>Disk on one machine</TD>
+      <TD>a few TB</TD>
+    </TR>
+    <TR>
+      <TD>Network on one machine</TD>
+      <TD>1 - 10 Gbps</TD>
+    </TR>
+  </TBody>
+</Table>
+
+<StickyNote color="orange">
+These are **order-of-magnitude anchors**, not benchmarks. Real numbers depend on query shape, indexes, hardware, and language. Their purpose is to let you say "one server can't do 500k QPS, so we need at least ~50-100 of them" — and be right about the *shape* of the answer.
+</StickyNote>
+
+---
+
+## 4. The estimation recipe
+
+Every capacity estimate follows the same five steps. Learn the sequence and you'll never freeze on a whiteboard.
+
+<Steps>
+
+<Step>State your assumptions out loud</Step>
+
+Total users, daily active users (DAU), actions per user per day, average object size. **Write them down.** If an interviewer disagrees with an assumption, they'll correct you — and that's a conversation, not a failure.
+
+<Step>Compute writes per day, then per second</Step>
+
+<Code>writes/day = DAU x actions per user per day</Code>, then divide by 100,000.
+
+<Step>Apply the read:write ratio</Step>
+
+Most systems read far more than they write. Multiply write QPS by the ratio to get read QPS.
+
+<Step>Multiply by a peak factor</Step>
+
+Traffic isn't flat across 24 hours. Multiply average QPS by **2-3x** to get peak QPS. Design for peak, not average.
+
+<Step>Compute storage and bandwidth</Step>
+
+<Code>storage/day = writes/day x object size</Code>, then project out 1 year and 5 years.
+<Code>bandwidth = QPS x object size</Code>.
+
+</Steps>
+
+<StickyNote color="teal">
+**Round aggressively at every step.** 86,400 → 100,000. 365 → 400. 7.3 → 10. You are hunting for the *magnitude*. Precision here is a trap that costs you time and buys you nothing.
+</StickyNote>
+
+---
+
+## 5. Understanding DAU, actions, and the read:write ratio
+
+Three assumptions do most of the work. Getting a feel for them is most of the skill.
+
+### 5.1 Total users vs Daily Active Users
+
+Nobody uses an app every day. **DAU is typically 10-30% of registered users.**
+
+<Code>1 billion registered users → assume ~300 million DAU</Code>
+
+Always estimate from DAU. Estimating from total registered users overshoots by 3-10x.
+
+### 5.2 Actions per user per day
+
+How many times does one active user do the thing?
+
+<Table>
+  <THead>
+    <TR>
+      <TH>System</TH>
+      <TH>Writes / user / day</TH>
+      <TH>Reads / user / day</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>Twitter / X</TD>
+      <TD>~2 tweets</TD>
+      <TD>~200 timeline views</TD>
+    </TR>
+    <TR>
+      <TD>Instagram</TD>
+      <TD>~0.1 posts</TD>
+      <TD>~100 photo views</TD>
+    </TR>
+    <TR>
+      <TD>WhatsApp</TD>
+      <TD>~50 messages</TD>
+      <TD>~50 messages received</TD>
+    </TR>
+    <TR>
+      <TD>YouTube</TD>
+      <TD>~0.001 uploads</TD>
+      <TD>~5 video views</TD>
+    </TR>
+    <TR>
+      <TD>URL shortener</TD>
+      <TD>1 create</TD>
+      <TD>~100 redirects</TD>
+    </TR>
+  </TBody>
+</Table>
+
+### 5.3 The read:write ratio
+
+This is the number that shapes your entire architecture.
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Ratio</TH>
+      <TH>Type of system</TH>
+      <TH>What the architecture needs</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>100:1 or higher</TD>
+      <TD>Read-heavy (Twitter, YouTube, news, URL shorteners)</TD>
+      <TD>Caching, read replicas, CDN</TD>
+    </TR>
+    <TR>
+      <TD>~1:1</TD>
+      <TD>Balanced (chat, messaging)</TD>
+      <TD>Fast writes and fast reads; partitioning</TD>
+    </TR>
+    <TR>
+      <TD>Write-heavy (1:10)</TD>
+      <TD>Logging, metrics, IoT sensors, analytics ingestion</TD>
+      <TD>Queues, batching, LSM-tree / time-series DBs</TD>
+    </TR>
+  </TBody>
+</Table>
+
+<StickyNote color="indigo">
+**Why the ratio matters so much:** reads can be cached, replicated, and served from the edge — they scale *outward* almost for free. Writes must reach the source of truth, must be durable, and must stay consistent — they scale *hard*.
+
+So a 100:1 read-heavy system with 60,000 QPS is a **caching problem**. A write-heavy system at the same QPS is a **sharding and durability problem**. Same number, totally different design.
+</StickyNote>
+
+---
+
+## 6. Worked example #1: Twitter / X
+
+Let's do a full estimate, slowly.
+
+### 6.1 Assumptions
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Assumption</TH>
+      <TH>Value</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>Daily active users</TD>
+      <TD>300 million</TD>
+    </TR>
+    <TR>
+      <TD>Tweets per user per day</TD>
+      <TD>2</TD>
+    </TR>
+    <TR>
+      <TD>Timeline reads per user per day</TD>
+      <TD>200</TD>
+    </TR>
+    <TR>
+      <TD>Size of one tweet (text + metadata)</TD>
+      <TD>1 KB</TD>
+    </TR>
+    <TR>
+      <TD>Percentage of tweets with media</TD>
+      <TD>10%, at 1 MB each</TD>
+    </TR>
+  </TBody>
+</Table>
+
+### 6.2 Write QPS
+
+<Code>300,000,000 users x 2 tweets = 600,000,000 tweets/day</Code>
+
+Now divide by 100,000 (chop 5 zeros):
+
+<Code>600,000,000 ÷ 100,000 = 6,000 tweets/second</Code>
+
+Apply a 2x peak factor:
+
+<Code>Peak write QPS ≈ 12,000/second</Code>
+
+### 6.3 Read QPS
+
+<Code>300,000,000 x 200 = 60,000,000,000 reads/day</Code>
+
+<Code>60,000,000,000 ÷ 100,000 = 600,000 reads/second</Code>
+
+Peak: <Code>~1,200,000 reads/second</Code>
+
+<StickyNote color="red">
+**Stop and look at those two numbers.** 6,000 writes/sec vs 600,000 reads/sec — a **100:1 ratio**.
+
+This single observation tells you the whole architecture. You cannot serve 600k reads/second from a database. That number *demands* aggressive caching and precomputed timelines (fan-out on write). You just derived the core design decision from arithmetic alone.
+</StickyNote>
+
+### 6.4 Storage
+
+Text:
+
+<Code>600,000,000 tweets/day x 1 KB = 600 GB/day</Code>
+
+Media (10% of tweets, 1 MB each):
+
+<Code>60,000,000 x 1 MB = 60 TB/day</Code>
+
+Total ≈ **60.6 TB/day**, which is basically 60 TB — the text is a rounding error next to the images.
+
+Over 5 years:
+
+<Code>60 TB/day x 365 x 5 ≈ 110 PB</Code>
+
+<StickyNote color="yellow">
+**Notice what happened:** media is 100x bigger than text. This is why real systems store media in **object storage** (S3, blob storage) behind a **CDN**, and keep only the *URL* in the database. Your database stays small and fast; the bytes live somewhere cheap.
+
+You discovered that architectural rule purely from the numbers.
+</StickyNote>
+
+### 6.5 Bandwidth
+
+Egress (what you serve to users) — assume a timeline read returns ~10 tweets and some images, roughly 100 KB per read:
+
+<Code>600,000 reads/sec x 100 KB = 60 GB/second</Code>
+
+That's about **480 Gbps**.
+
+<StickyNote color="purple">
+One server has maybe 10 Gbps of network. 480 Gbps means you'd need ~50 servers *just to push bytes* — before doing any actual work.
+
+Conclusion: **a CDN is not optional here.** Static media must be served from edge locations, not your origin servers.
+</StickyNote>
+
+#### Twitter — final numbers:
+
+<Output>
+Write QPS   6,000/s      (peak 12,000/s)
+Read QPS    600,000/s    (peak 1,200,000/s)
+Ratio       100 : 1
+Storage     60 TB/day  →  ~110 PB over 5 years
+Egress      60 GB/s    ≈  480 Gbps
+</Output>
+
+---
+
+## 7. Worked example #2: URL shortener (like bit.ly)
+
+A smaller, cleaner example — and an extremely common interview question.
+
+### 7.1 Assumptions
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Assumption</TH>
+      <TH>Value</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>New URLs created</TD>
+      <TD>100 million / month</TD>
+    </TR>
+    <TR>
+      <TD>Read:write ratio</TD>
+      <TD>100:1</TD>
+    </TR>
+    <TR>
+      <TD>Size of one row (short code, long URL, metadata)</TD>
+      <TD>500 bytes</TD>
+    </TR>
+    <TR>
+      <TD>Retention</TD>
+      <TD>5 years</TD>
+    </TR>
+  </TBody>
+</Table>
+
+### 7.2 QPS
+
+100 million/month → per day: <Code>100,000,000 ÷ 30 ≈ 3,300,000/day</Code>
+
+Per second: <Code>3,300,000 ÷ 100,000 ≈ 33 writes/second</Code>
+
+Reads at 100:1: <Code>3,300 reads/second</Code>
+
+<StickyNote color="green">
+**33 writes per second is nothing.** A single modest database handles that without breaking a sweat. 3,300 reads/second is also very manageable, especially with a cache.
+
+This is a genuinely important result: **a URL shortener does not need a huge distributed system.** The interesting problems are *short-code generation without collisions* and *redirect latency* — not scale. Estimation just saved you from over-engineering.
+</StickyNote>
+
+### 7.3 Storage
+
+<Code>3,300,000 URLs/day x 500 bytes ≈ 1.65 GB/day</Code>
+
+Over 5 years:
+
+<Code>1.65 GB x 365 x 5 ≈ 3 TB</Code>
+
+3 TB fits comfortably on a single machine's disk. No sharding required — though you'd still replicate for availability.
+
+### 7.4 Bandwidth
+
+Egress: <Code>3,300 reads/sec x 500 bytes ≈ 1.65 MB/second</Code>
+
+Trivial. A redirect is just an HTTP 301 with a header — tiny.
+
+<StickyNote color="cyan">
+**Compare the two examples side by side.** Twitter: 600k QPS, 110 PB, 480 Gbps. URL shortener: 3.3k QPS, 3 TB, 1.65 MB/s. Both are "web apps with a database", but they live in completely different universes.
+
+That gap is precisely what capacity estimation exists to reveal.
+</StickyNote>
+
+#### URL shortener — final numbers:
+
+<Output>
+Write QPS   33/s
+Read QPS    3,300/s
+Storage     1.65 GB/day  →  ~3 TB over 5 years
+Egress      1.65 MB/s
+Verdict     one database + one cache is enough
+</Output>
+
+<ZoomableImage width="900" height="400" src="/images/capacity-comparison.png" alt="Twitter vs URL shortener capacity comparison" className='h-100 w-auto'/>
+
+---
+
+## 8. From numbers to servers
+
+Once you have QPS and storage, server counts fall out by division.
+
+### 8.1 App servers
+
+<Code>servers = peak QPS ÷ QPS per server</Code>
+
+For Twitter's 1.2M peak reads/sec, with a cache-backed server handling ~5,000 QPS:
+
+<Code>1,200,000 ÷ 5,000 = 240 servers</Code>
+
+Then add headroom for failures and deploys — call it **300+**.
+
+### 8.2 Cache sizing (the 80/20 rule)
+
+Not all data is hot. The standard assumption: **20% of data serves 80% of requests.**
+
+For Twitter, if a day's text is 600 GB, cache the hot 20%:
+
+<Code>600 GB x 0.2 = 120 GB of cache</Code>
+
+At ~64 GB of usable RAM per cache node, that's **~2-4 Redis nodes** (plus replicas).
+
+### 8.3 Database shards
+
+<Code>shards = total storage ÷ storage per node</Code>, and also <Code>shards = write QPS ÷ write QPS per node</Code>
+
+Take the larger of the two. Storage can force sharding even when QPS wouldn't, and vice versa.
+
+<StickyNote color="sky">
+**Two independent reasons to shard:** you ran out of *disk*, or you ran out of *write throughput*. Always check both — candidates usually check only one.
+</StickyNote>
+
+---
+
+## 9. Common mistakes
+
+<Table>
+  <THead>
+    <TR>
+      <TH>Mistake</TH>
+      <TH>Why it hurts</TH>
+      <TH>Fix</TH>
+    </TR>
+  </THead>
+  <TBody>
+    <TR>
+      <TD>Estimating from total users, not DAU</TD>
+      <TD>Overshoots by 3-10x, leads to wild over-engineering</TD>
+      <TD>Always convert to DAU first (10-30%)</TD>
+    </TR>
+    <TR>
+      <TD>Designing for average QPS</TD>
+      <TD>System collapses at peak hour</TD>
+      <TD>Multiply by a 2-3x peak factor</TD>
+    </TR>
+    <TR>
+      <TD>Forgetting the read:write split</TD>
+      <TD>You miss the single biggest architectural signal</TD>
+      <TD>Always compute both separately</TD>
+    </TR>
+    <TR>
+      <TD>Ignoring replication in storage math</TD>
+      <TD>Real storage is 3x your estimate</TD>
+      <TD>Multiply final storage by replication factor (usually 3)</TD>
+    </TR>
+    <TR>
+      <TD>Chasing exact numbers</TD>
+      <TD>Burns interview time, adds zero value</TD>
+      <TD>Round hard; magnitude is the goal</TD>
+    </TR>
+    <TR>
+      <TD>Silent assumptions</TD>
+      <TD>Interviewer can't follow or correct you</TD>
+      <TD>Say every assumption out loud, write it down</TD>
+    </TR>
+    <TR>
+      <TD>Forgetting metadata and indexes</TD>
+      <TD>Real DB size is often 2x raw data</TD>
+      <TD>Add a rough overhead multiplier</TD>
+    </TR>
+    <TR>
+      <TD>Treating media like text</TD>
+      <TD>Off by 1000x — media dominates everything</TD>
+      <TD>Separate media into its own line item</TD>
+    </TR>
+  </TBody>
+</Table>
+
+<StickyNote color="red">
+**The replication trap is the most commonly missed one.** You calculate 3 TB and confidently say "fits on one disk." But with a replication factor of 3, it's 9 TB. Add indexes and it's ~15 TB. Add backups and retention and it grows again.
+
+Rule of thumb: **your real storage bill is 3-5x your raw data estimate.**
+</StickyNote>
+
+{/* ## 11. Interview Questions */}
+
+<InterviewQ className="hidden">
+  <InterviewQItem>
+    <InterviewQuestion>
+    #### 1. What is back-of-the-envelope estimation and why do we do it in system design?
+    </InterviewQuestion>
+    <InterviewAnswer>
+      It's a quick, rough calculation that converts user counts into the numbers that actually drive architecture: QPS, storage, and bandwidth.
+
+      We do it because the *scale* determines the *design*. A system doing 30 writes per second and one doing 30,000 look identical on a whiteboard but need completely different architectures — one database versus a sharded cluster with queues.
+
+      The goal is order-of-magnitude accuracy, not precision. Being within 10x is a success, because we're deciding between "one server" and "one thousand servers".
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+    #### 2. Why do people approximate a day as 100,000 seconds?
+    </InterviewQuestion>
+    <InterviewAnswer>
+      A day is actually 86,400 seconds, but 100,000 is <Code>10⁵</Code> — so dividing by it just means removing five zeros, which you can do mentally.
+
+      For example, 1 billion events per day becomes 10,000 per second instantly.
+
+      The approximation overestimates by about 16%, which is harmless and conservative — you end up designing with a little extra headroom rather than under-provisioning.
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+    #### 3. What is the read:write ratio and why does it matter so much?
+    </InterviewQuestion>
+    <InterviewAnswer>
+      It's the number of reads for every write. Social media and content systems are typically 100:1 or higher; chat is roughly 1:1; logging and metrics systems are write-heavy.
+
+      It matters because reads and writes scale very differently. Reads can be cached, replicated, and served from a CDN — they scale outward cheaply. Writes must reach the source of truth and stay durable and consistent, so they scale much harder.
+
+      A read-heavy system at 60,000 QPS is a caching problem. A write-heavy system at the same QPS is a sharding and durability problem. Same number, entirely different architecture.
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+    #### 4. Estimate the QPS and storage for Twitter.
+    </InterviewQuestion>
+    <InterviewAnswer>
+      Assume 300 million daily active users, 2 tweets each per day, and 200 timeline reads each per day.
+
+      Writes: <Code>300M x 2 = 600M tweets/day</Code>, and dividing by 100,000 gives <Code>6,000 writes/second</Code>.
+
+      Reads: <Code>300M x 200 = 60B/day</Code>, which is <Code>600,000 reads/second</Code>.
+
+      Storage: at 1 KB per tweet that's 600 GB/day of text. But if 10% of tweets carry a 1 MB image, media adds 60 TB/day — a hundred times more than the text.
+
+      The conclusion is that media belongs in object storage behind a CDN, with only URLs in the database, and the 100:1 read ratio means timelines must be cached or precomputed.
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+    #### 5. Why do you multiply by a peak factor?
+    </InterviewQuestion>
+    <InterviewAnswer>
+      Traffic isn't evenly spread across 24 hours. Most users are active during a few peak hours, so the busiest moment can be two to three times the daily average.
+
+      If you provision for the average, the system falls over exactly when the most people are trying to use it.
+
+      So we take the average QPS and multiply by 2 or 3 to get peak QPS, and size the system against that number. Some systems have far spikier patterns — ticket sales or flash sales can be 10x or more, and those need explicit surge handling.
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+    #### 6. You estimate 3 TB of data. Can you store that on one machine?
+    </InterviewQuestion>
+    <InterviewAnswer>
+      Raw, yes — 3 TB fits on a single disk. But 3 TB is not what you'll actually provision.
+
+      With a replication factor of 3 for durability and availability, it becomes 9 TB. Indexes commonly add another 50-100%, pushing it toward 15 TB. Backups and retention add more on top.
+
+      So the practical rule is that real storage is roughly 3-5x the raw estimate. At that point you'd likely still use a single primary with replicas rather than sharding, but you'd want to check growth rate — if data doubles yearly, you're planning a sharding strategy now, not later.
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+    #### 7. How do you go from QPS to a number of servers?
+    </InterviewQuestion>
+    <InterviewAnswer>
+      Divide peak QPS by what one server can handle, then add headroom.
+
+      A typical app server handles somewhere between 1,000 and 10,000 simple requests per second, so 5,000 is a reasonable working assumption. For 1.2 million peak reads per second, that's <Code>1,200,000 ÷ 5,000 = 240 servers</Code>.
+
+      Then add capacity for failures, rolling deployments, and traffic growth — so you'd plan for 300 or more. You should also state the assumption explicitly, because if the interviewer says each request is expensive and a server only handles 500 QPS, the answer changes by 10x.
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+    #### 8. How do you size a cache?
+    </InterviewQuestion>
+    <InterviewAnswer>
+      Start with the 80/20 rule: roughly 20% of the data serves 80% of the requests. So cache the hot 20% of the working set rather than everything.
+
+      If a day's worth of text data is 600 GB, caching 20% means about 120 GB of cache. At around 64 GB of usable RAM per node, that's two to four cache nodes, plus replicas for availability.
+
+      You also need to decide the time window — caching the last day is very different from caching the last year — and pick an eviction policy, usually LRU, so the cache naturally keeps what's actually hot.
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+    #### 9. Estimate the storage for a URL shortener over 5 years.
+    </InterviewQuestion>
+    <InterviewAnswer>
+      Assume 100 million new URLs per month, which is about 3.3 million per day.
+
+      At 500 bytes per row — short code, long URL, creation time, owner, expiry — that's about 1.65 GB per day.
+
+      Over five years: <Code>1.65 GB x 365 x 5 ≈ 3 TB</Code>.
+
+      The useful insight is how small that is. Writes work out to only about 33 per second. So a URL shortener isn't really a scale problem at all — the interesting parts are generating short codes without collisions and keeping redirect latency low.
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+    #### 10. What's the difference between ingress and egress bandwidth, and why does egress matter more?
+    </InterviewQuestion>
+    <InterviewAnswer>
+      Ingress is data coming into your system, such as uploads. Egress is data leaving it, such as downloads and API responses.
+
+      Egress usually matters more for two reasons. First, most systems are read-heavy, so far more data flows out than in. Second, cloud providers typically charge little or nothing for ingress but charge significantly for egress — it's often one of the largest line items on a cloud bill.
+
+      This is a major reason CDNs exist: serving bytes from edge caches is cheaper than serving them from your origin, and it reduces load on your servers at the same time.
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+    #### 11. Your estimate says 500,000 writes per second. What does that tell you about the design?
+    </InterviewQuestion>
+    <InterviewAnswer>
+      It immediately rules out a single database. A typical SQL node handles a few thousand writes per second, so 500,000 means you need on the order of 100 or more write nodes — which means sharding is mandatory, not optional.
+
+      It also suggests putting a queue like Kafka in front to absorb bursts and decouple ingestion from persistence, and it points toward storage engines optimized for write throughput, such as LSM-tree based systems like Cassandra.
+
+      And it raises a design question worth asking: does every write need to be immediately durable and consistent, or can some be batched and processed asynchronously? At this volume, that decision has a big impact on cost.
+    </InterviewAnswer>
+  </InterviewQItem>
+
+  <InterviewQItem>
+    <InterviewQuestion>
+    #### 12. What are the most common mistakes people make when estimating?
+    </InterviewQuestion>
+    <InterviewAnswer>
+      The most frequent one is estimating from total registered users instead of daily active users, which overshoots by three to ten times and leads to over-engineering.
+
+      Others include designing for average traffic instead of peak, forgetting to split reads from writes and therefore missing the biggest architectural signal, and ignoring replication so the real storage is three times larger than calculated.
+
+      Two more are worth mentioning: treating media like text, which is off by a factor of a thousand, and chasing exact numbers instead of rounding — that burns time and adds nothing, since the whole point is magnitude.
+
+      Finally, keeping assumptions silent. If you don't say them out loud, the interviewer can't follow your reasoning or correct a wrong premise early.
+    </InterviewAnswer>
+  </InterviewQItem>
+</InterviewQ>
+
+---
+
+## Summary
+
+- **Capacity estimation** turns "N users" into **QPS, storage, and bandwidth** — the three numbers that drive architecture.
+- Use **DAU**, not total users. DAU is typically **10-30%** of registered users.
+- **1 day ≈ 100,000 seconds** — divide by it to convert per-day into per-second by chopping five zeros.
+- Always split **reads from writes**. The ratio tells you whether you have a caching problem or a sharding problem.
+- Multiply by a **2-3x peak factor**; design for the busy hour, not the average.
+- Real storage is **3-5x** raw data once replication and indexes are counted.
+- **Media dominates text by ~1000x** — which is why object storage and CDNs exist.
+- Round hard. **Order of magnitude is the goal**, and stating assumptions out loud is half the value.
