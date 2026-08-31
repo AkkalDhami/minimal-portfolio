@@ -494,13 +494,13 @@ You'll rarely need to change this as a beginner — just know it exists and that
       ACID describes four important properties of reliable database transactions:
 
       <ul>
-        <li><strong>Atomicity</strong> — All operations succeed or none are applied.</li>
-        <li><strong>Consistency</strong> — The transaction keeps the database in a valid state.</li>
-        <li><strong>Isolation</strong> — Concurrent transactions should not improperly interfere with each other.</li>
-        <li><strong>Durability</strong> — Once a transaction is committed, its changes should survive failures.</li>
+        <li>**Atomicity** — All operations succeed or none are applied.</li>
+        <li>**Consistency** — The transaction keeps the database in a valid state.</li>
+        <li>**Isolation** — Concurrent transactions should not improperly interfere with each other.</li>
+        <li>**Durability** — Once a transaction is committed, its changes should survive failures.</li>
       </ul>
 
-      An easy way to remember it is: <strong>All or nothing, valid state, safe concurrency, and committed data persists.</strong>
+      An easy way to remember it is: **All or nothing, valid state, safe concurrency, and committed data persists.**
     </InterviewAnswer>
   </InterviewQItem>
 
@@ -515,7 +515,7 @@ You'll rarely need to change this as a beginner — just know it exists and that
 
       If the second operation fails, the first operation is rolled back as well.
 
-      In simple terms: <strong>Atomicity means "all or nothing."</strong>
+      In simple terms: **Atomicity means "all or nothing."**
     </InterviewAnswer>
   </InterviewQItem>
 
@@ -528,7 +528,7 @@ You'll rarely need to change this as a beginner — just know it exists and that
 
       For example, if a database has a rule that an account balance cannot be negative, a transaction should not leave the database with an invalid negative balance.
 
-      In simple terms: <strong>valid state → transaction → valid state.</strong>
+      In simple terms: **valid state → transaction → valid state.**
     </InterviewAnswer>
   </InterviewQItem>
 
@@ -552,7 +552,7 @@ You'll rarely need to change this as a beginner — just know it exists and that
     <InterviewAnswer>
       Durability means that once a transaction is successfully committed, its changes should be persisted and survive failures such as a database or server crash, subject to the database's durability configuration.
 
-      In simple terms: <strong>COMMIT means the successful changes should not simply disappear after a failure.</strong>
+      In simple terms: **COMMIT means the successful changes should not simply disappear after a failure.**
     </InterviewAnswer>
   </InterviewQItem>
 
@@ -582,9 +582,9 @@ You'll rarely need to change this as a beginner — just know it exists and that
 
       Consistency is about whether the resulting database state follows the defined constraints and rules.
 
-      For example, Atomicity asks: <strong>"Did both sides of the money transfer happen?"</strong>
+      For example, Atomicity asks: **"Did both sides of the money transfer happen?"**
 
-      Consistency asks: <strong>"Is the resulting database state still valid?"</strong>
+      Consistency asks: **"Is the resulting database state still valid?"**
     </InterviewAnswer>
   </InterviewQItem>
 
@@ -599,7 +599,7 @@ You'll rarely need to change this as a beginner — just know it exists and that
 
       If Transaction B reads <Code>4000</Code> and Transaction A later performs a <Code>ROLLBACK</Code>, Transaction B has read data that was never committed.
 
-      That is called a <strong>dirty read</strong>.
+      That is called a **dirty read**.
     </InterviewAnswer>
   </InterviewQItem>
 
@@ -635,7 +635,7 @@ You'll rarely need to change this as a beginner — just know it exists and that
 
       The same query now finds 3 accounts.
 
-      The new matching row is called a <strong>phantom row</strong>.
+      The new matching row is called a **phantom row**.
     </InterviewAnswer>
   </InterviewQItem>
 
@@ -667,18 +667,21 @@ You'll rarely need to change this as a beginner — just know it exists and that
       The difference is what changes between reads:
 
       <ul>
-        <li><strong>Dirty Read</strong> — You see another transaction's uncommitted data.</li>
-        <li><strong>Non-Repeatable Read</strong> — The value of an existing row changes between reads.</li>
-        <li><strong>Phantom Read</strong> — The set of rows returned by a query changes between reads.</li>
+        <li>**Dirty Read** — You see another transaction's uncommitted data.</li>
+        <li>**Non-Repeatable Read** — The value of an existing row changes between reads.</li>
+        <li>**Phantom Read** — The set of rows returned by a query changes between reads.</li>
       </ul>
 
       A simple way to remember them:
 
-      <strong>Dirty = uncommitted data.</strong>
+      **Dirty = uncommitted data.**
 
-      <strong>Non-repeatable = same row, different value.</strong>
+      **Non-repeatable = same row, different value.**
 
-      <strong>Phantom = same query, different rows.</strong>
+      **Phantom = same query, different rows.**
+
+      <ZoomableImage width="800" height="400" src="/images/dirty-read.png" wrapperClassName="" alt="Dirty Read, Non-Repeatable Read, Phantom Read" className='h-100 w-auto'/>
+
     </InterviewAnswer>
   </InterviewQItem>
 

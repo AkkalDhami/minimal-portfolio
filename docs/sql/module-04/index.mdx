@@ -55,3 +55,41 @@ CREATE TABLE books (
     </TR>
   </TBody>
 </Table>
+
+
+---
+
+## <HLink href="/docs/sql/module-04/transactions">2. Transactions</HLink>
+
+A **transaction** is a group of SQL operations that execute as a single unit — either **all** of them succeed, or **none** of them do. If anything fails partway through, everything gets undone, leaving the database exactly as it was before.
+
+
+```sql title="example.sql"
+START TRANSACTION;
+
+UPDATE accounts
+SET balance = balance - 1000
+WHERE id = 1;
+
+UPDATE accounts
+SET balance = balance + 1000
+WHERE id = 2;
+
+COMMIT;
+```
+
+```sql title="example.sql"
+START TRANSACTION;
+
+UPDATE accounts
+SET balance = balance - 1000
+WHERE id = 1;
+
+UPDATE accounts
+SET balance = balance + 1000
+WHERE id = 2;
+
+ROLLBACK;
+```
+
+ <ZoomableImage width="800" height="400" src="/images/dirty-read.png" wrapperClassName="" alt="Dirty Read, Non-Repeatable Read, Phantom Read" className='h-100 w-auto'/>
