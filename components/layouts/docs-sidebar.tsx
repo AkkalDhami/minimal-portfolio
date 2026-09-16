@@ -102,7 +102,7 @@ export function DocsSidebar({ className }: { className?: string }) {
           ease: "easeInOut"
         }}
         className={cn(
-          "primary-ring not-typeset bg-background fixed top-22 left-6.5 z-40 h-full w-74 space-y-2 rounded-lg border p-2",
+          "primary-ring not-typeset bg-background fixed top-22 left-6.5 z-40 w-74 space-y-2 rounded-lg border p-2",
           className
         )}>
         <h2 className="font-inter text-lg font-medium xl:pl-10">
@@ -123,7 +123,7 @@ export function DocsSidebar({ className }: { className?: string }) {
 
         <div
           className={cn(
-            "relative h-full max-h-140 xl:max-h-128",
+            "relative h-full max-h-144 overflow-y-auto xl:max-h-132",
             isSql && "pb-10",
             "scroll-fade-y"
           )}>
@@ -167,7 +167,7 @@ export function DocsSidebar({ className }: { className?: string }) {
                   variant: "outline",
                   size: "sm"
                 }),
-                "absolute -bottom-2 z-30 w-full font-normal"
+                "w-full font-normal"
               )}>
               MySQL Playground
             </Link>

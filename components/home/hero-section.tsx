@@ -110,7 +110,7 @@ export function NewHeroSection() {
             <h1 className="font-inter text-4xl font-semibold tracking-wide uppercase md:text-4xl">
               {NAME}
             </h1>
-            <h3 className="text-muted-primary hidden overflow-hidden text-base font-normal sm:block md:text-xl">
+            <h3 className="text-muted-primary mb-4 hidden overflow-hidden text-base font-normal sm:block md:text-xl">
               I build <FlipWords words={HERO_WORDS} />
             </h3>
             <SocialLinks minimal={true} className="sm:gap-4" />
