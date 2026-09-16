@@ -52,13 +52,13 @@ export function ResultsPanel({ result, error }: ResultsPanelProps) {
             transition={{ duration: 0.15 }}
             className="space-y-6">
             <ScrollArea className="border-border rounded-md border">
-              <table className="font-code mt-0 w-full border-collapse text-sm">
+              <table className="font- mt-0 w-full border-collapse text-sm">
                 <thead>
                   <tr>
                     {result.columns.map(col => (
                       <th
                         key={col}
-                        className="border-border bg-secondary/40 border-b px-3 py-2 text-left font-mono font-medium whitespace-nowrap">
+                        className="border-border bg-secondary/40 border-b px-3 py-2 text-left font-sans font-medium whitespace-nowrap">
                         {col}
                       </th>
                     ))}
