@@ -51,22 +51,23 @@ export function InterviewQuestion({
 }: InterviewQuestionProps) {
   return (
     <div
-      className={cn("not-typeset flex max-w-[85%] min-w-0 gap-2", className)}>
+      className={cn(
+        "not-typeset flex max-w-[85%] min-w-0 items-end gap-2",
+        className
+      )}>
       <Image
         src="/images/profile2.png"
         alt="Interview Question"
         width={24}
         height={24}
-        className="hidden size-12 rounded-full sm:block"
+        className="size-8 rounded-full sm:size-12"
       />
-      {/* <div className=""> */}
       <StickyNote
         color={color ?? "emerald"}
         icon={false}
         className="my-0 rounded-xl rounded-bl-none">
         {children}
       </StickyNote>
-      {/* </div> */}
     </div>
   );
 }
@@ -95,7 +96,7 @@ export function InterviewAnswer({
         alt="Interview Answer"
         width={24}
         height={24}
-        className="hidden size-12 -scale-x-100 rounded-full sm:block"
+        className="size-8 -scale-x-100 rounded-full sm:size-12"
       />
     </div>
   );
