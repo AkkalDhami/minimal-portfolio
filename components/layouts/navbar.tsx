@@ -79,6 +79,27 @@ export function Navbar() {
             <div
               className="border-edge/60 hidden items-center gap-1 p-1 backdrop-blur-md md:flex"
               onMouseLeave={() => setHoveredIndex(null)}>
+              {menuItems.map(item => {
+                const isActive = isActiveLink(pathname, item.href);
+
+                return (
+                  <Link
+                    key={item.label}
+                    href={item.href}
+                    onClick={() => play()}
+                    className={cn(
+                      "relative cursor-pointer px-3 py-1.5 text-xs font-medium tracking-widest uppercase transition-all duration-300",
+                      "text-muted-foreground hover:text-primary",
+                      isActive && "text-accent-foreground"
+                    )}>
+                    <span className="relative z-10">{item.label}</span>
+                  </Link>
+                );
+              })}
+            </div>
+            <div
+              className="border-edge/60 hidden items-center gap-1 p-1 backdrop-blur-md"
+              onMouseLeave={() => setHoveredIndex(null)}>
               {menuItems.map((item, index) => {
                 const isActive = isActiveLink(pathname, item.href);
                 const isMoving =
