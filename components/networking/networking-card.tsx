@@ -27,7 +27,7 @@ export function NetworkingCard({
         "animate-fade-in-blur",
         className
       )}>
-      <h2 className="text-muted-primary group-hover:text-foreground font-noraml mb-2 line-clamp-1 text-lg underline-offset-4 group-hover:underline">
+      <h2 className="text-muted-primary group-hover:text-primary font-noraml mb-2 line-clamp-1 text-lg underline-offset-4 group-hover:underline">
         {data.order.toString().padStart(2, "0")}. {data?.title}
       </h2>
       {data?.description && (

@@ -45,7 +45,7 @@ export function NetworkingModule({ module }: { module: IModule }) {
             </div>
             <Link
               href={module.docs as Route}
-              className="text-xl font-medium tracking-tight underline-offset-2 hover:underline"
+              className="hover:text-primary text-xl font-medium tracking-tight underline-offset-2 hover:underline"
               onClick={() => play()}>
               {module.title}
             </Link>
@@ -56,7 +56,7 @@ export function NetworkingModule({ module }: { module: IModule }) {
         <ChevronsUpDownIcon
           ref={chevronsUpDownIconRef}
           duration={0.2}
-          className="group-hover:text-accent-foreground text-muted-foreground size-5"
+          className="group-hover:text-primary text-muted-foreground size-5"
         />
       </div>
 
