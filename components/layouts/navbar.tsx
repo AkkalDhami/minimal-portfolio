@@ -13,7 +13,7 @@ import { isActiveLink } from "@/utils/link";
 import { PrimaryButton } from "@/components/ui/primary-button";
 import { GITHUB_URL, NAME } from "@/lib/constants";
 import { SearchCommand } from "@/components/home/search-command";
-import { ThemeToggle } from "@/components/layouts/theme-toggle";
+import { ThemeToggle2 } from "@/components/layouts/theme-toggle";
 import { cardSlide5Sound } from "@/sounds/card-slide-5";
 import { useSound } from "@/hooks/use-sound";
 import { uChatScrollButtonSound } from "@/sounds/chat-scroll";
@@ -143,7 +143,8 @@ export function Navbar() {
               className="relative hidden rounded-lg border-0 px-2 py-2 ring-0 sm:block">
               <IconGitHub onClick={() => play()} className="size-5" />
             </PrimaryButton>
-            <ThemeToggle className="py-1.5" />
+            {/* <ThemeToggle className="py-1.5" /> */}
+            <ThemeToggle2 />
             <button
               onClick={() => {
                 setMobileMenuOpen(!mobileMenuOpen);
@@ -217,9 +218,8 @@ export function Navbar() {
                               }}
                               className={cn(
                                 "group relative flex cursor-pointer items-center gap-4 rounded-full px-8 py-2.5 transition-all duration-200",
-                                isActive
-                                  ? "bg-foreground text-accent"
-                                  : "hover:bg-foreground hover:text-accent"
+                                "text-accent",
+                                "hover:text-accent"
                               )}>
                               <span className="text-lg font-medium tracking-widest uppercase">
                                 {item.label}
