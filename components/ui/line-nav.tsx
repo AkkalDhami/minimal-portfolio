@@ -111,11 +111,11 @@ const LineNavItem = memo(function LineNavItem({
         whileHover="hover"
         onClick={onClick}>
         <motion.span
-          className="bg-foreground/20 group-hover:bg-foreground group-aria-[current=page]:bg-foreground block h-px shrink-0 transition-[background-color] ease-out"
+          className="bg-foreground/20 group-hover:bg-primary group-aria-[current=page]:bg-primary block h-px shrink-0 transition-[background-color] ease-out"
           variants={lineVariants}
           transition={{ type: "spring", stiffness: 200, damping: 20 }}
         />
-        <span className="text-muted-foreground group-hover:text-foreground group-aria-[current=page]:text-foreground line-clamp-1 text-sm whitespace-nowrap transition-[color] ease-out">
+        <span className="text-muted-foreground group-hover:text-primary group-aria-[current=page]:text-primary line-clamp-1 text-sm whitespace-nowrap transition-[color] ease-out">
           {title}
         </span>
       </MotionLink>
