@@ -179,7 +179,7 @@ export default async function DocsPage(props: PageProps<"/docs/[[...slug]]">) {
           {/* <article className="prose prose-neutral dark:prose-invert mb-6 max-w-none"> */}
           <div className="mt-12 mb-4 w-full">
             <div className="not-typeset flex w-full flex-wrap items-center justify-between gap-4 pr-2">
-              <h2 className="font-inter animate-fade-in-blur text-2xl font-medium">
+              <h2 className="font-heading animate-fade-in-blur text-2xl font-medium">
                 {data.title}
               </h2>
               <div className="flex items-center gap-4">

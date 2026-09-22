@@ -3,13 +3,13 @@
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { useState, useTransition } from "react";
-import { Send, Loader2 } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/toast";
-import { PrimaryButton } from "@/components/ui/primary-button";
 import { contactFormSchema, ContactFormValues } from "@/validators/contact";
 import { back004Sound } from "@/sounds/back-004";
 import { useSound } from "@/hooks/use-sound";
+import { Spinner } from "@/components/ui/spinner";
+import { Button } from "../ui/button";
 
 export function ContactForm() {
   const [playError] = useSound(back004Sound);
@@ -140,19 +140,16 @@ export function ContactForm() {
         />
       </div>
 
-      <PrimaryButton
+      <Button
         type="submit"
         className="w-full cursor-pointer py-2"
         disabled={isPending}>
         <div className="flex items-center justify-center gap-2">
-          {isPending ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
-          ) : (
-            <Send className="h-4 w-4" />
-          )}
+          {isPending && <Spinner />}
+
           {isPending ? "Sending..." : "Send Message"}
         </div>
-      </PrimaryButton>
+      </Button>
     </form>
   );
 }

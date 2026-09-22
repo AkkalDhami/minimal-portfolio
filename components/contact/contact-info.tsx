@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 import { withUTM } from "@/utils/link";
 import { IconGitHub } from "@/components/icons";
 import { IconMail, IconMapPin, IconPhone, IconUser } from "@tabler/icons-react";
+import { Link1 } from "../ui/animated-links";
 
 export const CONTACT_INFO = [
   {
@@ -60,18 +61,15 @@ export function ContactInfo() {
               <div className="relative">
                 <item.icon className="primary-ring rounded-primary text-muted-primary border-edge from-background to-muted size-9 border bg-linear-to-b p-1.5" />
               </div>
-              <div className="text-primary flex flex-col space-y-1">
+              <div className="text-accent-foreground flex flex-col space-y-1">
                 <span className="text-muted-foreground text-xs font-normal tracking-widest uppercase">
                   {item.label}
                 </span>
                 {item.href ? (
                   <div className="flex w-full items-center justify-between">
-                    <Link
-                      href={withUTM(item.href) as Route}
-                      target="_blank"
-                      className="decoration-primary text-sm font-normal underline-offset-4 hover:underline">
+                    <Link1 href={withUTM(item.href) as Route}>
                       {item.value}
-                    </Link>
+                    </Link1>
                     <CopyButton
                       text={item.value}
                       docs={false}
