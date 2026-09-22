@@ -10,7 +10,7 @@
     "cssVariables": true,
     "prefix": ""
   },
-  "iconLibrary": "lucide",
+  "iconLibrary": "tabler",
   "menuColor": "default",
   "menuAccent": "bold",
   "aliases": {
@@ -24,6 +24,7 @@
     "@coss": "https://coss.com/ui/r/{name}.json",
     "@react-bits": "https://reactbits.dev/r/{name}.json",
     "@soundcn": "https://soundcn.xyz/r/{name}.json",
-    "@ncdai": "https://chanhdai.com/r/{name}.json"
+    "@ncdai": "https://chanhdai.com/r/{name}.json",
+    "@skiper-ui": "https://skiper-ui.com/registry/{name}.json"
   }
 }
