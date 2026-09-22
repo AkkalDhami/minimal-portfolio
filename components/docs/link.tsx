@@ -9,7 +9,7 @@ export function HLink({ ...props }: React.ComponentProps<typeof Link>) {
   return (
     <Link
       onClick={() => play()}
-      className="not-typeset underline-offset-4 hover:underline"
+      className="not-typeset hover:text-primary underline-offset-4 hover:underline"
       {...props}
     />
   );

@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils";
 import { withUTM } from "@/utils/link";
 import { IconGitHub } from "@/components/icons";
 import { IconMail, IconMapPin, IconPhone, IconUser } from "@tabler/icons-react";
-import { Link1 } from "../ui/animated-links";
+import { Link1 } from "@/components/ui/animated-links";
 
 export const CONTACT_INFO = [
   {
@@ -67,7 +67,9 @@ export function ContactInfo() {
                 </span>
                 {item.href ? (
                   <div className="flex w-full items-center justify-between">
-                    <Link1 href={withUTM(item.href) as Route}>
+                    <Link1
+                      href={withUTM(item.href) as Route}
+                      className="text-sm">
                       {item.value}
                     </Link1>
                     <CopyButton

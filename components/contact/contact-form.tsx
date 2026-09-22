@@ -9,7 +9,7 @@ import { contactFormSchema, ContactFormValues } from "@/validators/contact";
 import { back004Sound } from "@/sounds/back-004";
 import { useSound } from "@/hooks/use-sound";
 import { Spinner } from "@/components/ui/spinner";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 
 export function ContactForm() {
   const [playError] = useSound(back004Sound);

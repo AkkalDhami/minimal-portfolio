@@ -77,18 +77,18 @@ export const mdxComponents: MDXComponents = {
   h1: props => (
     <HeadingWithCopy
       tag="h1"
-      baseClassName="animate-fade-in-blur text-2xl font-medium font-inter"
+      baseClassName="animate-fade-in-blur text-2xl font-medium font-heading"
       {...props}
     />
   ),
   h2: props => (
     <HeadingWithCopy
       tag="h2"
-      baseClassName="animate-fade-in-blur font-inter"
+      baseClassName="animate-fade-in-blur font-heading"
       {...props}
     />
   ),
-  h3: props => <h3 className="this-page-link font-inter" {...props} />,
+  h3: props => <h3 className="this-page-link font-heading" {...props} />,
   h5: props => (
     <h5
       className="animate-fade-in-blur text-accent-foreground text-[18px] font-normal tracking-tight"
@@ -150,7 +150,7 @@ export const mdxComponents: MDXComponents = {
   Step: ({ className, ...props }: React.ComponentProps<"h3">) => (
     <h3
       className={cn(
-        "text-primary animate-fade-in-blur font-inter mt-8 mb-3 scroll-m-32 text-xl font-medium tracking-tight",
+        "text-primary animate-fade-in-blur font-heading mt-8 mb-3 scroll-m-32 text-xl font-medium tracking-tight",
         className
       )}
       {...props}
