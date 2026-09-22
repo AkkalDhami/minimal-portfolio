@@ -62,7 +62,7 @@ export function DsaSection({ home = false }: { home?: boolean }) {
               className={cn(
                 "group hover:bg-card-hover screen-line-before relative p-4"
               )}>
-              <h2 className="text-foreground font-noraml mb-2 text-lg underline-offset-4 group-hover:underline">
+              <h2 className="text-muted-foreground group-hover:text-primary font-noraml mb-2 text-lg underline-offset-4 group-hover:underline">
                 {t.title}
               </h2>
               <p className="text-muted-secondary line-clamp-3">

@@ -25,7 +25,7 @@ export function HeroSection() {
       className="screen-line relative z-10 px-4 pt-16 pb-4 font-sans font-normal">
       <div className="mt-4">
         <div className="flex items-baseline-last gap-2">
-          <h1 className="font-inter text-4xl font-semibold tracking-wide uppercase md:text-6xl">
+          <h1 className="font-heading text-4xl font-semibold tracking-wide uppercase md:text-6xl">
             {NAME}
           </h1>
         </div>
@@ -107,7 +107,7 @@ export function NewHeroSection() {
             />
           </div>
           <div className="space-y-3">
-            <h1 className="font-inter text-4xl font-semibold tracking-wide uppercase md:text-4xl">
+            <h1 className="font-heading text-4xl font-semibold tracking-wide uppercase md:text-4xl">
               {NAME}
             </h1>
             <h3 className="text-muted-primary mb-4 hidden overflow-hidden text-base font-normal sm:block md:text-xl">

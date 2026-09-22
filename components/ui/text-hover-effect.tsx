@@ -90,8 +90,8 @@ export function TextHoverEffect({ text }: TextHoverEffectProps) {
       }>
       <defs>
         <linearGradient id="textGradient">
-          <stop offset="0%" stopColor="var(--color-foreground)" />
-          <stop offset="100%" stopColor="var(--color-foreground)" />
+          <stop offset="0%" stopColor="var(--color-primary)" />
+          <stop offset="100%" stopColor="var(--color-primary)" />
         </linearGradient>
 
         <motion.radialGradient
