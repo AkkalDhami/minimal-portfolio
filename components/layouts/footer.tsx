@@ -11,6 +11,7 @@ import { cardSlide5Sound } from "@/sounds/card-slide-5";
 import { useSound } from "@/hooks/use-sound";
 import { TextHoverEffect } from "@/components/ui/text-hover-effect";
 import { menuItems } from "./navbar";
+import { CurrentTime } from "@/components/shared/current-time";
 
 const footerLinks = [
   ...menuItems,
@@ -91,6 +92,8 @@ export function Footer() {
                     {NAME}
                   </Link>
                 </div>
+
+                <CurrentTime />
               </div>
             </div>
 

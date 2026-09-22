@@ -105,7 +105,7 @@ export function DocsSidebar({ className }: { className?: string }) {
           "primary-ring not-typeset bg-background fixed top-22 left-6.5 z-40 w-74 space-y-2 rounded-lg border p-2",
           className
         )}>
-        <h2 className="font-inter text-lg font-medium xl:pl-10">
+        <h2 className="font-heading text-lg font-medium xl:pl-10">
           {
             title[
               isDsa
@@ -135,7 +135,7 @@ export function DocsSidebar({ className }: { className?: string }) {
                     href={m.href as Route}
                     onClick={() => play()}
                     className={cn(
-                      "font-inter hover:text-primary font-medium underline-offset-2 hover:underline",
+                      "font-heading hover:text-primary font-medium underline-offset-2 hover:underline",
                       pathname === m.href
                         ? "text-primary underline"
                         : "text-muted-foreground"

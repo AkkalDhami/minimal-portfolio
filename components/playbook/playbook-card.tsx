@@ -16,7 +16,7 @@ export function PlaybookCard({ data }: { data: IPlaybook }) {
         "animate-fade-in-blur",
         "last:border-r"
       )}>
-      <h2 className="text-muted-primary group-hover:text-foreground font-noraml mb-2 line-clamp-1 text-lg underline-offset-4 group-hover:underline">
+      <h2 className="text-muted-primary group-hover:text-primary font-noraml mb-2 line-clamp-1 text-lg underline-offset-4 group-hover:underline">
         {data.title}
       </h2>
       {data.description && (
