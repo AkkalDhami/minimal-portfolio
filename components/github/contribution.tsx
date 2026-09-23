@@ -124,7 +124,7 @@ export function GitHubContributionGraph({
                       />
                     </TooltipTrigger>
 
-                    <TooltipContent className="rounded-primary font-sans">
+                    <TooltipContent className="rounded-primary">
                       <p>
                         {activity.count} contribution
                         {activity.count > 1 ? "s" : null} on{" "}

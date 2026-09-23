@@ -6,14 +6,7 @@ import {
   X_URL
 } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-import { PrimaryButton } from "@/components/ui/primary-button";
 import { Route } from "next";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger
-} from "@/components/ui/tooltip";
 
 import { uChatScrollButtonSound } from "@/sounds/chat-scroll";
 import { useSound } from "@/hooks/use-sound";
@@ -26,6 +19,7 @@ import {
   IconLinkedIn,
   IconProps
 } from "@/components/icons";
+import { SocialHoverCards } from "@/components/shared/social-hover-card";
 
 export type SocialLink = {
   name: string;
@@ -78,29 +72,30 @@ export function SocialLinks({
 
   if (minimal) {
     return (
-      <div className={cn("flex items-center gap-4", className)}>
-        {socialLinks.map(link => (
-          <TooltipProvider key={link.name}>
-            <Tooltip>
-              <TooltipTrigger
-                render={
-                  <PrimaryButton
-                    as="a"
-                    variant="outline"
-                    href={link.href as Route}
-                    onClick={() => chatScrollPlay()}
-                    target="_blank"
-                    className="group from-background to-muted primary-ring relative bg-linear-to-b px-1.5 py-1.5">
-                    <link.icon className="text-muted-primary group-hover:text-primary size-6" />
-                  </PrimaryButton>
-                }></TooltipTrigger>
-              <TooltipContent>
-                <p>{link.name}</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        ))}
-      </div>
+      <SocialHoverCards />
+      // <div className={cn("flex items-center gap-4", className)}>
+      //   {socialLinks.map(link => (
+      //     <TooltipProvider key={link.name}>
+      //       <Tooltip>
+      //         <TooltipTrigger
+      //           render={
+      //             <PrimaryButton
+      //               as="a"
+      //               variant="outline"
+      //               href={link.href as Route}
+      //               onClick={() => chatScrollPlay()}
+      //               target="_blank"
+      //               className="group from-background to-muted primary-ring relative bg-linear-to-b px-1.5 py-1.5">
+      //               <link.icon className="text-muted-primary group-hover:text-primary size-6" />
+      //             </PrimaryButton>
+      //           }></TooltipTrigger>
+      //         <TooltipContent>
+      //           <p>{link.name}</p>
+      //         </TooltipContent>
+      //       </Tooltip>
+      //     </TooltipProvider>
+      //   ))}
+      // </div>
     );
   }
 
