@@ -1,0 +1,31 @@
+:root[data-font="schibsted"] body {
+  font-family: var(--font-schibsted);
+}
+
+:root[data-font="inter"] body {
+  font-family: var(--font-inter);
+}
+
+:root[data-font="geist"] body {
+  font-family: var(--font-geist);
+}
+
+:root[data-font="manrope"] body {
+  font-family: var(--font-manrope);
+}
+
+:root[data-font="space-grotesk"] body {
+  font-family: var(--font-space-grotesk);
+}
+
+:root[data-font="dm-sans"] body {
+  font-family: var(--font-dm-sans);
+}
+
+:root[data-font="plus-jakarta"] body {
+  font-family: var(--font-plus-jakarta);
+}
+
+:root[data-font="bricolage"] body {
+  font-family: var(--font-bricolage);
+}

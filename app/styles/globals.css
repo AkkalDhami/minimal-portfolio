@@ -2,6 +2,7 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "./typeset.css";
+@import "./appearance.css";
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -49,10 +50,16 @@
   --color-sidebar-ring: var(--sidebar-ring);
   --color-edge: var(--edge);
 
-  --font-sans: var(--font-sans), sans-serif;
+  --font-sans: var(--font-geist), sans-serif;
   --font-mono: var(--font-mono), monospace;
   --font-code: var(--font-code), monospace;
-  --font-heading: var(--font-heading), sans-serif;
+  --font-inter: var(--font-inter), sans-serif;
+  --font-geist: var(--font-geist), sans-serif;
+  --font-schibsted: var(--font-schibsted), sans-serif;
+  --font-space-grotesk: var(--font-space-grotesk), sans-serif;
+  --font-dm-sans: var(--font-dm-sans), sans-serif;
+  --font-bricolage-grotesque: var(--font-bricolage-grotesque), sans-serif;
+  --font-plus-jakarta: var(--font-plus-jakarta), sans-serif;
   --font-manrope: var(--font-manrope), sans-serif;
   --font-jetbrains-mono: var(--font-jetbrains-mono), monospace;
   --font-handwriting: var(--font-handwriting), sans-serif;

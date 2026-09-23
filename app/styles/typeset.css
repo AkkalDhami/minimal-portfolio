@@ -6,7 +6,7 @@
 @layer components {
   .typeset {
     --typeset-font-body: inherit;
-    --typeset-font-heading: var(--font-heading);
+    --typeset-: var(--);
     --typeset-font-mono: var(--font-mono);
     --typeset-size: 1em;
     --typeset-leading: 1.75;
@@ -55,7 +55,7 @@
     /* Headings. */
     &:where(h1, h2, h3, h4, h5, h6) {
       color: var(--color-foreground, currentColor);
-      font-family: var(--typeset-font-heading);
+      font-family: var(--typeset-);
       font-weight: 600;
       margin-block-end: 0;
     }

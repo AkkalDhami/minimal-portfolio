@@ -8,7 +8,7 @@ export default function DocsLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="border-edge screen-line-after relative mx-auto w-full max-w-3xl border-x px-4 pt-10 font-sans">
+    <div className="border-edge screen-line-after relative mx-auto w-full max-w-3xl border-x px-4 pt-10">
       <DocsSidebar className="hidden xl:block" />
       <div className="xl:hidden">
         <Sheet>

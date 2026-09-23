@@ -7,7 +7,13 @@ import {
   Fira_Code,
   Patrick_Hand,
   Kalam,
-  Caveat
+  Caveat,
+  Schibsted_Grotesk,
+  Manrope,
+  Plus_Jakarta_Sans,
+  DM_Sans,
+  Space_Grotesk,
+  Bricolage_Grotesque
 } from "next/font/google";
 import "./styles/globals.css";
 import { AnchoredToastProvider, ToastProvider } from "@/components/ui/toast";
@@ -16,9 +22,11 @@ import siteConfig from "@/lib/site";
 import { PORTFOLIO_URL, X_USERNAME } from "@/lib/constants";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { HotkeyProvider } from "@/components/providers/hotkey-provider";
+import { AppearanceProvider } from "@/components/providers/appearance-provider";
+import { cn } from "cn";
 
 const geistSans = Geist({
-  variable: "--font-sans",
+  variable: "--font-geist",
   subsets: ["latin"]
 });
 
@@ -28,7 +36,37 @@ const geistMono = Geist_Mono({
 });
 
 const inter = Inter({
-  variable: "--font-heading",
+  variable: "--font-inter",
+  subsets: ["latin"]
+});
+
+const schibsted = Schibsted_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-schibsted"
+});
+
+const manrope = Manrope({
+  variable: "--font-manrope",
+  subsets: ["latin"]
+});
+
+export const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
+  subsets: ["latin"]
+});
+
+export const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
+  subsets: ["latin"]
+});
+
+export const bricolage = Bricolage_Grotesque({
+  variable: "--font-bricolage",
+  subsets: ["latin"]
+});
+
+export const plusJakarta = Plus_Jakarta_Sans({
+  variable: "--font-plus-jakarta",
   subsets: ["latin"]
 });
 
@@ -148,7 +186,10 @@ export default function RootLayout({
   return (
     <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${firaCode.variable} ${handwriting.variable} ${bodyHand.variable} ${caveat.variable} ${caveat.variable} selection:bg-muted bg-background selection:text-accent-foreground selection:blur-out-3xl selection:blur-in-2xl scroll-mt-20 font-sans antialiased`}>
+        className={cn(
+          `selection:bg-muted font-geist bg-background selection:text-accent-foreground selection:blur-out-3xl selection:blur-in-2xl scroll-mt-20 antialiased`,
+          `${geistSans.variable} ${geistMono.variable} ${inter.variable} ${firaCode.variable} ${handwriting.variable} ${bodyHand.variable} ${caveat.variable} ${caveat.variable} ${schibsted.variable} ${manrope.variable} ${spaceGrotesk.variable} ${dmSans.variable} ${bricolage.variable} ${plusJakarta.variable}`
+        )}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -158,8 +199,10 @@ export default function RootLayout({
             <ToastProvider position="top-center">
               <AnchoredToastProvider>
                 <TooltipProvider>
-                  {children}
-                  <Analytics />
+                  <AppearanceProvider>
+                    {children}
+                    <Analytics />
+                  </AppearanceProvider>
                 </TooltipProvider>
               </AnchoredToastProvider>
             </ToastProvider>
