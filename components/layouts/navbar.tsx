@@ -20,6 +20,7 @@ import { uChatScrollButtonSound } from "@/sounds/chat-scroll";
 // import { usePreferencesStore } from "@/hooks/use-preferences";
 // import { SettingsDropdown } from "@/components/shared/setting-dropdown";
 import { IconGitHub } from "@/components/icons";
+import { CustomizationTrigger } from "../customization/customization-trigger";
 
 interface MenuItem {
   label: string;
@@ -90,7 +91,7 @@ export function Navbar() {
                     className={cn(
                       "relative cursor-pointer px-3 py-1.5 text-xs font-medium tracking-widest uppercase transition-all duration-300",
                       "text-muted-foreground hover:text-primary",
-                      isActive && "text-accent-foreground"
+                      isActive && "text-primary"
                     )}>
                     <span className="relative z-10">{item.label}</span>
                   </Link>
@@ -114,10 +115,11 @@ export function Navbar() {
                     className={cn(
                       "relative cursor-pointer px-3 py-1.5 text-xs font-medium tracking-widest uppercase transition-all duration-300",
                       isMoving
-                        ? "text-accent"
-                        : "text-muted-foreground hover:text-primary"
+                        ? "text-primary"
+                        : "text-muted-foreground hover:text-primary",
+                      isActive && "text-primary"
                     )}>
-                    <span className="relative z-10">{item.label}</span>
+                    <span className={"relative z-10"}>{item.label}</span>
                     {isMoving && (
                       <motion.div
                         layoutId="nav-active"
@@ -188,11 +190,8 @@ export function Navbar() {
                   exit={{ x: "100%" }}
                   transition={{ type: "spring", damping: 25, stiffness: 200 }}
                   className="bg-background border-border fixed top-0 right-0 bottom-0 z-60 h-screen w-70 overflow-y-auto border-l pb-10 md:hidden">
-                  <div className="bg-background flex h-full flex-col p-6">
-                    <div className="mb-8 flex items-center justify-between">
-                      <span className="text-muted-foreground text-xs font-medium tracking-[0.2em] uppercase">
-                        Menu
-                      </span>
+                  <div className="bg-background flex h-full flex-col">
+                    <div className="mb-4 flex items-center p-4">
                       <button
                         onClick={() => {
                           setMobileMenuOpen(false);
@@ -218,8 +217,9 @@ export function Navbar() {
                               }}
                               className={cn(
                                 "group relative flex cursor-pointer items-center gap-4 rounded-full px-8 py-2.5 transition-all duration-200",
-                                "text-accent",
-                                "hover:text-accent"
+                                "text-muted-foreground",
+                                "hover:text-primary",
+                                isActive && "text-primary"
                               )}>
                               <span className="text-lg font-medium tracking-widest uppercase">
                                 {item.label}
@@ -244,6 +244,7 @@ export function Navbar() {
                       </div>
                     </div>
                   </div>
+                  <CustomizationTrigger />
                 </motion.div>
               </>
             )}
