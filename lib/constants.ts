@@ -13,7 +13,10 @@ export const LINKEDIN_URL = `https://www.linkedin.com/in/${LINKEDIN_USERNAME}-85
 export const X_URL = `https://x.com/${X_USERNAME}`;
 
 export const DAILY_DEV_USERNAME = `akkal`;
+
 export const DAILY_DEV_URL = `https://app.daily.dev/${DAILY_DEV_USERNAME}`;
+
+export const DISCORD_USERNAME = "akkaldhami";
 
 export const DISCORD_URL = `https://discord.com/users/1364265336714563625`;
 

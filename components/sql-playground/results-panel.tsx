@@ -58,7 +58,7 @@ export function ResultsPanel({ result, error }: ResultsPanelProps) {
                     {result.columns.map(col => (
                       <th
                         key={col}
-                        className="border-border bg-secondary/40 border-b px-3 py-2 text-left font-sans font-medium whitespace-nowrap">
+                        className="border-border bg-secondary/40 border-b px-3 py-2 text-left font-medium whitespace-nowrap">
                         {col}
                       </th>
                     ))}

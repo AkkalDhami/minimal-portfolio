@@ -16,7 +16,7 @@ export function SubHeading({
     <Tag
       className={cn(
         "text-muted-foreground max-w-3xl text-base sm:text-lg",
-        as === "h3" && "font-heading",
+        as === "h3" && "",
         className
       )}>
       {children}
