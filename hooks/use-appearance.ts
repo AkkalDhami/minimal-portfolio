@@ -49,7 +49,7 @@ interface AppearanceState {
 export const useAppearanceStore = create<AppearanceState>()(
   persist(
     set => ({
-      font: "inter",
+      font: "schibsted",
       accentId: "neutral",
       setFont: font => set({ font }),
       setAccent: accentId => set({ accentId })

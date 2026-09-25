@@ -17,10 +17,8 @@ import { ThemeToggle2 } from "@/components/layouts/theme-toggle";
 import { cardSlide5Sound } from "@/sounds/card-slide-5";
 import { useSound } from "@/hooks/use-sound";
 import { uChatScrollButtonSound } from "@/sounds/chat-scroll";
-// import { usePreferencesStore } from "@/hooks/use-preferences";
-// import { SettingsDropdown } from "@/components/shared/setting-dropdown";
 import { IconGitHub } from "@/components/icons";
-import { CustomizationTrigger } from "../customization/customization-trigger";
+import { CustomizationTrigger } from "@/components/customization/customization-trigger";
 
 interface MenuItem {
   label: string;

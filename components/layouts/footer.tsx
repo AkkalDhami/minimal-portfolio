@@ -12,6 +12,8 @@ import { useSound } from "@/hooks/use-sound";
 import { TextHoverEffect } from "@/components/ui/text-hover-effect";
 import { menuItems } from "./navbar";
 import { CurrentTime } from "@/components/shared/current-time";
+import { Signature } from "@/components/ui/signature";
+import { usePathname } from "next/navigation";
 
 const footerLinks = [
   ...menuItems,
@@ -42,11 +44,16 @@ export function Footer() {
 
   const [play] = useSound(cardSlide5Sound);
 
+  const pathname = usePathname();
+
+  const isDocs = pathname.startsWith("/docs");
+
   return (
     <>
       <footer
         className={cn(
-          "bg-background relative z-10 w-full max-w-svw overflow-x-hidden pt-0 pb-10"
+          "bg-background relative z-10 w-full max-w-svw overflow-x-hidden pt-0 pb-10",
+          isDocs && "pb-22"
         )}>
         <div
           className={cn(
@@ -98,10 +105,10 @@ export function Footer() {
             </div>
 
             <div className="space-y-4">
-              <h4 className="text-foreground text-xs font-bold tracking-[0.2em] uppercase">
+              <h4 className="text-foreground mb-2 text-sm font-medium">
                 Navigation
               </h4>
-              <ul className="space-y-2">
+              <ul className="space-y-1">
                 {footerLinks.map(item => (
                   <li key={item.href}>
                     <Link
@@ -116,11 +123,15 @@ export function Footer() {
             </div>
           </div>
 
-          <div className="hidden md:block">
-            {/* <p className="mask-b-from-0.5 text-center text-3xl font-bold tracking-widest text-neutral-300 uppercase sm:text-6xl xl:text-8xl dark:text-neutral-700">
-              {NAME}
-            </p> */}
+          <div className="hidden md:hidden">
             <TextHoverEffect text="AKKAL DHAMI" />
+          </div>
+          <div className="flex items-center justify-center mask-b-from-40%">
+            <Signature
+              text="Akkal Dhami."
+              fontSize={16}
+              color="var(--color-primary)"
+            />
           </div>
         </div>
       </footer>
