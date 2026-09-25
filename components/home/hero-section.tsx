@@ -5,15 +5,17 @@ import { FlipWords } from "@/components/ui/flip-words";
 
 import { SocialLinks } from "@/components/home/social-link";
 import { HOME_PAGE_STACKS } from "@/utils/stack";
-import { NAME } from "@/lib/constants";
+import { LOCATION, NAME } from "@/lib/constants";
 import { getIconForLanguageExtension } from "@/components/docs/icon";
 import { TechBadge } from "@/components/projects/tech-badge";
 import Image from "next/image";
+import { CurrentTime } from "@/components/shared/current-time";
+import { IconMapPin } from "@tabler/icons-react";
 
 const HERO_WORDS = [
   "systems that scale under pressure.",
   "APIs designed for real traffic.",
-  "scalable backend systems that power real products.",
+  // "scalable backend systems that power real products.",
   "codebases that stay maintainable.",
   "performance-first engineering."
 ];
@@ -88,7 +90,11 @@ export function HeroSection() {
 export function NewHeroSection() {
   return (
     <section className="screen-line relative z-10 px-4 pt-16 pb-4 font-normal">
-      <div className="mt-4">
+      <div className="mt-4 space-y-5">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <CurrentTime />
+          <Location />
+        </div>
         <div className="flex flex-wrap items-center gap-4">
           <div className="hidden sm:block">
             <Image
@@ -117,33 +123,40 @@ export function NewHeroSection() {
           </div>
         </div>
 
-        <div className="mt-3 flex flex-col space-y-5 lg:text-left">
-          <div className="flex flex-col space-y-4 lg:text-left">
-            <p className="text-muted-foreground text-lg leading-relaxed sm:mt-0">
-              I design scalable web systems focused on performance,
-              maintainability, and real-world impact.
-            </p>
+        <div className="flex flex-col space-y-5 lg:text-left">
+          <p className="text-muted-foreground text-lg leading-relaxed sm:mt-0">
+            I design scalable web systems focused on performance,
+            maintainability, and real-world impact.
+          </p>
 
-            <div className="flex flex-wrap items-center gap-3">
-              {HOME_PAGE_STACKS.map(tech => {
-                const Icon = getIconForLanguageExtension({
-                  name: tech.value,
-                  className: "size-5"
-                });
-                return (
-                  <TechBadge key={tech.value} className="bg-gradient-t px-2">
-                    <div className="text-accent-foreground relative flex items-center gap-2 text-base grayscale-100 duration-300 hover:grayscale-0">
-                      {Icon}
-                      {tech.label}
-                    </div>
-                  </TechBadge>
-                );
-              })}
-            </div>
+          <div className="flex flex-wrap items-center gap-3">
+            {HOME_PAGE_STACKS.map(tech => {
+              const Icon = getIconForLanguageExtension({
+                name: tech.value,
+                className: "size-5"
+              });
+              return (
+                <TechBadge key={tech.value} className="bg-gradient-t px-2">
+                  <div className="text-accent-foreground relative flex items-center gap-2 text-base grayscale-100 duration-300 hover:grayscale-0">
+                    {Icon}
+                    {tech.label}
+                  </div>
+                </TechBadge>
+              );
+            })}
           </div>
         </div>
       </div>
     </section>
+  );
+}
+
+function Location() {
+  return (
+    <div className="text-muted-foreground flex items-center gap-1">
+      <IconMapPin className="size-4" />
+      <span className="text-sm -tracking-tight">{LOCATION}</span>
+    </div>
   );
 }
 

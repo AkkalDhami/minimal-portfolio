@@ -12,6 +12,7 @@ import {
 import { cn } from "@/lib/utils";
 import { IconBrandX } from "@tabler/icons-react";
 import { PrimaryButton } from "@/components/ui/primary-button";
+
 import { Route } from "next";
 import { uChatScrollButtonSound } from "@/sounds/chat-scroll";
 import { useSound } from "@/hooks/use-sound";
@@ -141,27 +142,14 @@ function SocialCard({
                 "absolute bottom-full left-1/2 z-60 mb-3 w-70",
                 "-translate-x-1/2"
               )}>
-              <div className="bg-background relative overflow-hidden rounded-xl border p-3 backdrop-blur-xl">
+              <div className="relative overflow-hidden rounded-xl border bg-neutral-200 p-3 backdrop-blur-xl dark:bg-neutral-900">
                 <div className="relative">
                   <div className="flex items-center gap-3">
-                    <motion.div
-                      className="primary-ring flex size-9 shrink-0 items-center justify-center rounded-lg border"
-                      initial={{
-                        scale: 0.8,
-                        rotate: -5
-                      }}
-                      animate={{
-                        scale: 1,
-                        rotate: 0
-                      }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 400,
-                        damping: 20,
-                        delay: 0.03
-                      }}>
-                      <Icon className="size-5" />
-                    </motion.div>
+                    <PrimaryButton
+                      variant="outline"
+                      className="from-background to-muted primary-ring relative bg-linear-to-b px-1.5 py-1.5">
+                      <Icon className="text-muted-primary size-6" />
+                    </PrimaryButton>
 
                     <div className="min-w-0">
                       <h3 className="truncate text-sm font-medium">
@@ -181,7 +169,7 @@ function SocialCard({
                 </div>
               </div>
 
-              <div className="bg-background absolute bottom-0 left-1/2 size-3 translate-x-[-50%] translate-y-[50%] rotate-45 border-r border-b" />
+              <div className="absolute bottom-0 left-1/2 size-3 translate-x-[-50%] translate-y-[50%] rotate-45 border-r border-b bg-neutral-200 dark:bg-neutral-900" />
             </motion.div>
           </Link>
         )}

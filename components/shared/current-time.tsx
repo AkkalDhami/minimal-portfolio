@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils";
 import NumberFlow from "@number-flow/react";
 import { useEffect, useState } from "react";
+import { IconClock } from "@tabler/icons-react";
 
 export function CurrentTime({ className }: { className?: string }) {
   const [time, setTime] = useState({
@@ -14,16 +15,22 @@ export function CurrentTime({ className }: { className?: string }) {
 
   useEffect(() => {
     const updateTime = () => {
-      const now = new Date();
-      const hours24 = now.getHours();
-      const period = hours24 >= 12 ? "PM" : "AM";
-      const hours12 = hours24 % 12 || 12;
+      const parts = new Intl.DateTimeFormat("en-US", {
+        timeZone: "Asia/Kathmandu",
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
+        hour12: true
+      }).formatToParts(new Date());
+
+      const get = (type: string) =>
+        parts.find(part => part.type === type)?.value ?? "";
 
       setTime({
-        hours: hours12,
-        minutes: now.getMinutes(),
-        seconds: now.getSeconds(),
-        period
+        hours: Number(get("hour")),
+        minutes: Number(get("minute")),
+        seconds: Number(get("second")),
+        period: get("dayPeriod")
       });
     };
 
@@ -35,33 +42,23 @@ export function CurrentTime({ className }: { className?: string }) {
   }, []);
 
   return (
-    <time
+    <div
       className={cn(
-        "text-muted-primary flex items-center gap-px font-mono text-sm tabular-nums",
+        "text-muted-primary flex items-center gap-1 text-sm",
         className
-      )}
-      aria-label="Current local time">
-      <NumberFlow
-        value={time.hours}
-        format={{
-          minimumIntegerDigits: 2
-        }}
-      />
-      <span>:</span>
-      <NumberFlow
-        value={time.minutes}
-        format={{
-          minimumIntegerDigits: 2
-        }}
-      />
-      <span>:</span>
-      <NumberFlow
-        value={time.seconds}
-        format={{
-          minimumIntegerDigits: 2
-        }}
-      />
-      <span className="ml-1">{time.period}</span>
-    </time>
+      )}>
+      <IconClock stroke={1.8} className="size-4" />
+      <span className="text-sm -tracking-tight">Local Time: </span>
+      <time
+        className={"flex items-center gap-px font-mono text-sm tabular-nums"}
+        aria-label="Current time in Nepal">
+        <NumberFlow value={time.hours} format={{ minimumIntegerDigits: 2 }} />
+        <span>:</span>
+        <NumberFlow value={time.minutes} format={{ minimumIntegerDigits: 2 }} />
+        <span>:</span>
+        <NumberFlow value={time.seconds} format={{ minimumIntegerDigits: 2 }} />
+        <span className="ml-1">{time.period}</span>
+      </time>
+    </div>
   );
 }

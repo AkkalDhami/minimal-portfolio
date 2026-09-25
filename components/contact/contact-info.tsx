@@ -68,7 +68,7 @@ export function ContactInfo() {
                   <div className="flex w-full items-center justify-between">
                     <Link1
                       href={withUTM(item.href) as Route}
-                      className="text-sm">
+                      className="text-accent-foreground text-sm">
                       {item.value}
                     </Link1>
                     <CopyButton

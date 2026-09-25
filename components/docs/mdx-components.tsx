@@ -150,7 +150,7 @@ export const mdxComponents: MDXComponents = {
   Step: ({ className, ...props }: React.ComponentProps<"h3">) => (
     <h3
       className={cn(
-        "text-primary animate-fade-in-blur mt-8 mb-3 scroll-m-32 text-xl font-medium tracking-tight",
+        "text-foreground animate-fade-in-blur mt-8 mb-3 scroll-m-32 text-xl font-medium tracking-tight",
         className
       )}
       {...props}
