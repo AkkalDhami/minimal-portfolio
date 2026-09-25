@@ -91,7 +91,7 @@ export function NewHeroSection() {
   return (
     <section className="screen-line relative z-10 px-4 pt-16 pb-4 font-normal">
       <div className="mt-4 space-y-5">
-        <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="flex flex-wrap items-center justify-between gap-2">
           <CurrentTime />
           <Location />
         </div>

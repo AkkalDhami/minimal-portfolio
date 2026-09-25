@@ -182,7 +182,7 @@ export function SocialHoverCards() {
   const [active, setActive] = useState<SocialId | null>(null);
 
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-4">
       {socials.map(social => (
         <SocialCard
           key={social.id}
