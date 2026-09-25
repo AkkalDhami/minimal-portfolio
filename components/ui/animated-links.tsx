@@ -18,7 +18,7 @@ export const Link0 = ({
       className={cn(
         "group relative flex items-center",
         className,
-        "before:pointer-events-none before:absolute before:bottom-0 before:left-0 before:h-[0.05em] before:w-full before:bg-current before:content-['']",
+        "text-muted-foreground hover:text-primary before:pointer-events-none before:absolute before:bottom-0 before:left-0 before:h-[0.05em] before:w-full before:bg-current before:content-['']",
         "before:origin-right before:scale-x-0 before:transition-transform before:duration-300 before:ease-in-out",
         "hover:before:origin-left hover:before:scale-x-100"
       )}>
@@ -41,7 +41,7 @@ export const Link1 = ({
       href={href as Route}
       target="_blank"
       className={cn(
-        "group relative flex items-center",
+        "group text-muted-foreground hover:text-primary relative flex items-center",
         "before:pointer-events-none before:absolute before:top-[1.5em] before:left-0 before:h-[0.06em] before:w-full before:bg-current before:content-['']",
         "before:origin-right before:scale-x-0 before:transition-transform before:duration-300 before:ease-in-out",
         "hover:before:origin-left hover:before:scale-x-100",
