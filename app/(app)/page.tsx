@@ -7,9 +7,7 @@ import { PlaybookSection } from "@/components/playbook/playbook-section";
 import { TemplateSection } from "@/components/templates/template-section";
 import { StackMarquee } from "@/components/shared/stack-marquee";
 import { Container } from "@/components/shared/container";
-import { NetworkingSection } from "@/components/networking/networking-section";
 import { SQLSection } from "@/components/sql/sql-section";
-import { SystemDesignSection } from "@/components/system-design/system-design-section";
 
 export default function Page() {
   return (
@@ -21,8 +19,8 @@ export default function Page() {
       <ProjectsSection home />
 
       <PlaybookSection home />
-      <SystemDesignSection home />
-      <NetworkingSection home />
+      {/* <SystemDesignSection home /> */}
+      {/* <NetworkingSection home /> */}
       <SQLSection home />
 
       <SkillsSection home />
