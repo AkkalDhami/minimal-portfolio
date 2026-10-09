@@ -167,7 +167,7 @@ export function Signature({
   duration = 1.5,
   delay = 0,
   className,
-  inView = false,
+  inView = true,
   once = true
 }: SignatureProps) {
   const [paths, setPaths] = useState<string[]>([]);

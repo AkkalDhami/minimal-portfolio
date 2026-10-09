@@ -74,10 +74,12 @@ export function Footer() {
                   </span>
                 </div>
               </div>
+
               <p className="text-muted-foreground max-w-xs text-sm leading-relaxed">
                 Building modern web experiences with a focus on performance,
                 scalability, and clean architecture.
               </p>
+
               <SocialLinks minimal />
 
               <div className="flex flex-col gap-3">
