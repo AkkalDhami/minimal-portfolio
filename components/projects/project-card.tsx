@@ -58,13 +58,13 @@ export function ProjectCard({
           </Link>
 
           <div className="flex flex-1 flex-col justify-between py-1">
-            <div className="space-y-2">
+            <div className="space-y-1">
               <motion.h3
                 style={{
                   filter:
                     project.status === "ongoing" ? "blur(1px)" : "blur(0px)"
                 }}
-                className="group-hover:text-primary text-xl font-medium transition-colors">
+                className="text-xl font-medium transition-colors">
                 {project.title}
               </motion.h3>
               <motion.p
@@ -76,7 +76,7 @@ export function ProjectCard({
                 {project.description}
               </motion.p>
 
-              <div className="flex flex-wrap gap-3.5">
+              <div className="mt-4 flex flex-wrap gap-3.5">
                 {project.technologies.map((tech, idx) => {
                   const Icon = getIconForLanguageExtension({
                     name: tech.name,
@@ -101,7 +101,7 @@ export function ProjectCard({
                 })}
               </div>
 
-              <div className="mt-4 flex justify-end">
+              <div className="mt-5 flex justify-end">
                 <ProjectLinks project={project} />
               </div>
             </div>

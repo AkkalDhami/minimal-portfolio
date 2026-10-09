@@ -32,7 +32,7 @@ export function DsaSection({ home = false }: { home?: boolean }) {
   }, [search, data]);
   return (
     <Section id="templates" className={cn("px-0")}>
-      <div className="mb-4 px-4">
+      <div className="mb-6 px-4">
         <Heading>Data Structures & Algorithms</Heading>
         <SubHeading className="text-muted-foreground mx-0 max-w-2xl text-lg">
           A collection of data structures and algorithms implemented in c++.

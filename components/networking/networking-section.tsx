@@ -12,7 +12,7 @@ export function NetworkingSection({ home = false }: { home?: boolean }) {
     <Section
       id="networking"
       className={cn("not-typeset px-0", home && "screen-line-before")}>
-      <div className="mb-6 px-4">
+      <div className={cn("mb-6 px-4", home && "mb-4")}>
         <Heading>Computer Networking</Heading>
 
         <SubHeading className="text-muted-foreground mx-0 max-w-2xl text-lg">

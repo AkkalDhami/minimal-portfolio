@@ -21,7 +21,7 @@ export function ContactSection({ home = false }: { home?: boolean }) {
         </SubHeading>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+      <div className="screen-line-before grid grid-cols-1 gap-6 pt-4 md:grid-cols-2">
         <ContactInfo />
         <ContactForm />
       </div>
