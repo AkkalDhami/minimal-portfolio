@@ -46,7 +46,7 @@ export function SystemDesignSection({ home = false }: { home?: boolean }) {
     <Section
       id="system-design"
       className={cn("px-0", home && "screen-line-before")}>
-      <div className="mb-4 px-4">
+      <div className={cn("mb-6 px-4", home && "mb-4")}>
         <Heading>System Design</Heading>
 
         <SubHeading className="text-muted-foreground mx-0 max-w-2xl text-lg">

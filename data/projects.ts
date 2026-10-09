@@ -11,7 +11,7 @@ export interface Project {
   thumbnail: string;
   images: string[];
   liveUrl?: string;
-  githubUrl?: string;
+  githubUrl: string;
   features: string[];
   status?: "completed" | "ongoing";
 }

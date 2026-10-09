@@ -12,7 +12,7 @@ export function SQLSection({ home = false }: { home?: boolean }) {
     <Section
       id="sql"
       className={cn("not-typeset px-0", home && "screen-line-before")}>
-      <div className="mb-6 px-4">
+      <div className="mb-4 px-4">
         <Heading>SQL - MySQL</Heading>
 
         <SubHeading className="text-muted-foreground mx-0 max-w-2xl text-lg">

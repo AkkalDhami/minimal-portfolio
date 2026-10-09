@@ -32,11 +32,11 @@ const footerLinks = [
   {
     label: "System Design",
     href: "/system-design"
-  },
-  {
-    label: "DSA",
-    href: "/dsa"
   }
+  // {
+  //   label: "DSA",
+  //   href: "/dsa"
+  // }
 ];
 
 export function Footer() {

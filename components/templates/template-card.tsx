@@ -30,14 +30,16 @@ export function TemplateCard({ template }: { template: ITemplate }) {
         />
         <div className="p1 flex flex-1 flex-col justify-between">
           <div className="space-y-2">
-            <h3 className="group-hover:text-primary text-xl font-medium transition-colors">
+            <Link
+              href={(template.liveUrl ?? template.githubUrl) as Route}
+              className="hover:text-primary text-xl font-medium underline-offset-2 transition-colors hover:underline">
               {template.title}
-            </h3>
+            </Link>
             <p className="text-muted-foreground line-clamp-2 md:line-clamp-3">
               {template.description}
             </p>
 
-            <div className="flex flex-wrap gap-3.5">
+            <div className="mt-4 flex flex-wrap gap-3.5">
               {template.technologies.map((tech, idx) => {
                 const Icon = getIconForLanguageExtension({
                   name: tech.name,
@@ -62,7 +64,7 @@ export function TemplateCard({ template }: { template: ITemplate }) {
               })}
             </div>
 
-            <div className="mt-4 flex justify-end">
+            <div className="mt-5 flex justify-end">
               <Links template={template} />
             </div>
           </div>
