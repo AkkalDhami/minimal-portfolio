@@ -11,7 +11,8 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        default:
+          "relative isolate rounded-[0.625rem] bg-clip-padding bg-linear-to-b from-primary/85 via-primary to-primary/95 text-primary-foreground shadow-md shadow-primary/20 ring-1 ring-primary/25 transition-[filter,box-shadow,transform] before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:border before:border-primary-foreground/20 before:transition-transform hover:brightness-110 hover:shadow-lg hover:shadow-primary/25 focus-visible:ring-3 focus-visible:ring-primary/40 active:before:scale-[0.99]",
         outline: "border border-border bg-background hover:color-card-hover",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
