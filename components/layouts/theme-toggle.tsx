@@ -14,6 +14,11 @@ import { useSound } from "@/hooks/use-sound";
 import { click002Sound } from "@/sounds/click-002";
 import { Kbd } from "@/components/ui/kbd";
 import { Spin } from "@/components/ui/spin";
+import { useSyncExternalStore } from "react";
+
+const subscribe = () => () => {};
+const getSnapshot = () => true;
+const getServerSnapshot = () => false;
 
 export function ThemeToggle({ className }: { className?: string }) {
   const { systemTheme, theme, setTheme } = useTheme();
@@ -85,9 +90,14 @@ export function ThemeToggle({ className }: { className?: string }) {
 export const ThemeToggle2 = ({ className }: { className?: string }) => {
   const { systemTheme, theme, setTheme } = useTheme();
   const [play] = useSound(click002Sound);
+  const mounted = useSyncExternalStore(
+    subscribe,
+    getSnapshot,
+    getServerSnapshot
+  );
 
   const currentTheme = theme === "system" ? systemTheme : theme;
-  const isDark = currentTheme === "dark";
+  const isDark = mounted && currentTheme === "dark";
 
   const toggleTheme = () => {
     setTheme(isDark ? "light" : "dark");
