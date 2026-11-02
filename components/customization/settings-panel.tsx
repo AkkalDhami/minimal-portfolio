@@ -9,7 +9,9 @@ import {
   useAppearanceStore,
   PortfolioFont
 } from "@/hooks/use-appearance";
-import { IconCheck } from "@tabler/icons-react";
+import { IconVolume, IconVolumeOff } from "@tabler/icons-react";
+import { usePreferencesStore } from "@/hooks/use-preferences";
+import { Kbd, KbdGroup } from "@/components/ui/kbd";
 
 export const FONT_PREVIEW_STYLE: Record<PortfolioFont, React.CSSProperties> = {
   schibsted: { fontFamily: "var(--font-schibsted, sans-serif)" },
@@ -53,6 +55,7 @@ export function SettingsPanel({
   const accentId = useAppearanceStore(s => s.accentId);
   const setFont = useAppearanceStore(s => s.setFont);
   const setAccent = useAppearanceStore(s => s.setAccent);
+  const { toggleSound, soundEnabled } = usePreferencesStore();
 
   useEffect(() => {
     if (!open) return;
@@ -98,8 +101,7 @@ export function SettingsPanel({
           className={cn(
             "absolute top-full right-0 z-50 mt-2 origin-top-right",
             "w-70 max-w-[calc(100vw-2rem)]",
-            "space-y-3 rounded-2xl border border-white/10 bg-zinc-900/95 p-3",
-            "shadow-[0_8px_30px_rgba(0,0,0,0.35)] backdrop-blur-md",
+            "bg-background/95 border-muted space-y-4 rounded-2xl border p-3",
             className
           )}>
           <div className="flex flex-wrap items-center justify-between gap-2">
@@ -115,13 +117,14 @@ export function SettingsPanel({
                   style={FONT_PREVIEW_STYLE[option.id]}
                   className={cn(
                     "relative w-auto flex-1 rounded-lg px-2.5 py-1.5 text-sm font-medium",
-                    "text-zinc-400 hover:text-zinc-200",
-                    "focus-visible:outline-none"
+                    "text-muted-foreground hover:text-primary",
+                    "focus-visible:outline-none",
+                    isActive && "text-primary"
                   )}>
                   {isActive && (
                     <motion.span
                       layoutId="active-font"
-                      className="absolute inset-0 rounded-lg bg-white/10"
+                      className="bg-primary/10 absolute inset-0 rounded-lg"
                       transition={{
                         type: "spring",
                         stiffness: 500,
@@ -149,6 +152,7 @@ export function SettingsPanel({
           <div className="flex items-center justify-between px-1">
             {ACCENT_COLORS.map(color => {
               const isActive = color.id === accentId;
+
               return (
                 <button
                   key={color.id}
@@ -157,21 +161,48 @@ export function SettingsPanel({
                   aria-label={`${color.label} accent`}
                   aria-pressed={isActive}
                   className={cn(
-                    "relative flex h-5 w-5 items-center justify-center rounded-full transition-transform duration-150",
-                    "ring-1 ring-white/10 ring-inset hover:scale-110",
-                    isActive && "ring-2 ring-white/70"
+                    "h-5 w-5 rounded-full transition-all duration-150",
+                    "border-muted border-2 hover:scale-110",
+                    isActive &&
+                      "ring-offset-background border-white ring-2 ring-offset-1"
                   )}
-                  style={{ backgroundColor: color.value }}>
-                  {isActive && (
-                    <IconCheck
-                      className="h-3 w-3 text-white drop-shadow-sm"
-                      strokeWidth={3}
-                    />
-                  )}
-                </button>
+                  style={{
+                    backgroundColor: color.value,
+                    ...(isActive && {
+                      outline: `2px solid ${color.value}`
+                    })
+                  }}
+                />
               );
             })}
           </div>
+
+          <div
+            className="my-4 h-px w-full"
+            style={{
+              backgroundImage:
+                "repeating-linear-gradient(90deg, rgba(255,255,255,0.18) 0px, rgba(255,255,255,0.18) 2px, transparent 2px, transparent 6px)"
+            }}
+            aria-hidden="true"
+          />
+
+          <button
+            className="bg-muted/40 text-muted-foreground hover:text-foreground flex w-full items-center justify-between gap-2 rounded-lg px-3 py-1.5"
+            type="button"
+            onClick={toggleSound}>
+            <div className="flex items-center justify-center gap-1">
+              {soundEnabled ? (
+                <IconVolume className="size-5" />
+              ) : (
+                <IconVolumeOff className="size-5" />
+              )}
+              Toggle Sound
+            </div>
+            <KbdGroup>
+              <Kbd>ctrl</Kbd>
+              <Kbd>s</Kbd>
+            </KbdGroup>
+          </button>
         </motion.div>
       )}
     </AnimatePresence>
