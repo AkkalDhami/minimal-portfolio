@@ -13,7 +13,7 @@ import type { Route } from "next";
 import { isActiveLink } from "@/utils/link";
 import { PrimaryButton } from "@/components/ui/primary-button";
 import { GITHUB_URL, NAME } from "@/lib/constants";
-import { ThemeToggle2 } from "@/components/layouts/theme-toggle";
+import { ThemeToggle } from "@/components/layouts/theme-toggle";
 import { cardSlide5Sound } from "@/sounds/card-slide-5";
 import { useSound } from "@/hooks/use-sound";
 import { uChatScrollButtonSound } from "@/sounds/chat-scroll";
@@ -40,7 +40,6 @@ export const menuItems: MenuItem[] = [
 const mobileItems: MenuItem[] = [{ label: "Home", href: "/" }, ...menuItems];
 
 export function Navbar() {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const [play] = useSound(cardSlide5Sound);
@@ -65,40 +64,20 @@ export function Navbar() {
           <Profile />
 
           <div className="flex items-center gap-3">
-            {/* Single desktop menu with the animated pill */}
-            <div
-              className="hidden items-center gap-1 p-1 md:flex"
-              onMouseLeave={() => setHoveredIndex(null)}>
-              {menuItems.map((item, index) => {
+            <div className="hidden items-center gap-1 p-1 md:flex">
+              {menuItems.map(item => {
                 const isActive = isActiveLink(pathname, item.href);
-                const isHighlighted =
-                  (hoveredIndex ?? (isActive ? index : -1)) === index;
 
                 return (
                   <Link
                     key={item.label}
                     href={item.href}
                     onClick={() => play()}
-                    onMouseEnter={() => setHoveredIndex(index)}
                     className={cn(
-                      "relative cursor-pointer px-3 py-1.5 text-xs font-medium tracking-widest uppercase transition-colors duration-200",
-                      isHighlighted || isActive
-                        ? "text-primary"
-                        : "text-muted-foreground"
+                      "hover:text-primary relative cursor-pointer px-3 py-1.5 text-xs font-medium tracking-widest uppercase transition-colors duration-200",
+                      isActive ? "text-primary" : "text-muted-foreground"
                     )}>
                     <span className="relative z-10">{item.label}</span>
-                    {isHighlighted && (
-                      <motion.div
-                        layoutId="nav-active"
-                        initial={false}
-                        className="bg-foreground absolute inset-0 rounded-full"
-                        transition={{
-                          type: "spring",
-                          bounce: 0.25,
-                          duration: 0.4
-                        }}
-                      />
-                    )}
                   </Link>
                 );
               })}
@@ -116,7 +95,7 @@ export function Navbar() {
               <IconGitHub className="size-5" />
             </PrimaryButton>
 
-            <ThemeToggle2 />
+            <ThemeToggle />
 
             <button
               aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
